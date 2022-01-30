@@ -15,16 +15,52 @@ STRING *tile_mdl = "tile.mdl";
 
 #define MAP_WIDTH 31
 #define MAP_HEIGHT 31
-#define MAP_TOTAL_CELLS 961 // MAP_WIDTH * MAP_HEIGHT
 #define MAP_CELL_SIZE 32
+
+#define STATE_NEW 0
+#define STATE_EPISODE 1
+#define STATE_EDITOR 2
+#define STATE_TEST 3
+
+int editor_state = STATE_NEW;
+int editor_old_state = STATE_NEW;
 
 int mouse_x = 0;
 int mouse_y = 0;
 
-int current_map_id = 0;
-
 int is_settings_opened = false;
 int is_editor_popup_on = false;
+
+void editor_switch_state_to(int state)
+{
+	editor_old_state = editor_state;
+	editor_state = state;
+}
+
+int is_pos_on_grid(VECTOR *pos)
+{
+	if (!pos)
+	{
+		return false;
+	}
+
+	return (pos->x >= 0 && pos->x < MAP_WIDTH && pos->y >= 0 && pos->y < MAP_HEIGHT);
+}
+
+int is_allowed_to_draw_map()
+{
+	if (is_settings_opened == true || is_editor_popup_on == true)
+	{
+		return false;
+	}
+
+	if (is_pos_on_grid(vector(mouse_x, mouse_y, 0)) == false)
+	{
+		return false;
+	}
+
+	return true;
+}
 
 #include "cmd.h"
 #include "imgui.h"
@@ -34,27 +70,11 @@ int is_editor_popup_on = false;
 #include "screenres_list.h"
 #include "engine.h"
 #include "config.h"
-#include "assets.h"
-#include "game_episode.h"
-#include "editor.h"
-#include "editor_cam.h"
-#include "editor_grid.h"
-#include "editor_episode.h"
-#include "editor_main_ui.h"
 
 #include "savedir.c"
 #include "screenres_list.c"
 #include "engine.c"
 #include "config.c"
-#include "assets.c"
-#include "game_episode.c"
-#include "editor.c"
-#include "editor_cam.c"
-#include "editor_grid.c"
-#include "editor_episode.c"
-#include "editor_main_ui.c"
-
-Episode def_episode;
 
 void map_editor_startup()
 {
@@ -72,12 +92,9 @@ void map_editor_startup()
 	config_initialize(temp_str);   // initialize config (set defaults and load from the config file)engine_initialize()
 	engine_initialize();		   // initialize all engine settings
 
-	imgui_init(0);						  // initialize imgui
-	imgui_change_theme();				  // and apply custom theme
-	assets_initialize();				  // initialize all assets
-	camera_initialize();				  // initialize camera
-	grid_initialize();					  // initialize grid
-	editor_main_initialize(&def_episode); // initialize main ui
+	// initialize imgui and apply custom theme
+	imgui_init(0);
+	imgui_change_theme();
 }
 
 void on_frame_event()
@@ -85,27 +102,12 @@ void on_frame_event()
 	switch (editor_state)
 	{
 	case STATE_NEW:
-		grid_clear();
-		editor_camera_resize(false);
-		episode_reset(&def_episode);
-		editor_main_reset(&def_episode);
-
-		strcpy(def_episode.name, "a");
-		strcpy(def_episode.story, "abc");
-		def_episode.map_count = 2;
-
-		editor_switch_state_to(STATE_EPISODE);
 		break;
 
 	case STATE_EPISODE:
-		editor_episode_update(&def_episode);
 		break;
 
 	case STATE_EDITOR:
-		grid_get_mouse_pos(&mouse_x, &mouse_y);
-		editor_main_update(&def_episode);
-		camera_update();
-		grid_update();
 		break;
 
 	case STATE_TEST:
@@ -117,18 +119,16 @@ void on_frame_event()
 
 void on_exit_event()
 {
-	assets_destroy();
-	grid_destroy();
-	editor_main_destroy();
 }
 
 void on_esc_event()
 {
+	sys_exit("");
 }
 
 void main()
 {
-	max_entities = (MAP_TOTAL_CELLS * 3) + 100;
+	max_entities = 3000;
 
 	on_d3d_lost = imgui_reset;
 	on_scanmessage = custom_scan_message;
