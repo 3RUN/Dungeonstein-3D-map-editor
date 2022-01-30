@@ -13,12 +13,15 @@ STRING *project_name_str = "MapEditor"; // insert your project's name here !
 STRING *grid_cursor_tga = "cursor.tga";
 STRING *tile_mdl = "tile.mdl";
 
-#define MAP_WIDTH 63
-#define MAP_HEIGHT 63
+#define MAP_WIDTH 31
+#define MAP_HEIGHT 31
+#define MAP_TOTAL_CELLS 961 // MAP_WIDTH * MAP_HEIGHT
 #define MAP_CELL_SIZE 32
 
 int mouse_x = 0;
 int mouse_y = 0;
+
+int current_map_id = 0;
 
 int is_settings_opened = false;
 int is_editor_popup_on = false;
@@ -37,6 +40,7 @@ int is_editor_popup_on = false;
 #include "editor_cam.h"
 #include "editor_grid.h"
 #include "editor_episode.h"
+#include "editor_main_ui.h"
 
 #include "savedir.c"
 #include "screenres_list.c"
@@ -48,6 +52,7 @@ int is_editor_popup_on = false;
 #include "editor_cam.c"
 #include "editor_grid.c"
 #include "editor_episode.c"
+#include "editor_main_ui.c"
 
 Episode def_episode;
 
@@ -67,11 +72,12 @@ void map_editor_startup()
 	config_initialize(temp_str);   // initialize config (set defaults and load from the config file)engine_initialize()
 	engine_initialize();		   // initialize all engine settings
 
-	imgui_init(0);		  // initialize imgui
-	imgui_change_theme(); // and apply custom theme
-	assets_initialize();  // initialize all assets
-	camera_initialize();  // initialize camera
-	grid_initialize();	  // initialize grid
+	imgui_init(0);			  // initialize imgui
+	imgui_change_theme();	  // and apply custom theme
+	assets_initialize();	  // initialize all assets
+	camera_initialize();	  // initialize camera
+	grid_initialize();		  // initialize grid
+	editor_main_initialize(); // initialize main ui
 }
 
 void on_frame_event()
@@ -80,7 +86,14 @@ void on_frame_event()
 	{
 	case STATE_NEW:
 		grid_clear();
+		editor_camera_resize(false);
+		editor_main_reset();
 		episode_reset(&def_episode);
+
+		strcpy(def_episode.name, "a");
+		strcpy(def_episode.story, "abc");
+		def_episode.map_count = 2;
+
 		editor_switch_state_to(STATE_EPISODE);
 		break;
 
@@ -90,7 +103,7 @@ void on_frame_event()
 
 	case STATE_EDITOR:
 		grid_get_mouse_pos(&mouse_x, &mouse_y);
-
+		editor_main_update(&def_episode);
 		camera_update();
 		grid_update();
 		break;
@@ -106,6 +119,7 @@ void on_exit_event()
 {
 	assets_destroy();
 	grid_destroy();
+	editor_main_destroy();
 }
 
 void on_esc_event()
@@ -114,7 +128,7 @@ void on_esc_event()
 
 void main()
 {
-	max_entities = 3000;
+	max_entities = (MAP_TOTAL_CELLS * 3) + 100;
 
 	on_d3d_lost = imgui_reset;
 	on_scanmessage = custom_scan_message;

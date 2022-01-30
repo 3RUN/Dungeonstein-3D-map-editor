@@ -4,6 +4,11 @@
 #define GRID_DRAW_OFFSET 0.01
 #define GRID_COLOR vector(128, 128, 128)
 
+int is_grid_visible = true;
+int is_layer_1_visible = true;
+int is_layer_2_visible = true;
+int is_layer_3_visible = true;
+
 array_t *grid_base;
 array_t *grid_ceiling;
 array_t *grid_obj;

@@ -154,5 +154,8 @@ void grid_update()
     vec_set(&grid_draw_offset, vector(0, 0, GRID_DRAW_OFFSET));
     vec_add(&grid_draw_offset, &vec_grid_center);
 
-    grid_draw(&grid_draw_offset, MAP_CELL_SIZE, MAP_WIDTH, MAP_HEIGHT, GRID_COLOR);
+    if (is_grid_visible == true)
+    {
+        grid_draw(&grid_draw_offset, MAP_CELL_SIZE, MAP_WIDTH, MAP_HEIGHT, GRID_COLOR);
+    }
 }
