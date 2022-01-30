@@ -1,0 +1,26 @@
+{
+    "files.associations": {
+        "windows.h": "c",
+        "keybinding.h": "c",
+        "ini.h": "c",
+        "imgui.h": "c",
+        "keybind.h": "c",
+        "cmd.h": "c",
+        "launcher_graphics.h": "c",
+        "acknex.h": "c",
+        "list.h": "c",
+        "dungeon.h": "c",
+        "dungeon_maze.h": "c",
+        "dungeon_helper.h": "c",
+        "dungeon_rooms.h": "c",
+        "dungeon_secrets.h": "c",
+        "dynamic_array.h": "c",
+        "dynamicmodels.h": "c",
+        "imgui_theme.h": "c",
+        "savedir.h": "c",
+        "cell_struct.h": "c",
+        "world_struct.h": "c",
+        "assets.h": "c",
+        "editor_grid.h": "c"
+    }
+}
