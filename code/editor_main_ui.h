@@ -14,6 +14,14 @@
 
 int editor_top_bar_popup_id = EDITOR_TOP_BAR_NEW_POPUP;
 
+char *wall_texture_listbox[MAX_WALL_TEXTURES];
+char *floor_texture_listbox[MAX_FLOOR_TEXTURES];
+char *ceiling_texture_listbox[MAX_CEILING_TEXTURES];
+
+int editor_asset_index = 0;
+
+BMAP *preview_bmp;
+
 STRING *editor_top_bar_popup_str = "";
 STRING *editor_top_bar_new_popup_str = "Are you sure you want to create a new episode?\n         All unsaved data will be lost!";
 STRING *editor_top_bar_exit_popup_str = "Are you sure you want to exit?\nAll unsaved data will be lost!";
@@ -52,6 +60,8 @@ float get_color_from_hsv(float value);
 
 void editor_camera_resize(int is_shrinked);
 
+void editor_update_preview(int type, int index);
+
 void editor_main_initialize(Episode *e);
 
 void editor_main_destroy();
@@ -63,6 +73,12 @@ void editor_weather_refresh(Episode *e);
 void editor_sky_refresh(Episode *e);
 
 void editor_map_settings(Episode *e);
+
+void editor_wall_textures();
+
+void editor_floor_textures();
+
+void editor_ceiling_textures();
 
 void editor_side_bar(Episode *e);
 

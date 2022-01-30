@@ -28,13 +28,9 @@ typedef struct Cell
     int x;
     int y;
 
-    int wall_type_index;
+    int base_type_index;
     int wall_asset_index;
-
-    int floor_type_index;
     int floor_asset_index;
-
-    int ceiling_type_index;
     int ceiling_asset_index;
 
     int obj_type_index;

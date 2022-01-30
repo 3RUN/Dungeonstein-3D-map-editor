@@ -29,13 +29,9 @@ void map_initialize(Map *m)
             m->cells[x][y].x = x;
             m->cells[x][y].y = y;
 
-            m->cells[x][y].wall_type_index = INDEX_NONE;
+            m->cells[x][y].base_type_index = INDEX_NONE;
             m->cells[x][y].wall_asset_index = INDEX_NONE;
-
-            m->cells[x][y].floor_type_index = INDEX_NONE;
             m->cells[x][y].floor_asset_index = INDEX_NONE;
-
-            m->cells[x][y].ceiling_type_index = INDEX_NONE;
             m->cells[x][y].ceiling_asset_index = INDEX_NONE;
 
             m->cells[x][y].obj_type_index = INDEX_NONE;

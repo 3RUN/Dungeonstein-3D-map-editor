@@ -1,4 +1,40 @@
 
+BMAP *asset_get_bmap(int type, int index)
+{
+    switch (type)
+    {
+    case ASSET_TYPE_WALL:
+        Asset *asset = array_get_element_at(Asset *, wall_textures, index);
+        return asset->bmap;
+
+    case ASSET_TYPE_FLOOR:
+        Asset *asset = array_get_element_at(Asset *, floor_textures, index);
+        return asset->bmap;
+
+    case ASSET_TYPE_CEILING:
+        Asset *asset = array_get_element_at(Asset *, ceiling_textures, index);
+        return asset->bmap;
+    }
+}
+
+char *asset_get_desc(int type, int index)
+{
+    switch (type)
+    {
+    case ASSET_TYPE_WALL:
+        Asset *asset = array_get_element_at(Asset *, wall_textures, index);
+        return asset->description;
+
+    case ASSET_TYPE_FLOOR:
+        Asset *asset = array_get_element_at(Asset *, floor_textures, index);
+        return asset->description;
+
+    case ASSET_TYPE_CEILING:
+        Asset *asset = array_get_element_at(Asset *, ceiling_textures, index);
+        return asset->description;
+    }
+}
+
 void asset_create_texture(array_t *array, BMAP *source, STRING *description, int type, int u, int v)
 {
     if (!array)
@@ -12,8 +48,8 @@ void asset_create_texture(array_t *array, BMAP *source, STRING *description, int
         return;
     }
 
-    asset->bmap = bmap_createblack(32, 32, 24);
-    bmap_blitpart(asset->bmap, source, nullvector, nullvector, vector(u, v, 0), vector(MAP_CELL_SIZE, MAP_CELL_SIZE, 0));
+    asset->bmap = bmap_createblack(64, 64, 32);
+    bmap_blitpart(asset->bmap, source, nullvector, nullvector, vector(u, v, 0), vector(64, 64, 0));
     strcpy(asset->description, description);
     asset->type = type;
     asset->index = array_get_count(array);
@@ -81,13 +117,13 @@ void assets_initialize()
         asset_create_texture(wall_textures, wall_textures_tga, "Brown marble / flag", ASSET_TYPE_WALL, 354, 354);
         asset_create_texture(wall_textures, wall_textures_tga, "Door excavation (side of door)", ASSET_TYPE_WALL, 419, 354);
 
-        asset_create_texture(wall_textures, wall_textures_tga, "Elevator wall", ASSET_TYPE_WALL, 29, 419);
-        asset_create_texture(wall_textures, wall_textures_tga, "Elevator (on)", ASSET_TYPE_WALL, 94, 419);
-        asset_create_texture(wall_textures, wall_textures_tga, "Elevator (off)", ASSET_TYPE_WALL, 159, 419);
+        asset_create_texture(wall_textures, wall_textures_tga, "Door", ASSET_TYPE_WALL, 29, 419);
+        asset_create_texture(wall_textures, wall_textures_tga, "Door / locked", ASSET_TYPE_WALL, 94, 419);
+        asset_create_texture(wall_textures, wall_textures_tga, "Entrance to level", ASSET_TYPE_WALL, 159, 419);
         asset_create_texture(wall_textures, wall_textures_tga, "Elevator door", ASSET_TYPE_WALL, 224, 419);
-        asset_create_texture(wall_textures, wall_textures_tga, "Entrance to level", ASSET_TYPE_WALL, 289, 419);
-        asset_create_texture(wall_textures, wall_textures_tga, "Locked door", ASSET_TYPE_WALL, 354, 419);
-        asset_create_texture(wall_textures, wall_textures_tga, "Door", ASSET_TYPE_WALL, 419, 419);
+        asset_create_texture(wall_textures, wall_textures_tga, "Elevator wall", ASSET_TYPE_WALL, 289, 419);
+        asset_create_texture(wall_textures, wall_textures_tga, "Elevator (on)", ASSET_TYPE_WALL, 354, 419);
+        //asset_create_texture(wall_textures, wall_textures_tga, "Elevator (off)", ASSET_TYPE_WALL, 419, 419);
     }
 
     // floor
@@ -107,17 +143,17 @@ void assets_initialize()
 
     // ceiling
     {
-        asset_create_texture(floor_textures, floor_textures_tga, "Ceiling 1", ASSET_TYPE_FLOOR, 31, 31);
-        asset_create_texture(floor_textures, floor_textures_tga, "Ceiling 2", ASSET_TYPE_FLOOR, 96, 31);
-        asset_create_texture(floor_textures, floor_textures_tga, "Ceiling 3", ASSET_TYPE_FLOOR, 161, 31);
+        asset_create_texture(ceiling_textures, ceiling_textures_tga, "Ceiling 1", ASSET_TYPE_CEILING, 31, 31);
+        asset_create_texture(ceiling_textures, ceiling_textures_tga, "Ceiling 2", ASSET_TYPE_CEILING, 96, 31);
+        asset_create_texture(ceiling_textures, ceiling_textures_tga, "Ceiling 3", ASSET_TYPE_CEILING, 161, 31);
 
-        asset_create_texture(floor_textures, floor_textures_tga, "Ceiling 4", ASSET_TYPE_FLOOR, 31, 96);
-        asset_create_texture(floor_textures, floor_textures_tga, "Ceiling 5", ASSET_TYPE_FLOOR, 96, 96);
-        asset_create_texture(floor_textures, floor_textures_tga, "Ceiling 6", ASSET_TYPE_FLOOR, 161, 96);
+        asset_create_texture(ceiling_textures, ceiling_textures_tga, "Ceiling 4", ASSET_TYPE_CEILING, 31, 96);
+        asset_create_texture(ceiling_textures, ceiling_textures_tga, "Ceiling 5", ASSET_TYPE_CEILING, 96, 96);
+        asset_create_texture(ceiling_textures, ceiling_textures_tga, "Ceiling 6", ASSET_TYPE_CEILING, 161, 96);
 
-        asset_create_texture(floor_textures, floor_textures_tga, "Ceiling 7", ASSET_TYPE_FLOOR, 31, 161);
-        asset_create_texture(floor_textures, floor_textures_tga, "Ceiling 8", ASSET_TYPE_FLOOR, 96, 161);
-        asset_create_texture(floor_textures, floor_textures_tga, "Ceiling 9", ASSET_TYPE_FLOOR, 161, 161);
+        asset_create_texture(ceiling_textures, ceiling_textures_tga, "Ceiling 7", ASSET_TYPE_CEILING, 31, 161);
+        asset_create_texture(ceiling_textures, ceiling_textures_tga, "Ceiling 8", ASSET_TYPE_CEILING, 96, 161);
+        asset_create_texture(ceiling_textures, ceiling_textures_tga, "Ceiling 9", ASSET_TYPE_CEILING, 161, 161);
     }
 }
 

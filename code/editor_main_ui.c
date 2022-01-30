@@ -29,6 +29,11 @@ void editor_camera_resize(int is_shrinked)
     }
 }
 
+void editor_update_preview(int type, int index)
+{
+    preview_bmp = asset_get_bmap(type, index);
+}
+
 void editor_main_initialize(Episode *e)
 {
     if (!e)
@@ -36,8 +41,26 @@ void editor_main_initialize(Episode *e)
         return;
     }
 
-    // weather
+    editor_update_preview(ASSET_TYPE_WALL, 0);
+
+    // textures
     int i = 0;
+    for (i = 0; i < MAX_WALL_TEXTURES; i++)
+    {
+        wall_texture_listbox[i] = asset_get_desc(ASSET_TYPE_WALL, i);
+    }
+
+    for (i = 0; i < MAX_FLOOR_TEXTURES; i++)
+    {
+        floor_texture_listbox[i] = asset_get_desc(ASSET_TYPE_FLOOR, i);
+    }
+
+    for (i = 0; i < MAX_CEILING_TEXTURES; i++)
+    {
+        ceiling_texture_listbox[i] = asset_get_desc(ASSET_TYPE_CEILING, i);
+    }
+
+    // weather
     for (i = 0; i < WEATHER_MAX; i++)
     {
         STRING *temp_weather_str = "";
@@ -169,10 +192,12 @@ void editor_main_reset(Episode *e)
         return;
     }
 
+    editor_asset_index = 0;
     current_map_id = 0;
     is_settings_opened = false;
     is_editor_popup_on = false;
 
+    editor_update_preview(ASSET_TYPE_WALL, 0);
     editor_weather_refresh(e);
     editor_sky_refresh(e);
 }
@@ -337,7 +362,7 @@ void editor_map_settings(Episode *e)
     imgui_text("Music:");
     imgui_same_line();
     int len = strlen(e->maps[current_map_id].music);
-    imgui_push_item_width(170);
+    imgui_push_item_width(140);
     imgui_input_text("##Textbox", e->maps[current_map_id].music, len, ImGuiInputTextFlags_ReadOnly | ImGuiInputTextFlags_AutoSelectAll);
     imgui_pop_item_width();
     imgui_same_line();
@@ -345,6 +370,77 @@ void editor_map_settings(Episode *e)
     {
         beep();
     }
+}
+
+void editor_wall_textures()
+{
+    int settings_child_flags = ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
+    var width = imgui_get_content_region_avail_width();
+    imgui_begin_child("##Wall Texture list", vector(width, 256, 0), 1, settings_child_flags);
+
+    DEBUG_VAR(editor_asset_index, 300);
+
+    imgui_push_item_width(-1);
+    if (imgui_list_box("##Wall listbox", &editor_asset_index, wall_texture_listbox, MAX_WALL_TEXTURES, MAX_WALL_TEXTURES))
+    {
+        int i = 0;
+        for (i = 0; i < MAX_WALL_TEXTURES; i++)
+        {
+            if (editor_asset_index == i)
+            {
+                editor_update_preview(ASSET_TYPE_WALL, editor_asset_index);
+            }
+        }
+    }
+    imgui_pop_item_width();
+
+    imgui_end_child();
+}
+
+void editor_floor_textures()
+{
+    int settings_child_flags = ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
+    var width = imgui_get_content_region_avail_width();
+    imgui_begin_child("##Floor Texture list", vector(width, 256, 0), 1, settings_child_flags);
+
+    imgui_push_item_width(-1);
+    if (imgui_list_box("##Floor listbox", &editor_asset_index, floor_texture_listbox, MAX_FLOOR_TEXTURES, MAX_FLOOR_TEXTURES))
+    {
+        int i = 0;
+        for (i = 0; i < MAX_FLOOR_TEXTURES; i++)
+        {
+            if (editor_asset_index == i)
+            {
+                editor_update_preview(ASSET_TYPE_FLOOR, editor_asset_index);
+            }
+        }
+    }
+    imgui_pop_item_width();
+
+    imgui_end_child();
+}
+
+void editor_ceiling_textures()
+{
+    int settings_child_flags = ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
+    var width = imgui_get_content_region_avail_width();
+    imgui_begin_child("##Ceiling Texture list", vector(width, 256, 0), 1, settings_child_flags);
+
+    imgui_push_item_width(-1);
+    if (imgui_list_box("##Ceiling listbox", &editor_asset_index, ceiling_texture_listbox, MAX_CEILING_TEXTURES, MAX_CEILING_TEXTURES))
+    {
+        int i = 0;
+        for (i = 0; i < MAX_CEILING_TEXTURES; i++)
+        {
+            if (editor_asset_index == i)
+            {
+                editor_update_preview(ASSET_TYPE_CEILING, editor_asset_index);
+            }
+        }
+    }
+    imgui_pop_item_width();
+
+    imgui_end_child();
 }
 
 void editor_side_bar(Episode *e)
@@ -361,21 +457,27 @@ void editor_side_bar(Episode *e)
 
     if (imgui_collapsing_header("Preview", NULL, ImGuiTreeNodeFlags_DefaultOpen))
     {
+        imgui_text("Tile preview");
+        imgui_image(preview_bmp);
+        imgui_separator();
     }
 
     if (imgui_collapsing_header("Assets", NULL, ImGuiTreeNodeFlags_DefaultOpen))
     {
-        imgui_begin_tabbar("Tabs", ImGuiTabBarFlags_Reorderable);
+        imgui_begin_tabbar("Tabs", ImGuiTabBarFlags_NoCloseWithMiddleMouseButton);
         if (imgui_begin_tabitem("Walls", NULL, NULL))
         {
+            editor_wall_textures();
             imgui_end_tabitem();
         }
         if (imgui_begin_tabitem("Floor", NULL, NULL))
         {
+            editor_floor_textures();
             imgui_end_tabitem();
         }
         if (imgui_begin_tabitem("Ceiling", NULL, NULL))
         {
+            editor_ceiling_textures();
             imgui_end_tabitem();
         }
         if (imgui_begin_tabitem("Objects", NULL, NULL))
@@ -385,12 +487,8 @@ void editor_side_bar(Episode *e)
     }
     imgui_separator();
 
-    if (imgui_collapsing_header("Tools", NULL, ImGuiTreeNodeFlags_DefaultOpen))
+    if (imgui_collapsing_header("Map settings", NULL, ImGuiTreeNodeFlags_DefaultOpen))
     {
-        // insert tools here
-
-        imgui_separator();
-
         if (is_allowed_to_draw_map())
         {
             imgui_text(_chr(str_printf(NULL, "Mouse pos x = %d; y = %d;", (long)mouse_x, (long)mouse_y)));
@@ -399,12 +497,8 @@ void editor_side_bar(Episode *e)
         {
             imgui_text("Mouse pos x = 0; y = 0;");
         }
-    }
-    imgui_separator();
 
-    if (imgui_collapsing_header("Map settings", NULL, ImGuiTreeNodeFlags_DefaultOpen))
-    {
-        imgui_text(_chr(str_printf(NULL, "Size: width = %d; height = %d;", (long)MAP_WIDTH, (long)MAP_HEIGHT)));
+        imgui_text(_chr(str_printf(NULL, "Map size: width = %d; height = %d;", (long)MAP_WIDTH, (long)MAP_HEIGHT)));
         imgui_separator();
         editor_map_settings(e);
     }
