@@ -10,57 +10,9 @@
 STRING *config_file_str = "config.ini";
 STRING *project_name_str = "MapEditor"; // insert your project's name here !
 
-STRING *grid_cursor_tga = "cursor.tga";
-STRING *tile_mdl = "tile.mdl";
-
 #define MAP_WIDTH 31
 #define MAP_HEIGHT 31
 #define MAP_CELL_SIZE 32
-
-#define STATE_NEW 0
-#define STATE_EPISODE 1
-#define STATE_EDITOR 2
-#define STATE_TEST 3
-
-int editor_state = STATE_NEW;
-int editor_old_state = STATE_NEW;
-
-int mouse_x = 0;
-int mouse_y = 0;
-
-int is_settings_opened = false;
-int is_editor_popup_on = false;
-
-void editor_switch_state_to(int state)
-{
-	editor_old_state = editor_state;
-	editor_state = state;
-}
-
-int is_pos_on_grid(VECTOR *pos)
-{
-	if (!pos)
-	{
-		return false;
-	}
-
-	return (pos->x >= 0 && pos->x < MAP_WIDTH && pos->y >= 0 && pos->y < MAP_HEIGHT);
-}
-
-int is_allowed_to_draw_map()
-{
-	if (is_settings_opened == true || is_editor_popup_on == true)
-	{
-		return false;
-	}
-
-	if (is_pos_on_grid(vector(mouse_x, mouse_y, 0)) == false)
-	{
-		return false;
-	}
-
-	return true;
-}
 
 #include "cmd.h"
 #include "imgui.h"
@@ -70,11 +22,15 @@ int is_allowed_to_draw_map()
 #include "screenres_list.h"
 #include "engine.h"
 #include "config.h"
+#include "assets.h"
+#include "editor.h"
 
 #include "savedir.c"
 #include "screenres_list.c"
 #include "engine.c"
 #include "config.c"
+#include "assets.c"
+#include "editor.c"
 
 void map_editor_startup()
 {
@@ -92,15 +48,18 @@ void map_editor_startup()
 	config_initialize(temp_str);   // initialize config (set defaults and load from the config file)engine_initialize()
 	engine_initialize();		   // initialize all engine settings
 
-	// initialize imgui and apply custom theme
-	imgui_init(0);
-	imgui_change_theme();
+	imgui_init(0);		  // initialize imgui
+	imgui_change_theme(); //and apply custom theme
+	assets_initialize();  // load all editor assets
 }
 
 void on_frame_event()
 {
 	switch (editor_state)
 	{
+	case STATE_MENU:
+		break;
+
 	case STATE_NEW:
 		break;
 
@@ -119,6 +78,7 @@ void on_frame_event()
 
 void on_exit_event()
 {
+	assets_destroy();
 }
 
 void on_esc_event()
