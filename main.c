@@ -72,12 +72,12 @@ void map_editor_startup()
 	config_initialize(temp_str);   // initialize config (set defaults and load from the config file)engine_initialize()
 	engine_initialize();		   // initialize all engine settings
 
-	imgui_init(0);			  // initialize imgui
-	imgui_change_theme();	  // and apply custom theme
-	assets_initialize();	  // initialize all assets
-	camera_initialize();	  // initialize camera
-	grid_initialize();		  // initialize grid
-	editor_main_initialize(); // initialize main ui
+	imgui_init(0);						  // initialize imgui
+	imgui_change_theme();				  // and apply custom theme
+	assets_initialize();				  // initialize all assets
+	camera_initialize();				  // initialize camera
+	grid_initialize();					  // initialize grid
+	editor_main_initialize(&def_episode); // initialize main ui
 }
 
 void on_frame_event()
@@ -87,8 +87,8 @@ void on_frame_event()
 	case STATE_NEW:
 		grid_clear();
 		editor_camera_resize(false);
-		editor_main_reset();
 		episode_reset(&def_episode);
+		editor_main_reset(&def_episode);
 
 		strcpy(def_episode.name, "a");
 		strcpy(def_episode.story, "abc");

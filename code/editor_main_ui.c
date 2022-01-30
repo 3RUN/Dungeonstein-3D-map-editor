@@ -1,4 +1,16 @@
 
+// imgui handles color range from 0...1
+// so I do this dumb trick to get 0...255 value
+float get_hsv_from_color(float value)
+{
+    return value / 255;
+}
+
+float get_color_from_hsv(float value)
+{
+    return value * 255;
+}
+
 void editor_camera_resize(int is_shrinked)
 {
     if (is_shrinked == true)
@@ -17,10 +29,67 @@ void editor_camera_resize(int is_shrinked)
     }
 }
 
-void editor_main_initialize()
+void editor_main_initialize(Episode *e)
 {
-    // resolution
+    if (!e)
+    {
+        return;
+    }
+
+    // weather
     int i = 0;
+    for (i = 0; i < WEATHER_MAX; i++)
+    {
+        STRING *temp_weather_str = "";
+
+        if (i == WEATHER_CLEAR)
+        {
+            str_cpy(temp_weather_str, weather_clear_str);
+        }
+        else if (i == WEATHER_CLOUDY)
+        {
+            str_cpy(temp_weather_str, weather_cloudy_str);
+        }
+        else if (i == WEATHER_RAINY)
+        {
+            str_cpy(temp_weather_str, weather_rain_str);
+        }
+
+        if (!weather_list_str[i])
+        {
+            weather_list_str[i] = str_create("");
+            str_cpy(weather_list_str[i], temp_weather_str);
+        }
+    }
+    editor_weather_refresh(e);
+
+    // sky
+    for (i = 0; i < SKY_MAX; i++)
+    {
+        STRING *temp_sky_str = "";
+
+        if (i == SKY_CLEAR)
+        {
+            str_cpy(temp_sky_str, skycube_clear_str);
+        }
+        else if (i == SKY_CLOUDY)
+        {
+            str_cpy(temp_sky_str, skycube_cloudy_str);
+        }
+        else if (i == SKY_NIGHT)
+        {
+            str_cpy(temp_sky_str, skycube_night_str);
+        }
+
+        if (!skycube_list_str[i])
+        {
+            skycube_list_str[i] = str_create("");
+            str_cpy(skycube_list_str[i], temp_sky_str);
+        }
+    }
+    editor_sky_refresh(e);
+
+    // resolution
     STRING *temp_resolution = "";
     for (i = 0; i < screen_resolutions_total; i++)
     {
@@ -59,6 +128,22 @@ void editor_main_initialize()
 void editor_main_destroy()
 {
     int i = 0;
+    for (i = 0; i < WEATHER_MAX; i++)
+    {
+        if (weather_list_str[i])
+        {
+            ptr_remove(weather_list_str[i]);
+        }
+    }
+
+    for (i = 0; i < SKY_MAX; i++)
+    {
+        if (skycube_list_str[i])
+        {
+            ptr_remove(skycube_list_str[i]);
+        }
+    }
+
     for (i = 0; i < screen_resolutions_total; i++)
     {
         if (graphics_resolution_available_list_str[i])
@@ -77,11 +162,189 @@ void editor_main_destroy()
     }
 }
 
-void editor_main_reset()
+void editor_main_reset(Episode *e)
 {
+    if (!e)
+    {
+        return;
+    }
+
     current_map_id = 0;
     is_settings_opened = false;
     is_editor_popup_on = false;
+
+    editor_weather_refresh(e);
+    editor_sky_refresh(e);
+}
+
+void editor_weather_refresh(Episode *e)
+{
+    if (!e)
+    {
+        return;
+    }
+
+    Map *m = &e->maps[current_map_id];
+    if (!m)
+    {
+        return;
+    }
+
+    // weather
+    int i = 0;
+    for (i = 0; i < WEATHER_MAX; i++)
+    {
+        if (m->weather == i)
+        {
+            str_cpy(weather_currently_used_str, weather_list_str[i]);
+        }
+    }
+
+    // load fog preset when weather is changed
+    if (m->weather == WEATHER_CLEAR)
+    {
+        m->fog_start = 32;
+        m->fog_end = 1024;
+        m->fog_color[0] = get_hsv_from_color(255); // 0...1
+        m->fog_color[1] = get_hsv_from_color(255);
+        m->fog_color[2] = get_hsv_from_color(255);
+    }
+    else if (m->weather == WEATHER_CLOUDY)
+    {
+        m->fog_start = 32;
+        m->fog_end = 512;
+        m->fog_color[0] = get_hsv_from_color(128);
+        m->fog_color[1] = get_hsv_from_color(128);
+        m->fog_color[2] = get_hsv_from_color(128);
+    }
+    else if (m->weather == WEATHER_RAINY)
+    {
+        m->fog_start = 32;
+        m->fog_end = 256;
+        m->fog_color[0] = get_hsv_from_color(96);
+        m->fog_color[1] = get_hsv_from_color(96);
+        m->fog_color[2] = get_hsv_from_color(96);
+    }
+}
+
+void editor_sky_refresh(Episode *e)
+{
+    if (!e)
+    {
+        return;
+    }
+
+    Map *m = &e->maps[current_map_id];
+    if (!m)
+    {
+        return;
+    }
+
+    // sky
+    int i = 0;
+    for (i = 0; i < SKY_MAX; i++)
+    {
+        if (m->sky_cube == i)
+        {
+            str_cpy(skycube_currently_used_str, skycube_list_str[i]);
+        }
+    }
+}
+
+void editor_map_settings(Episode *e)
+{
+    if (!e)
+    {
+        return;
+    }
+
+    Map *m = &e->maps[current_map_id];
+    if (!m)
+    {
+        return;
+    }
+
+    // weather
+    imgui_text("Weather:");
+    imgui_same_line();
+    var avail_combobox_width = imgui_get_content_region_avail_width();
+    imgui_push_item_width(avail_combobox_width);
+    if (imgui_begin_combo("##Weather Combobox", _chr(weather_currently_used_str), ImGuiComboFlags_HeightSmall))
+    {
+        int i = 0;
+        for (i = 0; i < WEATHER_MAX; i++)
+        {
+            int is_selected = str_cmp(weather_currently_used_str, weather_list_str[i]);
+            if (imgui_selectable(_chr(weather_list_str[i]), &is_selected, 0))
+            {
+                m->weather = i;
+                str_cpy(weather_currently_used_str, weather_list_str[i]);
+                editor_weather_refresh(e);
+            }
+        }
+        imgui_end_combo();
+    }
+    imgui_pop_item_width();
+
+    //sky
+    imgui_text("Skycube:");
+    imgui_same_line();
+    var avail_combobox_width = imgui_get_content_region_avail_width();
+    imgui_push_item_width(avail_combobox_width);
+    if (imgui_begin_combo("##Skycube Combobox", _chr(skycube_currently_used_str), ImGuiComboFlags_HeightSmall))
+    {
+        int i = 0;
+        for (i = 0; i < SKY_MAX; i++)
+        {
+            int is_selected = str_cmp(skycube_currently_used_str, skycube_list_str[i]);
+            if (imgui_selectable(_chr(skycube_list_str[i]), &is_selected, 0))
+            {
+                m->sky_cube = i;
+                str_cpy(skycube_currently_used_str, skycube_list_str[i]);
+                editor_sky_refresh(e);
+            }
+        }
+        imgui_end_combo();
+    }
+    imgui_pop_item_width();
+
+    // fog settings
+    imgui_text("Fog start: ");
+    imgui_same_line();
+    var avail_slider_width = imgui_get_content_region_avail_width();
+    imgui_push_item_width(avail_slider_width);
+    imgui_slider_var("##Fog start slider", &m->fog_start, 0, m->fog_end);
+    m->fog_start = clamp(m->fog_start, 0, m->fog_end);
+    editor_create_tooltip("Fog starting distance in quants.\nShould be smaller than 'end'.");
+
+    imgui_text("Fog end:   ");
+    imgui_same_line();
+    imgui_slider_var("##Fog end slider", &m->fog_end, m->fog_start, 2048);
+    m->fog_end = clamp(m->fog_end, m->fog_start, 2048);
+    editor_create_tooltip("Fog end distance in quants.\nShould be higher than 'start'.");
+    imgui_pop_item_width();
+
+    imgui_text("Fog color: ");
+    imgui_same_line();
+    var avail_picker_width = imgui_get_content_region_avail_width();
+    imgui_push_item_width(avail_picker_width);
+    static int misc_flags = ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_NoDragDrop;
+    imgui_color_edit3("##Fod color picker", m->fog_color, misc_flags);
+    imgui_pop_item_width();
+    imgui_separator();
+
+    // music
+    imgui_text("Music:");
+    imgui_same_line();
+    int len = strlen(e->maps[current_map_id].music);
+    imgui_push_item_width(170);
+    imgui_input_text("##Textbox", e->maps[current_map_id].music, len, ImGuiInputTextFlags_ReadOnly | ImGuiInputTextFlags_AutoSelectAll);
+    imgui_pop_item_width();
+    imgui_same_line();
+    if (imgui_button_withsize("Browse", -1, 15))
+    {
+        beep();
+    }
 }
 
 void editor_side_bar(Episode *e)
@@ -96,25 +359,55 @@ void editor_side_bar(Episode *e)
     int side_bar_flags = ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing;
     imgui_begin("##Side Bar", NULL, side_bar_flags);
 
-    imgui_begin_tabbar("Tabs", ImGuiTabBarFlags_Reorderable);
-    if (imgui_begin_tabitem("Walls", NULL, NULL))
+    if (imgui_collapsing_header("Preview", NULL, ImGuiTreeNodeFlags_DefaultOpen))
     {
-        imgui_end_tabitem();
     }
-    if (imgui_begin_tabitem("Floor", NULL, NULL))
+
+    if (imgui_collapsing_header("Assets", NULL, ImGuiTreeNodeFlags_DefaultOpen))
     {
-        imgui_end_tabitem();
-    }
-    if (imgui_begin_tabitem("Ceiling", NULL, NULL))
-    {
-        imgui_end_tabitem();
-    }
-    if (imgui_begin_tabitem("Objects", NULL, NULL))
-    {
-        imgui_end_tabitem();
+        imgui_begin_tabbar("Tabs", ImGuiTabBarFlags_Reorderable);
+        if (imgui_begin_tabitem("Walls", NULL, NULL))
+        {
+            imgui_end_tabitem();
+        }
+        if (imgui_begin_tabitem("Floor", NULL, NULL))
+        {
+            imgui_end_tabitem();
+        }
+        if (imgui_begin_tabitem("Ceiling", NULL, NULL))
+        {
+            imgui_end_tabitem();
+        }
+        if (imgui_begin_tabitem("Objects", NULL, NULL))
+        {
+            imgui_end_tabitem();
+        }
     }
     imgui_separator();
 
+    if (imgui_collapsing_header("Tools", NULL, ImGuiTreeNodeFlags_DefaultOpen))
+    {
+        // insert tools here
+
+        imgui_separator();
+
+        if (is_allowed_to_draw_map())
+        {
+            imgui_text(_chr(str_printf(NULL, "Mouse pos x = %d; y = %d;", (long)mouse_x, (long)mouse_y)));
+        }
+        else
+        {
+            imgui_text("Mouse pos x = 0; y = 0;");
+        }
+    }
+    imgui_separator();
+
+    if (imgui_collapsing_header("Map settings", NULL, ImGuiTreeNodeFlags_DefaultOpen))
+    {
+        imgui_text(_chr(str_printf(NULL, "Size: width = %d; height = %d;", (long)MAP_WIDTH, (long)MAP_HEIGHT)));
+        imgui_separator();
+        editor_map_settings(e);
+    }
     imgui_separator();
     imgui_end();
 }

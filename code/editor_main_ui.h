@@ -30,13 +30,39 @@ STRING *graphics_display_mode_str = "Display mode";
 STRING *graphics_display_windowed_str = "Windowed";
 STRING *graphics_display_windowed_fullscreen_str = "Borderless";
 
+// weather
+STRING *weather_list_str[WEATHER_MAX];
+STRING *weather_currently_used_str = "";
+STRING *weather_clear_str = "Clear";
+STRING *weather_cloudy_str = "Cloudy";
+STRING *weather_rain_str = "Rainy";
+
+// skycube
+STRING *skycube_list_str[SKY_MAX];
+STRING *skycube_currently_used_str = "";
+STRING *skycube_clear_str = "Day Clear";
+STRING *skycube_cloudy_str = "Day Cloudy";
+STRING *skycube_night_str = "Night";
+
+// imgui handles color range from 0...1
+// so I do this dumb trick to get 0...255 value
+float get_hsv_from_color(float value);
+
+float get_color_from_hsv(float value);
+
 void editor_camera_resize(int is_shrinked);
 
-void editor_main_initialize();
+void editor_main_initialize(Episode *e);
 
 void editor_main_destroy();
 
-void editor_main_reset();
+void editor_main_reset(Episode *e);
+
+void editor_weather_refresh(Episode *e);
+
+void editor_sky_refresh(Episode *e);
+
+void editor_map_settings(Episode *e);
 
 void editor_side_bar(Episode *e);
 

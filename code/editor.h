@@ -11,6 +11,8 @@ int editor_old_state = STATE_NEW;
 
 void editor_switch_state_to(int state);
 
+void editor_create_tooltip(STRING *tooltip);
+
 void editor_help_maker(char *desc);
 
 #endif

@@ -5,6 +5,16 @@ void editor_switch_state_to(int state)
     editor_state = state;
 }
 
+void editor_create_tooltip(STRING *tooltip)
+{
+    if (imgui_is_item_hovered())
+    {
+        imgui_set_tooltip(_chr(tooltip));
+        imgui_begin_tooltip();
+        imgui_end_tooltip();
+    }
+}
+
 void editor_help_maker(char *desc)
 {
     imgui_text_disabled("(?)");

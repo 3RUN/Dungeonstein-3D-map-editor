@@ -9,10 +9,12 @@
 #define FOG_DEF_START 32
 #define FOG_DEF_END 512
 
+#define SKY_MAX 3
 #define SKY_CLEAR 0
 #define SKY_CLOUDY 1
 #define SKY_NIGHT 2
 
+#define WEATHER_MAX 3
 #define WEATHER_CLEAR 0
 #define WEATHER_CLOUDY 1
 #define WEATHER_RAINY 2
