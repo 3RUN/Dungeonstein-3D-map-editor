@@ -11,11 +11,29 @@
 
 STRING *editor_back_to_menu_popup_str = "You want to go back to main menu?\nAll unsaved data will be lost!";
 
-int is_grid_visible = true;
-int is_walls_visible = true;
-int is_objects_visible = true;
+// resolution config
+STRING *graphics_resolution_available_list_str[SCREEN_RESOLUTION_MAX];
+STRING *graphics_resolution_currently_used_str = "None";
+STRING *graphics_res_str = "Resolution";
+
+// display mode config
+STRING *graphics_display_mode_list_str[DISPLAY_MODES_MAX]; // list of available display modes (windowed, windowed fullscreen, fullscreen)
+STRING *graphics_display_currently_used_str = "None";      // currently set display mode
+STRING *graphics_display_mode_str = "Display mode";
+STRING *graphics_display_windowed_str = "Windowed";
+STRING *graphics_display_windowed_fullscreen_str = "Borderless";
+
+void editor_main_initialize();
+
+void editor_main_reset();
 
 void editor_side_bar(Episode *e);
+
+void editor_settings_refresh();
+
+void editor_settings_window();
+
+void editor_help_window();
 
 void editor_top_bar(Episode *e);
 

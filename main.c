@@ -16,6 +16,12 @@ STRING *project_name_str = "MapEditor"; // insert your project's name here !
 #define MAP_CELL_SIZE 32
 
 int is_popup_opened = false;
+int is_settings_opened = false;
+int is_help_opened = false;
+
+int is_grid_visible = true;
+int is_walls_visible = true;
+int is_objects_visible = true;
 
 #include "cmd.h"
 #include "imgui.h"
@@ -63,9 +69,10 @@ void map_editor_startup()
 	config_initialize(temp_str);   // initialize config (set defaults and load from the config file)engine_initialize()
 	engine_initialize();		   // initialize all engine settings
 
-	imgui_init(0);		  // initialize imgui
-	imgui_change_theme(); //and apply custom theme
-	assets_initialize();  // load all editor assets
+	imgui_init(0);			  // initialize imgui
+	imgui_change_theme();	  //and apply custom theme
+	assets_initialize();	  // load all editor assets
+	editor_main_initialize(); // initialize main editor interface
 }
 
 void on_frame_event()
