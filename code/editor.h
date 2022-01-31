@@ -2,10 +2,11 @@
 #define _EDITOR_H_
 
 #define STATE_MENU 0
-#define STATE_NEW 1
-#define STATE_EPISODE 2
-#define STATE_EDITOR 3
-#define STATE_TEST 4
+#define STATE_LOAD 1
+#define STATE_NEW 2
+#define STATE_EPISODE 3
+#define STATE_EDITOR 4
+#define STATE_TEST 5
 
 int editor_state = STATE_MENU;
 int editor_old_state = STATE_MENU;
