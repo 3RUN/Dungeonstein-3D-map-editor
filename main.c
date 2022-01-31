@@ -14,8 +14,6 @@ STRING *project_name_str = "MapEditor"; // insert your project's name here !
 #define MAP_HEIGHT 31
 #define MAP_CELL_SIZE 32
 
-#define MAX_MAPS_PER_EPISODE 10
-
 #include "cmd.h"
 #include "imgui.h"
 #include "ini.h"
@@ -27,6 +25,7 @@ STRING *project_name_str = "MapEditor"; // insert your project's name here !
 #include "assets.h"
 #include "game_episode.h"
 #include "editor.h"
+#include "editor_menu.h"
 
 #include "savedir.c"
 #include "screenres_list.c"
@@ -35,6 +34,7 @@ STRING *project_name_str = "MapEditor"; // insert your project's name here !
 #include "assets.c"
 #include "game_episode.c"
 #include "editor.c"
+#include "editor_menu.c"
 
 Episode def_episode;
 
@@ -64,13 +64,16 @@ void on_frame_event()
 	switch (editor_state)
 	{
 	case STATE_MENU:
+		editor_menu_update();
 		break;
 
 	case STATE_LOAD:
+		episode_reset(&def_episode);
 		break;
 
 	case STATE_NEW:
 		episode_reset(&def_episode);
+		editor_switch_state_to(STATE_EPISODE);
 		break;
 
 	case STATE_EPISODE:

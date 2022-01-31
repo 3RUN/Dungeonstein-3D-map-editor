@@ -1,6 +1,13 @@
 #ifndef _GAME_EPISODE_H_
 #define _GAME_EPISODE_H_
 
+#define MAX_MAPS_PER_EPISODE 10
+
+#define MAP_MUSIC_NAME_LENGTH 32
+
+#define EPISODE_NAME_LENGTH 32
+#define EPISODE_STORY_LENGTH 512
+
 #define INDEX_NONE -1
 #define TYPE_NONE -1
 
@@ -48,15 +55,15 @@ typedef struct Map
     var fog_end;
     float fog_color[3];
 
-    char *music[32];
+    char *music[MAP_MUSIC_NAME_LENGTH];
 
     Cell cells[MAP_WIDTH][MAP_HEIGHT];
 } Map;
 
 typedef struct Episode
 {
-    char *name[32];
-    char *story[512];
+    char *name[EPISODE_NAME_LENGTH];
+    char *story[EPISODE_STORY_LENGTH];
 
     int map_count;
     Map map[MAX_MAPS_PER_EPISODE];
