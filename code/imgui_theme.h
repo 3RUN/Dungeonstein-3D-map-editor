@@ -4,7 +4,7 @@
 // style parameters
 var engine_theme_win_padding[2] = {8, 8};
 var engine_theme_win_rounding = 0;
-var engine_theme_win_bordersize = 2;
+var engine_theme_win_bordersize = 0;
 var engine_theme_win_minsize[2] = {16, 16};
 var engine_theme_win_title_alignment[2] = {0.5, 0.5};
 var engine_theme_child_rounding = 0;

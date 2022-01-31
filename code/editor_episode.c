@@ -33,12 +33,6 @@ void editor_episode_update(Episode *e)
 
     var button_width = ((EPISODE_WINDOW_WIDTH - (engine_theme_win_padding[0] * 2)) / 2) - 2.5;
 
-    if (imgui_button_withsize("Back", button_width, EPISODE_WINDOW_BUTTON_HEIGHT))
-    {
-        episode_reset(e);
-        editor_switch_state_to(STATE_MENU);
-    }
-    imgui_same_line();
     if (imgui_button_withsize("Create", button_width, EPISODE_WINDOW_BUTTON_HEIGHT))
     {
         if (strlen(e->name) > 0 && strlen(e->story) > 0)
@@ -50,6 +44,12 @@ void editor_episode_update(Episode *e)
             is_popup_opened = true;
             imgui_open_popup("##Episode popup");
         }
+    }
+    imgui_same_line();
+    if (imgui_button_withsize("Back", button_width, EPISODE_WINDOW_BUTTON_HEIGHT))
+    {
+        episode_reset(e);
+        editor_switch_state_to(STATE_MENU);
     }
 
     int popup_modal_flags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings;

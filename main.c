@@ -31,6 +31,7 @@ int is_popup_opened = false;
 #include "editor.h"
 #include "editor_menu.h"
 #include "editor_episode.h"
+#include "editor_main.h"
 
 #include "savedir.c"
 #include "screenres_list.c"
@@ -42,6 +43,7 @@ int is_popup_opened = false;
 #include "editor.c"
 #include "editor_menu.c"
 #include "editor_episode.c"
+#include "editor_main.c"
 
 Episode def_episode;
 
@@ -96,11 +98,22 @@ void on_frame_event()
 		break;
 
 	case STATE_EDITOR:
-		draw_text("in editor", 100, 100, COLOR_WHITE);
+		editor_main_update(&def_episode);
 		break;
 
 	case STATE_TEST:
 		break;
+	}
+
+	// make camera smaller + move downwards
+	// so we can't interact with grid under imgui user interface
+	if (editor_state == STATE_EDITOR)
+	{
+		editor_camera_resize(true);
+	}
+	else
+	{
+		editor_camera_resize(false);
 	}
 
 	mouse_lock_in_window();

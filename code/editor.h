@@ -17,4 +17,12 @@ void editor_create_tooltip(STRING *tooltip);
 
 void editor_help_maker(char *desc);
 
+// imgui handles color range from 0...1
+// so I do this dumb trick to get 0...255 value
+float get_hsv_from_color(float value);
+
+float get_color_from_hsv(float value);
+
+void editor_camera_resize(int is_shrinked);
+
 #endif
