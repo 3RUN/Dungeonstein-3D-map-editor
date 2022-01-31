@@ -47,6 +47,7 @@ void editor_episode_update(Episode *e)
         }
         else
         {
+            is_popup_opened = true;
             episode_button_id = EPISODE_POPUP_CREATE_ID;
             str_cpy(episode_popup_str, episode_create_popup_str);
             imgui_open_popup("##Episode popup");
@@ -55,6 +56,7 @@ void editor_episode_update(Episode *e)
     imgui_same_line();
     if (imgui_button_withsize("Exit", button_width, EPISODE_WINDOW_BUTTON_HEIGHT))
     {
+        is_popup_opened = true;
         episode_button_id = EPISODE_POPUP_EXIT_ID;
         str_cpy(episode_popup_str, episode_exit_popup_str);
         imgui_open_popup("##Episode popup");
@@ -72,16 +74,18 @@ void editor_episode_update(Episode *e)
                 sys_exit("");
             }
 
-            if (imgui_button_withsize("No", -1, EPISODE_WINDOW_BUTTON_HEIGHT) || key_esc)
+            if (imgui_button_withsize("No", -1, EPISODE_WINDOW_BUTTON_HEIGHT))
             {
                 imgui_close_current_popup();
+                is_popup_opened = false;
             }
         }
         else if (episode_button_id == EPISODE_POPUP_CREATE_ID)
         {
-            if (imgui_button_withsize("Ok", -1, EPISODE_WINDOW_BUTTON_HEIGHT) || key_esc)
+            if (imgui_button_withsize("Ok", -1, EPISODE_WINDOW_BUTTON_HEIGHT))
             {
                 imgui_close_current_popup();
+                is_popup_opened = false;
             }
         }
 

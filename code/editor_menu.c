@@ -25,6 +25,7 @@ void editor_menu_update(Episode *e)
 
     if (imgui_button_withsize("Exit", -1, MENU_WINDOW_BUTTON_HEIGHT))
     {
+        is_popup_opened = true;
         imgui_open_popup("##Menu exit popup");
     }
 
@@ -38,8 +39,9 @@ void editor_menu_update(Episode *e)
             sys_exit("");
         }
 
-        if (imgui_button_withsize("No", -1, MENU_WINDOW_BUTTON_HEIGHT) || key_esc)
+        if (imgui_button_withsize("No", -1, MENU_WINDOW_BUTTON_HEIGHT))
         {
+            is_popup_opened = false;
             imgui_close_current_popup();
         }
 

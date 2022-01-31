@@ -1,7 +1,7 @@
 
-int map_save()
+int episode_save()
 {
-    char *map_file = file_dialog_save("Save level", "*.map");
+    char *map_file = file_dialog_save("Save episode", "*.ep");
 
     key_pressed(-1);
 
@@ -13,9 +13,9 @@ int map_save()
     return true;
 }
 
-int map_load()
+int episode_load()
 {
-    char *map_file = file_dialog("Load level", "*.map");
+    char *map_file = file_dialog("Load episode", "*.ep");
 
     key_pressed(-1);
 

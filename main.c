@@ -15,6 +15,8 @@ STRING *project_name_str = "MapEditor"; // insert your project's name here !
 #define MAP_HEIGHT 31
 #define MAP_CELL_SIZE 32
 
+int is_popup_opened = false;
+
 #include "cmd.h"
 #include "imgui.h"
 #include "ini.h"
@@ -73,7 +75,7 @@ void on_frame_event()
 		break;
 
 	case STATE_LOAD:
-		int load_res = map_load();
+		int load_res = episode_load();
 		if (load_res == true)
 		{
 			editor_switch_state_to(STATE_EDITOR);
@@ -111,6 +113,33 @@ void on_exit_event()
 
 void on_esc_event()
 {
+	if (is_popup_opened == true)
+	{
+		return;
+	}
+
+	switch (editor_state)
+	{
+	case STATE_MENU:
+		break;
+
+	case STATE_LOAD:
+		break;
+
+	case STATE_NEW:
+		break;
+
+	case STATE_EPISODE:
+		episode_reset(&def_episode);
+		editor_switch_state_to(STATE_MENU);
+		break;
+
+	case STATE_EDITOR:
+		break;
+
+	case STATE_TEST:
+		break;
+	}
 }
 
 void main()
