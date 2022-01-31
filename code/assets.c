@@ -122,8 +122,8 @@ void assets_initialize()
         asset_create_texture(wall_textures, wall_textures_tga, "Entrance to level", ASSET_TYPE_WALL, 159, 419);
         asset_create_texture(wall_textures, wall_textures_tga, "Elevator door", ASSET_TYPE_WALL, 224, 419);
         asset_create_texture(wall_textures, wall_textures_tga, "Elevator wall", ASSET_TYPE_WALL, 289, 419);
-        asset_create_texture(wall_textures, wall_textures_tga, "Elevator (on)", ASSET_TYPE_WALL, 354, 419);
-        //asset_create_texture(wall_textures, wall_textures_tga, "Elevator (off)", ASSET_TYPE_WALL, 419, 419);
+        asset_create_texture(wall_textures, wall_textures_tga, "Elevator (off)", ASSET_TYPE_WALL, 354, 419);
+        //asset_create_texture(wall_textures, wall_textures_tga, "Elevator (on)", ASSET_TYPE_WALL, 419, 419);
     }
 }
 

@@ -9,9 +9,16 @@
 #define EDITOR_TOP_BAR_HEIGHT 16
 #define EDITOR_SIDE_BAR_WIDTH 280
 
+#define EDITOR_ASSET_WALLS 0
+#define EDITOR_ASSET_OBJECTS 1
+
+int editor_asset_type = EDITOR_ASSET_WALLS;
+int editor_asset_index = 0;
+
 BMAP *preview_bmap = NULL;
 
 char *preview_name[ASSET_DESC_LENGTH];
+char *wall_textures_listbox[MAX_WALL_TEXTURES];
 
 STRING *editor_back_to_menu_popup_str = "You want to go back to main menu?\nAll unsaved data will be lost!";
 

@@ -23,6 +23,48 @@ void editor_side_bar(Episode *e)
 
     if (imgui_collapsing_header("Assets", NULL, ImGuiTreeNodeFlags_DefaultOpen))
     {
+        if (imgui_begin_tabbar("Tabs", ImGuiTabBarFlags_NoCloseWithMiddleMouseButton))
+        {
+            if (imgui_begin_tabitem("Walls", NULL, NULL))
+            {
+                int settings_child_flags = ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
+                var width = imgui_get_content_region_avail_width();
+                imgui_begin_child("##Wall Texture list", vector(width, 256, 0), 1, settings_child_flags);
+
+                imgui_push_item_width(-1);
+                if (imgui_list_box("##Wall listbox", &editor_asset_index, wall_textures_listbox, MAX_WALL_TEXTURES, MAX_WALL_TEXTURES))
+                {
+                    int i = 0;
+                    for (i = 0; i < MAX_WALL_TEXTURES; i++)
+                    {
+                        if (editor_asset_index == i)
+                        {
+                            editor_preview_update(ASSET_TYPE_WALL, editor_asset_index);
+                        }
+                    }
+                }
+                imgui_pop_item_width();
+
+                imgui_end_child();
+
+                if (editor_asset_type != EDITOR_ASSET_WALLS)
+                {
+                    editor_asset_index = 0;
+                    editor_asset_type = EDITOR_ASSET_WALLS;
+                }
+                imgui_end_tabitem();
+            }
+            if (imgui_begin_tabitem("Objects", NULL, NULL))
+            {
+                if (editor_asset_type != EDITOR_ASSET_OBJECTS)
+                {
+                    editor_asset_index = 0;
+                    editor_asset_type = EDITOR_ASSET_OBJECTS;
+                }
+                imgui_end_tabitem();
+            }
+            imgui_end_tabbar();
+        }
     }
     imgui_separator();
 
@@ -313,6 +355,12 @@ void editor_main_initialize()
 {
     int i = 0;
 
+    // textures
+    for (i = 0; i < MAX_WALL_TEXTURES; i++)
+    {
+        wall_textures_listbox[i] = asset_get_desc(ASSET_TYPE_WALL, i);
+    }
+
     // update preview image
     editor_preview_update(ASSET_TYPE_WALL, 0);
 
@@ -354,6 +402,8 @@ void editor_main_initialize()
 
 void editor_main_reset()
 {
+    editor_asset_type = EDITOR_ASSET_WALLS;
+    editor_asset_index = 0;
     editor_preview_update(ASSET_TYPE_WALL, 0);
 
     is_settings_opened = false;
