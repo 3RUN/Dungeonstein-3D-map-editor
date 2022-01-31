@@ -31,7 +31,7 @@ void editor_episode_update(Episode *e)
     imgui_slider_int("##Slider_01", &e->map_count, 1, MAX_MAPS_PER_EPISODE);
     imgui_pop_item_width();
 
-    var button_width = ((EPISODE_WINDOW_WIDTH - (engine_theme_win_padding[0] * 2)) / 3) - 3;
+    var button_width = ((EPISODE_WINDOW_WIDTH - (engine_theme_win_padding[0] * 2)) / 2) - 2.5;
 
     if (imgui_button_withsize("Back", button_width, EPISODE_WINDOW_BUTTON_HEIGHT))
     {
@@ -48,45 +48,19 @@ void editor_episode_update(Episode *e)
         else
         {
             is_popup_opened = true;
-            episode_button_id = EPISODE_POPUP_CREATE_ID;
-            str_cpy(episode_popup_str, episode_create_popup_str);
             imgui_open_popup("##Episode popup");
         }
-    }
-    imgui_same_line();
-    if (imgui_button_withsize("Exit", button_width, EPISODE_WINDOW_BUTTON_HEIGHT))
-    {
-        is_popup_opened = true;
-        episode_button_id = EPISODE_POPUP_EXIT_ID;
-        str_cpy(episode_popup_str, episode_exit_popup_str);
-        imgui_open_popup("##Episode popup");
     }
 
     int popup_modal_flags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings;
     if (imgui_begin_popup_modals_params("##Episode popup", NULL, popup_modal_flags))
     {
-        imgui_text(_chr(episode_popup_str));
+        imgui_text(_chr(episode_create_popup_str));
 
-        if (episode_button_id == EPISODE_POPUP_EXIT_ID)
+        if (imgui_button_withsize("Ok", -1, EPISODE_WINDOW_BUTTON_HEIGHT))
         {
-            if (imgui_button_withsize("Yes", -1, EPISODE_WINDOW_BUTTON_HEIGHT))
-            {
-                sys_exit("");
-            }
-
-            if (imgui_button_withsize("No", -1, EPISODE_WINDOW_BUTTON_HEIGHT))
-            {
-                imgui_close_current_popup();
-                is_popup_opened = false;
-            }
-        }
-        else if (episode_button_id == EPISODE_POPUP_CREATE_ID)
-        {
-            if (imgui_button_withsize("Ok", -1, EPISODE_WINDOW_BUTTON_HEIGHT))
-            {
-                imgui_close_current_popup();
-                is_popup_opened = false;
-            }
+            imgui_close_current_popup();
+            is_popup_opened = false;
         }
 
         imgui_end_popup();
