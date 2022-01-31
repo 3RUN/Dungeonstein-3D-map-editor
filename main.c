@@ -26,6 +26,8 @@ int is_objects_visible = true;
 int mouse_x = 0;
 int mouse_y = 0;
 
+int current_map_id = 0; // id of currently modified map
+
 #include "cmd.h"
 #include "imgui.h"
 #include "ini.h"
@@ -88,7 +90,7 @@ void on_frame_event()
 {
 	DEBUG_VAR(editor_asset_type, 200);
 	DEBUG_VAR(editor_asset_index, 220);
-	
+
 	switch (editor_state)
 	{
 	case STATE_MENU:

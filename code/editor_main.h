@@ -51,6 +51,8 @@ void editor_help_window();
 
 void editor_top_bar(Episode *e);
 
+void editor_cell_tooltip(Episode *e);
+
 void editor_main_initialize();
 
 void editor_main_reset();

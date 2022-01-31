@@ -26,4 +26,8 @@ float get_color_from_hsv(float value);
 
 void editor_camera_resize(int is_shrinked);
 
+STRING *get_cell_info(Cell *cell);
+
+STRING *draw_cell_info(Episode *e, int x, int y);
+
 #endif

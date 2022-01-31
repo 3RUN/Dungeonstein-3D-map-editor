@@ -28,6 +28,7 @@ void cell_reset(Cell *c)
     c->id = INDEX_NONE;
     c->x = INDEX_NONE;
     c->y = INDEX_NONE;
+    c->type = TYPE_NONE;
     c->asset_index = INDEX_NONE;
 
     c->skill_x = 0;
@@ -68,6 +69,8 @@ void map_reset(Map *m)
 
             vec_set(&m->cells[x][y].worldpos, vector((MAP_CELL_SIZE * x), -(MAP_CELL_SIZE * y), 0));
             m->cells[x][y].id = id;
+            m->cells[x][y].x = x;
+            m->cells[x][y].y = y;
             id++;
         }
     }

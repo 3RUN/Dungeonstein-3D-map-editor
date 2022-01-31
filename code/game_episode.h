@@ -37,6 +37,7 @@ typedef struct Cell
     int id;
     int x;
     int y;
+    int type;
     int asset_index;
 
     var skill_x;

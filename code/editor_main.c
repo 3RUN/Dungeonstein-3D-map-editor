@@ -357,7 +357,7 @@ void editor_top_bar(Episode *e)
             editor_switch_state_to(STATE_MENU);
         }
 
-        if (imgui_button_withsize("No", -1, MENU_WINDOW_BUTTON_HEIGHT))
+        if (imgui_button_withsize("No", -1, MENU_WINDOW_BUTTON_HEIGHT) || key_esc)
         {
             is_popup_opened = false;
             imgui_close_current_popup();
@@ -367,6 +367,30 @@ void editor_top_bar(Episode *e)
     }
 
     imgui_end();
+}
+
+void editor_cell_tooltip(Episode *e)
+{
+    if (!e)
+    {
+        return;
+    }
+
+    if (config_current.is_cell_tooltip_enabled == false)
+    {
+        return;
+    }
+
+    if (is_allowed_to_draw_map() == true)
+    {
+        STRING *info_str = draw_cell_info(e, mouse_x, mouse_y);
+        if (info_str)
+        {
+            imgui_set_tooltip(_chr(info_str));
+            imgui_begin_tooltip();
+            imgui_end_tooltip();
+        }
+    }
 }
 
 void editor_main_initialize()
@@ -448,6 +472,7 @@ void editor_main_update(Episode *e)
 
     editor_side_bar(e);
     editor_top_bar(e);
+    editor_cell_tooltip(e);
 
     imgui_end_imode();
 }
