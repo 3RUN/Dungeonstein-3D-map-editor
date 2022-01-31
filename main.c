@@ -23,6 +23,9 @@ int is_grid_visible = true;
 int is_walls_visible = true;
 int is_objects_visible = true;
 
+int mouse_x = 0;
+int mouse_y = 0;
+
 #include "cmd.h"
 #include "imgui.h"
 #include "ini.h"
@@ -38,6 +41,8 @@ int is_objects_visible = true;
 #include "editor_menu.h"
 #include "editor_episode.h"
 #include "editor_main.h"
+#include "editor_cam.h"
+#include "editor_grid.h"
 
 #include "savedir.c"
 #include "screenres_list.c"
@@ -50,6 +55,8 @@ int is_objects_visible = true;
 #include "editor_menu.c"
 #include "editor_episode.c"
 #include "editor_main.c"
+#include "editor_cam.c"
+#include "editor_grid.c"
 
 Episode def_episode;
 
@@ -72,6 +79,8 @@ void map_editor_startup()
 	imgui_init(0);			  // initialize imgui
 	imgui_change_theme();	  //and apply custom theme
 	assets_initialize();	  // load all editor assets
+	camera_initialize();	  // initialize camera
+	grid_initialize();		  // initialize the map grid
 	editor_main_initialize(); // initialize main editor interface
 }
 
@@ -110,7 +119,10 @@ void on_frame_event()
 		break;
 
 	case STATE_EDITOR:
+		grid_get_mouse_pos(&mouse_x, &mouse_y);
 		editor_main_update(&def_episode);
+		camera_update();
+		grid_update();
 		break;
 
 	case STATE_TEST:
@@ -134,6 +146,7 @@ void on_frame_event()
 void on_exit_event()
 {
 	assets_destroy();
+	grid_destroy();
 }
 
 void on_esc_event()
