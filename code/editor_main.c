@@ -1,6 +1,9 @@
 
-void editor_tile_preview()
+void editor_preview_update(int type, int index)
 {
+    preview_bmap = asset_get_bmap(type, index);
+    strcpy(preview_name, "Name: ");
+    strcat(preview_name, asset_get_desc(type, index));
 }
 
 void editor_side_bar(Episode *e)
@@ -12,7 +15,9 @@ void editor_side_bar(Episode *e)
 
     if (imgui_collapsing_header("Preview", NULL, ImGuiTreeNodeFlags_DefaultOpen))
     {
-        editor_tile_preview();
+        imgui_text("Asset:");
+        imgui_image(preview_bmap);
+        imgui_text(preview_name);
     }
     imgui_separator();
 
@@ -308,6 +313,9 @@ void editor_main_initialize()
 {
     int i = 0;
 
+    // update preview image
+    editor_preview_update(ASSET_TYPE_WALL, 0);
+
     // resolution
     STRING *temp_resolution = "";
     for (i = 0; i < screen_resolutions_total; i++)
@@ -346,6 +354,8 @@ void editor_main_initialize()
 
 void editor_main_reset()
 {
+    editor_preview_update(ASSET_TYPE_WALL, 0);
+
     is_settings_opened = false;
     is_help_opened = false;
 
