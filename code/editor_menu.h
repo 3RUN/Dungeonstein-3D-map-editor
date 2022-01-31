@@ -8,6 +8,6 @@
 
 STRING *episode_menu_exit_popup_str = "Are you sure you want to exit?";
 
-void editor_menu_update();
+void editor_menu_update(Episode *e);
 
 #endif

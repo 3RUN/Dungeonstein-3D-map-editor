@@ -1,6 +1,7 @@
 #include <acknex.h>
 #include <windows.h>
 #include <default.c>
+#include <strio.c>
 
 #define PRAGMA_POINTER
 
@@ -24,6 +25,7 @@ STRING *project_name_str = "MapEditor"; // insert your project's name here !
 #include "config.h"
 #include "assets.h"
 #include "game_episode.h"
+#include "save_n_load.h"
 #include "editor.h"
 #include "editor_menu.h"
 #include "editor_episode.h"
@@ -34,6 +36,7 @@ STRING *project_name_str = "MapEditor"; // insert your project's name here !
 #include "config.c"
 #include "assets.c"
 #include "game_episode.c"
+#include "save_n_load.c"
 #include "editor.c"
 #include "editor_menu.c"
 #include "editor_episode.c"
@@ -66,11 +69,19 @@ void on_frame_event()
 	switch (editor_state)
 	{
 	case STATE_MENU:
-		editor_menu_update();
+		editor_menu_update(&def_episode);
 		break;
 
 	case STATE_LOAD:
-		episode_reset(&def_episode);
+		int load_res = map_load();
+		if (load_res == true)
+		{
+			editor_switch_state_to(STATE_EDITOR);
+		}
+		else
+		{
+			editor_switch_state_to(STATE_MENU);
+		}
 		break;
 
 	case STATE_NEW:
@@ -83,6 +94,7 @@ void on_frame_event()
 		break;
 
 	case STATE_EDITOR:
+		draw_text("in editor", 100, 100, COLOR_WHITE);
 		break;
 
 	case STATE_TEST:

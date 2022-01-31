@@ -1,6 +1,11 @@
 
-void editor_menu_update()
+void editor_menu_update(Episode *e)
 {
+    if (!e)
+    {
+        return;
+    }
+
     imgui_start_imode();
     imgui_set_next_window_pos((screen_size.x / 2) - (MENU_WINDOW_WIDTH / 2), (screen_size.y / 2) - (MENU_WINDOW_HEIGHT / 2), ImGuiCond_Always);
     imgui_set_next_window_size(MENU_WINDOW_WIDTH, MENU_WINDOW_HEIGHT, ImGuiCond_Always);
@@ -14,6 +19,7 @@ void editor_menu_update()
 
     if (imgui_button_withsize("Open episode", -1, MENU_WINDOW_BUTTON_HEIGHT))
     {
+        episode_reset(e);
         editor_switch_state_to(STATE_LOAD);
     }
 
