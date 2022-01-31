@@ -53,6 +53,10 @@ void map_reset(Map *m)
     m->fog_color[1] = 0;
     m->fog_color[2] = 0;
 
+    m->sky_color[0] = 32;
+    m->sky_color[0] = 32;
+    m->sky_color[0] = 32;
+
     strcpy(m->music, "");
 
     int x = 0, y = 0, id = 0;

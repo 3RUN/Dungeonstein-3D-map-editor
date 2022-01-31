@@ -23,9 +23,7 @@ STRING *graphics_display_mode_str = "Display mode";
 STRING *graphics_display_windowed_str = "Windowed";
 STRING *graphics_display_windowed_fullscreen_str = "Borderless";
 
-void editor_main_initialize();
-
-void editor_main_reset();
+void editor_tile_preview();
 
 void editor_side_bar(Episode *e);
 
@@ -36,6 +34,10 @@ void editor_settings_window();
 void editor_help_window();
 
 void editor_top_bar(Episode *e);
+
+void editor_main_initialize();
+
+void editor_main_reset();
 
 void editor_main_update(Episode *e);
 

@@ -1,52 +1,6 @@
 
-void editor_main_initialize()
+void editor_tile_preview()
 {
-    int i = 0;
-
-    // resolution
-    STRING *temp_resolution = "";
-    for (i = 0; i < screen_resolutions_total; i++)
-    {
-        str_cpy(temp_resolution, str_for_num(NULL, screen_resolution_available_list[SCREEN_RESOLUTION_WIDTH][i]));
-        str_cat(temp_resolution, "x");
-        str_cat(temp_resolution, str_for_num(NULL, screen_resolution_available_list[SCREEN_RESOLUTION_HEIGHT][i]));
-
-        if (!graphics_resolution_available_list_str[i])
-        {
-            graphics_resolution_available_list_str[i] = str_create("");
-            str_cpy(graphics_resolution_available_list_str[i], temp_resolution);
-        }
-    }
-
-    // display modes
-    for (i = 0; i < DISPLAY_MODES_MAX; i++)
-    {
-        if (!graphics_display_mode_list_str[i])
-        {
-            graphics_display_mode_list_str[i] = str_create("");
-            switch (i)
-            {
-            case DISPLAY_MODE_WINDOWED:
-                str_cpy(graphics_display_mode_list_str[i], graphics_display_windowed_str);
-                break;
-
-            case DISPLAY_MODE_WINDOWED_FULLSCREEN:
-                str_cpy(graphics_display_mode_list_str[i], graphics_display_windowed_fullscreen_str);
-                break;
-            }
-        }
-    }
-    editor_settings_refresh();
-}
-
-void editor_main_reset()
-{
-    is_settings_opened = false;
-    is_help_opened = false;
-
-    is_grid_visible = true;
-    is_walls_visible = true;
-    is_objects_visible = true;
 }
 
 void editor_side_bar(Episode *e)
@@ -58,6 +12,7 @@ void editor_side_bar(Episode *e)
 
     if (imgui_collapsing_header("Preview", NULL, ImGuiTreeNodeFlags_DefaultOpen))
     {
+        editor_tile_preview();
     }
     imgui_separator();
 
@@ -347,6 +302,56 @@ void editor_top_bar(Episode *e)
     }
 
     imgui_end();
+}
+
+void editor_main_initialize()
+{
+    int i = 0;
+
+    // resolution
+    STRING *temp_resolution = "";
+    for (i = 0; i < screen_resolutions_total; i++)
+    {
+        str_cpy(temp_resolution, str_for_num(NULL, screen_resolution_available_list[SCREEN_RESOLUTION_WIDTH][i]));
+        str_cat(temp_resolution, "x");
+        str_cat(temp_resolution, str_for_num(NULL, screen_resolution_available_list[SCREEN_RESOLUTION_HEIGHT][i]));
+
+        if (!graphics_resolution_available_list_str[i])
+        {
+            graphics_resolution_available_list_str[i] = str_create("");
+            str_cpy(graphics_resolution_available_list_str[i], temp_resolution);
+        }
+    }
+
+    // display modes
+    for (i = 0; i < DISPLAY_MODES_MAX; i++)
+    {
+        if (!graphics_display_mode_list_str[i])
+        {
+            graphics_display_mode_list_str[i] = str_create("");
+            switch (i)
+            {
+            case DISPLAY_MODE_WINDOWED:
+                str_cpy(graphics_display_mode_list_str[i], graphics_display_windowed_str);
+                break;
+
+            case DISPLAY_MODE_WINDOWED_FULLSCREEN:
+                str_cpy(graphics_display_mode_list_str[i], graphics_display_windowed_fullscreen_str);
+                break;
+            }
+        }
+    }
+    editor_settings_refresh();
+}
+
+void editor_main_reset()
+{
+    is_settings_opened = false;
+    is_help_opened = false;
+
+    is_grid_visible = true;
+    is_walls_visible = true;
+    is_objects_visible = true;
 }
 
 void editor_main_update(Episode *e)

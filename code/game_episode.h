@@ -54,6 +54,8 @@ typedef struct Map
     var fog_end;
     float fog_color[3];
 
+    float sky_color[3];
+
     char *music[MAP_MUSIC_NAME_LENGTH];
 
     Cell cells[MAP_WIDTH][MAP_HEIGHT];
