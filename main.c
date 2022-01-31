@@ -88,6 +88,7 @@ void map_editor_startup()
 
 void on_frame_event()
 {
+	DEBUG_VAR(current_map_id, 160);
 	DEBUG_VAR(editor_asset_type, 200);
 	DEBUG_VAR(editor_asset_index, 220);
 

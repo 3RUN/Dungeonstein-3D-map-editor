@@ -86,6 +86,24 @@ void editor_side_bar(Episode *e)
 
     if (imgui_collapsing_header("Map settings", NULL, ImGuiTreeNodeFlags_DefaultOpen))
     {
+        imgui_text("Active Map Id:");
+        imgui_same_line();
+        imgui_align_right_with_offset(43);
+        if (imgui_arrow_button("Decrease", ImGuiDir_Left))
+        {
+            current_map_id--;
+            current_map_id = clamp(current_map_id, 0, e->map_count - 1);
+        }
+        imgui_same_line();
+        imgui_text(_chr(str_printf(NULL, "%d", (long)(current_map_id + 1))));
+        imgui_same_line();
+        if (imgui_arrow_button("Increase", ImGuiDir_Right))
+        {
+            current_map_id++;
+            current_map_id = clamp(current_map_id, 0, e->map_count - 1);
+        }
+        imgui_separator();
+
         imgui_text(_chr(str_printf(NULL, "Mouse pos x = %d; y = %d;", (long)mouse_x, (long)mouse_y)));
         imgui_text(_chr(str_printf(NULL, "Map size: width = %d; height = %d;", (long)MAP_WIDTH, (long)MAP_HEIGHT)));
         imgui_separator();
@@ -452,6 +470,8 @@ void editor_main_reset()
     editor_asset_type = EDITOR_ASSET_WALLS;
     editor_main_selected_asset_type = editor_main_asset_types[editor_asset_type];
     editor_preview_update(editor_asset_type, editor_asset_index);
+
+    current_map_id = 0;
 
     is_settings_opened = false;
     is_help_opened = false;
