@@ -86,6 +86,9 @@ void map_editor_startup()
 
 void on_frame_event()
 {
+	DEBUG_VAR(editor_asset_type, 200);
+	DEBUG_VAR(editor_asset_index, 220);
+	
 	switch (editor_state)
 	{
 	case STATE_MENU:
@@ -110,6 +113,8 @@ void on_frame_event()
 		break;
 
 	case STATE_NEW:
+		grid_clear();
+		editor_main_reset();
 		episode_reset(&def_episode);
 		editor_switch_state_to(STATE_EPISODE);
 		break;

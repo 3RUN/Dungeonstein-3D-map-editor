@@ -16,7 +16,7 @@ int is_allowed_to_draw_map()
         return false;
     }
 
-    if (is_pos_on_grid(vector(mouse_x, mouse_y, 0)) == false)
+    if (is_pos_on_grid(vector(vec_mouse_on_grid.x, -vec_mouse_on_grid.y, 0)) == false)
     {
         return false;
     }

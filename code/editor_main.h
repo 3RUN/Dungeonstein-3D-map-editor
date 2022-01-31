@@ -12,6 +12,8 @@
 #define EDITOR_ASSET_WALLS 0
 #define EDITOR_ASSET_OBJECTS 1
 
+#define MAX_EDITOR_ASSET_TYPES 2
+
 int editor_asset_type = EDITOR_ASSET_WALLS;
 int editor_asset_index = 0;
 
@@ -19,6 +21,9 @@ BMAP *preview_bmap = NULL;
 
 char *preview_name[ASSET_DESC_LENGTH];
 char *wall_textures_listbox[MAX_WALL_TEXTURES];
+
+char *editor_main_selected_asset_type = "";
+char *editor_main_asset_types[MAX_EDITOR_ASSET_TYPES];
 
 STRING *editor_back_to_menu_popup_str = "You want to go back to main menu?\nAll unsaved data will be lost!";
 

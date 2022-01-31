@@ -12,12 +12,12 @@ void editor_menu_update(Episode *e)
     int menu_window_flags = ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing;
     imgui_begin("Main menu", NULL, menu_window_flags);
 
-    if (imgui_button_withsize("New episode", -1, MENU_WINDOW_BUTTON_HEIGHT))
+    if (imgui_button_withsize("New", -1, MENU_WINDOW_BUTTON_HEIGHT))
     {
         editor_switch_state_to(STATE_NEW);
     }
 
-    if (imgui_button_withsize("Open episode", -1, MENU_WINDOW_BUTTON_HEIGHT))
+    if (imgui_button_withsize("Open", -1, MENU_WINDOW_BUTTON_HEIGHT))
     {
         episode_reset(e);
         editor_switch_state_to(STATE_LOAD);

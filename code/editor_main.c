@@ -23,47 +23,63 @@ void editor_side_bar(Episode *e)
 
     if (imgui_collapsing_header("Assets", NULL, ImGuiTreeNodeFlags_DefaultOpen))
     {
-        if (imgui_begin_tabbar("Tabs", ImGuiTabBarFlags_NoCloseWithMiddleMouseButton))
-        {
-            if (imgui_begin_tabitem("Walls", NULL, NULL))
-            {
-                int settings_child_flags = ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
-                var width = imgui_get_content_region_avail_width();
-                imgui_begin_child("##Wall Texture list", vector(width, 256, 0), 1, settings_child_flags);
+        imgui_text("Category:");
+        imgui_same_line();
 
-                imgui_push_item_width(-1);
-                if (imgui_list_box("##Wall listbox", &editor_asset_index, wall_textures_listbox, MAX_WALL_TEXTURES, MAX_WALL_TEXTURES))
+        imgui_push_item_width(-1);
+        if (imgui_begin_combo("##Asset Type Combobox", editor_main_selected_asset_type, ImGuiComboFlags_HeightSmall))
+        {
+            int n = 0;
+            for (n = 0; n < MAX_EDITOR_ASSET_TYPES; n++)
+            {
+                BOOL is_selected = (editor_main_selected_asset_type == editor_main_asset_types[n]);
+                if (imgui_selectable(editor_main_asset_types[n], &is_selected, 0))
                 {
-                    int i = 0;
-                    for (i = 0; i < MAX_WALL_TEXTURES; i++)
+                    editor_main_selected_asset_type = editor_main_asset_types[n];
+                    editor_asset_type = n;
+                    editor_asset_index = 0;
+                    //editor_preview_update(editor_asset_type, editor_asset_index);
+                }
+            }
+            imgui_end_combo();
+        }
+        imgui_pop_item_width();
+
+        if (editor_asset_type == EDITOR_ASSET_WALLS)
+        {
+            int wall_texture_child_window_flags = ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
+            var width = imgui_get_content_region_avail_width();
+            imgui_begin_child("##Wall Texture Child", vector(width, 256, 0), 1, wall_texture_child_window_flags);
+
+            imgui_push_item_width(-1);
+            if (imgui_list_box("##Wall Texture listbox", &editor_asset_index, wall_textures_listbox, MAX_WALL_TEXTURES, MAX_WALL_TEXTURES))
+            {
+                int i = 0;
+                for (i = 0; i < MAX_WALL_TEXTURES; i++)
+                {
+                    if (editor_asset_index == i)
                     {
-                        if (editor_asset_index == i)
-                        {
-                            editor_preview_update(ASSET_TYPE_WALL, editor_asset_index);
-                        }
+                        editor_preview_update(ASSET_TYPE_WALL, editor_asset_index);
                     }
                 }
-                imgui_pop_item_width();
-
-                imgui_end_child();
-
-                if (editor_asset_type != EDITOR_ASSET_WALLS)
-                {
-                    editor_asset_index = 0;
-                    editor_asset_type = EDITOR_ASSET_WALLS;
-                }
-                imgui_end_tabitem();
             }
-            if (imgui_begin_tabitem("Objects", NULL, NULL))
-            {
-                if (editor_asset_type != EDITOR_ASSET_OBJECTS)
-                {
-                    editor_asset_index = 0;
-                    editor_asset_type = EDITOR_ASSET_OBJECTS;
-                }
-                imgui_end_tabitem();
-            }
-            imgui_end_tabbar();
+            imgui_pop_item_width();
+
+            imgui_end_child();
+        }
+        else if (editor_asset_type == EDITOR_ASSET_OBJECTS)
+        {
+            imgui_separator();
+            imgui_text("Object parameters:");
+            int object_child_window_flags = ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
+            var width = imgui_get_content_region_avail_width();
+            imgui_begin_child("##Object Parameters Child", vector(width, 96, 0), 1, object_child_window_flags);
+
+            imgui_end_child();
+            imgui_separator();
+            imgui_begin_child("##Object Texture Child", vector(width, 160, 0), 1, object_child_window_flags);
+
+            imgui_end_child();
         }
     }
     imgui_separator();
@@ -338,7 +354,6 @@ void editor_top_bar(Episode *e)
         {
             is_popup_opened = false;
             episode_reset(e);
-            editor_main_reset();
             editor_switch_state_to(STATE_MENU);
         }
 
@@ -357,6 +372,10 @@ void editor_top_bar(Episode *e)
 void editor_main_initialize()
 {
     int i = 0;
+
+    // asset types
+    editor_main_asset_types[0] = "Walls";
+    editor_main_asset_types[1] = "Objects";
 
     // textures
     for (i = 0; i < MAX_WALL_TEXTURES; i++)
@@ -405,9 +424,10 @@ void editor_main_initialize()
 
 void editor_main_reset()
 {
-    editor_asset_type = EDITOR_ASSET_WALLS;
     editor_asset_index = 0;
-    editor_preview_update(ASSET_TYPE_WALL, 0);
+    editor_asset_type = EDITOR_ASSET_WALLS;
+    editor_main_selected_asset_type = editor_main_asset_types[editor_asset_type];
+    editor_preview_update(editor_asset_type, editor_asset_index);
 
     is_settings_opened = false;
     is_help_opened = false;
