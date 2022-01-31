@@ -6,7 +6,7 @@
 #define MAP_MUSIC_NAME_LENGTH 32
 
 #define EPISODE_NAME_LENGTH 32
-#define EPISODE_STORY_LENGTH 512
+#define EPISODE_STORY_LENGTH 303
 
 #define INDEX_NONE -1
 #define TYPE_NONE -1
@@ -37,7 +37,6 @@ typedef struct Cell
     int id;
     int x;
     int y;
-    int type;
     int asset_index;
 
     var skill_x;

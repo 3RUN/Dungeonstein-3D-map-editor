@@ -28,7 +28,6 @@ void cell_reset(Cell *c)
     c->id = INDEX_NONE;
     c->x = INDEX_NONE;
     c->y = INDEX_NONE;
-    c->type = TYPE_NONE;
     c->asset_index = INDEX_NONE;
 
     c->skill_x = 0;

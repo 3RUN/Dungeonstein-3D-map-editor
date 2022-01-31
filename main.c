@@ -26,6 +26,7 @@ STRING *project_name_str = "MapEditor"; // insert your project's name here !
 #include "game_episode.h"
 #include "editor.h"
 #include "editor_menu.h"
+#include "editor_episode.h"
 
 #include "savedir.c"
 #include "screenres_list.c"
@@ -35,6 +36,7 @@ STRING *project_name_str = "MapEditor"; // insert your project's name here !
 #include "game_episode.c"
 #include "editor.c"
 #include "editor_menu.c"
+#include "editor_episode.c"
 
 Episode def_episode;
 
@@ -77,6 +79,7 @@ void on_frame_event()
 		break;
 
 	case STATE_EPISODE:
+		editor_episode_update(&def_episode);
 		break;
 
 	case STATE_EDITOR:
@@ -96,7 +99,6 @@ void on_exit_event()
 
 void on_esc_event()
 {
-	sys_exit("");
 }
 
 void main()
