@@ -91,8 +91,13 @@ void on_frame_event()
 		}
 		else
 		{
-			editor_switch_state_to(STATE_MENU);
+			editor_switch_state_to(editor_old_state);
 		}
+		break;
+
+	case STATE_SAVE:
+		int save_res = episode_save();
+		editor_switch_state_to(editor_old_state);
 		break;
 
 	case STATE_NEW:
@@ -144,6 +149,9 @@ void on_esc_event()
 		break;
 
 	case STATE_LOAD:
+		break;
+
+	case STATE_SAVE:
 		break;
 
 	case STATE_NEW:

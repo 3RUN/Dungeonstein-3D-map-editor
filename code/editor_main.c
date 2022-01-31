@@ -273,9 +273,11 @@ void editor_top_bar(Episode *e)
         {
             if (imgui_menu_item("Save", "", 0, 1))
             {
+                editor_switch_state_to(STATE_SAVE);
             }
             if (imgui_menu_item("Load", "", 0, 1))
             {
+                editor_switch_state_to(STATE_LOAD);
             }
             imgui_separator();
             if (imgui_menu_item("Exit", "", 0, 1))
