@@ -58,7 +58,9 @@ void camera_initialize()
 
     camera->arc = 90;
     vec_set(&camera->pan, vector(90, -90, 0));
-    vec_set(&sky_color.blue, BACKGROUND_COLOR);
+    sky_color.red = get_color_from_hsv(config_current.background_color[0]);
+    sky_color.green = get_color_from_hsv(config_current.background_color[1]);
+    sky_color.blue = get_color_from_hsv(config_current.background_color[2]);
 
     camera->skill_y = 1024; // initial camera height
     camera->skill_x = fcos(camera->tilt, camera->skill_y);
@@ -70,5 +72,9 @@ void camera_initialize()
 
 void camera_update()
 {
+    sky_color.red = get_color_from_hsv(config_current.background_color[0]);
+    sky_color.green = get_color_from_hsv(config_current.background_color[1]);
+    sky_color.blue = get_color_from_hsv(config_current.background_color[2]);
+
     camera_movement(vec_grid_center.z, MAP_CELL_SIZE);
 }

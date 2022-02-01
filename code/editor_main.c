@@ -481,6 +481,24 @@ void editor_settings_window()
     imgui_radiobutton("Disabled", &config_current.is_cell_tooltip_enabled, false);
     imgui_separator();
 
+    // background color
+    imgui_text("Background color: ");
+    imgui_same_line();
+    var avail_picker_width = imgui_get_content_region_avail_width();
+    imgui_push_item_width(avail_picker_width);
+    static int misc_flags = ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_NoDragDrop;
+    imgui_color_edit3("##Background color picker", config_current.background_color, misc_flags);
+    imgui_pop_item_width();
+
+    // grid color
+    imgui_text("Grid color:       ");
+    imgui_same_line();
+    var avail_picker_width = imgui_get_content_region_avail_width();
+    imgui_push_item_width(avail_picker_width);
+    static int misc_flags = ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_NoDragDrop;
+    imgui_color_edit3("##Grid color picker", config_current.grid_color, misc_flags);
+    imgui_pop_item_width();
+
     imgui_end_child();
 
     // reset to defaults button
@@ -553,6 +571,11 @@ void editor_top_bar(Episode *e)
                 editor_switch_state_to(STATE_LOAD);
             }
             imgui_separator();
+            if (imgui_menu_item("Preferences", "", 0, 1))
+            {
+                is_settings_opened = 1 - is_settings_opened;
+            }
+            imgui_separator();
             if (imgui_menu_item("Exit", "", 0, 1))
             {
                 is_popup_opened = true;
@@ -568,11 +591,10 @@ void editor_top_bar(Episode *e)
             imgui_end_menu();
         }
 
-        if (imgui_begin_menu("Editor", 1))
+        if (imgui_begin_menu("Episode", 1))
         {
-            if (imgui_menu_item("Settings", "", 0, 1))
+            if (imgui_menu_item("Edit", "", 0, 1))
             {
-                is_settings_opened = 1 - is_settings_opened;
             }
             imgui_end_menu();
         }

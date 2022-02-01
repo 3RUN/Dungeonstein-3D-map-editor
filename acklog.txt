@@ -1,4 +1,4 @@
-Log of A8 Engine 8.47.1 run at Tue Feb 01 18:18:27 2022
+Log of A8 Engine 8.47.1 run at Tue Feb 01 18:42:28 2022
 magom on Windows NT/2000/XP version 6.2 Build 9200
 Options main.c -diag 
 App: C:\Program Files (x86)\GStudio8\acknex.exe in C:\Users\magom\Desktop\map editor\
@@ -23,20 +23,20 @@ ackoal.dll opened
 ackphysX.dll opened
 Compiling MAIN.C - [Esc] to abort.......
 PATH assets\
-PATH code\.................................................................. 0.600 sec
+PATH code\.................................................................. 0.581 sec
 Running MAIN.C.
 9 objects
-Main started at 1.699
+Main started at 1.671
 D3D_Init Window: 720x480 -> Window: 1x720x480x32
 Video memory found: 4093 MB
-LevelInit at 1.781 0 lmaps 0 textures...ok
-LevelReady at 1.782
+LevelInit at 1.747 0 lmaps 0 textures...ok
+LevelReady at 1.747
 def_startup started
 map_editor_startup started
-Main loop at 1.795
+Main loop at 1.760
 D3D_Resize Window: 1280x720 -> Window: 1x1280x720x32....
-1st frame with 4093 MB. at 1.811
-Normal exit at 3.704
+1st frame with 4093 MB. at 1.775
+Normal exit at 17.094
 Close level,DLL,objects
 Free input,funcs,panels,defs,syns,views,strings,vars..ok
 Free sounds,bmaps,fonts,hash,defs1,script..ok
@@ -44,4 +44,4 @@ Close dx,multimedia,D3D,engine,nexus..ok
 A8 Engine - Pro Edition V8.47.1 - Mar  9 2016
 (c) Conitec - www.3dgamestudio.com
 Registered to: Magomet Kochkarov
-Close window at 3.740
+Close window at 17.137

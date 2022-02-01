@@ -1,8 +1,6 @@
 #ifndef _EDITOR_CAM_H_
 #define _EDITOR_CAM_H_
 
-#define BACKGROUND_COLOR vector(136, 0, 152)
-
 POINTL mouse_pos_PL;
 
 VECTOR vec_grid_center;

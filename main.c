@@ -102,6 +102,8 @@ void on_frame_event()
 		int load_res = episode_load();
 		if (load_res == true)
 		{
+			grid_clear();
+			editor_main_reset(&def_episode);
 			editor_switch_state_to(STATE_EDITOR);
 		}
 		else

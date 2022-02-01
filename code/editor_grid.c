@@ -100,6 +100,10 @@ void grid_update()
 
     if (is_grid_visible == true)
     {
-        grid_draw(&grid_draw_offset, MAP_CELL_SIZE, MAP_WIDTH, MAP_HEIGHT, GRID_COLOR);
+        COLOR grid_color;
+        grid_color.red = get_color_from_hsv(config_current.grid_color[0]);
+        grid_color.green = get_color_from_hsv(config_current.grid_color[1]);
+        grid_color.blue = get_color_from_hsv(config_current.grid_color[2]);
+        grid_draw(&grid_draw_offset, MAP_CELL_SIZE, MAP_WIDTH, MAP_HEIGHT, &grid_color);
     }
 }

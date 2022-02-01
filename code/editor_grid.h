@@ -2,7 +2,6 @@
 #define _EDITOR_GRID_H_
 
 #define GRID_DRAW_OFFSET 0.01
-#define GRID_COLOR vector(128, 128, 128)
 
 int is_pos_on_grid(VECTOR *pos);
 
