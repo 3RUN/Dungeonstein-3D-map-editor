@@ -6,6 +6,56 @@ void editor_preview_update(int type, int index)
     strcat(preview_name, asset_get_desc(type, index));
 }
 
+void editor_weather_refresh(Episode *e)
+{
+    if (!e)
+    {
+        return;
+    }
+
+    Map *m = &e->map[current_map_id];
+    if (!m)
+    {
+        return;
+    }
+
+    // weather
+    int i = 0;
+    for (i = 0; i < WEATHER_MAX; i++)
+    {
+        if (m->weather_id == i)
+        {
+            str_cpy(weather_currently_used_str, weather_list_str[i]);
+        }
+    }
+
+    // load fog preset when weather is changed
+    if (m->weather_id == WEATHER_CLEAR)
+    {
+        m->fog_start = 32;
+        m->fog_end = 1024;
+        m->fog_color[0] = get_hsv_from_color(255); // 0...1
+        m->fog_color[1] = get_hsv_from_color(255);
+        m->fog_color[2] = get_hsv_from_color(255);
+    }
+    else if (m->weather_id == WEATHER_RAIN)
+    {
+        m->fog_start = 32;
+        m->fog_end = 512;
+        m->fog_color[0] = get_hsv_from_color(128);
+        m->fog_color[1] = get_hsv_from_color(128);
+        m->fog_color[2] = get_hsv_from_color(128);
+    }
+    else if (m->weather_id == WEATHER_SNOW)
+    {
+        m->fog_start = 32;
+        m->fog_end = 256;
+        m->fog_color[0] = get_hsv_from_color(96);
+        m->fog_color[1] = get_hsv_from_color(96);
+        m->fog_color[2] = get_hsv_from_color(96);
+    }
+}
+
 void editor_side_bar(Episode *e)
 {
     imgui_set_next_window_pos(screen_size.x - EDITOR_SIDE_BAR_WIDTH, EDITOR_TOP_BAR_HEIGHT, ImGuiCond_Always);
@@ -16,7 +66,9 @@ void editor_side_bar(Episode *e)
     if (imgui_collapsing_header("Preview", NULL, ImGuiTreeNodeFlags_DefaultOpen))
     {
         imgui_text("Asset:");
-        imgui_image(preview_bmap);
+        imgui_align_right_with_offset((EDITOR_SIDE_BAR_WIDTH / 2) + 64 - engine_theme_win_padding[0]);
+        imgui_image_scale(preview_bmap, vector(128, 128, 0), vector(0, 0, 0), vector(1, 1, 0));
+        imgui_separator();
         imgui_text(preview_name);
     }
     imgui_separator();
@@ -59,12 +111,11 @@ void editor_side_bar(Episode *e)
                 {
                     if (editor_asset_index == i)
                     {
-                        editor_preview_update(ASSET_TYPE_WALL, editor_asset_index);
+                        editor_preview_update(editor_asset_type, editor_asset_index);
                     }
                 }
             }
             imgui_pop_item_width();
-
             imgui_end_child();
         }
         else if (editor_asset_type >= ASSET_TYPE_PROPS)
@@ -74,11 +125,27 @@ void editor_side_bar(Episode *e)
             int object_child_window_flags = ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
             var width = imgui_get_content_region_avail_width();
             imgui_begin_child("##Object Parameters Child", vector(width, 96, 0), 1, object_child_window_flags);
+            switch (editor_asset_type)
+            {
+            case ASSET_TYPE_PROPS:
+                break;
 
+            case ASSET_TYPE_ITEMS:
+                break;
+
+            case ASSET_TYPE_WEAPON:
+                break;
+
+            case ASSET_TYPE_ENEMIES:
+                break;
+
+            case ASSET_TYPE_BOSSES:
+                break;
+            }
             imgui_end_child();
+
             imgui_separator();
             imgui_begin_child("##Object Texture Child", vector(width, 160, 0), 1, object_child_window_flags);
-
             switch (editor_asset_type)
             {
             case ASSET_TYPE_PROPS:
@@ -161,7 +228,6 @@ void editor_side_bar(Episode *e)
                 imgui_pop_item_width();
                 break;
             }
-
             imgui_end_child();
         }
     }
@@ -197,6 +263,28 @@ void editor_side_bar(Episode *e)
         {
             return;
         }
+
+        // weather
+        imgui_text("Weather:");
+        imgui_same_line();
+        var avail_combobox_width = imgui_get_content_region_avail_width();
+        imgui_push_item_width(avail_combobox_width);
+        if (imgui_begin_combo("##Weather Combobox", _chr(weather_currently_used_str), ImGuiComboFlags_HeightSmall))
+        {
+            int i = 0;
+            for (i = 0; i < WEATHER_MAX; i++)
+            {
+                int is_selected = str_cmp(weather_currently_used_str, weather_list_str[i]);
+                if (imgui_selectable(_chr(weather_list_str[i]), &is_selected, 0))
+                {
+                    m->weather_id = i;
+                    str_cpy(weather_currently_used_str, weather_list_str[i]);
+                    editor_weather_refresh(e);
+                }
+            }
+            imgui_end_combo();
+        }
+        imgui_pop_item_width();
 
         // fog settings
         imgui_text("Fog start: ");
@@ -557,9 +645,18 @@ void editor_cell_tooltip(Episode *e)
     }
 }
 
-void editor_main_initialize()
+void editor_main_initialize(Episode *e)
 {
-    int i = 0;
+    if (!e)
+    {
+        return;
+    }
+
+    Map *m = &e->map[current_map_id];
+    if (!m)
+    {
+        return;
+    }
 
     // asset types
     editor_main_asset_types[0] = "Walls";
@@ -570,6 +667,7 @@ void editor_main_initialize()
     editor_main_asset_types[5] = "Bosses";
 
     // textures
+    int i = 0;
     for (i = 0; i < MAX_WALL_TEXTURES; i++)
     {
         wall_textures_listbox[i] = asset_get_desc(ASSET_TYPE_WALL, i);
@@ -597,6 +695,31 @@ void editor_main_initialize()
 
     // update preview image
     editor_preview_update(ASSET_TYPE_WALL, 0);
+
+    // weather
+    for (i = 0; i < WEATHER_MAX; i++)
+    {
+        STRING *temp_weather_str = "";
+        if (i == WEATHER_CLEAR)
+        {
+            str_cpy(temp_weather_str, weather_clear_str);
+        }
+        else if (i == WEATHER_RAIN)
+        {
+            str_cpy(temp_weather_str, weather_rain_str);
+        }
+        else if (i == WEATHER_SNOW)
+        {
+            str_cpy(temp_weather_str, weather_snow_str);
+        }
+
+        if (!weather_list_str[i])
+        {
+            weather_list_str[i] = str_create("");
+            str_cpy(weather_list_str[i], temp_weather_str);
+        }
+    }
+    editor_weather_refresh(e);
 
     // resolution
     STRING *temp_resolution = "";
@@ -634,12 +757,19 @@ void editor_main_initialize()
     editor_settings_refresh();
 }
 
-void editor_main_reset()
+void editor_main_reset(Episode *e)
 {
+    if (!e)
+    {
+        return;
+    }
+
     editor_asset_index = 0;
     editor_asset_type = ASSET_TYPE_WALL;
     editor_main_selected_asset_type = editor_main_asset_types[editor_asset_type];
     editor_preview_update(editor_asset_type, editor_asset_index);
+
+    editor_weather_refresh(e);
 
     current_map_id = 0;
 
@@ -654,6 +784,14 @@ void editor_main_reset()
 void editor_main_destroy()
 {
     int i = 0;
+    for (i = 0; i < WEATHER_MAX; i++)
+    {
+        if (weather_list_str[i])
+        {
+            ptr_remove(weather_list_str[i]);
+        }
+    }
+
     for (i = 0; i < screen_resolutions_total; i++)
     {
         if (graphics_resolution_available_list_str[i])

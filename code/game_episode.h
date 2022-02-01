@@ -11,6 +11,7 @@
 #define INDEX_NONE -1
 #define TYPE_NONE -1
 
+#define WEATHER_MAX 3
 #define WEATHER_CLEAR 0
 #define WEATHER_RAIN 1
 #define WEATHER_SNOW 2

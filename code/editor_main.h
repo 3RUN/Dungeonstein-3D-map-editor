@@ -39,7 +39,16 @@ STRING *graphics_display_mode_str = "Display mode:";
 STRING *graphics_display_windowed_str = "Windowed";
 STRING *graphics_display_windowed_fullscreen_str = "Borderless";
 
+// weather
+STRING *weather_list_str[WEATHER_MAX];
+STRING *weather_currently_used_str = "";
+STRING *weather_clear_str = "Clear";
+STRING *weather_rain_str = "Rain";
+STRING *weather_snow_str = "Snow";
+
 void editor_preview_update(int type, int index);
+
+void editor_weather_refresh(Episode *e);
 
 void editor_side_bar(Episode *e);
 
@@ -53,9 +62,9 @@ void editor_top_bar(Episode *e);
 
 void editor_cell_tooltip(Episode *e);
 
-void editor_main_initialize();
+void editor_main_initialize(Episode *e);
 
-void editor_main_reset();
+void editor_main_reset(Episode *e);
 
 void editor_main_destroy();
 
