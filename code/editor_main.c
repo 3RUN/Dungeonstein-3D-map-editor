@@ -237,7 +237,7 @@ void editor_side_bar(Episode *e)
     {
         imgui_text("Active Map Id:");
         imgui_same_line();
-        imgui_align_right_with_offset(43);
+        imgui_align_right_with_offset(50);
         if (imgui_arrow_button("Decrease", ImGuiDir_Left))
         {
             current_map_id--;
@@ -251,6 +251,10 @@ void editor_side_bar(Episode *e)
             current_map_id++;
             current_map_id = clamp(current_map_id, 0, e->map_count - 1);
         }
+        imgui_text("Total map count:");
+        imgui_same_line();
+        imgui_align_right_with_offset(30);
+        imgui_text(_chr(str_for_num(NULL, e->map_count)));
         imgui_separator();
 
         imgui_text(_chr(str_printf(NULL, "Mouse pos x = %d; y = %d;", (long)mouse_x, (long)mouse_y)));
