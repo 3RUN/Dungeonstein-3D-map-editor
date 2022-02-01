@@ -1,7 +1,7 @@
 #ifndef _ASSETS_H_
 #define _ASSETS_H_
 
-#define ASSET_BMAP_DEF_SIZE 64
+#define ASSET_BMAP_SIZE 64
 
 #define MAX_WALL_TEXTURES 48
 #define MAX_PROPS_TEXTURES 49

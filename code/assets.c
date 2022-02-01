@@ -80,8 +80,8 @@ void asset_create_texture(array_t *array, BMAP *source, STRING *desc, int type, 
         return;
     }
 
-    asset->bmap = bmap_createblack(ASSET_BMAP_DEF_SIZE, ASSET_BMAP_DEF_SIZE, 32);
-    bmap_blitpart(asset->bmap, source, nullvector, nullvector, vector(u, v, 0), vector(ASSET_BMAP_DEF_SIZE, ASSET_BMAP_DEF_SIZE, 0));
+    asset->bmap = bmap_createblack(ASSET_BMAP_SIZE, ASSET_BMAP_SIZE, 32);
+    bmap_blitpart(asset->bmap, source, nullvector, nullvector, vector(u, v, 0), vector(ASSET_BMAP_SIZE, ASSET_BMAP_SIZE, 0));
     strcpy(asset->desc, desc);
     asset->type = type;
     asset->index = array_get_count(array);
@@ -102,8 +102,8 @@ void asset_create_object(array_t *array, BMAP *source, STRING *desc, int type, i
         return;
     }
 
-    asset->bmap = bmap_createblack(ASSET_BMAP_DEF_SIZE, ASSET_BMAP_DEF_SIZE, 32);
-    bmap_blitpart(asset->bmap, source, nullvector, nullvector, vector(u, v, 0), vector(ASSET_BMAP_DEF_SIZE, ASSET_BMAP_DEF_SIZE, 0));
+    asset->bmap = bmap_createblack(ASSET_BMAP_SIZE, ASSET_BMAP_SIZE, 32);
+    bmap_blitpart(asset->bmap, source, nullvector, nullvector, vector(u, v, 0), vector(ASSET_BMAP_SIZE, ASSET_BMAP_SIZE, 0));
     strcpy(asset->desc, desc);
     asset->type = type;
     asset->index = index;
