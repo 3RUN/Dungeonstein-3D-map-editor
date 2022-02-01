@@ -56,6 +56,8 @@ void editor_settings_refresh();
 
 void editor_settings_window();
 
+void editor_episode_edit_window(Episode *e);
+
 void editor_help_window();
 
 void editor_top_bar(Episode *e);

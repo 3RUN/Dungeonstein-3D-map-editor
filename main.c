@@ -17,6 +17,7 @@ STRING *project_name_str = "MapEditor"; // insert your project's name here !
 
 int is_popup_opened = false;
 int is_settings_opened = false;
+int is_edit_episode_opened = false;
 int is_help_opened = false;
 
 int is_grid_visible = true;

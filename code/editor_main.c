@@ -58,6 +58,11 @@ void editor_weather_refresh(Episode *e)
 
 void editor_side_bar(Episode *e)
 {
+    if (!e)
+    {
+        return;
+    }
+
     imgui_set_next_window_pos(screen_size.x - EDITOR_SIDE_BAR_WIDTH, EDITOR_TOP_BAR_HEIGHT, ImGuiCond_Always);
     imgui_set_next_window_size(EDITOR_SIDE_BAR_WIDTH, screen_size.y - EDITOR_TOP_BAR_HEIGHT, ImGuiCond_Always);
     int side_bar_flags = ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing;
@@ -322,15 +327,6 @@ void editor_side_bar(Episode *e)
         static int misc_flags = ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_NoDragDrop;
         imgui_color_edit3("##Sky color picker", m->sky_color, misc_flags);
         imgui_pop_item_width();
-
-        /*
-        COLOR temp_color;
-        temp_color.red = get_color_from_hsv(m->sky_color[0]);
-        temp_color.green = get_color_from_hsv(m->sky_color[1]);
-        temp_color.blue = get_color_from_hsv(m->sky_color[2]);
-        vec_set(&sky_color, &temp_color);
-        */
-
         imgui_separator();
 
         // music
@@ -536,6 +532,50 @@ void editor_settings_window()
     imgui_end();
 }
 
+void editor_episode_edit_window(Episode *e)
+{
+    if (!e)
+    {
+        return;
+    }
+
+    if (is_edit_episode_opened == false)
+    {
+        return;
+    }
+
+    imgui_set_next_window_pos((screen_size.x / 2) - (EPISODE_WINDOW_WIDTH / 2), (screen_size.y / 2) - (EPISODE_WINDOW_HEIGHT / 2), ImGuiCond_Appearing);
+    imgui_set_next_window_size(EPISODE_WINDOW_WIDTH, EPISODE_WINDOW_HEIGHT, ImGuiCond_Appearing);
+    int edit_episode_window_flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoSavedSettings;
+    imgui_begin("Edit Episode", &is_edit_episode_opened, edit_episode_window_flags);
+
+    imgui_text("Name");
+    imgui_same_line();
+    editor_help_maker(_chr(str_printf(NULL, "The name of the episode. Character limit %d.", (long)EPISODE_NAME_LENGTH)));
+    imgui_push_item_width(-1);
+    imgui_input_text("##Name", e->name, EPISODE_NAME_LENGTH, NULL);
+    imgui_pop_item_width();
+
+    imgui_text("Short story");
+    imgui_same_line();
+    editor_help_maker(_chr(str_printf(NULL, "Short episode story. Character limit %d.", (long)EPISODE_STORY_LENGTH)));
+    imgui_input_text_multiline("##Multiline", e->story, EPISODE_STORY_LENGTH, -1, 128, NULL);
+
+    imgui_text("Map count");
+    imgui_same_line();
+    editor_help_maker(_chr(str_printf(NULL, "Amount of maps in the episode. Max %d.", (long)MAX_MAPS_PER_EPISODE)));
+    imgui_push_item_width(-1);
+    imgui_slider_int("##Slider_01", &e->map_count, 1, MAX_MAPS_PER_EPISODE);
+    imgui_pop_item_width();
+
+    if (imgui_button_withsize("Close", -1, EPISODE_WINDOW_BUTTON_HEIGHT))
+    {
+        is_edit_episode_opened = false;
+    }
+
+    imgui_end();
+}
+
 void editor_help_window()
 {
     if (is_help_opened == false)
@@ -557,6 +597,11 @@ void editor_help_window()
 
 void editor_top_bar(Episode *e)
 {
+    if (!e)
+    {
+        return;
+    }
+
     imgui_set_next_window_pos(0, 0, ImGuiCond_Always);
     imgui_set_next_window_size(screen_size.x, EDITOR_TOP_BAR_HEIGHT, ImGuiCond_Always);
     int top_bar_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoFocusOnAppearing;
@@ -599,6 +644,7 @@ void editor_top_bar(Episode *e)
         {
             if (imgui_menu_item("Edit", "", 0, 1))
             {
+                is_edit_episode_opened = 1 - is_edit_episode_opened;
             }
             imgui_end_menu();
         }
@@ -616,6 +662,7 @@ void editor_top_bar(Episode *e)
     }
 
     editor_settings_window();
+    editor_episode_edit_window(e);
     editor_help_window();
 
     if (is_popup_opened == true)
@@ -800,6 +847,7 @@ void editor_main_reset(Episode *e)
     current_map_id = 0;
 
     is_settings_opened = false;
+    is_edit_episode_opened = false;
     is_help_opened = false;
 
     is_grid_visible = true;
