@@ -22,11 +22,6 @@ void cell_reset(Cell *c)
         return;
     }
 
-    vec_set(&c->worldpos, nullvector);
-
-    c->id = INDEX_NONE;
-    c->x = INDEX_NONE;
-    c->y = INDEX_NONE;
     c->type = TYPE_NONE;
     c->asset_index = INDEX_NONE;
 

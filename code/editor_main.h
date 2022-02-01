@@ -9,6 +9,8 @@
 #define EDITOR_TOP_BAR_HEIGHT 16
 #define EDITOR_SIDE_BAR_WIDTH 280
 
+#define DRAW_DEF_TIME 0.01
+
 int editor_asset_type = ASSET_TYPE_WALL;
 int editor_asset_index = 0;
 
@@ -24,6 +26,8 @@ char *bosses_textures_listbox[MAX_BOSS_TEXTURES];
 
 char *editor_main_selected_asset_type = "";
 char *editor_main_asset_types[MAX_ASSET_TYPES];
+
+var draw_cooldown = 0;
 
 STRING *editor_back_to_menu_popup_str = "You want to go back to main menu?\nAll unsaved data will be lost!";
 

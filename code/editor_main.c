@@ -256,6 +256,8 @@ void editor_side_bar(Episode *e)
             current_map_id++;
             current_map_id = clamp(current_map_id, 0, e->map_count - 1);
         }
+        current_map_id = clamp(current_map_id, 0, e->map_count - 1);
+
         imgui_text("Total map count:");
         imgui_same_line();
         imgui_align_right_with_offset(30);
@@ -897,4 +899,46 @@ void editor_main_update(Episode *e)
     editor_cell_tooltip(e);
 
     imgui_end_imode();
+
+    if (mouse_left)
+    {
+        draw_cooldown += time_frame / 16;
+        if (draw_cooldown > DRAW_DEF_TIME)
+        {
+            if (is_allowed_to_draw_map() == true)
+            {
+                Map *m = &e->map[current_map_id];
+                Cell *cell = &m->cells[mouse_x][mouse_y];
+                if (cell)
+                {
+                    cell->type = editor_asset_type;
+                    cell->asset_index = editor_asset_index;
+
+                    grid_refresh_map(m);
+                }
+            }
+            draw_cooldown -= DRAW_DEF_TIME;
+        }
+    }
+    else if (mouse_right)
+    {
+        draw_cooldown += time_frame / 16;
+        if (draw_cooldown > DRAW_DEF_TIME)
+        {
+            if (is_allowed_to_draw_map() == true)
+            {
+                Map *m = &e->map[current_map_id];
+                Cell *cell = &m->cells[mouse_x][mouse_y];
+                if (cell)
+                {
+                    cell_reset(cell);
+                    grid_refresh_map(m);
+                }
+            }
+        }
+    }
+    else
+    {
+        draw_cooldown = 0;
+    }
 }

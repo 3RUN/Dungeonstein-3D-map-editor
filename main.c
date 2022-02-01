@@ -15,6 +15,13 @@ STRING *project_name_str = "MapEditor"; // insert your project's name here !
 #define MAP_HEIGHT 31
 #define MAP_CELL_SIZE 32
 
+#define OBJ_ID skill50
+#define OBJ_POS_X skill51
+#define OBJ_POS_Y skill52
+#define OBJ_POS_Z skill53
+#define OBJ_TYPE_INDEX skill54
+#define OBJ_ASSET_INDEX skill55
+
 int is_popup_opened = false;
 int is_settings_opened = false;
 int is_edit_episode_opened = false;
@@ -89,10 +96,6 @@ void map_editor_startup()
 
 void on_frame_event()
 {
-	DEBUG_VAR(current_map_id, 160);
-	DEBUG_VAR(editor_asset_type, 200);
-	DEBUG_VAR(editor_asset_index, 220);
-
 	switch (editor_state)
 	{
 	case STATE_MENU:
