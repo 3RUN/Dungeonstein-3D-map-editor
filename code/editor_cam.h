@@ -8,10 +8,10 @@ VECTOR vec_mouse_on_grid;
 VECTOR vec_mouse_3d;
 VECTOR vec_camera_center;
 
-void camera_movement(var grid_height, var grid_size);
+void editor_camera_movement(var grid_height, var grid_size);
 
-void camera_initialize();
+void editor_camera_initialize();
 
-void camera_update();
+void editor_camera_update();
 
 #endif

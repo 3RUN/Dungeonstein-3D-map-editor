@@ -1,7 +1,9 @@
 
-void camera_movement(var grid_height, var grid_size)
+void editor_camera_movement(var grid_height, var grid_size)
 {
-    if (mouse_middle && is_allowed_to_draw_map() == true)
+    int is_allowed = is_allowed_to_draw();
+
+    if (mouse_middle && is_allowed == true)
     {
         VECTOR vtemp;
         vec_set(&vtemp, &mouse_dir3d);
@@ -32,7 +34,7 @@ void camera_movement(var grid_height, var grid_size)
             vec_mouse_on_grid.z = grid_height / grid_size;
         }
 
-        if (mickey.z && is_allowed_to_draw_map() == true)
+        if (mickey.z && is_allowed == true)
         {
             var ntemp = camera->skill_y;
             camera->skill_y += mickey.z * 0.2;
@@ -51,7 +53,7 @@ void camera_movement(var grid_height, var grid_size)
     }
 }
 
-void camera_initialize()
+void editor_camera_initialize()
 {
     vec_set(&vec_grid_center, vector((MAP_WIDTH / 2) * MAP_CELL_SIZE, -(MAP_HEIGHT / 2) * MAP_CELL_SIZE, 0));
     vec_set(&vec_camera_center, &vec_grid_center);
@@ -70,11 +72,11 @@ void camera_initialize()
     camera->z = vec_camera_center.z - fsin(camera->tilt, camera->skill_y);
 }
 
-void camera_update()
+void editor_camera_update()
 {
     sky_color.red = get_color_from_hsv(config_current.background_color[0]);
     sky_color.green = get_color_from_hsv(config_current.background_color[1]);
     sky_color.blue = get_color_from_hsv(config_current.background_color[2]);
 
-    camera_movement(vec_grid_center.z, MAP_CELL_SIZE);
+    editor_camera_movement(vec_grid_center.z, MAP_CELL_SIZE);
 }

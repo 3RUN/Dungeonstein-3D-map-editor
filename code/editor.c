@@ -5,46 +5,6 @@ void editor_switch_state_to(int state)
     editor_state = state;
 }
 
-int is_pos_on_grid(VECTOR *pos)
-{
-    if (!pos)
-    {
-        return false;
-    }
-
-    return (pos->x >= 0 && pos->x < MAP_WIDTH && pos->y >= 0 && pos->y < MAP_HEIGHT);
-}
-
-int is_pos_within_camera(VECTOR *pos)
-{
-    if (!pos)
-    {
-        return false;
-    }
-
-    return (pos->x >= camera->pos_x && pos->x < camera->size_x && pos->y >= camera->pos_y && pos->y < camera->size_y);
-}
-
-int is_allowed_to_draw_map()
-{
-    if (is_settings_opened == true || is_popup_opened == true || is_help_opened == true)
-    {
-        return false;
-    }
-
-    if (is_pos_on_grid(vector(vec_mouse_on_grid.x, -vec_mouse_on_grid.y, 0)) == false)
-    {
-        return false;
-    }
-
-    if (is_pos_within_camera(vector(mouse_pos.x, mouse_pos.y, 0)) == false)
-    {
-        return false;
-    }
-
-    return true;
-}
-
 void editor_create_tooltip(STRING *tooltip)
 {
     if (imgui_is_item_hovered())
@@ -172,7 +132,7 @@ STRING *draw_cell_info(Map *m, int x, int y)
         return NULL;
     }
 
-    if (is_allowed_to_draw_map() == false)
+    if (is_allowed_to_draw() == false)
     {
         return NULL;
     }

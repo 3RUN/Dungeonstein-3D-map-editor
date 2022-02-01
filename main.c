@@ -30,8 +30,8 @@ STRING *project_name_str = "MapEditor"; // insert your project's name here !
 #define STATE_EDITOR 5
 #define STATE_TEST_MAP 6
 
-int editor_state = STATE_MENU;
-int editor_old_state = STATE_MENU;
+int editor_state = STATE_EDITOR;
+int editor_old_state = STATE_EDITOR;
 
 int is_popup_opened = false;
 int is_settings_opened = false;
@@ -59,6 +59,7 @@ int map_id = 0;
 #include "episode.h"
 #include "editor.h"
 #include "editor_cam.h"
+#include "editor_grid.h"
 
 #include "savedir.c"
 #include "screenres_list.c"
@@ -68,6 +69,7 @@ int map_id = 0;
 #include "episode.c"
 #include "editor.c"
 #include "editor_cam.c"
+#include "editor_grid.c"
 
 void map_editor_startup()
 {
@@ -85,8 +87,9 @@ void map_editor_startup()
 	config_initialize(temp_str);   // initialize config (set defaults and load from the config file)engine_initialize()
 	engine_initialize();		   // initialize all engine settings
 	imgui_init(0);				   // initialize imgui
-	imgui_change_theme();		   //and apply custom theme
+	imgui_change_theme();		   // and apply custom theme
 	assets_initialize();		   // load all editor assets
+	editor_camera_initialize();	   // initialize camera (background color)
 }
 
 void on_frame_event()
@@ -109,11 +112,16 @@ void on_frame_event()
 		break;
 
 	case STATE_EDITOR:
+		editor_grid_get_mouse_pos(&mouse_x, &mouse_y);
+		editor_camera_update();
+		editor_grid_update();
 		break;
 
 	case STATE_TEST_MAP:
 		break;
 	}
+
+	editor_camera_resize();
 	mouse_lock_in_window();
 }
 
@@ -127,6 +135,49 @@ void on_esc_event()
 	sys_exit("");
 }
 
+void on_f_event(var scancode)
+{
+	switch (scancode)
+	{
+	case 59: // f1
+		break;
+
+	case 60: // f2
+		break;
+
+	case 61: // f3
+		break;
+
+	case 62: // f4
+		break;
+
+	case 63: // f5
+		break;
+
+	case 64: // f6
+		break;
+
+	case 65: // f7
+		break;
+
+	case 66: // f8
+		break;
+
+	case 67: // f9
+		break;
+
+	case 68: // f10
+		break;
+
+	case 87: // f11
+		def_debug();
+		break;
+
+	case 88: // f12
+		break;
+	}
+}
+
 void main()
 {
 	max_entities = 2000;
@@ -137,6 +188,19 @@ void main()
 	on_frame = on_frame_event;
 	on_exit = on_exit_event;
 	on_esc = on_esc_event;
+
+	on_f1 = on_f_event;
+	on_f2 = on_f_event;
+	on_f3 = on_f_event;
+	on_f4 = on_f_event;
+	on_f5 = on_f_event;
+	on_f6 = on_f_event;
+	on_f7 = on_f_event;
+	on_f8 = on_f_event;
+	on_f9 = on_f_event;
+	on_f10 = on_f_event;
+	on_f11 = on_f_event;
+	on_f12 = on_f_event;
 
 	level_load("");
 }
