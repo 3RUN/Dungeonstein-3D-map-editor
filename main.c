@@ -155,6 +155,7 @@ void on_exit_event()
 {
 	assets_destroy();
 	grid_destroy();
+	editor_main_destroy();
 }
 
 void on_esc_event()

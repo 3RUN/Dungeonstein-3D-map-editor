@@ -24,7 +24,7 @@ VIEW* viewMap =
 PANEL* def_debug_pan = 
 {
    pos_x = 5; 
-	pos_y = 24; 
+	pos_y = 20; 
 	layer = 998; 
 
 	digits(0,2,"%4.0fx",*,1,screen_size.x);

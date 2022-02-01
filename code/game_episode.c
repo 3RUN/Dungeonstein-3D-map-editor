@@ -8,7 +8,6 @@ void obj_reset(Obj *o)
 
     o->pan = 0;
 
-    o->type = TYPE_NONE;
     o->asset_index = INDEX_NONE;
 
     o->skill_x = 0;
@@ -50,13 +49,13 @@ void map_reset(Map *m)
     m->fog_start = FOG_DEF_START;
     m->fog_end = FOG_DEF_END;
 
-    m->fog_color[0] = 0;
-    m->fog_color[1] = 0;
-    m->fog_color[2] = 0;
+    m->fog_color[0] = get_hsv_from_color(0);
+    m->fog_color[1] = get_hsv_from_color(0);
+    m->fog_color[2] = get_hsv_from_color(0);
 
-    m->sky_color[0] = 32;
-    m->sky_color[0] = 32;
-    m->sky_color[0] = 32;
+    m->sky_color[0] = get_hsv_from_color(32);
+    m->sky_color[1] = get_hsv_from_color(32);
+    m->sky_color[2] = get_hsv_from_color(32);
 
     strcpy(m->music, "");
 

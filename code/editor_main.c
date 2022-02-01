@@ -30,7 +30,7 @@ void editor_side_bar(Episode *e)
         if (imgui_begin_combo("##Asset Type Combobox", editor_main_selected_asset_type, ImGuiComboFlags_HeightSmall))
         {
             int n = 0;
-            for (n = 0; n < MAX_EDITOR_ASSET_TYPES; n++)
+            for (n = 0; n < MAX_ASSET_TYPES; n++)
             {
                 BOOL is_selected = (editor_main_selected_asset_type == editor_main_asset_types[n]);
                 if (imgui_selectable(editor_main_asset_types[n], &is_selected, 0))
@@ -38,14 +38,14 @@ void editor_side_bar(Episode *e)
                     editor_main_selected_asset_type = editor_main_asset_types[n];
                     editor_asset_type = n;
                     editor_asset_index = 0;
-                    //editor_preview_update(editor_asset_type, editor_asset_index);
+                    editor_preview_update(editor_asset_type, editor_asset_index);
                 }
             }
             imgui_end_combo();
         }
         imgui_pop_item_width();
 
-        if (editor_asset_type == EDITOR_ASSET_WALLS)
+        if (editor_asset_type == ASSET_TYPE_WALL)
         {
             int wall_texture_child_window_flags = ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
             var width = imgui_get_content_region_avail_width();
@@ -67,7 +67,7 @@ void editor_side_bar(Episode *e)
 
             imgui_end_child();
         }
-        else if (editor_asset_type == EDITOR_ASSET_OBJECTS)
+        else if (editor_asset_type >= ASSET_TYPE_PROPS)
         {
             imgui_separator();
             imgui_text("Object parameters:");
@@ -78,6 +78,89 @@ void editor_side_bar(Episode *e)
             imgui_end_child();
             imgui_separator();
             imgui_begin_child("##Object Texture Child", vector(width, 160, 0), 1, object_child_window_flags);
+
+            switch (editor_asset_type)
+            {
+            case ASSET_TYPE_PROPS:
+                imgui_push_item_width(-1);
+                if (imgui_list_box("##Props Texture listbox", &editor_asset_index, props_textures_listbox, MAX_PROPS_TEXTURES, MAX_PROPS_TEXTURES))
+                {
+                    int i = 0;
+                    for (i = 0; i < MAX_PROPS_TEXTURES; i++)
+                    {
+                        if (editor_asset_index == i)
+                        {
+                            editor_preview_update(editor_asset_type, editor_asset_index);
+                        }
+                    }
+                }
+                imgui_pop_item_width();
+                break;
+
+            case ASSET_TYPE_ITEMS:
+                imgui_push_item_width(-1);
+                if (imgui_list_box("##Item Texture listbox", &editor_asset_index, items_textures_listbox, MAX_ITEM_TEXTURES, MAX_ITEM_TEXTURES))
+                {
+                    int i = 0;
+                    for (i = 0; i < MAX_ITEM_TEXTURES; i++)
+                    {
+                        if (editor_asset_index == i)
+                        {
+                            editor_preview_update(editor_asset_type, editor_asset_index);
+                        }
+                    }
+                }
+                imgui_pop_item_width();
+                break;
+
+            case ASSET_TYPE_WEAPON:
+                imgui_push_item_width(-1);
+                if (imgui_list_box("##Item Texture listbox", &editor_asset_index, weapons_textures_listbox, MAX_WEAPON_TEXTURES, MAX_WEAPON_TEXTURES))
+                {
+                    int i = 0;
+                    for (i = 0; i < MAX_WEAPON_TEXTURES; i++)
+                    {
+                        if (editor_asset_index == i)
+                        {
+                            editor_preview_update(editor_asset_type, editor_asset_index);
+                        }
+                    }
+                }
+                imgui_pop_item_width();
+                break;
+
+            case ASSET_TYPE_ENEMIES:
+                imgui_push_item_width(-1);
+                if (imgui_list_box("##Item Texture listbox", &editor_asset_index, enemies_textures_listbox, MAX_ENEMY_TEXTURES, MAX_ENEMY_TEXTURES))
+                {
+                    int i = 0;
+                    for (i = 0; i < MAX_ENEMY_TEXTURES; i++)
+                    {
+                        if (editor_asset_index == i)
+                        {
+                            editor_preview_update(editor_asset_type, editor_asset_index);
+                        }
+                    }
+                }
+                imgui_pop_item_width();
+                break;
+
+            case ASSET_TYPE_BOSSES:
+                imgui_push_item_width(-1);
+                if (imgui_list_box("##Item Texture listbox", &editor_asset_index, bosses_textures_listbox, MAX_BOSS_TEXTURES, MAX_BOSS_TEXTURES))
+                {
+                    int i = 0;
+                    for (i = 0; i < MAX_BOSS_TEXTURES; i++)
+                    {
+                        if (editor_asset_index == i)
+                        {
+                            editor_preview_update(editor_asset_type, editor_asset_index);
+                        }
+                    }
+                }
+                imgui_pop_item_width();
+                break;
+            }
 
             imgui_end_child();
         }
@@ -107,6 +190,69 @@ void editor_side_bar(Episode *e)
         imgui_text(_chr(str_printf(NULL, "Mouse pos x = %d; y = %d;", (long)mouse_x, (long)mouse_y)));
         imgui_text(_chr(str_printf(NULL, "Map size: width = %d; height = %d;", (long)MAP_WIDTH, (long)MAP_HEIGHT)));
         imgui_separator();
+
+        // get active map
+        Map *m = &e->map[current_map_id];
+        if (!m)
+        {
+            return;
+        }
+
+        // fog settings
+        imgui_text("Fog start: ");
+        imgui_same_line();
+        var avail_slider_width = imgui_get_content_region_avail_width();
+        imgui_push_item_width(avail_slider_width);
+        imgui_slider_var("##Fog start slider", &m->fog_start, 0, m->fog_end);
+        m->fog_start = clamp(m->fog_start, 0, m->fog_end);
+        editor_create_tooltip("Fog starting distance in quants.\nShould be smaller than 'end'.");
+
+        imgui_text("Fog end:   ");
+        imgui_same_line();
+        imgui_slider_var("##Fog end slider", &m->fog_end, m->fog_start, 2048);
+        m->fog_end = clamp(m->fog_end, m->fog_start, 2048);
+        editor_create_tooltip("Fog end distance in quants.\nShould be higher than 'start'.");
+        imgui_pop_item_width();
+
+        imgui_text("Fog color: ");
+        imgui_same_line();
+        var avail_picker_width = imgui_get_content_region_avail_width();
+        imgui_push_item_width(avail_picker_width);
+        static int misc_flags = ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_NoDragDrop;
+        imgui_color_edit3("##Fog color picker", m->fog_color, misc_flags);
+        imgui_pop_item_width();
+        imgui_separator();
+
+        imgui_text("Sky color: ");
+        imgui_same_line();
+        var avail_picker_width = imgui_get_content_region_avail_width();
+        imgui_push_item_width(avail_picker_width);
+        static int misc_flags = ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_NoDragDrop;
+        imgui_color_edit3("##Sky color picker", m->sky_color, misc_flags);
+        imgui_pop_item_width();
+
+        /*
+        COLOR temp_color;
+        temp_color.red = get_color_from_hsv(m->sky_color[0]);
+        temp_color.green = get_color_from_hsv(m->sky_color[1]);
+        temp_color.blue = get_color_from_hsv(m->sky_color[2]);
+        vec_set(&sky_color, &temp_color);
+        */
+
+        imgui_separator();
+
+        // music
+        imgui_text("Music:");
+        imgui_same_line();
+        int len = strlen(m->music);
+        imgui_push_item_width(140);
+        imgui_input_text("##Textbox", m->music, len, ImGuiInputTextFlags_ReadOnly | ImGuiInputTextFlags_AutoSelectAll);
+        imgui_pop_item_width();
+        imgui_same_line();
+        if (imgui_button_withsize("Browse", -1, 15))
+        {
+            beep();
+        }
     }
     imgui_separator();
 
@@ -375,7 +521,7 @@ void editor_top_bar(Episode *e)
             editor_switch_state_to(STATE_MENU);
         }
 
-        if (imgui_button_withsize("No", -1, MENU_WINDOW_BUTTON_HEIGHT) || key_esc)
+        if (imgui_button_withsize("No", -1, MENU_WINDOW_BUTTON_HEIGHT))
         {
             is_popup_opened = false;
             imgui_close_current_popup();
@@ -417,12 +563,36 @@ void editor_main_initialize()
 
     // asset types
     editor_main_asset_types[0] = "Walls";
-    editor_main_asset_types[1] = "Objects";
+    editor_main_asset_types[1] = "Props";
+    editor_main_asset_types[2] = "Items";
+    editor_main_asset_types[3] = "Weapons";
+    editor_main_asset_types[4] = "Enemies";
+    editor_main_asset_types[5] = "Bosses";
 
     // textures
     for (i = 0; i < MAX_WALL_TEXTURES; i++)
     {
         wall_textures_listbox[i] = asset_get_desc(ASSET_TYPE_WALL, i);
+    }
+    for (i = 0; i < MAX_PROPS_TEXTURES; i++)
+    {
+        props_textures_listbox[i] = asset_get_desc(ASSET_TYPE_PROPS, i);
+    }
+    for (i = 0; i < MAX_ITEM_TEXTURES; i++)
+    {
+        items_textures_listbox[i] = asset_get_desc(ASSET_TYPE_ITEMS, i);
+    }
+    for (i = 0; i < MAX_WEAPON_TEXTURES; i++)
+    {
+        weapons_textures_listbox[i] = asset_get_desc(ASSET_TYPE_WEAPON, i);
+    }
+    for (i = 0; i < MAX_ENEMY_TEXTURES; i++)
+    {
+        enemies_textures_listbox[i] = asset_get_desc(ASSET_TYPE_ENEMIES, i);
+    }
+    for (i = 0; i < MAX_BOSS_TEXTURES; i++)
+    {
+        bosses_textures_listbox[i] = asset_get_desc(ASSET_TYPE_BOSSES, i);
     }
 
     // update preview image
@@ -467,7 +637,7 @@ void editor_main_initialize()
 void editor_main_reset()
 {
     editor_asset_index = 0;
-    editor_asset_type = EDITOR_ASSET_WALLS;
+    editor_asset_type = ASSET_TYPE_WALL;
     editor_main_selected_asset_type = editor_main_asset_types[editor_asset_type];
     editor_preview_update(editor_asset_type, editor_asset_index);
 
@@ -479,6 +649,26 @@ void editor_main_reset()
     is_grid_visible = true;
     is_walls_visible = true;
     is_objects_visible = true;
+}
+
+void editor_main_destroy()
+{
+    int i = 0;
+    for (i = 0; i < screen_resolutions_total; i++)
+    {
+        if (graphics_resolution_available_list_str[i])
+        {
+            ptr_remove(graphics_resolution_available_list_str[i]);
+        }
+    }
+
+    for (i = 0; i < DISPLAY_MODES_MAX; i++)
+    {
+        if (graphics_display_mode_list_str[i])
+        {
+            ptr_remove(graphics_display_mode_list_str[i]);
+        }
+    }
 }
 
 void editor_main_update(Episode *e)

@@ -9,21 +9,21 @@
 #define EDITOR_TOP_BAR_HEIGHT 16
 #define EDITOR_SIDE_BAR_WIDTH 280
 
-#define EDITOR_ASSET_WALLS 0
-#define EDITOR_ASSET_OBJECTS 1
-
-#define MAX_EDITOR_ASSET_TYPES 2
-
-int editor_asset_type = EDITOR_ASSET_WALLS;
+int editor_asset_type = ASSET_TYPE_WALL;
 int editor_asset_index = 0;
 
 BMAP *preview_bmap = NULL;
 
 char *preview_name[ASSET_DESC_LENGTH];
 char *wall_textures_listbox[MAX_WALL_TEXTURES];
+char *props_textures_listbox[MAX_PROPS_TEXTURES];
+char *items_textures_listbox[MAX_ITEM_TEXTURES];
+char *weapons_textures_listbox[MAX_WEAPON_TEXTURES];
+char *enemies_textures_listbox[MAX_ENEMY_TEXTURES];
+char *bosses_textures_listbox[MAX_BOSS_TEXTURES];
 
 char *editor_main_selected_asset_type = "";
-char *editor_main_asset_types[MAX_EDITOR_ASSET_TYPES];
+char *editor_main_asset_types[MAX_ASSET_TYPES];
 
 STRING *editor_back_to_menu_popup_str = "You want to go back to main menu?\nAll unsaved data will be lost!";
 
@@ -56,6 +56,8 @@ void editor_cell_tooltip(Episode *e);
 void editor_main_initialize();
 
 void editor_main_reset();
+
+void editor_main_destroy();
 
 void editor_main_update(Episode *e);
 

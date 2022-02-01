@@ -22,7 +22,6 @@ typedef struct Obj
 {
     var pan;
 
-    int type; // props, item, enemy, etc
     int asset_index;
 
     var skill_x;
@@ -37,7 +36,7 @@ typedef struct Cell
     int id;
     int x;
     int y;
-    int type;
+    int type; // props, item, enemy, etc
     int asset_index;
 
     var skill_x;

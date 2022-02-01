@@ -82,7 +82,6 @@ STRING *get_cell_info(Cell *cell)
 
     var obj_pan = cell_object->pan;
 
-    int obj_type = cell_object->type;
     int obj_asset_index = cell_object->asset_index;
 
     var obj_skill_x = cell_object->skill_x;
@@ -93,7 +92,7 @@ STRING *get_cell_info(Cell *cell)
     str_cpy(info_str, "");
     str_printf(info_str, "world position:\nx = %d; y = %d; z = %d;\n\non grid position:\nx = %d; y = %d;\n\nid = %d;\n", (long)(cellpos.x), (long)(cellpos.y), (long)(cellpos.z), (long)(cell_x), (long)(cell_y), (long)(cell_id));
 
-    if (cell_type == EDITOR_ASSET_WALLS)
+    if (cell_type == ASSET_TYPE_WALL)
     {
         str_cat(info_str, "\ntype: wall;");
         if (cell_asset_index > 0)
@@ -107,13 +106,13 @@ STRING *get_cell_info(Cell *cell)
             str_cat(info_str, "\nasset: none;");
         }
     }
-    else if (cell_type == EDITOR_ASSET_OBJECTS)
+    else if (cell_type >= ASSET_TYPE_PROPS)
     {
         str_cat(info_str, "\ntype: object;");
         if (cell_asset_index > 0)
         {
             str_cat(info_str, "\nasset: ");
-            str_cat(info_str, asset_get_desc(ASSET_TYPE_OBJECT, cell_asset_index));
+            str_cat(info_str, asset_get_desc(cell_type, cell_asset_index));
             str_cat(info_str, ";");
 
             str_cat(info_str, str_printf(NULL, "pan = %d;\nskill_x = %d;\n\nskill_y = %d;\nskill_z = %d;", (long)obj_pan, (long)obj_skill_x, (long)obj_skill_y, (long)obj_skill_z));
