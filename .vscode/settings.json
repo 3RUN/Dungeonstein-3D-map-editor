@@ -19,6 +19,8 @@
         "imgui_theme.h": "c",
         "savedir.h": "c",
         "cell_struct.h": "c",
-        "world_struct.h": "c"
+        "world_struct.h": "c",
+        "episode.h": "c",
+        "editor.h": "c"
     }
 }

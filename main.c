@@ -22,6 +22,31 @@ STRING *project_name_str = "MapEditor"; // insert your project's name here !
 #define OBJ_TYPE_INDEX skill54
 #define OBJ_ASSET_INDEX skill55
 
+#define STATE_MENU 0
+#define STATE_LOAD 1
+#define STATE_SAVE 2
+#define STATE_NEW 3
+#define STATE_EPISODE 4
+#define STATE_EDITOR 5
+#define STATE_TEST_MAP 6
+
+int editor_state = STATE_MENU;
+int editor_old_state = STATE_MENU;
+
+int is_popup_opened = false;
+int is_settings_opened = false;
+int is_edit_episode_opened = false;
+int is_help_opened = false;
+
+int is_grid_visible = true;
+int is_walls_visible = true;
+int is_objects_visible = true;
+
+int mouse_x = 0;
+int mouse_y = 0;
+
+int map_id = 0;
+
 #include "cmd.h"
 #include "imgui.h"
 #include "ini.h"
@@ -31,12 +56,18 @@ STRING *project_name_str = "MapEditor"; // insert your project's name here !
 #include "engine.h"
 #include "config.h"
 #include "assets.h"
+#include "episode.h"
+#include "editor.h"
+#include "editor_cam.h"
 
 #include "savedir.c"
 #include "screenres_list.c"
 #include "engine.c"
 #include "config.c"
 #include "assets.c"
+#include "episode.c"
+#include "editor.c"
+#include "editor_cam.c"
 
 void map_editor_startup()
 {
@@ -60,6 +91,29 @@ void map_editor_startup()
 
 void on_frame_event()
 {
+	switch (editor_state)
+	{
+	case STATE_MENU:
+		break;
+
+	case STATE_LOAD:
+		break;
+
+	case STATE_SAVE:
+		break;
+
+	case STATE_NEW:
+		break;
+
+	case STATE_EPISODE:
+		break;
+
+	case STATE_EDITOR:
+		break;
+
+	case STATE_TEST_MAP:
+		break;
+	}
 	mouse_lock_in_window();
 }
 
