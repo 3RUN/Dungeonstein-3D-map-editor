@@ -1,6 +1,8 @@
 #ifndef _ASSETS_H_
 #define _ASSETS_H_
 
+#define ASSET_BMAP_DEF_SIZE 64
+
 #define MAX_WALL_TEXTURES 48
 #define MAX_PROPS_TEXTURES 49
 #define MAX_ITEM_TEXTURES 15
@@ -116,7 +118,7 @@ BMAP *boss_textures_tga = "bosses.tga";
 typedef struct Asset
 {
     BMAP *bmap;
-    char *desc[ASSET_DESC_LENGTH];
+    char desc[ASSET_DESC_LENGTH];
     int type;
     int index;
 } Asset;
@@ -130,7 +132,7 @@ array_t *boss_textures;
 
 BMAP *asset_get_bmap(int type, int index);
 
-char *asset_get_desc(int type, int index);
+STRING *asset_get_desc(int type, int index);
 
 void asset_create_texture(array_t *array, BMAP *source, STRING *desc, int type, int u, int v);
 

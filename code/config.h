@@ -21,20 +21,8 @@ STRING *graphics_display_mode_entry_str = "Display mode";
 // config other entries
 STRING *other_cell_tooltip_str = "Cell tooltip enabled";
 
-// colors
-STRING *other_background_color_red_str = "Background color red";
-STRING *other_background_color_green_str = "Background color green";
-STRING *other_background_color_blue_str = "Background color blue";
-STRING *other_grid_color_red_str = "Grid color red";
-STRING *other_grid_color_green_str = "Grid color green";
-STRING *other_grid_color_blue_str = "Grid color blue";
-
 // config others
 int is_cell_tooltip_def_enabled = true;
-
-// background and grid colors
-float background_def_color[3];
-float grid_def_color[3];
 
 // structure to save all game config
 typedef struct CONFIG
@@ -45,10 +33,6 @@ typedef struct CONFIG
 
     // other settings
     int is_cell_tooltip_enabled;
-
-    // background and grid colors
-    float background_color[3];
-    float grid_color[3];
 
 } CONFIG;
 

@@ -1,61 +1,69 @@
 
 BMAP *asset_get_bmap(int type, int index)
 {
-    switch (type)
+    if (type == ASSET_TYPE_WALL)
     {
-    case ASSET_TYPE_WALL:
         Asset *asset = array_get_element_at(Asset *, wall_textures, index);
         return asset->bmap;
-
-    case ASSET_TYPE_PROPS:
+    }
+    else if (type == ASSET_TYPE_PROPS)
+    {
         Asset *asset = array_get_element_at(Asset *, props_textures, index);
         return asset->bmap;
-
-    case ASSET_TYPE_ITEMS:
+    }
+    else if (type == ASSET_TYPE_ITEMS)
+    {
         Asset *asset = array_get_element_at(Asset *, item_textures, index);
         return asset->bmap;
-
-    case ASSET_TYPE_WEAPON:
+    }
+    else if (type == ASSET_TYPE_WEAPON)
+    {
         Asset *asset = array_get_element_at(Asset *, weapon_textures, index);
         return asset->bmap;
-
-    case ASSET_TYPE_ENEMIES:
+    }
+    else if (type == ASSET_TYPE_ENEMIES)
+    {
         Asset *asset = array_get_element_at(Asset *, enemy_textures, index);
         return asset->bmap;
-
-    case ASSET_TYPE_BOSSES:
+    }
+    else if (type == ASSET_TYPE_BOSSES)
+    {
         Asset *asset = array_get_element_at(Asset *, boss_textures, index);
         return asset->bmap;
     }
 }
 
-char *asset_get_desc(int type, int index)
+STRING *asset_get_desc(int type, int index)
 {
-    switch (type)
+    if (type == ASSET_TYPE_WALL)
     {
-    case ASSET_TYPE_WALL:
         Asset *asset = array_get_element_at(Asset *, wall_textures, index);
-        return asset->desc;
-
-    case ASSET_TYPE_PROPS:
+        return _str(asset->desc);
+    }
+    else if (type == ASSET_TYPE_PROPS)
+    {
         Asset *asset = array_get_element_at(Asset *, props_textures, index);
-        return asset->desc;
-
-    case ASSET_TYPE_ITEMS:
+        return _str(asset->desc);
+    }
+    else if (type == ASSET_TYPE_ITEMS)
+    {
         Asset *asset = array_get_element_at(Asset *, item_textures, index);
-        return asset->desc;
-
-    case ASSET_TYPE_WEAPON:
+        return _str(asset->desc);
+    }
+    else if (type == ASSET_TYPE_WEAPON)
+    {
         Asset *asset = array_get_element_at(Asset *, weapon_textures, index);
-        return asset->desc;
-
-    case ASSET_TYPE_ENEMIES:
+        return _str(asset->desc);
+    }
+    else if (type == ASSET_TYPE_ENEMIES)
+    {
         Asset *asset = array_get_element_at(Asset *, enemy_textures, index);
-        return asset->desc;
-
-    case ASSET_TYPE_BOSSES:
+        return _str(asset->desc);
+    }
+    else if (type == ASSET_TYPE_BOSSES)
+    {
         Asset *asset = array_get_element_at(Asset *, boss_textures, index);
-        return asset->desc;
+        return _str(asset->desc);
     }
 }
 
@@ -72,8 +80,8 @@ void asset_create_texture(array_t *array, BMAP *source, STRING *desc, int type, 
         return;
     }
 
-    asset->bmap = bmap_createblack(64, 64, 32);
-    bmap_blitpart(asset->bmap, source, nullvector, nullvector, vector(u, v, 0), vector(64, 64, 0));
+    asset->bmap = bmap_createblack(ASSET_BMAP_DEF_SIZE, ASSET_BMAP_DEF_SIZE, 32);
+    bmap_blitpart(asset->bmap, source, nullvector, nullvector, vector(u, v, 0), vector(ASSET_BMAP_DEF_SIZE, ASSET_BMAP_DEF_SIZE, 0));
     strcpy(asset->desc, desc);
     asset->type = type;
     asset->index = array_get_count(array);
@@ -94,8 +102,8 @@ void asset_create_object(array_t *array, BMAP *source, STRING *desc, int type, i
         return;
     }
 
-    asset->bmap = bmap_createblack(64, 64, 32);
-    bmap_blitpart(asset->bmap, source, nullvector, nullvector, vector(u, v, 0), vector(64, 64, 0));
+    asset->bmap = bmap_createblack(ASSET_BMAP_DEF_SIZE, ASSET_BMAP_DEF_SIZE, 32);
+    bmap_blitpart(asset->bmap, source, nullvector, nullvector, vector(u, v, 0), vector(ASSET_BMAP_DEF_SIZE, ASSET_BMAP_DEF_SIZE, 0));
     strcpy(asset->desc, desc);
     asset->type = type;
     asset->index = index;
