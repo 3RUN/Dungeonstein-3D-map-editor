@@ -3,6 +3,12 @@
 #include <default.c>
 #include <strio.c>
 
+// todo
+// * add load window with list of 'found' episodes
+// * add save window to save the episode, if file name was already given, if not, run 'save as' first
+// * add save as window, to define name for the episode file to save it to
+// * make grid entities toggleable (is_walls_visible, is_objects_visible)
+
 #define PRAGMA_POINTER
 
 #define PRAGMA_PATH "assets"
@@ -24,9 +30,9 @@ STRING *project_name_str = "MapEditor"; // insert your project's name here !
 
 #define STATE_MAIN_MENU 0
 #define STATE_LOAD 1
-#define STATE_SAVE 2
-#define STATE_RESET_EPISODE 3
-#define STATE_EDIT_EPISODE 4
+#define STATE_RESET_EPISODE 2
+#define STATE_EDIT_EPISODE 3
+#define STATE_START_EDITOR 4
 #define STATE_EDITOR 5
 #define STATE_EXIT_EDITOR 6
 #define STATE_TEST_MAP 7
@@ -65,6 +71,8 @@ int map_id = 0;
 #include "editor_grid_ents.h"
 #include "editor_main_menu.h"
 #include "editor_edit_episode.h"
+#include "map_editor.h"
+#include "map_editor_ui.h"
 
 #include "savedir.c"
 #include "screenres_list.c"
@@ -79,6 +87,8 @@ int map_id = 0;
 #include "editor_grid_ents.c"
 #include "editor_main_menu.c"
 #include "editor_edit_episode.c"
+#include "map_editor.c"
+#include "map_editor_ui.c"
 
 #include "test_scan_folder.c"
 
@@ -103,6 +113,7 @@ void map_editor_startup()
 	imgui_change_theme();		   // and apply custom theme
 	assets_initialize();		   // load all editor assets
 	editor_camera_initialize();	   // initialize camera (background color)
+	map_editor_initialize();	   // initialize all map editor stuff
 	episode_reset(&def_episode);   // initialize default episode
 }
 
@@ -115,9 +126,7 @@ void on_frame_event()
 		break;
 
 	case STATE_LOAD:
-		break;
-
-	case STATE_SAVE:
+		draw_text("load episode menu here", 200, 200, COLOR_WHITE);
 		break;
 
 	case STATE_RESET_EPISODE:
@@ -129,25 +138,29 @@ void on_frame_event()
 		editor_episode_update(&def_episode);
 		break;
 
+	case STATE_START_EDITOR:
+		editor_create_grid_ents();
+		map_editor_start(&def_episode);
+		editor_switch_state_to(STATE_EDITOR);
+		break;
+
 	case STATE_EDITOR:
-		editor_grid_get_mouse_pos(&mouse_x, &mouse_y);
-
-		DEBUG_VAR(mouse_x, 140);
-		DEBUG_VAR(mouse_y, 160);
-
 		Map *m = map_get_active(&def_episode);
-		draw_text(draw_cell_info(m, mouse_x, mouse_y), 10, 200, COLOR_WHITE);
-
+		editor_grid_get_mouse_pos(&mouse_x, &mouse_y);
+		map_editor_update(&def_episode);
 		editor_camera_update();
 		editor_grid_update();
 		break;
 
 	case STATE_EXIT_EDITOR:
 		editor_destroy_grid_ents();
+		map_editor_reset(&def_episode);
 		episode_reset(&def_episode);
+		editor_switch_state_to(STATE_MAIN_MENU);
 		break;
 
 	case STATE_TEST_MAP:
+		draw_text("test active map", 200, 200, COLOR_WHITE);
 		break;
 	}
 
@@ -159,6 +172,7 @@ void on_exit_event()
 {
 	assets_destroy();
 	editor_destroy_grid_ents();
+	map_editor_destroy();
 }
 
 void on_esc_event()
@@ -209,37 +223,6 @@ void on_f_event(var scancode)
 	}
 }
 
-void test_grid_create()
-{
-	editor_create_grid_ents();
-}
-
-void test_grid_ent()
-{
-	Map *m = map_get_active(&def_episode);
-
-	m->cell[0][0].type = ASSET_TYPE_WALL;
-	m->cell[0][0].asset = 0;
-
-	m->cell[16][0].type = ASSET_TYPE_WALL;
-	m->cell[16][0].asset = 5;
-
-	m->cell[2][0].type = ASSET_TYPE_WALL;
-	m->cell[2][0].asset = 25;
-
-	editor_update_grid_ents(m);
-}
-
-void test_grid_reset()
-{
-	editor_reset_grid_ents();
-}
-
-void test_grid_destroy()
-{
-	editor_destroy_grid_ents();
-}
-
 void test_save()
 {
 	episode_save("saved.dat", &def_episode);
@@ -271,11 +254,6 @@ void main()
 	on_3 = test_reset;
 
 	on_enter = test_scan_folder;
-
-	on_z = test_grid_create;
-	on_x = test_grid_ent;
-	on_c = test_grid_reset;
-	on_v = test_grid_destroy;
 
 	max_entities = 2000;
 

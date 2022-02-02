@@ -1,7 +1,7 @@
 
 void grid_ent_fnc()
 {
-    //set(my, PASSABLE | INVISIBLE | NOFILTER);
+    set(my, PASSABLE | INVISIBLE | NOFILTER);
     ent_cloneskin(my);
 }
 
@@ -26,7 +26,7 @@ void editor_update_grid_ent_by_id(int id, var pan, int type, int asset)
     // also, make visible if this tile is used
     if (type >= 0)
     {
-        //reset(tile, INVISIBLE);
+        reset(tile, INVISIBLE);
 
         BMAP *old_skin = ent_getskin(tile, 1);
         ptr_remove(old_skin);
@@ -38,7 +38,7 @@ void editor_update_grid_ent_by_id(int id, var pan, int type, int asset)
     }
     else
     {
-        //set(tile, INVISIBLE);
+        set(tile, INVISIBLE);
 
         BMAP *old_skin = ent_getskin(tile, 1);
         ptr_remove(old_skin);

@@ -37,8 +37,7 @@ void editor_episode_update(Episode *e)
     {
         if (strlen(e->name) > 0 && strlen(e->story) > 0)
         {
-            editor_create_grid_ents();
-            editor_switch_state_to(STATE_EDITOR);
+            editor_switch_state_to(STATE_START_EDITOR);
         }
         else
         {

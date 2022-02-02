@@ -22,6 +22,7 @@
         "world_struct.h": "c",
         "episode.h": "c",
         "editor.h": "c",
-        "editor_grid_ents.h": "c"
+        "editor_grid_ents.h": "c",
+        "editor_map_editor.h": "c"
     }
 }
