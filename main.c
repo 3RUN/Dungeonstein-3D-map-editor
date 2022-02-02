@@ -61,6 +61,7 @@ int map_id = 0;
 #include "editor.h"
 #include "editor_cam.h"
 #include "editor_grid.h"
+#include "editor_grid_ents.h"
 
 #include "savedir.c"
 #include "screenres_list.c"
@@ -72,6 +73,9 @@ int map_id = 0;
 #include "editor.c"
 #include "editor_cam.c"
 #include "editor_grid.c"
+#include "editor_grid_ents.c"
+
+Episode def_episode;
 
 void map_editor_startup()
 {
@@ -92,6 +96,8 @@ void map_editor_startup()
 	imgui_change_theme();		   // and apply custom theme
 	assets_initialize();		   // load all editor assets
 	editor_camera_initialize();	   // initialize camera (background color)
+
+	episode_reset(&def_episode);
 }
 
 void on_frame_event()
@@ -115,6 +121,13 @@ void on_frame_event()
 
 	case STATE_EDITOR:
 		editor_grid_get_mouse_pos(&mouse_x, &mouse_y);
+
+		DEBUG_VAR(mouse_x, 140);
+		DEBUG_VAR(mouse_y, 160);
+
+		Map *m = map_get_active(&def_episode);
+		draw_text(draw_cell_info(m, mouse_x, mouse_y), 10, 200, COLOR_WHITE);
+
 		editor_camera_update();
 		editor_grid_update();
 		break;
@@ -130,6 +143,7 @@ void on_frame_event()
 void on_exit_event()
 {
 	assets_destroy();
+	editor_destroy_grid_ents();
 }
 
 void on_esc_event()
@@ -180,8 +194,72 @@ void on_f_event(var scancode)
 	}
 }
 
+void test_grid_create()
+{
+	editor_create_grid_ents();
+}
+
+void test_grid_ent()
+{
+	Map *m = map_get_active(&def_episode);
+
+	m->cell[0][0].type = ASSET_TYPE_WALL;
+	m->cell[0][0].asset = 0;
+
+	m->cell[16][0].type = ASSET_TYPE_WALL;
+	m->cell[16][0].asset = 5;
+
+	m->cell[2][0].type = ASSET_TYPE_WALL;
+	m->cell[2][0].asset = 25;
+
+	editor_update_grid_ents(m);
+}
+
+void test_grid_reset()
+{
+	editor_reset_grid_ents();
+}
+
+void test_grid_destroy()
+{
+	editor_destroy_grid_ents();
+}
+
+void test_save()
+{
+	episode_save("saved.dat", &def_episode);
+
+	Map *m = map_get_active(&def_episode);
+	editor_update_grid_ents(m);
+}
+
+void test_load()
+{
+	episode_load("saved.dat", &def_episode);
+
+	Map *m = map_get_active(&def_episode);
+	editor_update_grid_ents(m);
+}
+
+void test_reset()
+{
+	episode_reset(&def_episode);
+
+	Map *m = map_get_active(&def_episode);
+	editor_update_grid_ents(m);
+}
+
 void main()
 {
+	on_1 = test_save;
+	on_2 = test_load;
+	on_3 = test_reset;
+
+	on_z = test_grid_create;
+	on_x = test_grid_ent;
+	on_c = test_grid_reset;
+	on_v = test_grid_destroy;
+
 	max_entities = 2000;
 
 	on_d3d_lost = imgui_reset;

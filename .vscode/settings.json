@@ -21,6 +21,7 @@
         "cell_struct.h": "c",
         "world_struct.h": "c",
         "episode.h": "c",
-        "editor.h": "c"
+        "editor.h": "c",
+        "editor_grid_ents.h": "c"
     }
 }
