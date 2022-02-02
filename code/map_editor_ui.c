@@ -3,6 +3,64 @@ void map_editor_ui_initialize()
 {
     int i = 0;
 
+    // asset types
+    editor_main_asset_types[0] = "Walls";
+    editor_main_asset_types[1] = "Props";
+    editor_main_asset_types[2] = "Items";
+    editor_main_asset_types[3] = "Weapons";
+    editor_main_asset_types[4] = "Enemies";
+    editor_main_asset_types[5] = "Bosses";
+
+    // textures
+    for (i = 0; i < MAX_WALL_TEXTURES; i++)
+    {
+        wall_textures_listbox[i] = _chr(asset_get_desc(ASSET_TYPE_WALL, i));
+    }
+    for (i = 0; i < MAX_PROPS_TEXTURES; i++)
+    {
+        props_textures_listbox[i] = _chr(asset_get_desc(ASSET_TYPE_PROPS, i));
+    }
+    for (i = 0; i < MAX_ITEM_TEXTURES; i++)
+    {
+        items_textures_listbox[i] = _chr(asset_get_desc(ASSET_TYPE_ITEMS, i));
+    }
+    for (i = 0; i < MAX_WEAPON_TEXTURES; i++)
+    {
+        weapons_textures_listbox[i] = _chr(asset_get_desc(ASSET_TYPE_WEAPON, i));
+    }
+    for (i = 0; i < MAX_ENEMY_TEXTURES; i++)
+    {
+        enemies_textures_listbox[i] = _chr(asset_get_desc(ASSET_TYPE_ENEMIES, i));
+    }
+    for (i = 0; i < MAX_BOSS_TEXTURES; i++)
+    {
+        bosses_textures_listbox[i] = _chr(asset_get_desc(ASSET_TYPE_BOSSES, i));
+    }
+
+    // weather
+    for (i = 0; i < WEATHER_MAX; i++)
+    {
+        STRING *temp_weather_str = "";
+        if (i == WEATHER_CLEAR)
+        {
+            str_cpy(temp_weather_str, weather_clear_str);
+        }
+        else if (i == WEATHER_RAIN)
+        {
+            str_cpy(temp_weather_str, weather_rain_str);
+        }
+        else if (i == WEATHER_SNOW)
+        {
+            str_cpy(temp_weather_str, weather_snow_str);
+        }
+
+        if (!weather_list_str[i])
+        {
+            weather_list_str[i] = str_create("");
+            str_cpy(weather_list_str[i], temp_weather_str);
+        }
+    }
+
     // resolution
     STRING *temp_resolution = "";
     for (i = 0; i < screen_resolutions_total; i++)
@@ -36,7 +94,6 @@ void map_editor_ui_initialize()
             }
         }
     }
-    map_editor_settings_refresh();
 }
 
 void map_editor_ui_refresh(Episode *e)
@@ -57,6 +114,15 @@ void map_editor_ui_reset(Episode *e)
         return;
     }
 
+    strcpy(episode_save_name, "");
+
+    editor_asset_index = 0;
+    editor_asset_type = ASSET_TYPE_WALL;
+    editor_main_selected_asset_type = editor_main_asset_types[editor_asset_type];
+    editor_preview_update(editor_asset_type, editor_asset_index);
+
+    map_editor_weather_refresh(e);
+
     map_id = 0;
 
     is_settings_opened = false;
@@ -71,6 +137,14 @@ void map_editor_ui_reset(Episode *e)
 void map_editor_ui_destroy()
 {
     int i = 0;
+    for (i = 0; i < WEATHER_MAX; i++)
+    {
+        if (weather_list_str[i])
+        {
+            ptr_remove(weather_list_str[i]);
+        }
+    }
+
     for (i = 0; i < screen_resolutions_total; i++)
     {
         if (graphics_resolution_available_list_str[i])
@@ -86,6 +160,13 @@ void map_editor_ui_destroy()
             ptr_remove(graphics_display_mode_list_str[i]);
         }
     }
+}
+
+void editor_preview_update(int type, int index)
+{
+    preview_bmap = asset_get_bmap(type, index);
+    strcpy(preview_name, "Name: ");
+    strcat(preview_name, _chr(asset_get_desc(type, index)));
 }
 
 void map_editor_settings_refresh()
@@ -353,8 +434,16 @@ void map_editor_top_menu_bar(Episode *e)
     {
         if (imgui_begin_menu("File", 1))
         {
-            if (imgui_menu_item("Save", "", 0, 1))
+            if (strlen(episode_save_name) > 0)
             {
+                char file_name[64];
+                strcpy(file_name, "Save \"");
+                strcat(file_name, episode_save_name);
+                strcat(file_name, "\"");
+
+                if (imgui_menu_item(file_name, "", 0, 1))
+                {
+                }
             }
             if (imgui_menu_item("Save As", "", 0, 1))
             {
@@ -433,6 +522,30 @@ void map_editor_top_menu_bar(Episode *e)
     imgui_end();
 }
 
+void map_editor_weather_refresh(Episode *e)
+{
+    if (!e)
+    {
+        return;
+    }
+
+    Map *m = map_get_active(e);
+    if (!m)
+    {
+        return;
+    }
+
+    // weather
+    int i = 0;
+    for (i = 0; i < WEATHER_MAX; i++)
+    {
+        if (m->weather_id == i)
+        {
+            str_cpy(weather_currently_used_str, weather_list_str[i]);
+        }
+    }
+}
+
 void map_editor_side_menu(Episode *e)
 {
     if (!e)
@@ -444,6 +557,292 @@ void map_editor_side_menu(Episode *e)
     imgui_set_next_window_size(EDITOR_SIDE_BAR_WIDTH, screen_size.y - EDITOR_TOP_BAR_HEIGHT, ImGuiCond_Always);
     int side_bar_flags = ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing;
     imgui_begin("##Side Bar", NULL, side_bar_flags);
+
+    if (imgui_collapsing_header("Preview", NULL, ImGuiTreeNodeFlags_DefaultOpen))
+    {
+        imgui_text("Asset:");
+        imgui_align_right_with_offset((EDITOR_SIDE_BAR_WIDTH / 2) + 64 - engine_theme_win_padding[0]);
+        imgui_image_scale(preview_bmap, vector(128, 128, 0), vector(0, 0, 0), vector(1, 1, 0));
+        imgui_separator();
+        imgui_text(preview_name);
+    }
+    imgui_separator();
+
+    if (imgui_collapsing_header("Assets", NULL, ImGuiTreeNodeFlags_DefaultOpen))
+    {
+        imgui_text("Category:");
+        imgui_same_line();
+
+        imgui_push_item_width(-1);
+        if (imgui_begin_combo("##Asset Type Combobox", editor_main_selected_asset_type, ImGuiComboFlags_HeightSmall))
+        {
+            int n = 0;
+            for (n = 0; n < MAX_ASSET_TYPES; n++)
+            {
+                BOOL is_selected = (editor_main_selected_asset_type == editor_main_asset_types[n]);
+                if (imgui_selectable(editor_main_asset_types[n], &is_selected, 0))
+                {
+                    editor_main_selected_asset_type = editor_main_asset_types[n];
+                    editor_asset_type = n;
+                    editor_asset_index = 0;
+                    editor_preview_update(editor_asset_type, editor_asset_index);
+                }
+            }
+            imgui_end_combo();
+        }
+        imgui_pop_item_width();
+
+        if (editor_asset_type == ASSET_TYPE_WALL)
+        {
+            int wall_texture_child_window_flags = ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
+            var width = imgui_get_content_region_avail_width();
+            imgui_begin_child("##Wall Texture Child", vector(width, 256, 0), 1, wall_texture_child_window_flags);
+
+            imgui_push_item_width(-1);
+            if (imgui_list_box("##Wall Texture listbox", &editor_asset_index, wall_textures_listbox, MAX_WALL_TEXTURES, MAX_WALL_TEXTURES))
+            {
+                int i = 0;
+                for (i = 0; i < MAX_WALL_TEXTURES; i++)
+                {
+                    if (editor_asset_index == i)
+                    {
+                        editor_preview_update(editor_asset_type, editor_asset_index);
+                    }
+                }
+            }
+            imgui_pop_item_width();
+            imgui_end_child();
+        }
+        else if (editor_asset_type >= ASSET_TYPE_PROPS)
+        {
+            imgui_separator();
+            imgui_text("Object parameters:");
+            int object_child_window_flags = ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
+            var width = imgui_get_content_region_avail_width();
+            imgui_begin_child("##Object Parameters Child", vector(width, 96, 0), 1, object_child_window_flags);
+            switch (editor_asset_type)
+            {
+            case ASSET_TYPE_PROPS:
+                break;
+
+            case ASSET_TYPE_ITEMS:
+                break;
+
+            case ASSET_TYPE_WEAPON:
+                break;
+
+            case ASSET_TYPE_ENEMIES:
+                break;
+
+            case ASSET_TYPE_BOSSES:
+                break;
+            }
+            imgui_end_child();
+
+            imgui_separator();
+            imgui_begin_child("##Object Texture Child", vector(width, 160, 0), 1, object_child_window_flags);
+            switch (editor_asset_type)
+            {
+            case ASSET_TYPE_PROPS:
+                imgui_push_item_width(-1);
+                if (imgui_list_box("##Props Texture listbox", &editor_asset_index, props_textures_listbox, MAX_PROPS_TEXTURES, MAX_PROPS_TEXTURES))
+                {
+                    int i = 0;
+                    for (i = 0; i < MAX_PROPS_TEXTURES; i++)
+                    {
+                        if (editor_asset_index == i)
+                        {
+                            editor_preview_update(editor_asset_type, editor_asset_index);
+                        }
+                    }
+                }
+                imgui_pop_item_width();
+                break;
+
+            case ASSET_TYPE_ITEMS:
+                imgui_push_item_width(-1);
+                if (imgui_list_box("##Item Texture listbox", &editor_asset_index, items_textures_listbox, MAX_ITEM_TEXTURES, MAX_ITEM_TEXTURES))
+                {
+                    int i = 0;
+                    for (i = 0; i < MAX_ITEM_TEXTURES; i++)
+                    {
+                        if (editor_asset_index == i)
+                        {
+                            editor_preview_update(editor_asset_type, editor_asset_index);
+                        }
+                    }
+                }
+                imgui_pop_item_width();
+                break;
+
+            case ASSET_TYPE_WEAPON:
+                imgui_push_item_width(-1);
+                if (imgui_list_box("##Weapon Texture listbox", &editor_asset_index, weapons_textures_listbox, MAX_WEAPON_TEXTURES, MAX_WEAPON_TEXTURES))
+                {
+                    int i = 0;
+                    for (i = 0; i < MAX_WEAPON_TEXTURES; i++)
+                    {
+                        if (editor_asset_index == i)
+                        {
+                            editor_preview_update(editor_asset_type, editor_asset_index);
+                        }
+                    }
+                }
+                imgui_pop_item_width();
+                break;
+
+            case ASSET_TYPE_ENEMIES:
+                imgui_push_item_width(-1);
+                if (imgui_list_box("##Enemies Texture listbox", &editor_asset_index, enemies_textures_listbox, MAX_ENEMY_TEXTURES, MAX_ENEMY_TEXTURES))
+                {
+                    int i = 0;
+                    for (i = 0; i < MAX_ENEMY_TEXTURES; i++)
+                    {
+                        if (editor_asset_index == i)
+                        {
+                            editor_preview_update(editor_asset_type, editor_asset_index);
+                        }
+                    }
+                }
+                imgui_pop_item_width();
+                break;
+
+            case ASSET_TYPE_BOSSES:
+                imgui_push_item_width(-1);
+                if (imgui_list_box("##Bosses Texture listbox", &editor_asset_index, bosses_textures_listbox, MAX_BOSS_TEXTURES, MAX_BOSS_TEXTURES))
+                {
+                    int i = 0;
+                    for (i = 0; i < MAX_BOSS_TEXTURES; i++)
+                    {
+                        if (editor_asset_index == i)
+                        {
+                            editor_preview_update(editor_asset_type, editor_asset_index);
+                        }
+                    }
+                }
+                imgui_pop_item_width();
+                break;
+            }
+            imgui_end_child();
+        }
+    }
+    imgui_separator();
+
+    if (imgui_collapsing_header("Map settings", NULL, ImGuiTreeNodeFlags_DefaultOpen))
+    {
+        imgui_text("Active Map Id:");
+        imgui_same_line();
+        imgui_align_right_with_offset(50);
+        if (imgui_arrow_button("Decrease", ImGuiDir_Left))
+        {
+            map_id--;
+            map_id = clamp(map_id, 0, e->map_count - 1);
+
+            Map *previous_map = map_get_active(e);
+            editor_update_grid_ents(previous_map);
+            map_editor_weather_refresh(e);
+        }
+        imgui_same_line();
+        imgui_text(_chr(str_printf(NULL, "%d", (long)(map_id + 1))));
+        imgui_same_line();
+        if (imgui_arrow_button("Increase", ImGuiDir_Right))
+        {
+            map_id++;
+            map_id = clamp(map_id, 0, e->map_count - 1);
+
+            Map *next_map = map_get_active(e);
+            editor_update_grid_ents(next_map);
+            map_editor_weather_refresh(e);
+        }
+        map_id = clamp(map_id, 0, e->map_count - 1);
+
+        imgui_text("Total map count:");
+        imgui_same_line();
+        imgui_align_right_with_offset(31);
+        imgui_text(_chr(str_for_num(NULL, e->map_count)));
+        imgui_separator();
+
+        imgui_text(_chr(str_printf(NULL, "Mouse pos x = %d; y = %d;", (long)mouse_x, (long)mouse_y)));
+        imgui_text(_chr(str_printf(NULL, "Map size: width = %d; height = %d;", (long)MAP_WIDTH, (long)MAP_HEIGHT)));
+        imgui_separator();
+
+        // get currently active map
+        Map *current_map = map_get_active(e);
+        if (!current_map)
+        {
+            return;
+        }
+
+        // weather
+        imgui_text("Weather:");
+        imgui_same_line();
+        var avail_combobox_width = imgui_get_content_region_avail_width();
+        imgui_push_item_width(avail_combobox_width);
+        if (imgui_begin_combo("##Weather Combobox", _chr(weather_currently_used_str), ImGuiComboFlags_HeightSmall))
+        {
+            int i = 0;
+            for (i = 0; i < WEATHER_MAX; i++)
+            {
+                int is_selected = str_cmp(weather_currently_used_str, weather_list_str[i]);
+                if (imgui_selectable(_chr(weather_list_str[i]), &is_selected, 0))
+                {
+                    current_map->weather_id = i;
+                    str_cpy(weather_currently_used_str, weather_list_str[i]);
+                    map_editor_weather_refresh(e);
+                }
+            }
+            imgui_end_combo();
+        }
+        imgui_pop_item_width();
+
+        // fog settings
+        imgui_text("Fog start: ");
+        imgui_same_line();
+        var avail_slider_width = imgui_get_content_region_avail_width();
+        imgui_push_item_width(avail_slider_width);
+        imgui_slider_var("##Fog start slider", &current_map->fog_start, 0, current_map->fog_end);
+        current_map->fog_start = clamp(current_map->fog_start, 0, current_map->fog_end);
+        editor_create_tooltip("Fog starting distance in quants.\nShould be smaller than 'end'.");
+
+        imgui_text("Fog end:   ");
+        imgui_same_line();
+        imgui_slider_var("##Fog end slider", &current_map->fog_end, current_map->fog_start, 2048);
+        current_map->fog_end = clamp(current_map->fog_end, current_map->fog_start, 2048);
+        editor_create_tooltip("Fog end distance in quants.\nShould be higher than 'start'.");
+        imgui_pop_item_width();
+
+        imgui_text("Fog color: ");
+        imgui_same_line();
+        var avail_picker_width = imgui_get_content_region_avail_width();
+        imgui_push_item_width(avail_picker_width);
+        static int misc_flags = ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_NoDragDrop;
+        imgui_color_edit3("##Fog color picker", current_map->fog_color, misc_flags);
+        imgui_pop_item_width();
+        imgui_separator();
+
+        imgui_text("Sky color: ");
+        imgui_same_line();
+        var avail_picker_width = imgui_get_content_region_avail_width();
+        imgui_push_item_width(avail_picker_width);
+        static int misc_flags = ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_NoDragDrop;
+        imgui_color_edit3("##Sky color picker", current_map->sky_color, misc_flags);
+        imgui_pop_item_width();
+        imgui_separator();
+
+        // music
+        imgui_text("Music:");
+        imgui_same_line();
+        int len = strlen(current_map->music);
+        imgui_push_item_width(140);
+        imgui_input_text("##Textbox", current_map->music, len, ImGuiInputTextFlags_ReadOnly | ImGuiInputTextFlags_AutoSelectAll);
+        imgui_pop_item_width();
+        imgui_same_line();
+        if (imgui_button_withsize("Browse", -1, 15))
+        {
+            beep();
+        }
+    }
+    imgui_separator();
 
     imgui_end();
 }

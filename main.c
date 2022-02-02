@@ -8,6 +8,14 @@
 // * add save window to save the episode, if file name was already given, if not, run 'save as' first
 // * add save as window, to define name for the episode file to save it to
 // * make grid entities toggleable (is_walls_visible, is_objects_visible)
+// * find a good way to define music for each level
+// * add selected tile preview in side menu
+// * add proper settings/parameters for objects
+// * add draw/erase functionality
+
+// things that needs to be updated on map ID change or load
+// * grid of entities
+// * weather combobox
 
 #define PRAGMA_POINTER
 
@@ -164,6 +172,8 @@ void on_frame_event()
 		break;
 	}
 
+	DEBUG_VAR(is_allowed_to_draw(), 200);
+
 	editor_camera_resize();
 	mouse_lock_in_window();
 }
@@ -237,6 +247,7 @@ void test_load()
 
 	Map *m = map_get_active(&def_episode);
 	editor_update_grid_ents(m);
+	map_editor_weather_refresh(&def_episode);
 }
 
 void test_reset()
@@ -245,6 +256,7 @@ void test_reset()
 
 	Map *m = map_get_active(&def_episode);
 	editor_update_grid_ents(m);
+	map_editor_weather_refresh(&def_episode);
 }
 
 void main()

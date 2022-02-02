@@ -21,7 +21,7 @@ int is_pos_within_camera(VECTOR *pos)
 
 int is_allowed_to_draw()
 {
-    if (is_settings_opened == true || is_popup_opened == true || is_help_opened == true)
+    if (is_settings_opened == true || is_popup_opened == true || is_help_opened == true || is_edit_episode_opened == true)
     {
         return false;
     }
