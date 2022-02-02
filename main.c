@@ -4,7 +4,6 @@
 #include <strio.c>
 
 // todo
-// * make grid entities toggleable (is_walls_visible, is_objects_visible)
 // * find a good way to define music for each level
 // * add proper settings/parameters for objects
 // * add draw/erase functionality
@@ -263,8 +262,26 @@ void on_f_event(var scancode)
 	}
 }
 
+void test_map()
+{
+	Map *m = map_get_active(&def_episode);
+
+	m->cell[0][0].type = ASSET_TYPE_WALL;
+	m->cell[0][0].asset = 0;
+
+	m->cell[16][0].type = ASSET_TYPE_PROPS;
+	m->cell[16][0].asset = 5;
+
+	m->cell[2][0].type = ASSET_TYPE_WALL;
+	m->cell[2][0].asset = 25;
+
+	editor_update_grid_ents(m);
+}
+
 void main()
 {
+	on_1 = test_map;
+
 	max_entities = 2000;
 
 	on_d3d_lost = imgui_reset;

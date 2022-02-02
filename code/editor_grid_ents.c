@@ -18,6 +18,8 @@ void editor_update_grid_ent_by_id(int id, var pan, int type, int asset)
         return;
     }
 
+    set(tile, INVISIBLE);
+
     tile->pan = pan;
     tile->OBJ_TYPE_INDEX = type;
     tile->OBJ_ASSET_INDEX = asset;
@@ -26,7 +28,15 @@ void editor_update_grid_ent_by_id(int id, var pan, int type, int asset)
     // also, make visible if this tile is used
     if (type >= 0)
     {
-        reset(tile, INVISIBLE);
+        if (is_walls_visible == true && type == ASSET_TYPE_WALL)
+        {
+            reset(tile, INVISIBLE);
+        }
+
+        if (is_objects_visible == true && type >= ASSET_TYPE_PROPS)
+        {
+            reset(tile, INVISIBLE);
+        }
 
         BMAP *old_skin = ent_getskin(tile, 1);
         ptr_remove(old_skin);
@@ -38,8 +48,6 @@ void editor_update_grid_ent_by_id(int id, var pan, int type, int asset)
     }
     else
     {
-        set(tile, INVISIBLE);
-
         BMAP *old_skin = ent_getskin(tile, 1);
         ptr_remove(old_skin);
 
