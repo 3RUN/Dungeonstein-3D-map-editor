@@ -17,8 +17,9 @@ void editor_menu_update(Episode *e)
         editor_switch_state_to(STATE_RESET_EPISODE);
     }
 
-    if (imgui_button_withsize("Open", -1, MENU_WINDOW_BUTTON_HEIGHT))
+    if (imgui_button_withsize("Load", -1, MENU_WINDOW_BUTTON_HEIGHT))
     {
+        editor_load_refresh_list();
         editor_switch_state_to(STATE_LOAD);
     }
 

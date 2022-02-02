@@ -4,12 +4,8 @@
 #include <strio.c>
 
 // todo
-// * add load window with list of 'found' episodes
-// * add save window to save the episode, if file name was already given, if not, run 'save as' first
-// * add save as window, to define name for the episode file to save it to
 // * make grid entities toggleable (is_walls_visible, is_objects_visible)
 // * find a good way to define music for each level
-// * add selected tile preview in side menu
 // * add proper settings/parameters for objects
 // * add draw/erase functionality
 
@@ -24,6 +20,7 @@
 
 STRING *config_file_str = "config.ini";
 STRING *project_name_str = "MapEditor"; // insert your project's name here !
+STRING *episode_extension_str = ".ep";	// this added to the episode's file name on load/save
 
 #define MAP_WIDTH 31
 #define MAP_HEIGHT 31
@@ -79,6 +76,7 @@ int map_id = 0;
 #include "editor_grid_ents.h"
 #include "editor_main_menu.h"
 #include "editor_edit_episode.h"
+#include "editor_load_episode.h"
 #include "map_editor.h"
 #include "map_editor_ui.h"
 
@@ -95,10 +93,9 @@ int map_id = 0;
 #include "editor_grid_ents.c"
 #include "editor_main_menu.c"
 #include "editor_edit_episode.c"
+#include "editor_load_episode.c"
 #include "map_editor.c"
 #include "map_editor_ui.c"
-
-#include "test_scan_folder.c"
 
 Episode def_episode;
 
@@ -114,15 +111,16 @@ void map_editor_startup()
 	str_cpy(temp_str, config_file_str);
 	path_make_absolute(temp_str); // add 'save_dir' full path (in documents folder)
 
-	screen_resolutions_find_all(); // find all available screen resolution (primary monitor only)
-	config_initialize(temp_str);   // initialize config (set defaults and load from the config file)engine_initialize()
-	engine_initialize();		   // initialize all engine settings
-	imgui_init(0);				   // initialize imgui
-	imgui_change_theme();		   // and apply custom theme
-	assets_initialize();		   // load all editor assets
-	editor_camera_initialize();	   // initialize camera (background color)
-	map_editor_initialize();	   // initialize all map editor stuff
-	episode_reset(&def_episode);   // initialize default episode
+	screen_resolutions_find_all();	   // find all available screen resolution (primary monitor only)
+	config_initialize(temp_str);	   // initialize config (set defaults and load from the config file)engine_initialize()
+	engine_initialize();			   // initialize all engine settings
+	imgui_init(0);					   // initialize imgui
+	imgui_change_theme();			   // and apply custom theme
+	assets_initialize();			   // load all editor assets
+	editor_camera_initialize();		   // initialize camera (background color)
+	editor_load_episodes_initialize(); // initialize episode loader
+	map_editor_initialize();		   // initialize all map editor stuff
+	episode_reset(&def_episode);	   // initialize default episode
 }
 
 void on_frame_event()
@@ -134,7 +132,7 @@ void on_frame_event()
 		break;
 
 	case STATE_LOAD:
-		draw_text("load episode menu here", 200, 200, COLOR_WHITE);
+		editor_load_update(&def_episode);
 		break;
 
 	case STATE_RESET_EPISODE:
@@ -172,8 +170,6 @@ void on_frame_event()
 		break;
 	}
 
-	DEBUG_VAR(is_allowed_to_draw(), 200);
-
 	editor_camera_resize();
 	mouse_lock_in_window();
 }
@@ -182,6 +178,7 @@ void on_exit_event()
 {
 	assets_destroy();
 	editor_destroy_grid_ents();
+	editor_load_episodes_destroy();
 	map_editor_destroy();
 }
 
@@ -233,40 +230,8 @@ void on_f_event(var scancode)
 	}
 }
 
-void test_save()
-{
-	episode_save("saved.dat", &def_episode);
-
-	Map *m = map_get_active(&def_episode);
-	editor_update_grid_ents(m);
-}
-
-void test_load()
-{
-	episode_load("blah.ep", &def_episode);
-
-	Map *m = map_get_active(&def_episode);
-	editor_update_grid_ents(m);
-	map_editor_weather_refresh(&def_episode);
-}
-
-void test_reset()
-{
-	episode_reset(&def_episode);
-
-	Map *m = map_get_active(&def_episode);
-	editor_update_grid_ents(m);
-	map_editor_weather_refresh(&def_episode);
-}
-
 void main()
 {
-	on_1 = test_save;
-	on_2 = test_load;
-	on_3 = test_reset;
-
-	on_enter = test_scan_folder;
-
 	max_entities = 2000;
 
 	on_d3d_lost = imgui_reset;

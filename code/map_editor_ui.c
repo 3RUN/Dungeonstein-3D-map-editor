@@ -445,7 +445,7 @@ void map_editor_top_menu_bar(Episode *e)
                 {
                     char save_file_name[64];
                     strcpy(save_file_name, episode_save_name);
-                    strcat(save_file_name, ".ep");
+                    strcat(save_file_name, _chr(episode_extension_str));
                     episode_save(save_file_name, e);
                 }
             }
@@ -564,7 +564,7 @@ void map_editor_top_menu_bar(Episode *e)
                 {
                     char save_file_name[64];
                     strcpy(save_file_name, episode_save_name);
-                    strcat(save_file_name, ".ep");
+                    strcat(save_file_name, _chr(episode_extension_str));
                     episode_save(save_file_name, e);
 
                     is_popup_opened = false;
