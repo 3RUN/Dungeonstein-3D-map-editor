@@ -3,6 +3,11 @@
 
 #define EPISODE_SAVE_NAME_LENGTH 32
 
+#define MAP_EDITOR_POPUP_EXIT 0
+#define MAP_EDITOR_POPUP_SAVE 1
+
+STRING *editor_popup_str = "";
+STRING *editor_save_popup_str = "Save episode as";
 STRING *editor_back_to_menu_popup_str = "You want to go back to main menu?\nAll unsaved data will be lost!";
 
 // resolution config
@@ -41,6 +46,10 @@ char *editor_main_asset_types[MAX_ASSET_TYPES];
 
 // save name
 char episode_save_name[EPISODE_SAVE_NAME_LENGTH];
+
+int map_episode_save_failed = false;
+
+int map_editor_popup_id = MAP_EDITOR_POPUP_EXIT;
 
 int editor_asset_type = ASSET_TYPE_WALL; // currently active asset category
 int editor_asset_index = 0;              // currently selected asset

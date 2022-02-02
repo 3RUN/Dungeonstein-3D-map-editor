@@ -443,10 +443,17 @@ void map_editor_top_menu_bar(Episode *e)
 
                 if (imgui_menu_item(file_name, "", 0, 1))
                 {
+                    char save_file_name[64];
+                    strcpy(save_file_name, episode_save_name);
+                    strcat(save_file_name, ".ep");
+                    episode_save(save_file_name, e);
                 }
             }
             if (imgui_menu_item("Save As", "", 0, 1))
             {
+                map_editor_popup_id = MAP_EDITOR_POPUP_SAVE;
+                str_cpy(editor_popup_str, editor_save_popup_str);
+                is_popup_opened = true;
             }
             imgui_separator();
             if (imgui_menu_item("Preferences", "", 0, 1))
@@ -456,6 +463,8 @@ void map_editor_top_menu_bar(Episode *e)
             imgui_separator();
             if (imgui_menu_item("Exit", "", 0, 1))
             {
+                map_editor_popup_id = MAP_EDITOR_POPUP_EXIT;
+                str_cpy(editor_popup_str, editor_back_to_menu_popup_str);
                 is_popup_opened = true;
             }
             imgui_end_menu();
@@ -474,6 +483,28 @@ void map_editor_top_menu_bar(Episode *e)
             if (imgui_menu_item("Edit", "", 0, 1))
             {
                 is_edit_episode_opened = 1 - is_edit_episode_opened;
+            }
+            if (imgui_menu_item("Reset", "", 0, 1))
+            {
+                episode_reset(e);
+
+                map_id = 0;
+
+                Map *current_map = map_get_active(e);
+                editor_update_grid_ents(current_map);
+                map_editor_weather_refresh(e);
+            }
+            imgui_end_menu();
+        }
+
+        if (imgui_begin_menu("Map", 1))
+        {
+            if (imgui_menu_item("Reset", "", 0, 1))
+            {
+                Map *current_map = map_get_active(e);
+                map_reset(current_map);
+                editor_update_grid_ents(current_map);
+                map_editor_weather_refresh(e);
             }
             imgui_end_menu();
         }
@@ -502,18 +533,63 @@ void map_editor_top_menu_bar(Episode *e)
     int popup_modal_flags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings;
     if (imgui_begin_popup_modals_params("##Editor main popup", NULL, popup_modal_flags))
     {
-        imgui_text(_chr(editor_back_to_menu_popup_str));
+        var popup_width = 256;
+        imgui_text(_chr(editor_popup_str));
 
-        if (imgui_button_withsize("Yes", -1, MENU_WINDOW_BUTTON_HEIGHT))
+        if (map_editor_popup_id == MAP_EDITOR_POPUP_EXIT)
         {
-            is_popup_opened = false;
-            editor_switch_state_to(STATE_EXIT_EDITOR);
+            if (imgui_button_withsize("Yes", -1, MENU_WINDOW_BUTTON_HEIGHT))
+            {
+                is_popup_opened = false;
+                editor_switch_state_to(STATE_EXIT_EDITOR);
+            }
+
+            if (imgui_button_withsize("No", -1, MENU_WINDOW_BUTTON_HEIGHT))
+            {
+                is_popup_opened = false;
+                imgui_close_current_popup();
+            }
         }
-
-        if (imgui_button_withsize("No", -1, MENU_WINDOW_BUTTON_HEIGHT))
+        else if (map_editor_popup_id == MAP_EDITOR_POPUP_SAVE)
         {
-            is_popup_opened = false;
-            imgui_close_current_popup();
+            imgui_push_item_width(-1);
+            imgui_input_text_with_hint("##File Name", "name", episode_save_name, EPISODE_SAVE_NAME_LENGTH, NULL);
+            imgui_pop_item_width();
+
+            var button_width = ((popup_width - (engine_theme_win_padding[0] * 2)) / 2) - 2.5;
+
+            if (imgui_button_withsize("Save", button_width, MENU_WINDOW_BUTTON_HEIGHT))
+            {
+                if (strlen(episode_save_name) > 0)
+                {
+                    char save_file_name[64];
+                    strcpy(save_file_name, episode_save_name);
+                    strcat(save_file_name, ".ep");
+                    episode_save(save_file_name, e);
+
+                    is_popup_opened = false;
+                    map_episode_save_failed = false;
+                    imgui_close_current_popup();
+                }
+                else
+                {
+                    map_episode_save_failed = true;
+                }
+            }
+            imgui_same_line();
+            if (imgui_button_withsize("Cancel", button_width, MENU_WINDOW_BUTTON_HEIGHT))
+            {
+                is_popup_opened = false;
+                map_episode_save_failed = false;
+                imgui_close_current_popup();
+            }
+
+            if (map_episode_save_failed == true)
+            {
+                imgui_push_style_color(ImGuiCol_TextDisabled, color4_red);
+                imgui_text_disabled("  You forgot to enter file name!");
+                imgui_pop_style_color(1);
+            }
         }
 
         imgui_end_popup();

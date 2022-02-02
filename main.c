@@ -243,7 +243,7 @@ void test_save()
 
 void test_load()
 {
-	episode_load("saved.dat", &def_episode);
+	episode_load("blah.ep", &def_episode);
 
 	Map *m = map_get_active(&def_episode);
 	editor_update_grid_ents(m);
