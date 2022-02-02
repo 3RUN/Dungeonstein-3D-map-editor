@@ -473,8 +473,11 @@ void map_editor_top_menu_bar(Episode *e)
         if (imgui_begin_menu("View", 1))
         {
             imgui_checkbox("Grid", &is_grid_visible);
-            imgui_checkbox("Walls", &is_walls_visible);
-            imgui_checkbox("Objects", &is_objects_visible);
+            if (imgui_checkbox("Walls", &is_walls_visible) || imgui_checkbox("Objects", &is_objects_visible))
+            {
+                Map *current_map = map_get_active(e);
+                editor_update_grid_ents(current_map);
+            }
             imgui_end_menu();
         }
 
