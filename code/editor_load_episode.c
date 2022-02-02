@@ -97,7 +97,12 @@ void editor_load_update(Episode *e)
 
         editor_switch_state_to(STATE_EDITOR);
 
-        strcpy(episode_save_name, selected_episode);
+        STRING *trim_the_name_str = "";
+        str_cpy(trim_the_name_str, _str(selected_episode));
+        var num = str_len(episode_extension_str);
+        str_trunc(trim_the_name_str, num);
+
+        strcpy(episode_save_name, _chr(trim_the_name_str));
     }
     imgui_same_line();
     if (imgui_button_withsize("Back", button_width, LOAD_BROWSER_WINDOW_BUTTON_HEIGHT))

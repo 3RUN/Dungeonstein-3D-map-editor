@@ -536,7 +536,6 @@ void map_editor_top_menu_bar(Episode *e)
     int popup_modal_flags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings;
     if (imgui_begin_popup_modals_params("##Editor main popup", NULL, popup_modal_flags))
     {
-        var popup_width = 256;
         imgui_text(_chr(editor_popup_str));
 
         if (map_editor_popup_id == MAP_EDITOR_POPUP_EXIT)
@@ -555,13 +554,15 @@ void map_editor_top_menu_bar(Episode *e)
         }
         else if (map_editor_popup_id == MAP_EDITOR_POPUP_SAVE)
         {
+            var popup_width = 270;
+
             imgui_push_item_width(-1);
             imgui_input_text_with_hint("##File Name", "name", episode_save_name, EPISODE_SAVE_NAME_LENGTH, NULL);
             imgui_pop_item_width();
 
-            var button_width = ((popup_width - (engine_theme_win_padding[0] * 2)) / 2) - 2.5;
+            var button_width = ((popup_width - (engine_theme_win_padding[0] * 2)) / 2);
 
-            if (imgui_button_withsize("Save", button_width, MENU_WINDOW_BUTTON_HEIGHT))
+            if (imgui_button_withsize(_chr(save_button_name), button_width, MENU_WINDOW_BUTTON_HEIGHT))
             {
                 if (strlen(episode_save_name) > 0)
                 {
@@ -590,8 +591,26 @@ void map_editor_top_menu_bar(Episode *e)
             if (map_episode_save_failed == true)
             {
                 imgui_push_style_color(ImGuiCol_TextDisabled, color4_red);
-                imgui_text_disabled("  You forgot to enter file name!");
+                imgui_text_disabled("   You forgot to enter file name!   ");
                 imgui_pop_style_color(1);
+            }
+
+            STRING *check_name = "";
+            str_cpy(check_name, "episodes\\");
+            str_cat(check_name, episode_save_name);
+            str_cat(check_name, episode_extension_str);
+            path_make_absolute(check_name);
+
+            if (file_exists(check_name))
+            {
+                str_cpy(save_button_name, "Overwrite");
+                imgui_push_style_color(ImGuiCol_TextDisabled, color4_red);
+                imgui_text_disabled(" File with this name already exists!");
+                imgui_pop_style_color(1);
+            }
+            else
+            {
+                str_cpy(save_button_name, "Save");
             }
         }
 

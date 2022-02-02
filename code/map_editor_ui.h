@@ -32,6 +32,9 @@ STRING *weather_snow_str = "Snow";
 BMAP *preview_bmap = NULL; // used for selected asset preview
 char preview_name[ASSET_DESC_LENGTH];
 
+// save button name (changes from Save to Overwrite if file with the given name is found)
+STRING *save_button_name = "Save";
+
 // all assets listbox
 char *wall_textures_listbox[MAX_WALL_TEXTURES];
 char *props_textures_listbox[MAX_PROPS_TEXTURES];

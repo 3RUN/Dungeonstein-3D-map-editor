@@ -47,4 +47,20 @@ void savedir_create_folder()
     {
         CreateDirectory(_chr(save_dir), NULL);
     }
+
+    // also make sure to create 'episodes' and 'music' folders if needed !
+    STRING *subfolder_str = "";
+    str_cpy(subfolder_str, save_dir);
+    str_cat(subfolder_str, "\episodes");
+    if (!DirectoryExists(subfolder_str))
+    {
+        CreateDirectory(_chr(subfolder_str), NULL);
+    }
+
+    str_cpy(subfolder_str, save_dir);
+    str_cat(subfolder_str, "\music");
+    if (!DirectoryExists(subfolder_str))
+    {
+        CreateDirectory(_chr(subfolder_str), NULL);
+    }
 }
