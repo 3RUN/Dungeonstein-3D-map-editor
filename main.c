@@ -22,7 +22,7 @@ STRING *project_name_str = "MapEditor"; // insert your project's name here !
 #define OBJ_TYPE_INDEX skill54
 #define OBJ_ASSET_INDEX skill55
 
-#define STATE_MENU 0
+#define STATE_MAIN_MENU 0
 #define STATE_LOAD 1
 #define STATE_SAVE 2
 #define STATE_RESET_EPISODE 3
@@ -31,8 +31,8 @@ STRING *project_name_str = "MapEditor"; // insert your project's name here !
 #define STATE_EXIT_EDITOR 6
 #define STATE_TEST_MAP 7
 
-int editor_state = STATE_EDITOR;
-int editor_old_state = STATE_EDITOR;
+int editor_state = STATE_MAIN_MENU;
+int editor_old_state = STATE_MAIN_MENU;
 
 int is_popup_opened = false;
 int is_settings_opened = false;
@@ -63,6 +63,8 @@ int map_id = 0;
 #include "editor_cam.h"
 #include "editor_grid.h"
 #include "editor_grid_ents.h"
+#include "editor_main_menu.h"
+#include "editor_edit_episode.h"
 
 #include "savedir.c"
 #include "screenres_list.c"
@@ -75,6 +77,10 @@ int map_id = 0;
 #include "editor_cam.c"
 #include "editor_grid.c"
 #include "editor_grid_ents.c"
+#include "editor_main_menu.c"
+#include "editor_edit_episode.c"
+
+#include "test_scan_folder.c"
 
 Episode def_episode;
 
@@ -104,7 +110,8 @@ void on_frame_event()
 {
 	switch (editor_state)
 	{
-	case STATE_MENU:
+	case STATE_MAIN_MENU:
+		editor_menu_update(&def_episode);
 		break;
 
 	case STATE_LOAD:
@@ -114,11 +121,12 @@ void on_frame_event()
 		break;
 
 	case STATE_RESET_EPISODE:
-		editor_create_grid_ents();
 		episode_reset(&def_episode);
+		editor_switch_state_to(STATE_EDIT_EPISODE);
 		break;
 
 	case STATE_EDIT_EPISODE:
+		editor_episode_update(&def_episode);
 		break;
 
 	case STATE_EDITOR:
@@ -255,8 +263,6 @@ void test_reset()
 	Map *m = map_get_active(&def_episode);
 	editor_update_grid_ents(m);
 }
-
-#include "test_scan_folder.c"
 
 void main()
 {
