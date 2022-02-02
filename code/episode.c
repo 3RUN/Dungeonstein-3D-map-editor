@@ -1,4 +1,14 @@
 
+Map *map_get_active(Episode *e)
+{
+    if (!e)
+    {
+        return NULL;
+    }
+
+    return &e->map[map_id];
+}
+
 void map_reset(Map *m)
 {
     if (!m)

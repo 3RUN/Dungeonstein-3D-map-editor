@@ -57,6 +57,8 @@ typedef struct Episode
     Map map[MAX_MAPS_PER_EPISODE];
 } Episode;
 
+Map *map_get_active(Episode *e);
+
 void map_reset(Map *m);
 
 void episode_reset(Episode *e);
