@@ -544,7 +544,7 @@ void map_editor_top_menu_bar(Episode *e)
                 editor_switch_state_to(STATE_EXIT_EDITOR);
             }
 
-            if (imgui_button_withsize("No", -1, MENU_WINDOW_BUTTON_HEIGHT))
+            if (imgui_button_withsize("No", -1, MENU_WINDOW_BUTTON_HEIGHT) || key_esc)
             {
                 is_popup_opened = false;
                 imgui_close_current_popup();
@@ -577,7 +577,7 @@ void map_editor_top_menu_bar(Episode *e)
                 }
             }
             imgui_same_line();
-            if (imgui_button_withsize("Cancel", button_width, MENU_WINDOW_BUTTON_HEIGHT))
+            if (imgui_button_withsize("Cancel", button_width, MENU_WINDOW_BUTTON_HEIGHT) || key_esc)
             {
                 is_popup_opened = false;
                 map_episode_save_failed = false;

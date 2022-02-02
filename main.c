@@ -184,7 +184,40 @@ void on_exit_event()
 
 void on_esc_event()
 {
-	sys_exit("");
+	if (is_popup_opened == true)
+	{
+		return;
+	}
+
+	switch (editor_state)
+	{
+	case STATE_MAIN_MENU:
+		break;
+
+	case STATE_LOAD:
+		editor_switch_state_to(STATE_MAIN_MENU);
+		break;
+
+	case STATE_RESET_EPISODE:
+		break;
+
+	case STATE_EDIT_EPISODE:
+		episode_reset(&def_episode);
+		editor_switch_state_to(STATE_MAIN_MENU);
+		break;
+
+	case STATE_START_EDITOR:
+		break;
+
+	case STATE_EDITOR:
+		break;
+
+	case STATE_EXIT_EDITOR:
+		break;
+
+	case STATE_TEST_MAP:
+		break;
+	}
 }
 
 void on_f_event(var scancode)

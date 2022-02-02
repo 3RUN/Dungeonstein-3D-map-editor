@@ -39,7 +39,7 @@ void editor_menu_update(Episode *e)
             sys_exit("");
         }
 
-        if (imgui_button_withsize("No", -1, MENU_WINDOW_BUTTON_HEIGHT))
+        if (imgui_button_withsize("No", -1, MENU_WINDOW_BUTTON_HEIGHT) || key_esc)
         {
             is_popup_opened = false;
             imgui_close_current_popup();
