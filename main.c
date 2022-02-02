@@ -25,10 +25,11 @@ STRING *project_name_str = "MapEditor"; // insert your project's name here !
 #define STATE_MENU 0
 #define STATE_LOAD 1
 #define STATE_SAVE 2
-#define STATE_NEW 3
-#define STATE_EPISODE 4
+#define STATE_RESET_EPISODE 3
+#define STATE_EDIT_EPISODE 4
 #define STATE_EDITOR 5
-#define STATE_TEST_MAP 6
+#define STATE_EXIT_EDITOR 6
+#define STATE_TEST_MAP 7
 
 int editor_state = STATE_EDITOR;
 int editor_old_state = STATE_EDITOR;
@@ -96,8 +97,7 @@ void map_editor_startup()
 	imgui_change_theme();		   // and apply custom theme
 	assets_initialize();		   // load all editor assets
 	editor_camera_initialize();	   // initialize camera (background color)
-
-	episode_reset(&def_episode);
+	episode_reset(&def_episode);   // initialize default episode
 }
 
 void on_frame_event()
@@ -113,10 +113,12 @@ void on_frame_event()
 	case STATE_SAVE:
 		break;
 
-	case STATE_NEW:
+	case STATE_RESET_EPISODE:
+		editor_create_grid_ents();
+		episode_reset(&def_episode);
 		break;
 
-	case STATE_EPISODE:
+	case STATE_EDIT_EPISODE:
 		break;
 
 	case STATE_EDITOR:
@@ -130,6 +132,11 @@ void on_frame_event()
 
 		editor_camera_update();
 		editor_grid_update();
+		break;
+
+	case STATE_EXIT_EDITOR:
+		editor_destroy_grid_ents();
+		episode_reset(&def_episode);
 		break;
 
 	case STATE_TEST_MAP:
@@ -249,11 +256,15 @@ void test_reset()
 	editor_update_grid_ents(m);
 }
 
+#include "test_scan_folder.c"
+
 void main()
 {
 	on_1 = test_save;
 	on_2 = test_load;
 	on_3 = test_reset;
+
+	on_enter = test_scan_folder;
 
 	on_z = test_grid_create;
 	on_x = test_grid_ent;
