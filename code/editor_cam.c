@@ -38,7 +38,7 @@ void editor_camera_movement(var grid_height, var grid_size)
         {
             var ntemp = camera->skill_y;
             camera->skill_y += mickey.z * 0.2;
-            camera->skill_y = clamp(camera->skill_y, 256, camera->skill_y);
+            camera->skill_y = clamp(camera->skill_y, 128, 1500);
             ntemp = camera->skill_y / ntemp;
             vec_sub(&vec_camera_center, &vec_mouse_3d);
             vec_scale(&vec_camera_center, ntemp);

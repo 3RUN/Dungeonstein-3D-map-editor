@@ -4,7 +4,6 @@
 #include <strio.c>
 
 // todo
-// * find a good way to define music for each level
 // * add proper settings/parameters for objects
 // * add draw/erase functionality
 // * add state to test the build level into 3d mesh (function map_editor_test_build)

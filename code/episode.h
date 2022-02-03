@@ -42,6 +42,7 @@ typedef struct Map
     var fog_start;
     var fog_end;
     float fog_color[3];
+    float floor_color[3];
     float sky_color[3];
 
     char music[MAP_MUSIC_NAME_LENGTH];

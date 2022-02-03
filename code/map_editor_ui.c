@@ -875,7 +875,7 @@ void map_editor_side_menu(Episode *e)
         }
 
         // weather
-        imgui_text("Weather:");
+        imgui_text("Weather:    ");
         imgui_same_line();
         var avail_combobox_width = imgui_get_content_region_avail_width();
         imgui_push_item_width(avail_combobox_width);
@@ -897,7 +897,7 @@ void map_editor_side_menu(Episode *e)
         imgui_pop_item_width();
 
         // fog settings
-        imgui_text("Fog start: ");
+        imgui_text("Fog start:  ");
         imgui_same_line();
         var avail_slider_width = imgui_get_content_region_avail_width();
         imgui_push_item_width(avail_slider_width);
@@ -905,14 +905,14 @@ void map_editor_side_menu(Episode *e)
         current_map->fog_start = clamp(current_map->fog_start, 0, current_map->fog_end);
         editor_create_tooltip("Fog starting distance in quants.\nShould be smaller than 'end'.");
 
-        imgui_text("Fog end:   ");
+        imgui_text("Fog end:    ");
         imgui_same_line();
         imgui_slider_var("##Fog end slider", &current_map->fog_end, current_map->fog_start, 2048);
         current_map->fog_end = clamp(current_map->fog_end, current_map->fog_start, 2048);
         editor_create_tooltip("Fog end distance in quants.\nShould be higher than 'start'.");
         imgui_pop_item_width();
 
-        imgui_text("Fog color: ");
+        imgui_text("Fog color:  ");
         imgui_same_line();
         var avail_picker_width = imgui_get_content_region_avail_width();
         imgui_push_item_width(avail_picker_width);
@@ -921,7 +921,15 @@ void map_editor_side_menu(Episode *e)
         imgui_pop_item_width();
         imgui_separator();
 
-        imgui_text("Sky color: ");
+        imgui_text("Floor color:");
+        imgui_same_line();
+        var avail_picker_width = imgui_get_content_region_avail_width();
+        imgui_push_item_width(avail_picker_width);
+        static int misc_flags = ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_NoDragDrop;
+        imgui_color_edit3("##Floor color picker", current_map->floor_color, misc_flags);
+        imgui_pop_item_width();
+
+        imgui_text("Sky color:  ");
         imgui_same_line();
         var avail_picker_width = imgui_get_content_region_avail_width();
         imgui_push_item_width(avail_picker_width);

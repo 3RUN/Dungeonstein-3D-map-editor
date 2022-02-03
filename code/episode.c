@@ -24,6 +24,7 @@ void map_reset(Map *m)
     for (i = 0; i < 3; i++)
     {
         m->fog_color[i] = get_hsv_from_color(128);
+        m->floor_color[i] = get_hsv_from_color(64);
         m->sky_color[i] = get_hsv_from_color(32);
     }
 
