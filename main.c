@@ -240,6 +240,7 @@ void on_f_event(var scancode)
 		break;
 
 	case 64: // f6
+		def_shot();
 		break;
 
 	case 65: // f7
@@ -267,14 +268,15 @@ void test_map()
 {
 	Map *m = map_get_active(&def_episode);
 
-	m->cell[0][0].type = ASSET_TYPE_WALL;
-	m->cell[0][0].asset = 0;
-
-	m->cell[16][0].type = ASSET_TYPE_PROPS;
-	m->cell[16][0].asset = 5;
-
-	m->cell[2][0].type = ASSET_TYPE_WALL;
-	m->cell[2][0].asset = 25;
+	int x = 0, y = 0;
+	for (y = 0; y < MAP_HEIGHT; y++)
+	{
+		for (x = 0; x < MAP_WIDTH; x++)
+		{
+			m->cell[x][y].type = integer(random(2));
+			m->cell[x][y].asset = integer(random(48));
+		}
+	}
 
 	editor_update_grid_ents(m);
 }
