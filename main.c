@@ -111,7 +111,7 @@ void map_editor_startup()
 	wait_for(savedir_create_folder);
 
 	// set proper path to the config file
-	static STRING *temp_str = "#256";
+	STRING *temp_str = "#256";
 	str_cpy(temp_str, config_file_str);
 	path_make_absolute(temp_str); // add 'save_dir' full path (in documents folder)
 

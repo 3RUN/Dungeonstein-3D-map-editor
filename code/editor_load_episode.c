@@ -15,7 +15,7 @@ void editor_load_episodes_destroy()
 
 int editor_load_episodes()
 {
-    static STRING *temp_str = "#256";
+    STRING *temp_str = "#256";
     str_cpy(temp_str, "episodes\\*");
     str_cat(temp_str, episode_extension_str);
     path_make_absolute(temp_str);
@@ -101,7 +101,7 @@ void editor_load_update(Episode *e)
 
             editor_switch_state_to(STATE_EDITOR);
 
-            static STRING *trim_the_name_str = "";
+            STRING *trim_the_name_str = "";
             str_cpy(trim_the_name_str, _str(selected_episode));
             var num = str_len(episode_extension_str);
             str_trunc(trim_the_name_str, num);

@@ -15,7 +15,7 @@ void editor_browse_music_destroy()
 
 int editor_load_music()
 {
-    static STRING *temp_str = "#256";
+    STRING *temp_str = "#256";
     str_cpy(temp_str, "music\\*");
     str_cat(temp_str, music_extension_str);
 
@@ -37,7 +37,7 @@ void editor_browser_music_refresh_list()
 
 void editor_browser_play_music()
 {
-    static STRING *music_to_play_str = "";
+    STRING *music_to_play_str = "";
     str_cpy(music_to_play_str, "music\\");
     str_cat(music_to_play_str, selected_music);
     playing_music_handle = media_play(music_to_play_str, NULL, playing_music_volume);
@@ -156,7 +156,7 @@ void editor_browser_music_update(Episode *e)
                 return;
             }
 
-            static STRING *music_to_use_str = "";
+            STRING *music_to_use_str = "";
             str_cpy(music_to_use_str, "music\\");
             str_cat(music_to_use_str, selected_music);
 
