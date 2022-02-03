@@ -3,6 +3,10 @@
 
 #define EPISODE_SAVE_NAME_LENGTH 32
 
+#define MAP_EDITOR_BUTTON_HEIGHT 24
+#define MAP_EDITOR_SETTINGS_BUTTON_HEIGHT 32
+#define MAP_EDITOR_MUSIC_BROWSE_BUTTON_HEIGHT 15
+
 #define MAP_EDITOR_POPUP_EXIT 0
 #define MAP_EDITOR_POPUP_SAVE 1
 
@@ -74,6 +78,8 @@ void map_editor_settings_window();
 void map_editor_edit_episode_window(Episode *e);
 
 void map_editor_help_window();
+
+void map_editor_test_build(Episode *e);
 
 void map_editor_top_menu_bar(Episode *e);
 

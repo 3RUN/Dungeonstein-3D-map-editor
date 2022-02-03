@@ -325,7 +325,7 @@ void map_editor_settings_window()
     imgui_end_child();
 
     // reset to defaults button
-    if (imgui_button_withsize("Defaults", BUTTON_WIDTH, 32))
+    if (imgui_button_withsize("Defaults", BUTTON_WIDTH, MAP_EDITOR_SETTINGS_BUTTON_HEIGHT))
     {
         config_reset_to_default();
         map_editor_settings_refresh();
@@ -335,7 +335,7 @@ void map_editor_settings_window()
     imgui_align_right_with_offset(BUTTON_WIDTH * 2 + engine_theme_item_spacing[1]);
 
     // apply and save
-    if (imgui_button_withsize("Ok", BUTTON_WIDTH, 32))
+    if (imgui_button_withsize("Ok", BUTTON_WIDTH, MAP_EDITOR_SETTINGS_BUTTON_HEIGHT))
     {
         config_save_n_apply();
         map_editor_settings_refresh();
@@ -345,7 +345,7 @@ void map_editor_settings_window()
     imgui_same_line();
 
     // cancel changes
-    if (imgui_button_withsize("Cancel", BUTTON_WIDTH, 32))
+    if (imgui_button_withsize("Cancel", BUTTON_WIDTH, MAP_EDITOR_SETTINGS_BUTTON_HEIGHT))
     {
         config_reset_to_saved();
         map_editor_settings_refresh();
@@ -416,6 +416,10 @@ void map_editor_help_window()
     imgui_text("blahblahblah");
 
     imgui_end();
+}
+
+void map_editor_test_build(Episode *e)
+{
 }
 
 void map_editor_top_menu_bar(Episode *e)
@@ -509,6 +513,10 @@ void map_editor_top_menu_bar(Episode *e)
                 editor_update_grid_ents(current_map);
                 map_editor_weather_refresh(e);
             }
+            if (imgui_menu_item("Test build", "", 0, 1))
+            {
+                map_editor_test_build(e);
+            }
             imgui_end_menu();
         }
 
@@ -540,13 +548,13 @@ void map_editor_top_menu_bar(Episode *e)
 
         if (map_editor_popup_id == MAP_EDITOR_POPUP_EXIT)
         {
-            if (imgui_button_withsize("Yes", -1, MENU_WINDOW_BUTTON_HEIGHT))
+            if (imgui_button_withsize("Yes", -1, MAP_EDITOR_BUTTON_HEIGHT))
             {
                 is_popup_opened = false;
                 editor_switch_state_to(STATE_EXIT_EDITOR);
             }
 
-            if (imgui_button_withsize("No", -1, MENU_WINDOW_BUTTON_HEIGHT) || key_esc)
+            if (imgui_button_withsize("No", -1, MAP_EDITOR_BUTTON_HEIGHT) || key_esc)
             {
                 is_popup_opened = false;
                 imgui_close_current_popup();
@@ -562,7 +570,7 @@ void map_editor_top_menu_bar(Episode *e)
 
             var button_width = ((popup_width - (engine_theme_win_padding[0] * 2)) / 2);
 
-            if (imgui_button_withsize(_chr(save_button_name), button_width, MENU_WINDOW_BUTTON_HEIGHT))
+            if (imgui_button_withsize(_chr(save_button_name), button_width, MAP_EDITOR_BUTTON_HEIGHT))
             {
                 if (strlen(episode_save_name) > 0)
                 {
@@ -581,7 +589,7 @@ void map_editor_top_menu_bar(Episode *e)
                 }
             }
             imgui_same_line();
-            if (imgui_button_withsize("Cancel", button_width, MENU_WINDOW_BUTTON_HEIGHT) || key_esc)
+            if (imgui_button_withsize("Cancel", button_width, MAP_EDITOR_BUTTON_HEIGHT) || key_esc)
             {
                 is_popup_opened = false;
                 map_episode_save_failed = false;
@@ -828,9 +836,9 @@ void map_editor_side_menu(Episode *e)
 
     if (imgui_collapsing_header("Map settings", NULL, ImGuiTreeNodeFlags_DefaultOpen))
     {
-        imgui_text("Active Map Id:");
+        imgui_text("Opened Map Id:");
         imgui_same_line();
-        imgui_align_right_with_offset(50);
+        imgui_align_right_with_offset(80);
         if (imgui_arrow_button("Decrease", ImGuiDir_Left))
         {
             map_id--;
@@ -841,7 +849,7 @@ void map_editor_side_menu(Episode *e)
             map_editor_weather_refresh(e);
         }
         imgui_same_line();
-        imgui_text(_chr(str_printf(NULL, "%d", (long)(map_id + 1))));
+        imgui_text(_chr(str_printf(NULL, "%d / %d", (long)(map_id + 1), (long)e->map_count)));
         imgui_same_line();
         if (imgui_arrow_button("Increase", ImGuiDir_Right))
         {
@@ -853,11 +861,6 @@ void map_editor_side_menu(Episode *e)
             map_editor_weather_refresh(e);
         }
         map_id = clamp(map_id, 0, e->map_count - 1);
-
-        imgui_text("Total map count:");
-        imgui_same_line();
-        imgui_align_right_with_offset(31);
-        imgui_text(_chr(str_for_num(NULL, e->map_count)));
         imgui_separator();
 
         imgui_text(_chr(str_printf(NULL, "Mouse pos x = %d; y = %d;", (long)mouse_x, (long)mouse_y)));
@@ -935,9 +938,15 @@ void map_editor_side_menu(Episode *e)
         imgui_input_text("##Textbox", current_map->music, len, ImGuiInputTextFlags_ReadOnly | ImGuiInputTextFlags_AutoSelectAll);
         imgui_pop_item_width();
         imgui_same_line();
-        if (imgui_button_withsize("Browse", -1, 15))
+        if (imgui_button_withsize("Browse", -1, MAP_EDITOR_MUSIC_BROWSE_BUTTON_HEIGHT))
         {
             beep();
+        }
+        imgui_separator();
+
+        if (imgui_button_withsize("Test Build", -1, MAP_EDITOR_BUTTON_HEIGHT))
+        {
+            map_editor_test_build(e);
         }
     }
     imgui_separator();

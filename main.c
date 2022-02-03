@@ -7,7 +7,7 @@
 // * find a good way to define music for each level
 // * add proper settings/parameters for objects
 // * add draw/erase functionality
-// * add state to test the build level into 3d mesh
+// * add state to test the build level into 3d mesh (function map_editor_test_build)
 
 // things that needs to be updated on map ID change or load
 // * grid of entities
