@@ -111,7 +111,7 @@ void map_editor_startup()
 	wait_for(savedir_create_folder);
 
 	// set proper path to the config file
-	STRING *temp_str = "#256";
+	static STRING *temp_str = "#256";
 	str_cpy(temp_str, config_file_str);
 	path_make_absolute(temp_str); // add 'save_dir' full path (in documents folder)
 
@@ -123,6 +123,7 @@ void map_editor_startup()
 	assets_initialize();			   // load all editor assets
 	editor_camera_initialize();		   // initialize camera (background color)
 	editor_load_episodes_initialize(); // initialize episode loader
+	editor_browse_music_initialize();  // initialize music browser
 	map_editor_initialize();		   // initialize all map editor stuff
 	episode_reset(&def_episode);	   // initialize default episode
 }
@@ -168,6 +169,11 @@ void on_frame_event()
 		map_editor_reset(&def_episode);
 		episode_reset(&def_episode);
 		editor_switch_state_to(STATE_MAIN_MENU);
+
+		if (media_playing(playing_music_handle))
+		{
+			media_stop(playing_music_handle);
+		}
 		break;
 
 	case STATE_TEST_MAP:
@@ -184,6 +190,7 @@ void on_exit_event()
 	assets_destroy();
 	editor_destroy_grid_ents();
 	editor_load_episodes_destroy();
+	editor_browse_music_destroy();
 	map_editor_destroy();
 }
 

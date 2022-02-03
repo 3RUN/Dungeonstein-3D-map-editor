@@ -13,6 +13,14 @@ TEXT *music_list_txt = NULL;
 int found_music_index = -1;
 int found_music_total = 0;
 
+int episode_selecting_playing_failed = false;
+
+int playing_music_index = 0;
+var playing_music_handle = 0;
+var playing_music_volume = 100;
+
+STRING *currently_playing_str = "";
+
 char *selected_music;
 char *found_music_listbox[MAX_AMOUNT_OF_MUSIC_TO_LOAD];
 
@@ -23,6 +31,8 @@ void editor_browse_music_destroy();
 int editor_load_music();
 
 void editor_browser_music_refresh_list();
+
+void editor_browser_play_music();
 
 void editor_browser_music_update(Episode *e);
 
