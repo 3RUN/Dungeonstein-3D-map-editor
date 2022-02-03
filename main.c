@@ -21,6 +21,7 @@
 STRING *config_file_str = "config.ini";
 STRING *project_name_str = "MapEditor"; // insert your project's name here !
 STRING *episode_extension_str = ".ep";	// this added to the episode's file name on load/save
+STRING *music_extension_str = ".mid";	// only mid music is used
 
 #define MAP_WIDTH 31
 #define MAP_HEIGHT 31
@@ -49,6 +50,7 @@ int is_popup_opened = false;
 int is_settings_opened = false;
 int is_edit_episode_opened = false;
 int is_help_opened = false;
+int is_music_browser_opened = false;
 
 int is_grid_visible = true;
 int is_walls_visible = true;
@@ -77,6 +79,7 @@ int map_id = 0;
 #include "editor_main_menu.h"
 #include "editor_edit_episode.h"
 #include "editor_load_episode.h"
+#include "editor_browse_music.h"
 #include "map_editor.h"
 #include "map_editor_ui.h"
 
@@ -94,6 +97,7 @@ int map_id = 0;
 #include "editor_main_menu.c"
 #include "editor_edit_episode.c"
 #include "editor_load_episode.c"
+#include "editor_browse_music.c"
 #include "map_editor.c"
 #include "map_editor_ui.c"
 
@@ -147,6 +151,7 @@ void on_frame_event()
 	case STATE_START_EDITOR:
 		editor_create_grid_ents();
 		map_editor_start(&def_episode);
+		editor_browser_music_refresh_list();
 		editor_switch_state_to(STATE_EDITOR);
 		break;
 
@@ -297,7 +302,7 @@ void main()
 	on_f1 = on_f_event;
 	on_f2 = on_f_event;
 	on_f3 = on_f_event;
-	on_f4 = on_f_event;
+	//on_f4 = on_f_event;
 	on_f5 = on_f_event;
 	on_f6 = on_f_event;
 	on_f7 = on_f_event;

@@ -23,6 +23,8 @@
         "episode.h": "c",
         "editor.h": "c",
         "editor_grid_ents.h": "c",
-        "editor_map_editor.h": "c"
+        "editor_map_editor.h": "c",
+        "editor_browse_music.h": "c",
+        "editor_load_episode.h": "c"
     }
 }

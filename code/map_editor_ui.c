@@ -940,7 +940,7 @@ void map_editor_side_menu(Episode *e)
         imgui_same_line();
         if (imgui_button_withsize("Browse", -1, MAP_EDITOR_MUSIC_BROWSE_BUTTON_HEIGHT))
         {
-            beep();
+            is_music_browser_opened = 1 - is_music_browser_opened;
         }
         imgui_separator();
 
@@ -950,6 +950,8 @@ void map_editor_side_menu(Episode *e)
         }
     }
     imgui_separator();
+
+    editor_browser_music_update(e);
 
     imgui_end();
 }

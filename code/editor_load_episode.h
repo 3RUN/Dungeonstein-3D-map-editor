@@ -13,6 +13,8 @@ TEXT *episodes_list_txt = NULL;
 int found_episode_index = -1;
 int found_episodes_total = 0;
 
+int episode_loading_failed = false;
+
 char *selected_episode;
 char *found_episodes_listbox[MAX_AMOUNT_OF_EPISODES_TO_LOAD];
 
