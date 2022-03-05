@@ -26,8 +26,10 @@ void imgui_push_font(ImFont *_font);
 
 void imgui_pop_font();
 
+void imgui_set_global_fontscale(float scalefactor);
+
 // choppy custom glyph range implemented for test purpouses
-//ImFont *         imgui_add_ttf_from_file_ranged(char *_chrFont, var _size, var _glyphRangeID, var _offX, var _offY);
+// ImFont *         imgui_add_ttf_from_file_ranged(char *_chrFont, var _size, var _glyphRangeID, var _offX, var _offY);
 ImFont *imgui_add_ttf_from_file_ranged(char *_chrFont, var _size, short *_ranges);
 
 // imgui_helpers.ccp

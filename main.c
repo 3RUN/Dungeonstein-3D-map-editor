@@ -1,27 +1,75 @@
 #include <acknex.h>
 #include <windows.h>
 #include <default.c>
+#include <strio.c>
+
+// to do
+//
+// * add preview parameters
+// * add drawing functionality
 
 #define PRAGMA_POINTER
 
-#define PRAGMA_PATH "assets"
 #define PRAGMA_PATH "code"
+#define PRAGMA_PATH "assets"
+#define PRAGMA_PATH "assets\\walls"
+#define PRAGMA_PATH "assets\\props"
+#define PRAGMA_PATH "assets\\events"
+#define PRAGMA_PATH "assets\\items"
+#define PRAGMA_PATH "assets\\enemies"
+#define PRAGMA_PATH "assets\\bosses"
 
 STRING *config_file_str = "config.ini";
 STRING *project_name_str = "MapEditor"; // insert your project's name here !
+STRING *episode_save_folder_str = "episodes\\";
+STRING *episode_music_folder_str = "music\\";
+STRING *episode_extension_str = ".ep"; // this added to the episode's file name on load/save
+STRING *music_extension_str = ".mid";  // only mid music is used
 
-STRING *grid_cursor_tga = "cursor.tga";
-STRING *tile_mdl = "tile.mdl";
+#define OBJ_ID skill50
+#define OBJ_POS_X skill51
+#define OBJ_POS_Y skill52
+#define OBJ_POS_Z skill53
+#define OBJ_TYPE_INDEX skill54
+#define OBJ_ASSET_INDEX skill55
+
+#define CAMERA_ARC 90
 
 #define MAP_WIDTH 31
 #define MAP_HEIGHT 31
 #define MAP_CELL_SIZE 32
 
+#define EDITOR_STATE_EMPTY 0
+#define EDITOR_STATE_OPEN 1
+#define EDITOR_STATE_NEW 2
+#define EDITOR_STATE_SAVE_US 3
+#define EDITOR_STATE_EDIT_MAP 4
+#define EDITOR_STATE_TO_MAP_SETTINGS 5
+#define EDITOR_STATE_MAP_SETTINGS 6
+#define EDITOR_STATE_FROM_MAP_SETTINGS 7
+#define EDITOR_STATE_TO_TEST_BUILD 8
+#define EDITOR_STATE_TEST_BUILD 9
+#define EDITOR_STATE_FROM_TEST_BUILD 10
+#define EDITOR_STATE_RESET_MAP 11
+#define EDITOR_STATE_EXIT 12
+
+int editor_state = EDITOR_STATE_EMPTY;
+int editor_old_state = EDITOR_STATE_EMPTY;
+
+// gui booleans
+int is_popup_opened = false; // true when any popup was opened
+int is_top_bar_used = false; // true when top bar's contex menu is opened
+
+// view booleans
+int is_grid_visible = true;
+int is_walls_visible = true;
+int is_objects_visible = true;
+int is_connections_visible = true;
+
 int mouse_x = 0;
 int mouse_y = 0;
 
-int is_settings_opened = false;
-int is_editor_popup_on = false;
+int current_map_id = 0;
 
 #include "cmd.h"
 #include "imgui.h"
@@ -32,18 +80,56 @@ int is_editor_popup_on = false;
 #include "engine.h"
 #include "config.h"
 #include "assets.h"
+#include "game_episode.h"
+#include "game_episode_save_n_load.h"
 #include "editor.h"
-#include "editor_cam.h"
-#include "editor_grid.h"
+#include "editor_episode_list.h"
+#include "editor_popups.h"
+#include "editor_empty.h"
+#include "editor_map.h"
+#include "editor_map_settings.h"
+#include "editor_music_browser.h"
+#include "editor_grid_sprites.h"
+#include "editor_cam_n_grid.h"
+#include "weather.h"
+
+Episode def_episode;
+
+void editor_switch_state_to(int new_state)
+{
+	editor_old_state = editor_state;
+	editor_state = new_state;
+}
 
 #include "savedir.c"
 #include "screenres_list.c"
 #include "engine.c"
 #include "config.c"
 #include "assets.c"
+#include "game_episode.c"
+#include "game_episode_save_n_load.c"
 #include "editor.c"
-#include "editor_cam.c"
-#include "editor_grid.c"
+#include "editor_episode_list.c"
+#include "editor_popups.c"
+#include "editor_empty.c"
+#include "editor_map.c"
+#include "editor_map_settings.c"
+#include "editor_music_browser.c"
+#include "editor_grid_sprites.c"
+#include "editor_cam_n_grid.c"
+#include "weather.c"
+
+void editor_reset()
+{
+	editor_map_reset();
+
+	current_map_id = 0;
+
+	is_grid_visible = true;
+	is_walls_visible = true;
+	is_objects_visible = true;
+	is_connections_visible = true;
+}
 
 void map_editor_startup()
 {
@@ -60,54 +146,201 @@ void map_editor_startup()
 	screen_resolutions_find_all(); // find all available screen resolution (primary monitor only)
 	config_initialize(temp_str);   // initialize config (set defaults and load from the config file)engine_initialize()
 	engine_initialize();		   // initialize all engine settings
+	assets_initialize();		   // load all editor assets (textures, sprites)
+	imgui_init(0);				   // initialize imgui
+	imgui_change_theme();		   // and apply custom theme
 
-	imgui_init(0);		  // initialize imgui
-	imgui_change_theme(); // and apply custom theme
-	assets_initialize();  // initialize all assets
-	camera_initialize();  // initialize camera
-	grid_initialize();	  // initialize grid
+	editor_map_initialize();				// initialize everything related to the main editor ui (preview, etc)
+	editor_episode_list_initialize();		// initialize everything to load list of episodes from episodes folder
+	editor_popups_initialize(&def_episode); // initialize all popups used in editor
+	editor_map_settings_initialize();		// initialize map settings
+	editor_music_browser_initialize();		// initialize music loading
+	editor_camera_initialize();				// initialize camera and visual grid
+	editor_grid_sprites_create();			// create all sprites that will visualize the map
 }
 
 void on_frame_event()
 {
+	Map *current_map = map_get_active(&def_episode);
+
 	switch (editor_state)
 	{
-	case STATE_NEW:
-		grid_clear();
-		editor_switch_state_to(STATE_EPISODE);
+	case EDITOR_STATE_EMPTY:
+		editor_empty_update(&def_episode);
 		break;
 
-	case STATE_EPISODE:
+	case EDITOR_STATE_OPEN:
+		editor_reset();
+
+		episode_reset(&def_episode);
+		episode_save_name_udpate(_str(selected_episode));
+		episode_load(episode_save_name, &def_episode);
+
+		editor_grid_sprites_refresh(&def_episode);
+		editor_switch_state_to(EDITOR_STATE_EDIT_MAP);
 		break;
 
-	case STATE_EDITOR:
-		grid_get_mouse_pos(&mouse_x, &mouse_y);
+	case EDITOR_STATE_NEW:
+		editor_reset();
 
-		camera_update();
-		grid_update();
+		episode_reset(&def_episode);
+		episode_change_info(&def_episode, new_name, new_story, new_map_count);
+		episode_save_name_udpate(_str(new_filename));
+		episode_save(episode_save_name, &def_episode);
+
+		editor_grid_sprites_refresh(&def_episode);
+		editor_switch_state_to(EDITOR_STATE_EDIT_MAP);
 		break;
 
-	case STATE_TEST:
+	case EDITOR_STATE_SAVE_US:
+		// update current episode name
+		// and save it to the file
+		episode_save_name_udpate(_str(save_as_filename));
+		episode_save(episode_save_name, &def_episode);
+
+		// return back to the editor
+		editor_switch_state_to(EDITOR_STATE_EDIT_MAP);
+		break;
+
+	case EDITOR_STATE_EDIT_MAP:
+		editor_map_update(&def_episode);
+		editor_camera_n_grid_update();
+		break;
+
+		// map settings
+	case EDITOR_STATE_TO_MAP_SETTINGS:
+		editor_map_settings_show(current_map);
+
+		// switch to map settings !
+		editor_switch_state_to(EDITOR_STATE_MAP_SETTINGS);
+		break;
+
+	case EDITOR_STATE_MAP_SETTINGS:
+		editor_map_settings_update(&def_episode);
+		editor_camera_in_map_settings();
+		break;
+
+	case EDITOR_STATE_FROM_MAP_SETTINGS:
+		editor_camera_restore_pos_n_angle();
+		editor_map_settings_hide();
+		editor_grid_sprites_refresh(&def_episode);
+
+		// return back to map editing
+		editor_switch_state_to(EDITOR_STATE_EDIT_MAP);
+		break;
+
+		// map test build
+	case EDITOR_STATE_TO_TEST_BUILD:
+		break;
+
+	case EDITOR_STATE_TEST_BUILD:
+		break;
+
+	case EDITOR_STATE_FROM_TEST_BUILD:
+		break;
+
+		// reset current map
+	case EDITOR_STATE_RESET_MAP:
+		// reset current map
+		map_reset(current_map);
+
+		// return back to the editor
+		editor_switch_state_to(EDITOR_STATE_EDIT_MAP);
+		break;
+
+	case EDITOR_STATE_EXIT:
+		sys_exit(NULL);
 		break;
 	}
 
+	DEBUG_VAR(current_map->cell[0][0].pan, 200);
+	draw_text(episode_save_name, 10, 240, COLOR_WHITE);
+
+	editor_camera_resize();
 	mouse_lock_in_window();
 }
 
 void on_exit_event()
 {
-	assets_destroy();
-	grid_destroy();
+	assets_destroy_all();
+	editor_map_destroy();
+	editor_episode_list_destroy();
+	editor_popups_destroy();
+	editor_map_settings_destroy();
+	editor_music_browser_destroy();
+	editor_grid_sprites_destroy();
 }
 
 void on_esc_event()
 {
-	sys_exit("");
+}
+
+void on_f_event(var scancode)
+{
+	switch (scancode)
+	{
+	case 59: // f1
+		break;
+
+	case 60: // f2
+		break;
+
+	case 61: // f3
+		break;
+
+	case 62: // f4
+		break;
+
+	case 63: // f5
+		break;
+
+	case 64: // f6
+		def_shot();
+		break;
+
+	case 65: // f7
+		break;
+
+	case 66: // f8
+		break;
+
+	case 67: // f9
+		break;
+
+	case 68: // f10
+		break;
+
+	case 87: // f11
+		def_debug();
+		break;
+
+	case 88: // f12
+		break;
+	}
+}
+
+void test_map()
+{
+	Map *m = map_get_active(&def_episode);
+
+	int x = 0, y = 0;
+	for (y = 0; y < MAP_HEIGHT; y++)
+	{
+		for (x = 0; x < MAP_WIDTH; x++)
+		{
+			m->cell[x][y].type = 0;
+			m->cell[x][y].asset = integer(random(TOTAL_WALL_TEXTURES));
+		}
+	}
+
+	editor_grid_sprites_refresh(&def_episode);
 }
 
 void main()
 {
-	max_entities = 3000;
+	on_1 = test_map;
+
+	max_entities = 2000;
 
 	on_d3d_lost = imgui_reset;
 	on_scanmessage = custom_scan_message;
@@ -115,6 +348,19 @@ void main()
 	on_frame = on_frame_event;
 	on_exit = on_exit_event;
 	on_esc = on_esc_event;
+
+	on_f1 = on_f_event;
+	on_f2 = on_f_event;
+	on_f3 = on_f_event;
+	// on_f4 = on_f_event;
+	on_f5 = on_f_event;
+	on_f6 = on_f_event;
+	on_f7 = on_f_event;
+	on_f8 = on_f_event;
+	on_f9 = on_f_event;
+	on_f10 = on_f_event;
+	on_f11 = on_f_event;
+	on_f12 = on_f_event;
 
 	level_load("");
 }

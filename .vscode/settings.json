@@ -20,7 +20,19 @@
         "savedir.h": "c",
         "cell_struct.h": "c",
         "world_struct.h": "c",
+        "episode.h": "c",
+        "editor.h": "c",
+        "editor_grid_ents.h": "c",
+        "editor_map_editor.h": "c",
+        "editor_browse_music.h": "c",
+        "editor_load_episode.h": "c",
         "assets.h": "c",
-        "editor_grid.h": "c"
+        "config.h": "c",
+        "engine.h": "c",
+        "game_episode.h": "c",
+        "editor_map.h": "c",
+        "editor_map_popups.h": "c",
+        "weather.h": "c",
+        "editor_music_browser.h": "c"
     }
 }
