@@ -229,8 +229,9 @@ typedef struct IMGUIVtbl
     VECTOR *GetWindowSize(void *This);
 } IMGUIVtbl;
 
-typedef interface IMGUI { IMGUIVtbl *lpVtbl; }
-IMGUI;
+typedef interface IMGUI {
+    IMGUIVtbl *lpVtbl;
+} IMGUI;
 
 var imgui_Button(IMGUI *This, char *label);
 var imgui_ButtonColor(IMGUI *This, char *label, VECTOR *normal, VECTOR *hover, VECTOR *pushed);

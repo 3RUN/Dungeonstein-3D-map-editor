@@ -1,4 +1,14 @@
 
+float get_hsv_from_color(float value)
+{
+    return value / 255;
+}
+
+float get_color_from_hsv(float value)
+{
+    return value * 255;
+}
+
 void mouse_set_position(VECTOR *pos)
 {
     VECTOR offset;
@@ -139,6 +149,8 @@ void engine_apply_settings()
 
 void engine_initialize()
 {
+    d3d_autotransparency = true;
+
     fps_max = 60;
     warn_level = 6;
 

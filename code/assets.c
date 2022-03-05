@@ -1,7 +1,7 @@
 
 BMAP *asset_get_bmap(int type, int index)
 {
-    if (type == ASSET_TYPE_WALL)
+    if (type == ASSET_TYPE_WALLS)
     {
         Asset *asset = array_get_element_at(Asset *, wall_textures, index);
         return asset->bmap;
@@ -11,14 +11,14 @@ BMAP *asset_get_bmap(int type, int index)
         Asset *asset = array_get_element_at(Asset *, props_textures, index);
         return asset->bmap;
     }
+    else if (type == ASSET_TYPE_EVENTS)
+    {
+        Asset *asset = array_get_element_at(Asset *, event_textures, index);
+        return asset->bmap;
+    }
     else if (type == ASSET_TYPE_ITEMS)
     {
         Asset *asset = array_get_element_at(Asset *, item_textures, index);
-        return asset->bmap;
-    }
-    else if (type == ASSET_TYPE_WEAPON)
-    {
-        Asset *asset = array_get_element_at(Asset *, weapon_textures, index);
         return asset->bmap;
     }
     else if (type == ASSET_TYPE_ENEMIES)
@@ -35,7 +35,7 @@ BMAP *asset_get_bmap(int type, int index)
 
 STRING *asset_get_desc(int type, int index)
 {
-    if (type == ASSET_TYPE_WALL)
+    if (type == ASSET_TYPE_WALLS)
     {
         Asset *asset = array_get_element_at(Asset *, wall_textures, index);
         return _str(asset->desc);
@@ -45,14 +45,14 @@ STRING *asset_get_desc(int type, int index)
         Asset *asset = array_get_element_at(Asset *, props_textures, index);
         return _str(asset->desc);
     }
+    else if (type == ASSET_TYPE_EVENTS)
+    {
+        Asset *asset = array_get_element_at(Asset *, event_textures, index);
+        return _str(asset->desc);
+    }
     else if (type == ASSET_TYPE_ITEMS)
     {
         Asset *asset = array_get_element_at(Asset *, item_textures, index);
-        return _str(asset->desc);
-    }
-    else if (type == ASSET_TYPE_WEAPON)
-    {
-        Asset *asset = array_get_element_at(Asset *, weapon_textures, index);
         return _str(asset->desc);
     }
     else if (type == ASSET_TYPE_ENEMIES)
@@ -67,7 +67,7 @@ STRING *asset_get_desc(int type, int index)
     }
 }
 
-void asset_create_texture(array_t *array, BMAP *source, STRING *desc, int type, int u, int v)
+void asset_add(array_t *array, STRING *desc, STRING *bmap)
 {
     if (!array)
     {
@@ -79,219 +79,189 @@ void asset_create_texture(array_t *array, BMAP *source, STRING *desc, int type, 
     {
         return;
     }
-
-    asset->bmap = bmap_createblack(ASSET_BMAP_SIZE, ASSET_BMAP_SIZE, 32);
-    bmap_blitpart(asset->bmap, source, nullvector, nullvector, vector(u, v, 0), vector(ASSET_BMAP_SIZE, ASSET_BMAP_SIZE, 0));
-    strcpy(asset->desc, desc);
-    asset->type = type;
-    asset->index = array_get_count(array);
-
-    array_add(Asset *, array, asset);
-}
-
-void asset_create_object(array_t *array, BMAP *source, STRING *desc, int type, int index, int u, int v)
-{
-    if (!array)
-    {
-        return;
-    }
-
-    Asset *asset = sys_malloc(sizeof(Asset));
-    if (!asset)
-    {
-        return;
-    }
-
-    asset->bmap = bmap_createblack(ASSET_BMAP_SIZE, ASSET_BMAP_SIZE, 32);
-    bmap_blitpart(asset->bmap, source, nullvector, nullvector, vector(u, v, 0), vector(ASSET_BMAP_SIZE, ASSET_BMAP_SIZE, 0));
-    strcpy(asset->desc, desc);
-    asset->type = type;
-    asset->index = index;
+    strcpy(asset->desc, _chr(desc));
+    BMAP *temp_bmap = bmap_create(bmap);
+    bmap_preload(temp_bmap);
+    asset->bmap = temp_bmap;
 
     array_add(Asset *, array, asset);
 }
 
 void assets_initialize()
 {
-    wall_textures = array_create(Asset *, 1);
-    props_textures = array_create(Asset *, 1);
-    item_textures = array_create(Asset *, 1);
-    weapon_textures = array_create(Asset *, 1);
-    enemy_textures = array_create(Asset *, 1);
-    boss_textures = array_create(Asset *, 1);
-
     // walls
     {
-        asset_create_texture(wall_textures, wall_textures_tga, "Grey brick 1", ASSET_TYPE_WALL, 29, 29);
-        asset_create_texture(wall_textures, wall_textures_tga, "Grey brick 2", ASSET_TYPE_WALL, 94, 29);
-        asset_create_texture(wall_textures, wall_textures_tga, "Grey brick 3", ASSET_TYPE_WALL, 159, 29);
-        asset_create_texture(wall_textures, wall_textures_tga, "Grey brick / flag", ASSET_TYPE_WALL, 224, 29);
-        asset_create_texture(wall_textures, wall_textures_tga, "Grey brick / Hitler", ASSET_TYPE_WALL, 289, 29);
-        asset_create_texture(wall_textures, wall_textures_tga, "Grey brick / eagle", ASSET_TYPE_WALL, 354, 29);
-        asset_create_texture(wall_textures, wall_textures_tga, "Grey brick / sign", ASSET_TYPE_WALL, 419, 29);
+        wall_textures = array_create(Asset *, 1);
 
-        asset_create_texture(wall_textures, wall_textures_tga, "Dirty brick 1", ASSET_TYPE_WALL, 29, 94);
-        asset_create_texture(wall_textures, wall_textures_tga, "Dirty brick 2", ASSET_TYPE_WALL, 94, 94);
-        asset_create_texture(wall_textures, wall_textures_tga, "Cell", ASSET_TYPE_WALL, 159, 94);
-        asset_create_texture(wall_textures, wall_textures_tga, "Cell / skeleton", ASSET_TYPE_WALL, 224, 94);
-        asset_create_texture(wall_textures, wall_textures_tga, "Blue brick 1", ASSET_TYPE_WALL, 289, 94);
-        asset_create_texture(wall_textures, wall_textures_tga, "Blue brick 2", ASSET_TYPE_WALL, 354, 94);
-        asset_create_texture(wall_textures, wall_textures_tga, "Blue brick / sign", ASSET_TYPE_WALL, 419, 94);
+        asset_add(wall_textures, "Grey brick 1", wall_00_pcx);
+        asset_add(wall_textures, "Grey brick 2", wall_01_pcx);
+        asset_add(wall_textures, "Grey brick 3", wall_02_pcx);
+        asset_add(wall_textures, "Grey brick / flag", wall_03_pcx);
+        asset_add(wall_textures, "Grey brick / Hitler", wall_04_pcx);
+        asset_add(wall_textures, "Grey brick / eagle", wall_05_pcx);
+        asset_add(wall_textures, "Grey brick / sign", wall_06_pcx);
+        asset_add(wall_textures, "Dirty brick 1", wall_07_pcx);
+        asset_add(wall_textures, "Dirty brick 2", wall_08_pcx);
+        asset_add(wall_textures, "Cell", wall_09_pcx);
+        asset_add(wall_textures, "Cell / skeleton", wall_10_pcx);
+        asset_add(wall_textures, "Blue brick 1", wall_11_pcx);
+        asset_add(wall_textures, "Blue brick 2", wall_12_pcx);
+        asset_add(wall_textures, "Blue brick / sign", wall_13_pcx);
+        asset_add(wall_textures, "Wood", wall_14_pcx);
+        asset_add(wall_textures, "Wood / eagle", wall_15_pcx);
+        asset_add(wall_textures, "Wood / Hitler", wall_16_pcx);
+        asset_add(wall_textures, "Wood / iron cross", wall_17_pcx);
+        asset_add(wall_textures, "Steal", wall_18_pcx);
+        asset_add(wall_textures, "Steal / sign", wall_19_pcx);
+        asset_add(wall_textures, "Red brick", wall_20_pcx);
+        asset_add(wall_textures, "Red brick / swastika", wall_21_pcx);
+        asset_add(wall_textures, "Red brick / flag", wall_22_pcx);
+        asset_add(wall_textures, "Multicolor brick", wall_23_pcx);
+        asset_add(wall_textures, "Stone wall 1", wall_24_pcx);
+        asset_add(wall_textures, "Stone wall 2", wall_25_pcx);
+        asset_add(wall_textures, "Stone wall / flag", wall_26_pcx);
+        asset_add(wall_textures, "Stone wall / swastika", wall_27_pcx);
+        asset_add(wall_textures, "Grey wall 1", wall_28_pcx);
+        asset_add(wall_textures, "Grey wall 2", wall_29_pcx);
+        asset_add(wall_textures, "Grey wall / Hitler", wall_30_pcx);
+        asset_add(wall_textures, "Grey wall / map", wall_31_pcx);
+        asset_add(wall_textures, "Grey wall / vent", wall_32_pcx);
+        asset_add(wall_textures, "Blue wall", wall_33_pcx);
+        asset_add(wall_textures, "Blue wall / swastika", wall_34_pcx);
+        asset_add(wall_textures, "Blue wall / skull", wall_35_pcx);
+        asset_add(wall_textures, "Brown stone 1", wall_36_pcx);
+        asset_add(wall_textures, "Brown stone 2", wall_37_pcx);
+        asset_add(wall_textures, "Brown marble 1", wall_38_pcx);
+        asset_add(wall_textures, "Brown marble 2", wall_39_pcx);
+        asset_add(wall_textures, "Brown marble / flag", wall_40_pcx);
 
-        asset_create_texture(wall_textures, wall_textures_tga, "Wood", ASSET_TYPE_WALL, 29, 159);
-        asset_create_texture(wall_textures, wall_textures_tga, "Wood / eagle", ASSET_TYPE_WALL, 94, 159);
-        asset_create_texture(wall_textures, wall_textures_tga, "Wood / Hitler", ASSET_TYPE_WALL, 159, 159);
-        asset_create_texture(wall_textures, wall_textures_tga, "Wood / iron cross", ASSET_TYPE_WALL, 224, 159);
-        asset_create_texture(wall_textures, wall_textures_tga, "Steal", ASSET_TYPE_WALL, 289, 159);
-        asset_create_texture(wall_textures, wall_textures_tga, "Steal / sign", ASSET_TYPE_WALL, 354, 159);
-        asset_create_texture(wall_textures, wall_textures_tga, "Red brick", ASSET_TYPE_WALL, 419, 159);
-
-        asset_create_texture(wall_textures, wall_textures_tga, "Red brick / swastika", ASSET_TYPE_WALL, 29, 224);
-        asset_create_texture(wall_textures, wall_textures_tga, "Red brick / flag", ASSET_TYPE_WALL, 94, 224);
-        asset_create_texture(wall_textures, wall_textures_tga, "Multicolor brick", ASSET_TYPE_WALL, 159, 224);
-        asset_create_texture(wall_textures, wall_textures_tga, "Stone wall 1", ASSET_TYPE_WALL, 224, 224);
-        asset_create_texture(wall_textures, wall_textures_tga, "Stone wall 2", ASSET_TYPE_WALL, 289, 224);
-        asset_create_texture(wall_textures, wall_textures_tga, "Stone wall / flag", ASSET_TYPE_WALL, 354, 224);
-        asset_create_texture(wall_textures, wall_textures_tga, "Stone wall / swastika", ASSET_TYPE_WALL, 419, 224);
-
-        asset_create_texture(wall_textures, wall_textures_tga, "Grey wall 1", ASSET_TYPE_WALL, 29, 289);
-        asset_create_texture(wall_textures, wall_textures_tga, "Grey wall 2", ASSET_TYPE_WALL, 94, 289);
-        asset_create_texture(wall_textures, wall_textures_tga, "Grey wall / Hitler", ASSET_TYPE_WALL, 159, 289);
-        asset_create_texture(wall_textures, wall_textures_tga, "Grey wall / map", ASSET_TYPE_WALL, 224, 289);
-        asset_create_texture(wall_textures, wall_textures_tga, "Grey wall / vent", ASSET_TYPE_WALL, 289, 289);
-        asset_create_texture(wall_textures, wall_textures_tga, "Blue wall", ASSET_TYPE_WALL, 354, 289);
-        asset_create_texture(wall_textures, wall_textures_tga, "Blue wall / swastika", ASSET_TYPE_WALL, 419, 289);
-
-        asset_create_texture(wall_textures, wall_textures_tga, "Blue wall / skull", ASSET_TYPE_WALL, 29, 354);
-        asset_create_texture(wall_textures, wall_textures_tga, "Brown stone 1", ASSET_TYPE_WALL, 94, 354);
-        asset_create_texture(wall_textures, wall_textures_tga, "Brown stone 2", ASSET_TYPE_WALL, 159, 354);
-        asset_create_texture(wall_textures, wall_textures_tga, "Brown marble 1", ASSET_TYPE_WALL, 224, 354);
-        asset_create_texture(wall_textures, wall_textures_tga, "Brown marble 2", ASSET_TYPE_WALL, 289, 354);
-        asset_create_texture(wall_textures, wall_textures_tga, "Brown marble / flag", ASSET_TYPE_WALL, 354, 354);
-        asset_create_texture(wall_textures, wall_textures_tga, "Door excavation (side of door)", ASSET_TYPE_WALL, 419, 354);
-
-        asset_create_texture(wall_textures, wall_textures_tga, "Door", ASSET_TYPE_WALL, 29, 419);
-        asset_create_texture(wall_textures, wall_textures_tga, "Door / locked", ASSET_TYPE_WALL, 94, 419);
-        asset_create_texture(wall_textures, wall_textures_tga, "Entrance to level", ASSET_TYPE_WALL, 159, 419);
-        asset_create_texture(wall_textures, wall_textures_tga, "Elevator door", ASSET_TYPE_WALL, 224, 419);
-        asset_create_texture(wall_textures, wall_textures_tga, "Elevator wall", ASSET_TYPE_WALL, 289, 419);
-        asset_create_texture(wall_textures, wall_textures_tga, "Elevator (off)", ASSET_TYPE_WALL, 354, 419);
-        //asset_create_texture(wall_textures, wall_textures_tga, "Elevator (on)", ASSET_TYPE_WALL, 419, 419);
+        asset_add(wall_textures, "Elevator wall", wall_elevator_pcx);
+        asset_add(wall_textures, "Elevator wall / switch", wall_elevator_switch_pcx);
     }
 
     // props
     {
-        asset_create_object(props_textures, props_textures_tga, "Knight", ASSET_TYPE_PROPS, PROPS_KNIGHT, 29, 29);
-        asset_create_object(props_textures, props_textures_tga, "Wooden barrel", ASSET_TYPE_PROPS, PROPS_WOODEN_BARREL, 94, 29);
-        asset_create_object(props_textures, props_textures_tga, "Metal barrel", ASSET_TYPE_PROPS, PROPS_METAL_BARREL, 159, 29);
-        asset_create_object(props_textures, props_textures_tga, "Table / empty", ASSET_TYPE_PROPS, PROPS_TABLE_EMPTY, 224, 29);
-        asset_create_object(props_textures, props_textures_tga, "Table / chairs 1", ASSET_TYPE_PROPS, PROPS_TABLE_CHAIRS_A, 289, 29);
-        asset_create_object(props_textures, props_textures_tga, "Table / chairs 2", ASSET_TYPE_PROPS, PROPS_TABLE_CHAIRS_B, 354, 29);
-        asset_create_object(props_textures, props_textures_tga, "Floor lamp", ASSET_TYPE_PROPS, PROPS_FLOOR_LAMP, 419, 29);
+        props_textures = array_create(Asset *, 1);
 
-        asset_create_object(props_textures, props_textures_tga, "Ceiling lamp", ASSET_TYPE_PROPS, PROPS_CEILING_LAMP, 29, 94);
-        asset_create_object(props_textures, props_textures_tga, "Column", ASSET_TYPE_PROPS, PROPS_COLUMN, 94, 94);
-        asset_create_object(props_textures, props_textures_tga, "Basket", ASSET_TYPE_PROPS, PROPS_BASKET, 159, 94);
-        asset_create_object(props_textures, props_textures_tga, "Plant 1", ASSET_TYPE_PROPS, PROPS_PLANT_A, 224, 94);
-        asset_create_object(props_textures, props_textures_tga, "Plant 2", ASSET_TYPE_PROPS, PROPS_PLANT_B, 289, 94);
-        asset_create_object(props_textures, props_textures_tga, "Blue vase", ASSET_TYPE_PROPS, PROPS_BLUE_VASE, 354, 94);
-        asset_create_object(props_textures, props_textures_tga, "Vines", ASSET_TYPE_PROPS, PROPS_VINES, 419, 94);
+        asset_add(props_textures, "Knight", props_00_pcx);
+        asset_add(props_textures, "Barrel / wooden", props_01_pcx);
+        asset_add(props_textures, "Barrel / metal", props_02_pcx);
+        asset_add(props_textures, "Table", props_03_pcx);
+        asset_add(props_textures, "Table / chairs 1", props_04_pcx);
+        asset_add(props_textures, "Table / chairs 2", props_05_pcx);
+        asset_add(props_textures, "Lamp / floor", props_06_pcx);
+        asset_add(props_textures, "Lamp / ceiling", props_07_pcx);
+        asset_add(props_textures, "Column", props_08_pcx);
+        asset_add(props_textures, "Basket", props_09_pcx);
+        asset_add(props_textures, "Plant 1", props_10_pcx);
+        asset_add(props_textures, "Plant 2", props_11_pcx);
+        asset_add(props_textures, "Vase", props_12_pcx);
+        asset_add(props_textures, "Vines", props_13_pcx);
+        asset_add(props_textures, "Rack", props_14_pcx);
+        asset_add(props_textures, "Flag", props_15_pcx);
+        asset_add(props_textures, "Toilet", props_16_pcx);
+        asset_add(props_textures, "Sink", props_17_pcx);
+        asset_add(props_textures, "Bed", props_18_pcx);
+        asset_add(props_textures, "Stove", props_19_pcx);
+        asset_add(props_textures, "Pots 1", props_20_pcx);
+        asset_add(props_textures, "Pots 2", props_21_pcx);
+        asset_add(props_textures, "Water puddle", props_22_pcx);
+        asset_add(props_textures, "Fence", props_23_pcx);
+        asset_add(props_textures, "Fence / dirty", props_24_pcx);
+        asset_add(props_textures, "Cage", props_25_pcx);
+        asset_add(props_textures, "Cage / skeleton", props_26_pcx);
+        asset_add(props_textures, "Hanging skeleton", props_27_pcx);
+        asset_add(props_textures, "Skeleton", props_28_pcx);
+        asset_add(props_textures, "Bones 1", props_29_pcx);
+        asset_add(props_textures, "Bones 2", props_30_pcx);
+        asset_add(props_textures, "Blood puddle", props_31_pcx);
+        asset_add(props_textures, "Gibs 1", props_32_pcx);
+        asset_add(props_textures, "Gibs 2", props_33_pcx);
+        asset_add(props_textures, "Skulls on a spike", props_34_pcx);
+        asset_add(props_textures, "Cow skull", props_35_pcx);
+        asset_add(props_textures, "Cage / gore", props_36_pcx);
+        asset_add(props_textures, "Cage / skulls", props_37_pcx);
+        asset_add(props_textures, "Table / skull", props_38_pcx);
+        asset_add(props_textures, "Ceiling moss 1", props_39_pcx);
+        asset_add(props_textures, "Ceiling moss 2", props_40_pcx);
+        asset_add(props_textures, "Grass 1", props_41_pcx);
+        asset_add(props_textures, "Grass 2", props_42_pcx);
+        asset_add(props_textures, "Grass 3", props_43_pcx);
+        asset_add(props_textures, "Bush 1", props_44_pcx);
+        asset_add(props_textures, "Bush 2", props_45_pcx);
+        asset_add(props_textures, "Bush 3", props_46_pcx);
+        asset_add(props_textures, "Tree", props_47_pcx);
+        asset_add(props_textures, "Tree / dead", props_48_pcx);
+        asset_add(props_textures, "Rocks 1", props_49_pcx);
+        asset_add(props_textures, "Rocks 2", props_50_pcx);
 
-        asset_create_object(props_textures, props_textures_tga, "Rack", ASSET_TYPE_PROPS, PROPS_RACK, 29, 159);
-        asset_create_object(props_textures, props_textures_tga, "Flag", ASSET_TYPE_PROPS, PROPS_FLAG, 94, 159);
-        asset_create_object(props_textures, props_textures_tga, "Toilet", ASSET_TYPE_PROPS, PROPS_TOILET, 159, 159);
-        asset_create_object(props_textures, props_textures_tga, "Sink", ASSET_TYPE_PROPS, PROPS_SINK, 224, 159);
-        asset_create_object(props_textures, props_textures_tga, "Bed", ASSET_TYPE_PROPS, PROPS_BED, 289, 159);
-        asset_create_object(props_textures, props_textures_tga, "Stove", ASSET_TYPE_PROPS, PROPS_STOVE, 354, 159);
-        asset_create_object(props_textures, props_textures_tga, "Pool of water", ASSET_TYPE_PROPS, PROPS_POOL_OF_WATER, 419, 159);
+        asset_add(props_textures, "Door", props_door_pcx);
+        asset_add(props_textures, "Door / elevator", props_door_elevator_pcx);
+        asset_add(props_textures, "Door / entrance (untouchable)", props_door_level_entrance_pcx);
+        asset_add(props_textures, "Door / locked", props_door_locked_pcx);
+        asset_add(props_textures, "Switch", props_switch_pcx);
+    }
 
-        asset_create_object(props_textures, props_textures_tga, "Fence 1", ASSET_TYPE_PROPS, PROPS_FENCE_A, 29, 224);
-        asset_create_object(props_textures, props_textures_tga, "Fence 2", ASSET_TYPE_PROPS, PROPS_FENCE_B, 94, 224);
-        asset_create_object(props_textures, props_textures_tga, "Cage / empty", ASSET_TYPE_PROPS, PROPS_EMPTY_CAGE, 159, 224);
-        asset_create_object(props_textures, props_textures_tga, "Cage / skeleton", ASSET_TYPE_PROPS, PROPS_CAGE_SKELETON, 224, 224);
-        asset_create_object(props_textures, props_textures_tga, "Hanging skeleton", ASSET_TYPE_PROPS, PROPS_HANGING_SKELETON, 289, 224);
-        asset_create_object(props_textures, props_textures_tga, "Laying skeleton", ASSET_TYPE_PROPS, PROPS_LAYING_SKELETON, 354, 224);
-        asset_create_object(props_textures, props_textures_tga, "Pile of bones 1", ASSET_TYPE_PROPS, PROPS_PILE_OF_BONES_A, 419, 224);
+    // events
+    {
+        event_textures = array_create(Asset *, 1);
 
-        asset_create_object(props_textures, props_textures_tga, "Pile of bones 2", ASSET_TYPE_PROPS, PROPS_PILE_OF_BONES_B, 29, 289);
-        asset_create_object(props_textures, props_textures_tga, "Pool of blood", ASSET_TYPE_PROPS, PROPS_POOL_OF_BLOOD, 94, 289);
-        asset_create_object(props_textures, props_textures_tga, "Bones with blood 1", ASSET_TYPE_PROPS, PROPS_BONES_WITH_BLOOD_A, 159, 289);
-        asset_create_object(props_textures, props_textures_tga, "Bones with blood 2", ASSET_TYPE_PROPS, PROPS_BONES_WITH_BLOOD_B, 224, 289);
-        asset_create_object(props_textures, props_textures_tga, "Bloody statue 1", ASSET_TYPE_PROPS, PROPS_BLOODY_STATUE_A, 289, 289);
-        asset_create_object(props_textures, props_textures_tga, "Bloody statue 2", ASSET_TYPE_PROPS, PROPS_BLOODY_STATUE_B, 354, 289);
-        asset_create_object(props_textures, props_textures_tga, "Bloody cage / empty", ASSET_TYPE_PROPS, PROPS_BLOODY_CAGE, 419, 289);
-
-        asset_create_object(props_textures, props_textures_tga, "Bloody cage / skulls", ASSET_TYPE_PROPS, PROPS_BLOODY_CAGE_SKULLS, 29, 354);
-        asset_create_object(props_textures, props_textures_tga, "Bloody table with skull", ASSET_TYPE_PROPS, PROPS_BLOODY_TABLE_WITH_SKULL, 94, 354);
-        asset_create_object(props_textures, props_textures_tga, "Ceiling moss 1", ASSET_TYPE_PROPS, PROPS_CEILING_MOSS_A, 159, 354);
-        asset_create_object(props_textures, props_textures_tga, "Ceiling moss 2", ASSET_TYPE_PROPS, PROPS_CEILING_MOSS_B, 224, 354);
-        asset_create_object(props_textures, props_textures_tga, "Grass 1", ASSET_TYPE_PROPS, PROPS_GRASS_A, 289, 354);
-        asset_create_object(props_textures, props_textures_tga, "Grass 2", ASSET_TYPE_PROPS, PROPS_GRASS_B, 354, 354);
-        asset_create_object(props_textures, props_textures_tga, "Grass 3", ASSET_TYPE_PROPS, PROPS_GRASS_C, 419, 354);
-
-        asset_create_object(props_textures, props_textures_tga, "Bush 1", ASSET_TYPE_PROPS, PROPS_BUSH_A, 29, 419);
-        asset_create_object(props_textures, props_textures_tga, "Bush 2", ASSET_TYPE_PROPS, PROPS_BUSH_B, 94, 419);
-        asset_create_object(props_textures, props_textures_tga, "Bush 3", ASSET_TYPE_PROPS, PROPS_BUSH_C, 159, 419);
-        asset_create_object(props_textures, props_textures_tga, "Tree", ASSET_TYPE_PROPS, PROPS_TREE, 224, 419);
-        asset_create_object(props_textures, props_textures_tga, "Tree / dead", ASSET_TYPE_PROPS, PROPS_DEAD_TREE, 289, 419);
-        asset_create_object(props_textures, props_textures_tga, "Rocks 1", ASSET_TYPE_PROPS, PROPS_ROCKS_A, 354, 419);
-        asset_create_object(props_textures, props_textures_tga, "Rocks 2", ASSET_TYPE_PROPS, PROPS_ROCKS_B, 419, 419);
+        asset_add(event_textures, "Player start position", event_player_pcx);
+        asset_add(event_textures, "Trigger zone (id)", event_trigger_zone_pcx);
+        asset_add(event_textures, "Spawn object", event_spawn_point_pcx);
+        asset_add(event_textures, "NPC turn point", event_npc_turn_point_pcx);
     }
 
     // items
     {
-        asset_create_object(item_textures, item_textures_tga, "Key / yellow", ASSET_TYPE_ITEMS, ITEMS_KEY_YELLOW, 29, 29);
-        asset_create_object(item_textures, item_textures_tga, "Key / blue", ASSET_TYPE_ITEMS, ITEMS_KEY_BLUE, 94, 29);
-        asset_create_object(item_textures, item_textures_tga, "Key / red", ASSET_TYPE_ITEMS, ITEMS_KEY_RED, 159, 29);
-        asset_create_object(item_textures, item_textures_tga, "Medkit / small", ASSET_TYPE_ITEMS, ITEMS_MEDKIT_SMALL, 224, 29);
-        asset_create_object(item_textures, item_textures_tga, "Medkit / big", ASSET_TYPE_ITEMS, ITEMS_MEDKIT_BIG, 289, 29);
-        asset_create_object(item_textures, item_textures_tga, "Treasure 1", ASSET_TYPE_ITEMS, ITEMS_TREASURE_A, 354, 29);
-        asset_create_object(item_textures, item_textures_tga, "Treasure 2", ASSET_TYPE_ITEMS, ITEMS_TREASURE_B, 419, 29);
+        item_textures = array_create(Asset *, 1);
 
-        asset_create_object(item_textures, item_textures_tga, "Treasure 3", ASSET_TYPE_ITEMS, ITEMS_TREASURE_C, 29, 94);
-        asset_create_object(item_textures, item_textures_tga, "Treasure 4", ASSET_TYPE_ITEMS, ITEMS_TREASURE_D, 94, 94);
-        asset_create_object(item_textures, item_textures_tga, "Ammo box", ASSET_TYPE_ITEMS, ITEMS_AMMO_BOX, 159, 94);
-        asset_create_object(item_textures, item_textures_tga, "Ammo / pistol", ASSET_TYPE_ITEMS, ITEMS_AMMO_PISTOL, 224, 94);
-        asset_create_object(item_textures, item_textures_tga, "Ammo / smg", ASSET_TYPE_ITEMS, ITEMS_AMMO_SMG, 289, 94);
-        asset_create_object(item_textures, item_textures_tga, "Ammo / shotgun", ASSET_TYPE_ITEMS, ITEMS_AMMO_SHOTGUN, 354, 94);
-        asset_create_object(item_textures, item_textures_tga, "Ammo / machinegun", ASSET_TYPE_ITEMS, ITEMS_AMMO_MACHINEGUN, 419, 94);
-
-        asset_create_object(item_textures, item_textures_tga, "Ammo / rocketlauncher", ASSET_TYPE_ITEMS, ITEMS_AMMO_ROCKETLAUNCHER, 29, 159);
-    }
-
-    // weapons
-    {
-        asset_create_object(weapon_textures, weapon_textures_tga, "Pistol", ASSET_TYPE_WEAPON, WEAPON_PISTOL, 31, 31);
-        asset_create_object(weapon_textures, weapon_textures_tga, "Shotgun", ASSET_TYPE_WEAPON, WEAPON_SHOTGUN, 96, 31);
-        asset_create_object(weapon_textures, weapon_textures_tga, "SMG", ASSET_TYPE_WEAPON, WEAPON_SMG, 161, 31);
-
-        asset_create_object(weapon_textures, weapon_textures_tga, "Machinegun", ASSET_TYPE_WEAPON, WEAPON_MACHINEGUN, 31, 96);
-        asset_create_object(weapon_textures, weapon_textures_tga, "Rocketlauncher", ASSET_TYPE_WEAPON, WEAPON_ROCKETLAUNCHER, 96, 96);
+        asset_add(item_textures, "Key / blue", item_key_blue_pcx);
+        asset_add(item_textures, "Key / red", item_key_red_pcx);
+        asset_add(item_textures, "Key / yellow", item_key_yellow_pcx);
+        asset_add(item_textures, "Medkit / small", item_medkit_small_pcx);
+        asset_add(item_textures, "Medkit / big", item_medkit_big_pcx);
+        asset_add(item_textures, "Treasure 1", item_treasure_00_pcx);
+        asset_add(item_textures, "Treasure 2", item_treasure_01_pcx);
+        asset_add(item_textures, "Treasure 3", item_treasure_02_pcx);
+        asset_add(item_textures, "Treasure 4", item_treasure_03_pcx);
+        asset_add(item_textures, "Ammo box", item_ammo_box_pcx);
+        asset_add(item_textures, "Ammo / pistol", item_ammo_pistol_pcx);
+        asset_add(item_textures, "Ammo / shotgun", item_ammo_shotgun_pcx);
+        asset_add(item_textures, "Ammo / smg", item_ammo_smg_pcx);
+        asset_add(item_textures, "Ammo / machinegun", item_ammo_machinegun_pcx);
+        asset_add(item_textures, "Ammo / rocketlauncher", item_ammo_rocketlauncher_pcx);
+        asset_add(item_textures, "Weapon / pistol", item_wpn_pistol_pcx);
+        asset_add(item_textures, "Weapon / shotgun", item_wpn_shotgun_pcx);
+        asset_add(item_textures, "Weapon / smg", item_wpn_smg_pcx);
+        asset_add(item_textures, "Weapon / machinegun", item_wpn_machinegun_pcx);
+        asset_add(item_textures, "Weapon / rocketlauncher", item_wpn_rocketlauncher_pcx);
     }
 
     // enemies
     {
-        asset_create_object(enemy_textures, enemy_textures_tga, "Dog", ASSET_TYPE_ENEMIES, ENEMY_DOG, 31, 31);
-        asset_create_object(enemy_textures, enemy_textures_tga, "Guard / pistol", ASSET_TYPE_ENEMIES, ENEMY_GUARD_PISTOL, 96, 31);
-        asset_create_object(enemy_textures, enemy_textures_tga, "Guard / shotgun", ASSET_TYPE_ENEMIES, ENEMY_GUARD_SHOTGUN, 161, 31);
+        enemy_textures = array_create(Asset *, 1);
 
-        asset_create_object(enemy_textures, enemy_textures_tga, "Suicide / Dog", ASSET_TYPE_ENEMIES, ENEMY_SUICIDE_DOG, 31, 96);
-        asset_create_object(enemy_textures, enemy_textures_tga, "Suicide / Inmate", ASSET_TYPE_ENEMIES, ENEMY_SUICIDE_INMATE, 96, 96);
-        asset_create_object(enemy_textures, enemy_textures_tga, "Guard / SMG", ASSET_TYPE_ENEMIES, ENEMY_GUARD_SMG, 161, 96);
-
-        asset_create_object(enemy_textures, enemy_textures_tga, "Support", ASSET_TYPE_ENEMIES, ENEMY_SUPPORT, 31, 161);
-        asset_create_object(enemy_textures, enemy_textures_tga, "Zombie", ASSET_TYPE_ENEMIES, ENEMY_ZOMBIE, 96, 161);
+        asset_add(enemy_textures, "Mutant rat", enemy_rat_pcx);
+        asset_add(enemy_textures, "Dog", enemy_dog_pcx);
+        asset_add(enemy_textures, "Guard / pistol", enemy_guard_pistol_pcx);
+        asset_add(enemy_textures, "Guard / shotgun", enemy_guard_shotgun_pcx);
+        asset_add(enemy_textures, "Soldier / smg", enemy_soldier_smg_pcx);
+        asset_add(enemy_textures, "Suicide bomber", enemy_suicider_pcx);
+        asset_add(enemy_textures, "Zombie", enemy_zombie_pcx);
+        asset_add(enemy_textures, "Support / machinegun", enemy_support_machinegun_pcx);
+        asset_add(enemy_textures, "Support / rocketlauncher", enemy_support_rocketlauncher_pcx);
     }
 
     // bosses
     {
-        asset_create_object(boss_textures, boss_textures_tga, "Boss 1", ASSET_TYPE_BOSSES, BOSS_1, 31, 31);
-        asset_create_object(boss_textures, boss_textures_tga, "Boss 2", ASSET_TYPE_BOSSES, BOSS_2, 96, 31);
-        asset_create_object(boss_textures, boss_textures_tga, "Boss 3", ASSET_TYPE_BOSSES, BOSS_3, 161, 31);
+        boss_textures = array_create(Asset *, 1);
 
-        asset_create_object(boss_textures, boss_textures_tga, "Boss 4", ASSET_TYPE_BOSSES, BOSS_4, 31, 96);
-        asset_create_object(boss_textures, boss_textures_tga, "Boss 5", ASSET_TYPE_BOSSES, BOSS_5, 96, 96);
-        asset_create_object(boss_textures, boss_textures_tga, "Boss 6", ASSET_TYPE_BOSSES, BOSS_6, 161, 96);
+        asset_add(boss_textures, "Uber soldier", boss_uber_soldier_pcx);
+        asset_add(boss_textures, "Uber officer", boss_uber_officer_pcx);
+        asset_add(boss_textures, "Uber mutant", boss_uber_mutant_pcx);
+        asset_add(boss_textures, "Mecha soldier", boss_mecha_soldier_pcx);
+        asset_add(boss_textures, "Demon", boss_demon_pcx);
     }
 }
 
@@ -302,26 +272,26 @@ void assets_destroy_array(array_t *array)
         return;
     }
 
-    Asset *temp_asset;
-    array_enumerate_begin(Asset *, array, temp_asset)
+    array_enumerate_begin(Asset *, array, v)
     {
-        if (temp_asset->bmap)
+        strcpy(v->desc, "");
+        if (v->bmap)
         {
-            ptr_remove(temp_asset->bmap);
-            temp_asset->bmap = NULL;
+            safe_remove(v->bmap);
         }
-        sys_free(temp_asset);
+
+        sys_free(v);
     }
     array_enumerate_end(array);
     array_destroy(array);
 }
 
-void assets_destroy()
+void assets_destroy_all()
 {
     assets_destroy_array(wall_textures);
     assets_destroy_array(props_textures);
+    assets_destroy_array(event_textures);
     assets_destroy_array(item_textures);
-    assets_destroy_array(weapon_textures);
     assets_destroy_array(enemy_textures);
     assets_destroy_array(boss_textures);
 }
