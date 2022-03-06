@@ -34,6 +34,7 @@ void cell_copy(Cell *to, Cell *from)
     to->flag = from->flag;
     to->event_type = from->event_type;
     to->event_id = from->event_id;
+    to->temp_skill = from->temp_skill;
 }
 
 Map *map_get_active(Episode *episode)

@@ -27,6 +27,7 @@
 // ENEMIES
 // * "flag" is checking whether enemy should drop an item on death (true) or not (false)
 // * "event_type" is holding item id to be dropper (0/1/2 - keys blue/red/yellow, 3/4 - medkits small/big or 5/6 - ammo/weapon that enemy is held)
+// * "temp_skill" is used 0/1/2 - wait/wait deaf/patrol behaviour
 
 // BOSSES
 // * "flag" is checking whether boss should drop an item on death (true) or not (false)
@@ -56,7 +57,7 @@ STRING *params_drop_item_key_blue_str = "Key blue";
 STRING *params_drop_item_key_red_str = "Key red";
 STRING *params_drop_item_key_yellow_str = "Key yellow";
 STRING *params_drop_item_small_medkit_str = "Small medkit";
-STRING *params_drop_item_big_medkit_str = "Bit medkit";
+STRING *params_drop_item_big_medkit_str = "Big medkit";
 STRING *params_drop_item_ammo_str = "Ammo from held weapon";
 STRING *params_drop_item_weapon_str = "Held weapon";
 
@@ -78,6 +79,11 @@ STRING *params_spawn_object_weapon_machinegun_str = "Machinegun weapon";
 STRING *params_spawn_object_ammo_machinegun_str = "Machinegun ammo";
 STRING *params_spawn_object_weapon_rocketlauncher_str = "Rocketlauncher weapon";
 STRING *params_spawn_object_ammo_rocketlauncher_str = "Rocketlauncher ammo";
+
+STRING *params_enemy_behaviour_str = "Behaviour";
+STRING *params_enemy_behaviour_wait_str = "wait";
+STRING *params_enemy_behaviour_deaf_str = "deaf";
+STRING *params_enemy_behaviour_patrol_str = "patrol";
 
 STRING *params_spawn_object_enemy_rat_str = "Rat";
 STRING *params_spawn_object_enemy_dog_str = "Dog";

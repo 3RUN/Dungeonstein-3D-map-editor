@@ -199,6 +199,14 @@ void editor_enemies_params(Cell *cell, int index)
         return;
     }
 
+    // behaviour
+    imgui_text(_chr(params_enemy_behaviour_str));
+    imgui_radiobutton(_chr(params_enemy_behaviour_wait_str), &cell->temp_skill, 0);
+    imgui_radiobutton(_chr(params_enemy_behaviour_deaf_str), &cell->temp_skill, 1);
+    imgui_radiobutton(_chr(params_enemy_behaviour_patrol_str), &cell->temp_skill, 2);
+
+    // item dropping
+    imgui_separator();
     imgui_checkbox(_chr(params_drop_item_str), &cell->flag);
     if (cell->flag == true)
     {
@@ -223,6 +231,14 @@ void editor_bosses_params(Cell *cell, int index)
         return;
     }
 
+    // behaviour
+    imgui_text(_chr(params_enemy_behaviour_str));
+    imgui_radiobutton(_chr(params_enemy_behaviour_wait_str), &cell->temp_skill, 0);
+    imgui_radiobutton(_chr(params_enemy_behaviour_deaf_str), &cell->temp_skill, 1);
+    imgui_radiobutton(_chr(params_enemy_behaviour_patrol_str), &cell->temp_skill, 2);
+
+    // item dropping
+    imgui_separator();
     imgui_checkbox(_chr(params_drop_item_str), &cell->flag);
     if (cell->flag == true)
     {

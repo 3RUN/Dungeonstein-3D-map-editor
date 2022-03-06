@@ -4,7 +4,7 @@
 #include <strio.c>
 
 // to do
-// * add drawing functionality
+// * add level test build state
 
 #define PRAGMA_POINTER
 
@@ -90,6 +90,7 @@ int current_map_id = 0;
 #include "editor_grid_sprites.h"
 #include "editor_cam_n_grid.h"
 #include "editor_obj_params.h"
+#include "editor_mouse_draw.h"
 #include "weather.h"
 
 Episode def_episode;
@@ -117,6 +118,7 @@ void editor_switch_state_to(int new_state)
 #include "editor_grid_sprites.c"
 #include "editor_cam_n_grid.c"
 #include "editor_obj_params.c"
+#include "editor_mouse_draw.c"
 #include "weather.c"
 
 void editor_reset()
@@ -250,10 +252,8 @@ void on_frame_event()
 
 		// reset current map
 	case EDITOR_STATE_RESET_MAP:
-		// reset current map
 		map_reset(current_map);
-
-		// return back to the editor
+		editor_grid_sprites_refresh(&def_episode);
 		editor_switch_state_to(EDITOR_STATE_EDIT_MAP);
 		break;
 
