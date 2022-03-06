@@ -4,6 +4,7 @@
 #include <strio.c>
 
 // to do
+// * add connection (draw_line3d) between cells with similar ID
 // * add level test build state
 
 #define PRAGMA_POINTER
@@ -178,34 +179,26 @@ void on_frame_event()
 
 	case EDITOR_STATE_OPEN:
 		editor_reset();
-
 		episode_reset(&def_episode);
 		episode_save_name_udpate(_str(selected_episode));
 		episode_load(episode_save_name, &def_episode);
-
 		editor_grid_sprites_refresh(&def_episode);
 		editor_switch_state_to(EDITOR_STATE_EDIT_MAP);
 		break;
 
 	case EDITOR_STATE_NEW:
 		editor_reset();
-
 		episode_reset(&def_episode);
 		episode_change_info(&def_episode, new_name, new_story, new_map_count);
 		episode_save_name_udpate(_str(new_filename));
 		episode_save(episode_save_name, &def_episode);
-
 		editor_grid_sprites_refresh(&def_episode);
 		editor_switch_state_to(EDITOR_STATE_EDIT_MAP);
 		break;
 
 	case EDITOR_STATE_SAVE_US:
-		// update current episode name
-		// and save it to the file
 		episode_save_name_udpate(_str(save_as_filename));
 		episode_save(episode_save_name, &def_episode);
-
-		// return back to the editor
 		editor_switch_state_to(EDITOR_STATE_EDIT_MAP);
 		break;
 
@@ -218,10 +211,7 @@ void on_frame_event()
 		// map settings
 	case EDITOR_STATE_TO_MAP_SETTINGS:
 		editor_map_settings_show(current_map);
-
 		cell_info_tooltip_counter = 0; // reset tooltip counter
-
-		// switch to map settings !
 		editor_switch_state_to(EDITOR_STATE_MAP_SETTINGS);
 		break;
 
@@ -235,8 +225,6 @@ void on_frame_event()
 		editor_map_settings_hide();
 		editor_grid_sprites_refresh(&def_episode);
 		weather_stop_sound();
-
-		// return back to map editing
 		editor_switch_state_to(EDITOR_STATE_EDIT_MAP);
 		break;
 
@@ -261,8 +249,6 @@ void on_frame_event()
 		sys_exit(NULL);
 		break;
 	}
-
-	DEBUG_VAR(cell_info_tooltip_counter, 300);
 
 	editor_camera_resize();
 	mouse_lock_in_window();
