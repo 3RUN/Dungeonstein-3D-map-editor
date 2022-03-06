@@ -53,6 +53,7 @@ void editor_map_settings_refresh()
         if (map_settings.weather_id == i)
         {
             str_cpy(weather_currently_used_str, weather_list_str[i]);
+            weather_play_sound(map_settings.weather_id);
         }
     }
 }

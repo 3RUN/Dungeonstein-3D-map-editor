@@ -48,8 +48,16 @@ var snow_splash_alpha = 30;
 var snow_splash_random_alpha = 10;
 var snow_splash_fadeout_speed = 2.5;
 
+var weather_sound_handle = 0;
+var weather_sound_volume = 0;
+var weather_sound_volume_target = 50;
+var weather_sound_volume_fade_speed_factor = 4;
+
 BMAP *weather_rain_tga = "weather_rain.tga";
 BMAP *weather_snow_tga = "weather_snow.tga";
+
+SOUND *weather_rain_ogg = "rain.ogg";
+SOUND *weather_snow_ogg = "snow.ogg";
 
 void vec_randomize(VECTOR *vec, var range);
 
@@ -64,6 +72,10 @@ void weather_particle_event(PARTICLE *p);
 void weather_rain_particle(PARTICLE *p);
 
 void weather_snow_particle(PARTICLE *p);
+
+void weather_stop_sound();
+
+void weather_play_sound(int type);
 
 void weather_update(int type);
 

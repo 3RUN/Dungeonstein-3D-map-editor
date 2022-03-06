@@ -180,7 +180,7 @@ void editor_map_side_bar(Episode *episode)
         var width = imgui_get_content_region_avail_width();
         imgui_begin_child(map_side_bar_asset_param_child_id, vector(width, SIDEBAR_PARAM_CHILD_HEIGHT, 0), 1, selected_asset_parameters_child_flag);
 
-        // insert parameters here !
+        editor_obj_params_update(&preview_cell, editor_asset_type, editor_asset_index);
 
         imgui_end_child();
     }

@@ -33,6 +33,9 @@
         "editor_map.h": "c",
         "editor_map_popups.h": "c",
         "weather.h": "c",
-        "editor_music_browser.h": "c"
+        "editor_music_browser.h": "c",
+        "editor_grid_sprites.h": "c",
+        "editor_cam_n_grid.h": "c",
+        "editor_obj_params.h": "c"
     }
 }

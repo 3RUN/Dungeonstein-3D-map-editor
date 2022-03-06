@@ -4,8 +4,6 @@
 #include <strio.c>
 
 // to do
-//
-// * add preview parameters
 // * add drawing functionality
 
 #define PRAGMA_POINTER
@@ -91,6 +89,7 @@ int current_map_id = 0;
 #include "editor_music_browser.h"
 #include "editor_grid_sprites.h"
 #include "editor_cam_n_grid.h"
+#include "editor_obj_params.h"
 #include "weather.h"
 
 Episode def_episode;
@@ -117,6 +116,7 @@ void editor_switch_state_to(int new_state)
 #include "editor_music_browser.c"
 #include "editor_grid_sprites.c"
 #include "editor_cam_n_grid.c"
+#include "editor_obj_params.c"
 #include "weather.c"
 
 void editor_reset()
@@ -124,6 +124,9 @@ void editor_reset()
 	editor_map_reset();
 
 	current_map_id = 0;
+
+	mouse_x = 0;
+	mouse_y = 0;
 
 	is_grid_visible = true;
 	is_walls_visible = true;
@@ -203,6 +206,7 @@ void on_frame_event()
 		break;
 
 	case EDITOR_STATE_EDIT_MAP:
+		editor_grid_get_mouse_pos(&mouse_x, &mouse_y);
 		editor_map_update(&def_episode);
 		editor_camera_n_grid_update();
 		break;
@@ -224,6 +228,7 @@ void on_frame_event()
 		editor_camera_restore_pos_n_angle();
 		editor_map_settings_hide();
 		editor_grid_sprites_refresh(&def_episode);
+		weather_stop_sound();
 
 		// return back to map editing
 		editor_switch_state_to(EDITOR_STATE_EDIT_MAP);
@@ -252,9 +257,6 @@ void on_frame_event()
 		sys_exit(NULL);
 		break;
 	}
-
-	DEBUG_VAR(current_map->cell[0][0].pan, 200);
-	draw_text(episode_save_name, 10, 240, COLOR_WHITE);
 
 	editor_camera_resize();
 	mouse_lock_in_window();
