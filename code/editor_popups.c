@@ -4,7 +4,8 @@ void editor_popups_initialize(Episode *episode)
     // new episode temp settings
     strcpy(new_filename, "");
     strcpy(new_name, "");
-    strcpy(new_story, "");
+    strcpy(new_start_story, "");
+    strcpy(new_end_story, "");
     new_map_count = 1;
 
     // resolution
@@ -225,10 +226,15 @@ void editor_popup_new(Episode *episode)
     imgui_input_text(editor_popup_new_episode_name_id, new_name, EPISODE_NAME_LENGTH, NULL);
     imgui_pop_item_width();
 
-    imgui_text(_chr(editor_popup_new_episode_story_str));
+    imgui_text(_chr(editor_popup_new_episode_start_story_str));
     imgui_same_line();
-    editor_help_maker(_chr(str_printf(NULL, editor_popup_new_episode_story_tooltip_str, (long)EPISODE_STORY_LENGTH)));
-    imgui_input_text_multiline(editor_popup_new_episode_story_id, new_story, EPISODE_STORY_LENGTH, -1, 128, NULL);
+    editor_help_maker(_chr(str_printf(NULL, editor_popup_new_episode_start_story_tooltip_str, (long)EPISODE_START_STORY_LENGTH)));
+    imgui_input_text_multiline(editor_popup_new_episode_start_story_id, new_start_story, EPISODE_START_STORY_LENGTH, -1, 128, NULL);
+
+    imgui_text(_chr(editor_popup_new_episode_end_story_str));
+    imgui_same_line();
+    editor_help_maker(_chr(str_printf(NULL, editor_popup_new_episode_end_story_tooltip_str, (long)EPISODE_END_STORY_LENGTH)));
+    imgui_input_text_multiline(editor_popup_new_episode_end_story_id, new_end_story, EPISODE_END_STORY_LENGTH, -1, 128, NULL);
 
     imgui_text(_chr(editor_popup_new_episode_map_count_str));
     imgui_same_line();
@@ -241,7 +247,7 @@ void editor_popup_new(Episode *episode)
 
     if (imgui_button_withsize(_chr(editor_popup_new_create_str), width, EDITOR_POPUP_BUTTON_HEIGHT))
     {
-        if (strlen(new_filename) > 0 && strlen(new_name) > 0 && strlen(new_story) > 0)
+        if (strlen(new_filename) > 0 && strlen(new_name) > 0 && strlen(new_start_story) > 0 && strlen(new_end_story) > 0)
         {
             is_episode_creation_failed = false;
             is_popup_opened = false;
@@ -259,7 +265,8 @@ void editor_popup_new(Episode *episode)
     {
         strcpy(new_filename, "");
         strcpy(new_name, "");
-        strcpy(new_story, "");
+        strcpy(new_start_story, "");
+        strcpy(new_end_story, "");
         new_map_count = 1;
 
         is_episode_creation_failed = false;
@@ -565,10 +572,15 @@ void editor_popup_episode_edit(Episode *episode)
     imgui_input_text(editor_popup_episode_edit_name_id, episode_edit_name, EPISODE_NAME_LENGTH, NULL);
     imgui_pop_item_width();
 
-    imgui_text(_chr(editor_popup_new_episode_story_str));
+    imgui_text(_chr(editor_popup_new_episode_start_story_str));
     imgui_same_line();
-    editor_help_maker(_chr(str_printf(NULL, editor_popup_new_episode_story_tooltip_str, (long)EPISODE_STORY_LENGTH)));
-    imgui_input_text_multiline(editor_popup_episode_edit_story_id, episode_edit_story, EPISODE_STORY_LENGTH, -1, 128, NULL);
+    editor_help_maker(_chr(str_printf(NULL, editor_popup_new_episode_start_story_tooltip_str, (long)EPISODE_START_STORY_LENGTH)));
+    imgui_input_text_multiline(editor_popup_episode_edit_start_story_id, episode_edit_start_story, EPISODE_START_STORY_LENGTH, -1, 128, NULL);
+
+    imgui_text(_chr(editor_popup_new_episode_end_story_str));
+    imgui_same_line();
+    editor_help_maker(_chr(str_printf(NULL, editor_popup_new_episode_end_story_tooltip_str, (long)EPISODE_END_STORY_LENGTH)));
+    imgui_input_text_multiline(editor_popup_episode_edit_end_story_id, episode_edit_end_story, EPISODE_END_STORY_LENGTH, -1, 128, NULL);
 
     imgui_text(_chr(editor_popup_new_episode_map_count_str));
     imgui_same_line();
@@ -581,31 +593,52 @@ void editor_popup_episode_edit(Episode *episode)
 
     if (imgui_button_withsize(_chr(editor_reset_str), width, EDITOR_POPUP_BUTTON_HEIGHT))
     {
+        is_episode_edit_failed = false;
         strcpy(episode_edit_name, episode->name);
-        strcpy(episode_edit_story, episode->story);
+        strcpy(episode_edit_start_story, episode->start_story);
+        strcpy(episode_edit_end_story, episode->end_story);
         episode_edit_map_count = episode->map_count;
     }
 
     imgui_same_line();
     if (imgui_button_withsize(_chr(editor_apply_str), width, EDITOR_POPUP_BUTTON_HEIGHT))
     {
-        episode->map_count = episode_edit_map_count;
-        strcpy(episode->name, episode_edit_name);
-        strcpy(episode->story, episode_edit_story);
+        if (strlen(episode_edit_name) > 0 && strlen(episode_edit_start_story) > 0 && strlen(episode_edit_end_story) > 0)
+        {
+            is_episode_edit_failed = false;
 
-        is_popup_opened = false;
-        imgui_close_current_popup();
+            episode->map_count = episode_edit_map_count;
+            strcpy(episode->name, episode_edit_name);
+            strcpy(episode->start_story, episode_edit_start_story);
+            strcpy(episode->end_story, episode_edit_end_story);
+
+            is_popup_opened = false;
+            imgui_close_current_popup();
+        }
+        else
+        {
+            is_episode_edit_failed = true;
+        }
     }
 
     imgui_same_line();
     if (imgui_button_withsize(_chr(editor_cancel_str), width, EDITOR_POPUP_BUTTON_HEIGHT) || key_esc)
     {
+        is_episode_edit_failed = false;
         strcpy(episode_edit_name, episode->name);
-        strcpy(episode_edit_story, episode->story);
+        strcpy(episode_edit_start_story, episode->start_story);
+        strcpy(episode_edit_end_story, episode->end_story);
         episode_edit_map_count = episode->map_count;
 
         is_popup_opened = false;
         imgui_close_current_popup();
+    }
+
+    if (is_episode_edit_failed == true)
+    {
+        imgui_push_style_color(ImGuiCol_TextDisabled, color4_red);
+        imgui_text_disabled(_chr(editor_popup_episode_edit_failed_str));
+        imgui_pop_style_color(1);
     }
 }
 

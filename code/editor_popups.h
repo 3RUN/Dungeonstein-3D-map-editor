@@ -29,11 +29,13 @@ char *editor_popup_episode_listbox_id = "##Editor episode browser listbox";
 
 char *editor_popup_new_filename_input_id = "##New filename";
 char *editor_popup_new_episode_name_id = "##New episode name";
-char *editor_popup_new_episode_story_id = "##New episode story";
+char *editor_popup_new_episode_start_story_id = "##New episode start story";
+char *editor_popup_new_episode_end_story_id = "##New episode end story";
 char *editor_popup_new_episode_map_slider_id = "##New episode map slider";
 
 char *editor_popup_episode_edit_name_id = "##Episode edit name";
-char *editor_popup_episode_edit_story_id = "##Episode edit story";
+char *editor_popup_episode_edit_start_story_id = "##Episode edit start story";
+char *editor_popup_episode_edit_end_story_id = "##Episode edit end story";
 char *editor_popup_episode_edit_map_slider_id = "##Episode edit map slider";
 
 char *editor_popup_settings_display_combo_id = "##Display mode combo";
@@ -47,17 +49,20 @@ char *editor_popup_music_browser_volume_slider_id = "##Music browser volume slid
 
 char new_filename[EPISODE_FILENAME_LENGTH];
 char new_name[EPISODE_NAME_LENGTH];
-char new_story[EPISODE_STORY_LENGTH];
+char new_start_story[EPISODE_START_STORY_LENGTH];
+char new_end_story[EPISODE_END_STORY_LENGTH];
 
 char save_as_filename[EPISODE_FILENAME_LENGTH];
 
 char episode_edit_name[EPISODE_NAME_LENGTH];
-char episode_edit_story[EPISODE_STORY_LENGTH];
+char episode_edit_start_story[EPISODE_START_STORY_LENGTH];
+char episode_edit_end_story[EPISODE_END_STORY_LENGTH];
 
 int new_map_count = 1;
 int episode_edit_map_count = 1;
 int is_episode_creation_failed = false;
 int is_episode_save_as_failed = false;
+int is_episode_edit_failed = false;
 
 STRING *editor_popup_open_str = "Please select episode to open.";
 STRING *editor_popup_open_empty_folder_str = "'Documents\\MapEditor\\episodes' - folder is empty.";
@@ -68,11 +73,13 @@ STRING *editor_popup_new_filename_str = "File name";
 STRING *editor_popup_new_filename_tooltip_str = "The file name to save episode as. Character limit %d.";
 STRING *editor_popup_new_episode_name_str = "Episode name";
 STRING *editor_popup_new_episode_name_tooltip_str = "The name of the episode. Character limit %d.";
-STRING *editor_popup_new_episode_story_str = "Short story";
-STRING *editor_popup_new_episode_story_tooltip_str = "Short episode story. Character limit %d.";
+STRING *editor_popup_new_episode_start_story_str = "Story beginning";
+STRING *editor_popup_new_episode_end_story_str = "Story ending";
+STRING *editor_popup_new_episode_start_story_tooltip_str = "Short episode story showed at the start. Character limit %d.";
+STRING *editor_popup_new_episode_end_story_tooltip_str = "Short episode story showed when game is finished. Character limit %d.";
 STRING *editor_popup_new_episode_map_count_str = "Map count";
 STRING *editor_popup_new_episode_map_count_tooltip_str = "Amount of maps in the episode. Max %d.";
-STRING *editor_popup_new_creation_failed_str = " Make sure to enter filename, episode name and a story!";
+STRING *editor_popup_new_creation_failed_str = "Make sure to enter filename, name and start/end stories!";
 STRING *editor_popup_new_file_exist_str = "          Episode with this name already exists!";
 STRING *editor_popup_new_create_str = "";
 
@@ -91,6 +98,7 @@ STRING *editor_popup_help_info_str = "blahahahaha";
 STRING *editor_popup_exit_str = "Are you sure you want to exit?\nAll unsaved data will be lost!";
 
 STRING *editor_popup_episode_edit_str = "Edit episode";
+STRING *editor_popup_episode_edit_failed_str = "  Make sure to enter episode name and start/end stories!";
 
 STRING *editor_popup_reset_map_str = "Are you sure you want to reset current map?";
 

@@ -370,7 +370,8 @@ void editor_map_top_bar(Episode *episode)
             if (imgui_menu_item(_chr(editor_edit_str), "", 0, 1))
             {
                 strcpy(episode_edit_name, episode->name);
-                strcpy(episode_edit_story, episode->story);
+                strcpy(episode_edit_start_story, episode->start_story);
+                strcpy(episode_edit_end_story, episode->end_story);
                 episode_edit_map_count = episode->map_count;
                 editor_map_popup_state_change_to(MAP_POPUP_EPISODE_EDIT);
             }

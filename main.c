@@ -4,6 +4,7 @@
 #include <strio.c>
 
 // to do
+//
 // * add connection (draw_line3d) between cells with similar ID
 // * add level test build state
 
@@ -189,7 +190,7 @@ void on_frame_event()
 	case EDITOR_STATE_NEW:
 		editor_reset();
 		episode_reset(&def_episode);
-		episode_change_info(&def_episode, new_name, new_story, new_map_count);
+		episode_change_info(&def_episode, new_name, new_start_story, new_end_story, new_map_count);
 		episode_save_name_udpate(_str(new_filename));
 		episode_save(episode_save_name, &def_episode);
 		editor_grid_sprites_refresh(&def_episode);

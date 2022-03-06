@@ -6,7 +6,8 @@
 
 #define EPISODE_FILENAME_LENGTH 32
 #define EPISODE_NAME_LENGTH 32
-#define EPISODE_STORY_LENGTH 256
+#define EPISODE_START_STORY_LENGTH 128
+#define EPISODE_END_STORY_LENGTH 128
 
 // default episode, map, cell settings
 #define TYPE_NONE -1
@@ -69,7 +70,8 @@ typedef struct Map
 typedef struct Episode
 {
     char name[EPISODE_NAME_LENGTH];
-    char story[EPISODE_STORY_LENGTH];
+    char start_story[EPISODE_START_STORY_LENGTH];
+    char end_story[EPISODE_END_STORY_LENGTH];
 
     int map_count;
     Map map[MAX_MAPS_PER_EPISODE];
@@ -87,7 +89,7 @@ void map_copy_weather(Map *to, Map *from);
 
 void map_reset(Map *map);
 
-void episode_change_info(Episode *episode, STRING *name, STRING *story, int map_count);
+void episode_change_info(Episode *episode, STRING *name, STRING *start_story, STRING *end_story, int map_count);
 
 void episode_reset(Episode *episode);
 

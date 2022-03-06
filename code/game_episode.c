@@ -132,7 +132,7 @@ void map_reset(Map *map)
     }
 }
 
-void episode_change_info(Episode *episode, STRING *name, STRING *story, int map_count)
+void episode_change_info(Episode *episode, STRING *name, STRING *start_story, STRING *end_story, int map_count)
 {
     if (!episode)
     {
@@ -140,7 +140,8 @@ void episode_change_info(Episode *episode, STRING *name, STRING *story, int map_
     }
 
     strcpy(episode->name, name);
-    strcpy(episode->story, story);
+    strcpy(episode->start_story, start_story);
+    strcpy(episode->end_story, end_story);
     episode->map_count = map_count;
 }
 
@@ -154,7 +155,8 @@ void episode_reset(Episode *episode)
     current_map_id = 0;
 
     strcpy(episode->name, "");
-    strcpy(episode->story, "");
+    strcpy(episode->start_story, "");
+    strcpy(episode->end_story, "");
     episode->map_count = 1;
 
     int i = 0;
