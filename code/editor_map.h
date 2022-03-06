@@ -68,6 +68,8 @@ void editor_map_top_bar(Episode *episode);
 
 void editor_map_background();
 
+void editor_map_tooltip(Episode *episode);
+
 void editor_map_update(Episode *episode);
 
 #endif

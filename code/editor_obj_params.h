@@ -57,8 +57,8 @@ STRING *params_drop_item_key_red_str = "Key red";
 STRING *params_drop_item_key_yellow_str = "Key yellow";
 STRING *params_drop_item_small_medkit_str = "Small medkit";
 STRING *params_drop_item_big_medkit_str = "Bit medkit";
-STRING *params_drop_item_ammo_str = "Ammo";
-STRING *params_drop_item_weapon_str = "Weapon";
+STRING *params_drop_item_ammo_str = "Ammo from held weapon";
+STRING *params_drop_item_weapon_str = "Held weapon";
 
 STRING *params_spawn_object_category_str = "Category";
 STRING *params_spawn_object_type_str = "Type";

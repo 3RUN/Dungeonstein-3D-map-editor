@@ -330,8 +330,33 @@ void test_map()
 	{
 		for (x = 0; x < MAP_WIDTH; x++)
 		{
-			m->cell[x][y].type = 0;
-			m->cell[x][y].asset = integer(random(TOTAL_WALL_TEXTURES));
+			m->cell[x][y].type = integer(random(MAX_ASSET_TYPES));
+			switch (m->cell[x][y].type)
+			{
+			case ASSET_TYPE_WALLS:
+				m->cell[x][y].asset = integer(random(TOTAL_WALL_TEXTURES));
+				break;
+
+			case ASSET_TYPE_PROPS:
+				m->cell[x][y].asset = integer(random(TOTAL_PROPS_TEXTURES));
+				break;
+
+			case ASSET_TYPE_EVENTS:
+				m->cell[x][y].asset = integer(random(TOTAL_EVENT_TEXTURES));
+				break;
+
+			case ASSET_TYPE_ITEMS:
+				m->cell[x][y].asset = integer(random(TOTAL_ITEM_TEXTURES));
+				break;
+
+			case ASSET_TYPE_ENEMIES:
+				m->cell[x][y].asset = integer(random(TOTAL_ENEMY_TEXTURES));
+				break;
+
+			case ASSET_TYPE_BOSSES:
+				m->cell[x][y].asset = integer(random(TOTAL_BOSS_TEXTURES));
+				break;
+			}
 		}
 	}
 

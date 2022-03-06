@@ -48,6 +48,30 @@ STRING *editor_view_str = "View";
 STRING *editor_episode_str = "Episode";
 STRING *editor_map_str = "Map";
 
+STRING *editor_semicolon_str = ";";
+STRING *editor_info_main_str = "world position:\nx = %d; y = %d; z = %d;\n\ngrid position:\nx = %d; y = %d;\n\npan = %.0f;\nid = %d;";
+STRING *editor_info_type_wall_str = "\ntype = wall;";
+STRING *editor_info_type_props_str = "\ntype = props;";
+STRING *editor_info_type_event_str = "\ntype = event;";
+STRING *editor_info_type_item_str = "\ntype = item;";
+STRING *editor_info_type_enemy_str = "\ntype = enemy;";
+STRING *editor_info_type_boss_str = "\ntype = boss;";
+STRING *editor_info_desc_str = "\ndesc = ";
+STRING *editor_info_params_str = "\n\nparams:";
+STRING *editor_info_wall_secret_str = "\n* secret wall;";
+STRING *editor_info_wall_solid_str = "\n* solid wall;";
+STRING *editor_info_activation_str = "\n* activation = ";
+STRING *editor_info_on_interaction_str = "on interaction;";
+STRING *editor_info_on_creation_str = "on creation;";
+STRING *editor_info_trigger_zone_id_str = "trigger zone - id = %d;";
+STRING *editor_info_siwtch_id_str = "switch - id = %d;";
+STRING *editor_info_key_requires_str = "\n* requires = ";
+STRING *editor_info_props_switch_id_str = "\n* switch id = %d;";
+STRING *editor_info_event_trigger_zone_id_str = "\n* zone id = %d;";
+STRING *editor_info_event_spawn_str = "\n* spawn = ";
+STRING *editor_info_drop_item_str = "\n* drop item = ";
+STRING *editor_info_drop_item_false_str = "\n* drop item = false;";
+
 float get_hsv_from_color(float value);
 
 float get_color_from_hsv(float value);
@@ -57,5 +81,9 @@ void editor_create_tooltip(char *tooltip);
 void editor_help_maker(char *desc);
 
 void editor_camera_resize();
+
+STRING *get_cell_info(Cell *cell);
+
+STRING *draw_map_info(Map *current_map, int x, int y);
 
 #endif

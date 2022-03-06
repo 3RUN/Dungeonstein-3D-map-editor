@@ -431,6 +431,33 @@ void editor_map_background()
     vec_set(&d3d_fogcolor4, &sky_color);
 }
 
+void editor_map_tooltip(Episode *episode)
+{
+    if (!episode)
+    {
+        return;
+    }
+
+    if (config_current.is_cell_tooltip_enabled == false)
+    {
+        return;
+    }
+
+    Map *current_map = map_get_active(episode);
+    if (!current_map)
+    {
+        return;
+    }
+
+    STRING *info_str = draw_map_info(current_map, mouse_x, mouse_y);
+    if (info_str)
+    {
+        imgui_set_tooltip(_chr(info_str));
+        imgui_begin_tooltip();
+        imgui_end_tooltip();
+    }
+}
+
 void editor_map_update(Episode *episode)
 {
     if (!episode)
@@ -443,5 +470,6 @@ void editor_map_update(Episode *episode)
     editor_map_top_bar(episode);
     editor_map_popup(episode);
     editor_map_background();
+    editor_map_tooltip(episode);
     imgui_end_imode();
 }
