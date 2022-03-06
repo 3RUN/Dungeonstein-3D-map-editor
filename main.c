@@ -128,6 +128,8 @@ void editor_reset()
 	mouse_x = 0;
 	mouse_y = 0;
 
+	cell_info_tooltip_counter = 0;
+
 	is_grid_visible = true;
 	is_walls_visible = true;
 	is_objects_visible = true;
@@ -215,6 +217,8 @@ void on_frame_event()
 	case EDITOR_STATE_TO_MAP_SETTINGS:
 		editor_map_settings_show(current_map);
 
+		cell_info_tooltip_counter = 0; // reset tooltip counter
+
 		// switch to map settings !
 		editor_switch_state_to(EDITOR_STATE_MAP_SETTINGS);
 		break;
@@ -257,6 +261,8 @@ void on_frame_event()
 		sys_exit(NULL);
 		break;
 	}
+
+	DEBUG_VAR(cell_info_tooltip_counter, 300);
 
 	editor_camera_resize();
 	mouse_lock_in_window();
@@ -321,52 +327,8 @@ void on_f_event(var scancode)
 	}
 }
 
-void test_map()
-{
-	Map *m = map_get_active(&def_episode);
-
-	int x = 0, y = 0;
-	for (y = 0; y < MAP_HEIGHT; y++)
-	{
-		for (x = 0; x < MAP_WIDTH; x++)
-		{
-			m->cell[x][y].type = integer(random(MAX_ASSET_TYPES));
-			switch (m->cell[x][y].type)
-			{
-			case ASSET_TYPE_WALLS:
-				m->cell[x][y].asset = integer(random(TOTAL_WALL_TEXTURES));
-				break;
-
-			case ASSET_TYPE_PROPS:
-				m->cell[x][y].asset = integer(random(TOTAL_PROPS_TEXTURES));
-				break;
-
-			case ASSET_TYPE_EVENTS:
-				m->cell[x][y].asset = integer(random(TOTAL_EVENT_TEXTURES));
-				break;
-
-			case ASSET_TYPE_ITEMS:
-				m->cell[x][y].asset = integer(random(TOTAL_ITEM_TEXTURES));
-				break;
-
-			case ASSET_TYPE_ENEMIES:
-				m->cell[x][y].asset = integer(random(TOTAL_ENEMY_TEXTURES));
-				break;
-
-			case ASSET_TYPE_BOSSES:
-				m->cell[x][y].asset = integer(random(TOTAL_BOSS_TEXTURES));
-				break;
-			}
-		}
-	}
-
-	editor_grid_sprites_refresh(&def_episode);
-}
-
 void main()
 {
-	on_1 = test_map;
-
 	max_entities = 2000;
 
 	on_d3d_lost = imgui_reset;

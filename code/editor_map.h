@@ -5,6 +5,8 @@
 #define SIDEBAR_ASSET_LIST_CHILD_HEIGHT 215
 #define SIDEBAR_PARAM_CHILD_HEIGHT 145
 
+#define CELL_TOOLTIP_TIME 0.25
+
 #define MAP_POPUP_OPEN 0
 #define MAP_POPUP_OPEN_SURE 1
 #define MAP_POPUP_NEW 2
@@ -43,6 +45,8 @@ int editor_asset_type = ASSET_TYPE_WALLS; // currently active asset category
 int editor_asset_index = 0;               // currently selected asset
 
 int map_popup_state = MAP_POPUP_OPEN;
+
+var cell_info_tooltip_counter = 0;
 
 BMAP *preview_bmap = NULL; // used for selected asset preview
 

@@ -449,12 +449,25 @@ void editor_map_tooltip(Episode *episode)
         return;
     }
 
-    STRING *info_str = draw_map_info(current_map, mouse_x, mouse_y);
-    if (info_str)
+    if (mouse_moving == false)
     {
-        imgui_set_tooltip(_chr(info_str));
-        imgui_begin_tooltip();
-        imgui_end_tooltip();
+        cell_info_tooltip_counter += time_frame / 16;
+        cell_info_tooltip_counter = clamp(cell_info_tooltip_counter, 0, CELL_TOOLTIP_TIME + 1);
+
+        if (cell_info_tooltip_counter > CELL_TOOLTIP_TIME)
+        {
+            STRING *info_str = draw_map_info(current_map, mouse_x, mouse_y);
+            if (info_str)
+            {
+                imgui_set_tooltip(_chr(info_str));
+                imgui_begin_tooltip();
+                imgui_end_tooltip();
+            }
+        }
+    }
+    else
+    {
+        cell_info_tooltip_counter = 0;
     }
 }
 
