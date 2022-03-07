@@ -31,6 +31,12 @@ int game_build_check_direction(Map *map, VECTOR *pos, VECTOR *dir);
 
 int is_neighbour_is_door(Map *map, VECTOR *pos, VECTOR *dir);
 
+int is_a_door(int type, int asset);
+
+int is_a_fence(int type, int asset);
+
+int is_npc(int type, int asset);
+
 void solid_ent_fnc();
 
 void game_build_walls(Map *map, Cell *cell);

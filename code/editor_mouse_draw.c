@@ -1,17 +1,17 @@
 
 int is_cell_allowed_rotation(int type, int asset)
 {
-    if (type == ASSET_TYPE_ENEMIES) // all enemies
+    if (is_npc(type, asset) == true) // enemies/bosses
     {
         return true;
     }
 
-    if (type == ASSET_TYPE_BOSSES) // all boses
+    if (is_a_door(type, asset) == true) // doors
     {
         return true;
     }
 
-    if (type == ASSET_TYPE_PROPS && asset == PROPS_DOOR || type == ASSET_TYPE_PROPS && asset == PROPS_DOOR_ELEVATOR || type == ASSET_TYPE_PROPS && asset == PROPS_DOOR_ENTRANCE || type == ASSET_TYPE_PROPS && asset == PROPS_DOOR_LOCKED)
+    if (is_a_fence(type, asset) == true) // dirty fences
     {
         return true;
     }
@@ -21,12 +21,12 @@ int is_cell_allowed_rotation(int type, int asset)
         return true;
     }
 
-    if (type == ASSET_TYPE_EVENTS && asset == EVENT_PLAYER) // player spawn point
+    if (type == ASSET_TYPE_EVENTS && asset == EVENT_PLAYER) // start position (player spawn)
     {
         return true;
     }
 
-    if (type == ASSET_TYPE_EVENTS && asset == EVENT_NPC_TURN_POINT) // enemy/boss turn point
+    if (type == ASSET_TYPE_EVENTS && asset == EVENT_NPC_TURN_POINT) // turning point for npcs
     {
         return true;
     }

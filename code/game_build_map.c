@@ -112,15 +112,50 @@ int is_neighbour_is_door(Map *map, VECTOR *pos, VECTOR *dir)
     int x = endpos.x;
     int y = endpos.y;
 
-    if (map->cell[x][y].type != ASSET_TYPE_PROPS)
+    int type = map->cell[x][y].type;
+    int asset = map->cell[x][y].asset;
+
+    return is_a_door(type, asset);
+}
+
+int is_a_door(int type, int asset)
+{
+    if (type != ASSET_TYPE_PROPS)
     {
         return false;
     }
 
-    if (map->cell[x][y].asset == PROPS_DOOR || map->cell[x][y].asset == PROPS_DOOR_ELEVATOR || map->cell[x][y].asset == PROPS_DOOR_ENTRANCE || map->cell[x][y].asset == PROPS_DOOR_LOCKED)
+    if (asset != PROPS_DOOR && asset != PROPS_DOOR_ELEVATOR && asset != PROPS_DOOR_ENTRANCE && asset != PROPS_DOOR_LOCKED)
     {
-        return true;
+        return false;
     }
+
+    return true;
+}
+
+int is_a_fence(int type, int asset)
+{
+    if (type != ASSET_TYPE_PROPS)
+    {
+        return false;
+    }
+
+    if (asset != PROPS_FENCE && asset != PROPS_FENCE_DIRTY)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+int is_npc(int type, int asset)
+{
+    if (type != ASSET_TYPE_ENEMIES && type != ASSET_TYPE_BOSSES) // all enemies/bosses
+    {
+        return false;
+    }
+
+    return true;
 }
 
 void solid_ent_fnc()
@@ -208,11 +243,11 @@ void game_build_dynamic_objects(Cell *cell)
 
     ENTITY *ent = ent_create(asset_get_filename(type, asset), &spawn_pos, dynamic_object_fnc);
 
-    if (is_cell_allowed_rotation(type, asset) == true)
+    if (is_cell_allowed_rotation(type, asset) == true && is_npc(type, asset) == false) // but ignore enemies/bosses
     {
         set(ent, DECAL);
         ent->pan = cell->pan;
-        if (type == ASSET_TYPE_PROPS && asset == PROPS_DOOR || type == ASSET_TYPE_PROPS && asset == PROPS_DOOR_ELEVATOR || type == ASSET_TYPE_PROPS && asset == PROPS_DOOR_ENTRANCE || type == ASSET_TYPE_PROPS && asset == PROPS_DOOR_LOCKED)
+        if (is_a_door(type, asset) == true || is_a_fence(type, asset) == true)
         {
             ent->pan = cell->pan - 90; // correct door position
             ent->pan = cycle(ent->pan, 0, 360);

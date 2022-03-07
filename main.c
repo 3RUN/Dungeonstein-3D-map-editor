@@ -6,7 +6,7 @@
 // to do
 //
 // * add connection (draw_line3d) between cells with similar ID
-// * add level test build state
+// * add proper functions for test build state
 
 #define PRAGMA_POINTER
 

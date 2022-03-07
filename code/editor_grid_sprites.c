@@ -35,7 +35,7 @@ void editor_grid_sprites_show(Episode *episode)
                 if (is_objects_visible == true && cell_type >= ASSET_TYPE_PROPS)
                 {
                     reset(sprite_ent, INVISIBLE);
-                    if (dir_ent)
+                    if (dir_ent && is_cell_allowed_rotation(cell_type, cell_asset) == true)
                     {
                         reset(dir_ent, INVISIBLE);
                     }
@@ -174,7 +174,7 @@ void editor_grid_sprites_refresh(Episode *episode)
 void grid_sprite_ent_fnc()
 {
     set(my, PASSABLE | INVISIBLE | NOFILTER | UNLIT);
-    
+
     my->ambient = 100;
     vec_fill(&my->blue, 255);
     vec_fill(&my->scale_x, 0.5 * GRID_SPRITE_SCALE_FACTOR); // scale down from 64x64 to 32x32 (tile_size)

@@ -263,7 +263,7 @@ void editor_obj_params_update(Cell *cell, int type, int index)
     {
         editor_wall_params(cell, index);
     }
-    else if (type == ASSET_TYPE_PROPS && index == PROPS_FENCE || type == ASSET_TYPE_PROPS && index == PROPS_FENCE_DIRTY || type == ASSET_TYPE_PROPS && index == PROPS_DOOR || type == ASSET_TYPE_PROPS && index == PROPS_DOOR_ELEVATOR || type == ASSET_TYPE_PROPS && index == PROPS_DOOR_LOCKED || type == ASSET_TYPE_PROPS && index == PROPS_SWITCH)
+    else if (is_a_fence(type, index) == true || type == ASSET_TYPE_PROPS && index == PROPS_DOOR || type == ASSET_TYPE_PROPS && index == PROPS_DOOR_ELEVATOR || type == ASSET_TYPE_PROPS && index == PROPS_DOOR_LOCKED || type == ASSET_TYPE_PROPS && index == PROPS_SWITCH)
     {
         editor_props_params(cell, index);
     }
