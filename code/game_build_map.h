@@ -7,6 +7,8 @@
 #define BOTTOM 2
 #define LEFT 3
 
+#define OFFSET_FROM_WALL 0.01
+
 VECTOR cardinal_dir[MAX_DIRECTION_STEP]; // top/right/bottom/left
 var cardinal_rot[MAX_DIRECTION_STEP];    // top/right/bottom/left
 
@@ -36,6 +38,10 @@ int is_a_door(int type, int asset);
 int is_a_fence(int type, int asset);
 
 int is_npc(int type, int asset);
+
+int is_a_switch(int type, int asset);
+
+void attach_to_wall(ENTITY *ent);
 
 void solid_ent_fnc();
 

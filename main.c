@@ -237,7 +237,8 @@ void on_frame_event()
 
 		// map test build
 	case EDITOR_STATE_TO_TEST_BUILD:
-		cell_info_tooltip_counter = 0;	 // reset tooltip counter
+		cell_info_tooltip_counter = 0; // reset tooltip counter
+		weather_play_sound(current_map->weather_id);
 		editor_camera_in_map_settings(); // set camera to the nullvector position
 		editor_grid_sprites_hide();
 		game_build_map(&def_episode);
@@ -250,6 +251,7 @@ void on_frame_event()
 		break;
 
 	case EDITOR_STATE_FROM_TEST_BUILD:
+		weather_stop_sound();
 		editor_camera_restore_pos_n_angle();
 		game_build_map_free();
 		editor_grid_sprites_show(&def_episode);
@@ -267,8 +269,6 @@ void on_frame_event()
 		sys_exit(NULL);
 		break;
 	}
-
-	DEBUG_VAR(is_top_bar_used, 300);
 
 	editor_camera_resize();
 	mouse_lock_in_window();

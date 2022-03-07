@@ -158,6 +158,32 @@ int is_npc(int type, int asset)
     return true;
 }
 
+int is_a_switch(int type, int asset)
+{
+    if (type != ASSET_TYPE_PROPS)
+    {
+        return false;
+    }
+
+    if (asset != PROPS_SWITCH)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+void attach_to_wall(ENTITY *ent)
+{
+    VECTOR pos;
+    vec_set(&pos, vector((MAP_CELL_SIZE / 2) - OFFSET_FROM_WALL, 0, 0));
+    vec_rotate(&pos, &ent->pan);
+    vec_add(&pos, &ent->x);
+
+    vec_set(&ent->x, &pos);
+    ent->pan += 180;
+}
+
 void solid_ent_fnc()
 {
     set(my, PASSABLE | NOFILTER | UNLIT | DECAL);
@@ -254,6 +280,11 @@ void game_build_dynamic_objects(Cell *cell)
         }
     }
 
+    if (is_a_switch(type, asset) == true)
+    {
+        attach_to_wall(ent);
+    }
+
     switch (type)
     {
     case ASSET_TYPE_PROPS:
@@ -321,6 +352,40 @@ void game_build_map_update(Episode *episode)
     {
         return;
     }
+
+    Map *current_map = map_get_active(episode);
+    if (!current_map)
+    {
+        return;
+    }
+
+    // apply all the settings at the test level
+    // so user can see the changes instantly
+    // camera and fog settings
+    camera->fog_end = current_map->fog_end;
+    camera->fog_start = current_map->fog_start;
+
+    camera->clip_near = 0.1;
+    camera->clip_far = FOG_MAX_END * 1.25;
+
+    fog_color = 4;
+    d3d_fogcolor4.red = get_color_from_hsv(current_map->fog_color[0]);
+    d3d_fogcolor4.green = get_color_from_hsv(current_map->fog_color[1]);
+    d3d_fogcolor4.blue = get_color_from_hsv(current_map->fog_color[2]);
+
+    if (current_map->weather_id > WEATHER_CLEAR)
+    {
+        sky_color.red = get_color_from_hsv(current_map->ceiling_color[0]);
+        sky_color.green = get_color_from_hsv(current_map->ceiling_color[1]);
+        sky_color.blue = get_color_from_hsv(current_map->ceiling_color[2]);
+    }
+    else
+    {
+        vec_set(&sky_color, &d3d_fogcolor4);
+    }
+
+    // weather
+    weather_update(current_map->weather_id);
 
     if (key_esc)
     {
