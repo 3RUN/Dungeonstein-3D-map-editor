@@ -208,6 +208,17 @@ void game_build_dynamic_objects(Cell *cell)
 
     ENTITY *ent = ent_create(asset_get_filename(type, asset), &spawn_pos, dynamic_object_fnc);
 
+    if (is_cell_allowed_rotation(type, asset) == true)
+    {
+        set(ent, DECAL);
+        ent->pan = cell->pan;
+        if (type == ASSET_TYPE_PROPS && asset == PROPS_DOOR || type == ASSET_TYPE_PROPS && asset == PROPS_DOOR_ELEVATOR || type == ASSET_TYPE_PROPS && asset == PROPS_DOOR_ENTRANCE || type == ASSET_TYPE_PROPS && asset == PROPS_DOOR_LOCKED)
+        {
+            ent->pan = cell->pan - 90; // correct door position
+            ent->pan = cycle(ent->pan, 0, 360);
+        }
+    }
+
     switch (type)
     {
     case ASSET_TYPE_PROPS:

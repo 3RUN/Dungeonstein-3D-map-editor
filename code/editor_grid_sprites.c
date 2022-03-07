@@ -173,7 +173,7 @@ void editor_grid_sprites_refresh(Episode *episode)
 
 void grid_sprite_ent_fnc()
 {
-    set(my, PASSABLE | INVISIBLE | NOFILTER | OVERLAY | UNLIT);
+    set(my, PASSABLE | INVISIBLE | NOFILTER | UNLIT);
     
     my->ambient = 100;
     vec_fill(&my->blue, 255);
@@ -184,7 +184,7 @@ void grid_sprite_ent_fnc()
 
 void grid_direction_ent_fnc()
 {
-    set(my, PASSABLE | INVISIBLE | NOFILTER | OVERLAY | UNLIT);
+    set(my, PASSABLE | INVISIBLE | NOFILTER | BRIGHT | UNLIT);
 
     my->ambient = 100;
     vec_fill(&my->blue, 255);

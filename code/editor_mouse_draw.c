@@ -11,6 +11,11 @@ int is_cell_allowed_rotation(int type, int asset)
         return true;
     }
 
+    if (type == ASSET_TYPE_PROPS && asset == PROPS_DOOR || type == ASSET_TYPE_PROPS && asset == PROPS_DOOR_ELEVATOR || type == ASSET_TYPE_PROPS && asset == PROPS_DOOR_ENTRANCE || type == ASSET_TYPE_PROPS && asset == PROPS_DOOR_LOCKED)
+    {
+        return true;
+    }
+
     if (type == ASSET_TYPE_PROPS && asset == PROPS_SWITCH) // switch
     {
         return true;
@@ -22,41 +27,6 @@ int is_cell_allowed_rotation(int type, int asset)
     }
 
     if (type == ASSET_TYPE_EVENTS && asset == EVENT_NPC_TURN_POINT) // enemy/boss turn point
-    {
-        return true;
-    }
-
-    return false;
-}
-
-int is_cell_allowed_rotation(Cell *cell)
-{
-    if (!cell)
-    {
-        return false;
-    }
-
-    if (cell->type == ASSET_TYPE_ENEMIES) // all enemies
-    {
-        return true;
-    }
-
-    if (cell->type == ASSET_TYPE_BOSSES) // all boses
-    {
-        return true;
-    }
-
-    if (cell->type == ASSET_TYPE_PROPS && cell->asset == PROPS_SWITCH) // switch
-    {
-        return true;
-    }
-
-    if (cell->type == ASSET_TYPE_EVENTS && cell->asset == EVENT_PLAYER) // player spawn point
-    {
-        return true;
-    }
-
-    if (cell->type == ASSET_TYPE_EVENTS && cell->asset == EVENT_NPC_TURN_POINT) // enemy/boss turn point
     {
         return true;
     }
@@ -116,7 +86,7 @@ void editor_mouse_draw_update(Episode *episode, Cell *drawing_cell)
     {
         if (rotate_cell_once == true)
         {
-            if (is_cell_allowed_rotation(current_cell) == true)
+            if (is_cell_allowed_rotation(current_cell->type, current_cell->asset) == true)
             {
                 current_cell->pan -= 90;
                 current_cell->pan = cycle(current_cell->pan, 0, 360);
@@ -130,24 +100,55 @@ void editor_mouse_draw_update(Episode *episode, Cell *drawing_cell)
         rotate_cell_once = true;
     }
 
-    if (mouse_left || mouse_right)
+    if (mouse_left)
     {
-        mouse_draw_timer += time_frame / 16;
-        while (mouse_draw_timer > mouse_draw_cooldown)
+        if (key_shift)
         {
-            if (mouse_left)
+            mouse_draw_timer += time_frame / 16;
+            while (mouse_draw_timer > mouse_draw_cooldown)
             {
                 editor_map_draw_cell(current_cell, drawing_cell);
+                mouse_draw_timer -= mouse_draw_cooldown;
             }
-            else if (mouse_right)
+        }
+        else
+        {
+            if (mouse_draw_once == true)
             {
-                editor_map_erase_cell(current_cell);
+                editor_map_draw_cell(current_cell, drawing_cell);
+                mouse_draw_once = false;
             }
-            mouse_draw_timer -= mouse_draw_cooldown;
         }
     }
     else
     {
         mouse_draw_timer = 0;
+        mouse_draw_once = true;
+
+        if (mouse_right)
+        {
+            if (key_shift)
+            {
+                mouse_erase_timer += time_frame / 16;
+                while (mouse_erase_timer > mouse_erase_cooldown)
+                {
+                    editor_map_erase_cell(current_cell);
+                    mouse_erase_timer -= mouse_erase_cooldown;
+                }
+            }
+            else
+            {
+                if (mouse_erase_once == true)
+                {
+                    editor_map_erase_cell(current_cell);
+                    mouse_erase_once = false;
+                }
+            }
+        }
+        else
+        {
+            mouse_erase_timer = 0;
+            mouse_erase_once = true;
+        }
     }
 }

@@ -5,7 +5,6 @@
 
 // to do
 //
-// * add direction to show where current cell is rotated
 // * add connection (draw_line3d) between cells with similar ID
 // * add level test build state
 
@@ -268,6 +267,8 @@ void on_frame_event()
 		sys_exit(NULL);
 		break;
 	}
+
+	DEBUG_VAR(is_top_bar_used, 300);
 
 	editor_camera_resize();
 	mouse_lock_in_window();
