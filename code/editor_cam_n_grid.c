@@ -168,6 +168,37 @@ void editor_camera_in_map_settings()
 {
     vec_set(&camera->x, nullvector);
     vec_set(&camera->pan, nullvector);
+
+    vec_fill(&cam_force, 0);
+    vec_fill(&cam_dist, 0);
+    vec_fill(&cam_speed, 0);
+
+    vec_fill(&cam_angle_force, 0);
+    vec_fill(&cam_angle_speed, 0);
+}
+
+void editor_camera_in_test_build()
+{
+    cam_angle_force.pan = -CAM_BUILD_STATE_ROTATE_SPEED * mouse_force.x;
+    cam_angle_force.tilt = CAM_BUILD_STATE_ROTATE_SPEED * mouse_force.y;
+    cam_angle_force.roll = 0;
+
+    vec_add(&camera->pan, vec_accelerate(&cam_dist, &cam_angle_speed, &cam_angle_force, 0.75));
+
+    cam_force.x = CAM_BUILD_STATE_MOVE_SPEED * (key_w - key_s);
+    cam_force.y = CAM_BUILD_STATE_MOVE_SPEED * (key_a - key_d);
+    cam_force.z = CAM_BUILD_STATE_MOVE_SPEED * (key_q - key_e);
+
+    if (key_shift)
+    {
+        cam_force.x *= CAM_BUILD_STATE_SPEED_INCREASE_FACTOR;
+        cam_force.y *= CAM_BUILD_STATE_SPEED_INCREASE_FACTOR;
+        cam_force.z *= CAM_BUILD_STATE_SPEED_INCREASE_FACTOR;
+    }
+
+    vec_accelerate(&cam_dist, &cam_speed, &cam_force, 0.75);
+
+    vec_add(&camera->x, vec_rotate(&cam_dist, &camera->pan));
 }
 
 void editor_camera_restore_pos_n_angle()

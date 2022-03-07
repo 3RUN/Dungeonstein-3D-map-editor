@@ -235,7 +235,8 @@ void on_frame_event()
 
 		// map test build
 	case EDITOR_STATE_TO_TEST_BUILD:
-		cell_info_tooltip_counter = 0; // reset tooltip counter
+		cell_info_tooltip_counter = 0;	 // reset tooltip counter
+		editor_camera_in_map_settings(); // set camera to the nullvector position
 		editor_grid_sprites_hide();
 		game_build_map(&def_episode);
 		editor_switch_state_to(EDITOR_STATE_TEST_BUILD);
@@ -243,9 +244,11 @@ void on_frame_event()
 
 	case EDITOR_STATE_TEST_BUILD:
 		game_build_map_update(&def_episode);
+		editor_camera_in_test_build();
 		break;
 
 	case EDITOR_STATE_FROM_TEST_BUILD:
+		editor_camera_restore_pos_n_angle();
 		game_build_map_free();
 		editor_grid_sprites_show(&def_episode);
 		editor_switch_state_to(EDITOR_STATE_EDIT_MAP);
