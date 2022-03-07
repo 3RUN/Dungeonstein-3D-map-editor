@@ -3,8 +3,6 @@
 
 #define GRID_SPRITE_SCALE_FACTOR 0.95
 
-BMAP *blank_texture_pcx = "blank.pcx";
-
 STRING *blank_sprite_pcx = "blank.pcx";
 
 array_t *grid_ents = NULL;

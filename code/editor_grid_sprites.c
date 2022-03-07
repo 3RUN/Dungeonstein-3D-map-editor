@@ -90,20 +90,11 @@ void editor_grid_sprite_update_by_id(int id, var pan, int type, int asset)
             reset(tile, INVISIBLE);
         }
 
-        BMAP *old_skin = ent_getskin(tile, 1);
-        ptr_remove(old_skin);
-
-        old_skin = bmap_createblack(ASSET_PREVIEW_IMAGE_WIDTH, ASSET_PREVIEW_IMAGE_HEIGHT, ASSET_IMAGE_FORMAT);
-        bmap_blit(old_skin, asset_get_bmap(type, asset), NULL, NULL);
-
-        ent_setskin(tile, old_skin, 1);
+        ent_morph(tile, _chr(asset_get_filename(type, asset)));
     }
     else
     {
-        BMAP *old_skin = ent_getskin(tile, 1);
-        ptr_remove(old_skin);
-
-        ent_setskin(tile, blank_texture_pcx, 1);
+        ent_morph(tile, blank_sprite_pcx);
     }
 }
 
@@ -148,7 +139,7 @@ void grid_ent_fnc()
     my->ambient = 100;
     vec_fill(&my->blue, 255);
     vec_fill(&my->scale_x, 0.5 * GRID_SPRITE_SCALE_FACTOR); // scale down from 64x64 to 32x32 (tile_size)
-    my->tilt = 90; // look upwards !
+    my->tilt = 90;                                          // look upwards !
 }
 
 void editor_grid_sprites_create()
