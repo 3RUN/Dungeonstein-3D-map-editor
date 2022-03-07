@@ -67,6 +67,40 @@ STRING *asset_get_desc(int type, int index)
     }
 }
 
+STRING *asset_get_filename(int type, int index)
+{
+    if (type == ASSET_TYPE_WALLS)
+    {
+        Asset *asset = array_get_element_at(Asset *, wall_textures, index);
+        return _str(asset->filename);
+    }
+    else if (type == ASSET_TYPE_PROPS)
+    {
+        Asset *asset = array_get_element_at(Asset *, props_textures, index);
+        return _str(asset->filename);
+    }
+    else if (type == ASSET_TYPE_EVENTS)
+    {
+        Asset *asset = array_get_element_at(Asset *, event_textures, index);
+        return _str(asset->filename);
+    }
+    else if (type == ASSET_TYPE_ITEMS)
+    {
+        Asset *asset = array_get_element_at(Asset *, item_textures, index);
+        return _str(asset->filename);
+    }
+    else if (type == ASSET_TYPE_ENEMIES)
+    {
+        Asset *asset = array_get_element_at(Asset *, enemy_textures, index);
+        return _str(asset->filename);
+    }
+    else if (type == ASSET_TYPE_BOSSES)
+    {
+        Asset *asset = array_get_element_at(Asset *, boss_textures, index);
+        return _str(asset->filename);
+    }
+}
+
 void asset_add(array_t *array, STRING *desc, STRING *bmap)
 {
     if (!array)
@@ -79,6 +113,7 @@ void asset_add(array_t *array, STRING *desc, STRING *bmap)
     {
         return;
     }
+    strcpy(asset->filename, _chr(bmap));
     strcpy(asset->desc, _chr(desc));
     BMAP *temp_bmap = bmap_create(bmap);
     bmap_preload(temp_bmap);
@@ -274,6 +309,7 @@ void assets_destroy_array(array_t *array)
 
     array_enumerate_begin(Asset *, array, v)
     {
+        strcpy(v->filename, "");
         strcpy(v->desc, "");
         if (v->bmap)
         {

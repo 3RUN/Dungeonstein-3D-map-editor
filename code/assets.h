@@ -2,10 +2,12 @@
 #define _ASSETS_H_
 
 #define ASSET_DESC_LENGTH 128
+#define ASSET_FILENAME_LENGTH 128
 
 typedef struct Asset
 {
 	char desc[ASSET_DESC_LENGTH];
+	char filename[ASSET_FILENAME_LENGTH];
 	BMAP *bmap;
 } Asset;
 
@@ -140,7 +142,6 @@ STRING *map_settings_ceiling_mdl = "map_settings_ceiling.mdl";
 STRING *map_settings_map_wmb = "map_settings_walls.wmb";
 STRING *map_settings_floor_mdl = "map_settings_floor.mdl";
 
-
 // walls
 STRING *wall_00_pcx = "wall_0.pcx";
 STRING *wall_01_pcx = "wall_1.pcx";
@@ -186,6 +187,7 @@ STRING *wall_40_pcx = "wall_40.pcx";
 STRING *wall_elevator_pcx = "wall_elevator.pcx";
 STRING *wall_elevator_switch_pcx = "wall_elevator_switch_off.pcx";
 STRING *wall_elevator_switch_on_pcx = "wall_elevator_switch_on.pcx";
+STRING *wall_doorway_pcx = "wall_doorway.pcx";
 
 // props
 STRING *props_00_pcx = "props_0.pcx";
@@ -282,8 +284,8 @@ STRING *enemy_guard_shotgun_pcx = "enemy_guard_shotgun.pcx";
 STRING *enemy_soldier_smg_pcx = "enemy_soldier_smg.pcx";
 STRING *enemy_suicider_pcx = "enemy_suicider.pcx";
 STRING *enemy_zombie_pcx = "enemy_zombie.pcx";
-STRING *enemy_support_machinegun_pcx = "enemy_support_machinegun.pcx";
-STRING *enemy_support_rocketlauncher_pcx = "enemy_support_rocketlauncher.pcx";
+STRING *enemy_support_machinegun_pcx = "enemy_s_machinegun.pcx";
+STRING *enemy_support_rocketlauncher_pcx = "enemy_s_rocketlauncher.pcx";
 
 // bosses
 STRING *boss_uber_soldier_pcx = "boss_uber_soldier.pcx";
@@ -302,6 +304,8 @@ array_t *boss_textures;
 BMAP *asset_get_bmap(int type, int index);
 
 STRING *asset_get_desc(int type, int index);
+
+STRING *asset_get_filename(int type, int index);
 
 void asset_add(array_t *array, STRING *desc, STRING *bmap);
 

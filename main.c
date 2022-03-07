@@ -82,6 +82,7 @@ int current_map_id = 0;
 #include "assets.h"
 #include "game_episode.h"
 #include "game_episode_save_n_load.h"
+#include "game_build_map.h"
 #include "editor.h"
 #include "editor_episode_list.h"
 #include "editor_popups.h"
@@ -110,6 +111,7 @@ void editor_switch_state_to(int new_state)
 #include "assets.c"
 #include "game_episode.c"
 #include "game_episode_save_n_load.c"
+#include "game_build_map.c"
 #include "editor.c"
 #include "editor_episode_list.c"
 #include "editor_popups.c"
@@ -158,6 +160,8 @@ void map_editor_startup()
 	assets_initialize();		   // load all editor assets (textures, sprites)
 	imgui_init(0);				   // initialize imgui
 	imgui_change_theme();		   // and apply custom theme
+
+	game_build_map_initialize(); // initialize everything for building the map
 
 	editor_map_initialize();				// initialize everything related to the main editor ui (preview, etc)
 	editor_episode_list_initialize();		// initialize everything to load list of episodes from episodes folder
@@ -211,8 +215,8 @@ void on_frame_event()
 
 		// map settings
 	case EDITOR_STATE_TO_MAP_SETTINGS:
-		editor_map_settings_show(current_map);
 		cell_info_tooltip_counter = 0; // reset tooltip counter
+		editor_map_settings_show(current_map);
 		editor_switch_state_to(EDITOR_STATE_MAP_SETTINGS);
 		break;
 
@@ -231,12 +235,20 @@ void on_frame_event()
 
 		// map test build
 	case EDITOR_STATE_TO_TEST_BUILD:
+		cell_info_tooltip_counter = 0; // reset tooltip counter
+		editor_grid_sprites_hide();
+		game_build_map(&def_episode);
+		editor_switch_state_to(EDITOR_STATE_TEST_BUILD);
 		break;
 
 	case EDITOR_STATE_TEST_BUILD:
+		game_build_map_update(&def_episode);
 		break;
 
 	case EDITOR_STATE_FROM_TEST_BUILD:
+		game_build_map_free();
+		editor_grid_sprites_show(&def_episode);
+		editor_switch_state_to(EDITOR_STATE_EDIT_MAP);
 		break;
 
 		// reset current map
@@ -258,6 +270,8 @@ void on_frame_event()
 void on_exit_event()
 {
 	assets_destroy_all();
+	game_build_map_destroy();
+
 	editor_map_destroy();
 	editor_episode_list_destroy();
 	editor_popups_destroy();
