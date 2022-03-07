@@ -4,6 +4,8 @@
 #define EDITOR_TOP_BAR_HEIGHT 16
 #define EDITOR_SIDE_BAR_WIDTH 280
 
+STRING *direction_tga = "direction.tga";
+
 STRING *editor_ok_str = "Ok";
 STRING *editor_yes_str = "Yes";
 STRING *editor_no_str = "No";

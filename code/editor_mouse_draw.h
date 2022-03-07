@@ -6,6 +6,8 @@ var mouse_draw_cooldown = 0.01;
 
 var rotate_cell_once = false;
 
+int is_cell_allowed_rotation(int type, int asset);
+
 int is_cell_allowed_rotation(Cell *cell);
 
 void editor_map_draw_cell(Cell *to, Cell *from);

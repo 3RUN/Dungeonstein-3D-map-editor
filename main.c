@@ -5,6 +5,7 @@
 
 // to do
 //
+// * add direction to show where current cell is rotated
 // * add connection (draw_line3d) between cells with similar ID
 // * add level test build state
 
@@ -25,6 +26,8 @@ STRING *episode_save_folder_str = "episodes\\";
 STRING *episode_music_folder_str = "music\\";
 STRING *episode_extension_str = ".ep"; // this added to the episode's file name on load/save
 STRING *music_extension_str = ".mid";  // only mid music is used
+
+#define MAX_ENTITIES 9999
 
 #define OBJ_ID skill50
 #define OBJ_POS_X skill51
@@ -333,7 +336,7 @@ void on_f_event(var scancode)
 
 void main()
 {
-	max_entities = 2000;
+	max_entities = MAX_ENTITIES;
 
 	on_d3d_lost = imgui_reset;
 	on_scanmessage = custom_scan_message;

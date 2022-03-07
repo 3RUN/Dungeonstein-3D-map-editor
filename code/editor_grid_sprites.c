@@ -24,6 +24,7 @@ void editor_grid_sprites_show(Episode *episode)
             int cell_asset = c->asset;
 
             ENTITY *sprite_ent = array_get_element_at(ENTITY *, grid_ents, cell_id);
+            ENTITY *dir_ent = array_get_element_at(ENTITY *, grid_dir, cell_id);
             if (sprite_ent)
             {
                 if (is_walls_visible == true && cell_type == ASSET_TYPE_WALLS)
@@ -34,6 +35,10 @@ void editor_grid_sprites_show(Episode *episode)
                 if (is_objects_visible == true && cell_type >= ASSET_TYPE_PROPS)
                 {
                     reset(sprite_ent, INVISIBLE);
+                    if (dir_ent)
+                    {
+                        reset(dir_ent, INVISIBLE);
+                    }
                 }
             }
         }
@@ -52,6 +57,11 @@ void editor_grid_sprites_hide()
             {
                 set(sprite_ent, INVISIBLE);
             }
+            ENTITY *dir_ent = array_get_element_at(ENTITY *, grid_dir, id);
+            if (dir_ent)
+            {
+                set(dir_ent, INVISIBLE);
+            }
             id++;
         }
     }
@@ -64,37 +74,66 @@ void editor_grid_sprite_update_by_id(int id, var pan, int type, int asset)
         return;
     }
 
-    ENTITY *tile = array_get_element_at(ENTITY *, grid_ents, id);
-    if (!tile)
+    ENTITY *cell_ent = array_get_element_at(ENTITY *, grid_ents, id);
+    if (!cell_ent)
     {
         return;
     }
 
-    set(tile, INVISIBLE);
+    set(cell_ent, INVISIBLE);
 
-    tile->pan = pan;
-    tile->OBJ_TYPE_INDEX = type;
-    tile->OBJ_ASSET_INDEX = asset;
+    cell_ent->OBJ_TYPE_INDEX = type;
+    cell_ent->OBJ_ASSET_INDEX = asset;
+
+    // if we need to, update the skin !
+    // also, make visible if this cell is used
+    if (type >= 0)
+    {
+        if (is_walls_visible == true && type == ASSET_TYPE_WALLS)
+        {
+            reset(cell_ent, INVISIBLE);
+        }
+
+        if (is_objects_visible == true && type >= ASSET_TYPE_PROPS)
+        {
+            reset(cell_ent, INVISIBLE);
+        }
+
+        ent_morph(cell_ent, _chr(asset_get_filename(type, asset)));
+    }
+    else
+    {
+        ent_morph(cell_ent, blank_sprite_pcx);
+    }
+}
+
+void editor_grid_direction_sprite_update_by_id(int id, var pan, int type, int asset)
+{
+    if (!grid_dir)
+    {
+        return;
+    }
+
+    ENTITY *dir_ent = array_get_element_at(ENTITY *, grid_dir, id);
+    if (!dir_ent)
+    {
+        return;
+    }
+
+    set(dir_ent, INVISIBLE);
 
     // if we need to, update the skin !
     // also, make visible if this tile is used
     if (type >= 0)
     {
-        if (is_walls_visible == true && type == ASSET_TYPE_WALLS)
-        {
-            reset(tile, INVISIBLE);
-        }
-
         if (is_objects_visible == true && type >= ASSET_TYPE_PROPS)
         {
-            reset(tile, INVISIBLE);
+            if (is_cell_allowed_rotation(type, asset) == true)
+            {
+                dir_ent->pan = pan;
+                reset(dir_ent, INVISIBLE);
+            }
         }
-
-        ent_morph(tile, _chr(asset_get_filename(type, asset)));
-    }
-    else
-    {
-        ent_morph(tile, blank_sprite_pcx);
     }
 }
 
@@ -111,7 +150,7 @@ void editor_grid_sprites_refresh(Episode *episode)
         return;
     }
 
-    if (!grid_ents)
+    if (!grid_ents || !grid_dir)
     {
         return;
     }
@@ -127,18 +166,30 @@ void editor_grid_sprites_refresh(Episode *episode)
             int cell_type = c->type;
             int cell_asset = c->asset;
             editor_grid_sprite_update_by_id(cell_id, cell_pan, cell_type, cell_asset);
+            editor_grid_direction_sprite_update_by_id(cell_id, cell_pan, cell_type, cell_asset);
         }
     }
 }
 
-void grid_ent_fnc()
+void grid_sprite_ent_fnc()
 {
     set(my, PASSABLE | INVISIBLE | NOFILTER | OVERLAY | UNLIT);
-    ent_cloneskin(my);
+    
+    my->ambient = 100;
+    vec_fill(&my->blue, 255);
+    vec_fill(&my->scale_x, 0.5 * GRID_SPRITE_SCALE_FACTOR); // scale down from 64x64 to 32x32 (tile_size)
+    my->pan = CELL_DEF_PAN;                                 // default pan, and don't change this !
+    my->tilt = 90;                                          // look upwards !
+}
+
+void grid_direction_ent_fnc()
+{
+    set(my, PASSABLE | INVISIBLE | NOFILTER | OVERLAY | UNLIT);
 
     my->ambient = 100;
     vec_fill(&my->blue, 255);
     vec_fill(&my->scale_x, 0.5 * GRID_SPRITE_SCALE_FACTOR); // scale down from 64x64 to 32x32 (tile_size)
+    my->pan = CELL_DEF_PAN;                                 // default pan, and don't change this !
     my->tilt = 90;                                          // look upwards !
 }
 
@@ -146,10 +197,17 @@ void editor_grid_sprites_create()
 {
     if (grid_ents)
     {
-        editor_grid_sprites_destroy();
+        editor_grid_sprite_destroy_array(grid_ents);
+        grid_ents = NULL;
     }
-
     grid_ents = array_create(ENTITY *, 1);
+
+    if (grid_dir)
+    {
+        editor_grid_sprite_destroy_array(grid_dir);
+        grid_dir = NULL;
+    }
+    grid_dir = array_create(ENTITY *, 1);
 
     int x = 0, y = 0, id = 0;
     for (y = 0; y < MAP_HEIGHT; y++)
@@ -159,13 +217,16 @@ void editor_grid_sprites_create()
             VECTOR pos;
             vec_set(&pos, vector((MAP_CELL_SIZE * x), -(MAP_CELL_SIZE * y), 0));
 
-            ENTITY *sprite_ent = ent_create(blank_sprite_pcx, &pos, grid_ent_fnc);
+            ENTITY *sprite_ent = ent_create(blank_sprite_pcx, &pos, grid_sprite_ent_fnc);
             sprite_ent->OBJ_ID = id;
             sprite_ent->OBJ_POS_X = x;
             sprite_ent->OBJ_POS_Y = y;
             sprite_ent->OBJ_POS_Z = 0;
-
             array_add(ENTITY *, grid_ents, sprite_ent);
+
+            ENTITY *dir_ent = ent_create(direction_tga, &pos, grid_direction_ent_fnc);
+            dir_ent->z += GRID_DRAW_OFFSET;
+            array_add(ENTITY *, grid_dir, dir_ent);
 
             id++;
         }
@@ -184,25 +245,33 @@ void editor_grid_sprites_reset()
     {
         for (x = 0; x < MAP_WIDTH; x++)
         {
-            editor_grid_sprite_update_by_id(id, 0, TYPE_NONE, ASSET_NONE);
+            editor_grid_sprite_update_by_id(id, CELL_DEF_PAN, TYPE_NONE, ASSET_NONE);
+            editor_grid_direction_sprite_update_by_id(id, CELL_DEF_PAN, TYPE_NONE, ASSET_NONE);
             id++;
         }
     }
 }
 
+void editor_grid_sprite_destroy_array(array_t *array)
+{
+    if (!array)
+    {
+        return;
+    }
+
+    array_enumerate_begin(ENTITY *, array, v)
+    {
+        if (v)
+        {
+            safe_remove(v);
+        }
+    }
+    array_enumerate_end(array);
+    array_destroy(array);
+}
+
 void editor_grid_sprites_destroy()
 {
-    if (grid_ents)
-    {
-        array_enumerate_begin(ENTITY *, grid_ents, v)
-        {
-            if (v)
-            {
-                ptr_remove(v);
-            }
-        }
-        array_enumerate_end(grid_ents);
-        array_destroy(grid_ents);
-        grid_ents = NULL;
-    }
+    editor_grid_sprite_destroy_array(grid_ents);
+    editor_grid_sprite_destroy_array(grid_dir);
 }

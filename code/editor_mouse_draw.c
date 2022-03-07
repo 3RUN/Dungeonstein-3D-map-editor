@@ -1,4 +1,34 @@
 
+int is_cell_allowed_rotation(int type, int asset)
+{
+    if (type == ASSET_TYPE_ENEMIES) // all enemies
+    {
+        return true;
+    }
+
+    if (type == ASSET_TYPE_BOSSES) // all boses
+    {
+        return true;
+    }
+
+    if (type == ASSET_TYPE_PROPS && asset == PROPS_SWITCH) // switch
+    {
+        return true;
+    }
+
+    if (type == ASSET_TYPE_EVENTS && asset == EVENT_PLAYER) // player spawn point
+    {
+        return true;
+    }
+
+    if (type == ASSET_TYPE_EVENTS && asset == EVENT_NPC_TURN_POINT) // enemy/boss turn point
+    {
+        return true;
+    }
+
+    return false;
+}
+
 int is_cell_allowed_rotation(Cell *cell)
 {
     if (!cell)
@@ -90,7 +120,7 @@ void editor_mouse_draw_update(Episode *episode, Cell *drawing_cell)
             {
                 current_cell->pan -= 90;
                 current_cell->pan = cycle(current_cell->pan, 0, 360);
-                editor_grid_sprite_update_by_id(current_cell->id, current_cell->pan, current_cell->type, current_cell->asset);
+                editor_grid_direction_sprite_update_by_id(current_cell->id, current_cell->pan, current_cell->type, current_cell->asset);
                 rotate_cell_once = false;
             }
         }
