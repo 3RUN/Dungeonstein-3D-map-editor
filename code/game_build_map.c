@@ -190,6 +190,18 @@ void solid_ent_fnc()
     my->ambient = 100;
     vec_fill(&my->blue, 255);
     vec_fill(&my->scale_x, 0.5);
+
+    my->material = mtl_solid;
+}
+
+void dynamic_object_fnc()
+{
+    set(my, PASSABLE | NOFILTER | UNLIT);
+    my->ambient = 100;
+    vec_fill(&my->blue, 255);
+    vec_fill(&my->scale_x, 0.5);
+
+    my->material = mtl_solid;
 }
 
 void game_build_walls(Map *map, Cell *cell)
@@ -244,14 +256,6 @@ void game_build_walls(Map *map, Cell *cell)
             }
         }
     }
-}
-
-void dynamic_object_fnc()
-{
-    set(my, PASSABLE | NOFILTER | UNLIT);
-    my->ambient = 100;
-    vec_fill(&my->blue, 255);
-    vec_fill(&my->scale_x, 0.5);
 }
 
 void game_build_dynamic_objects(Cell *cell)

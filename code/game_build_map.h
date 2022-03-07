@@ -45,9 +45,9 @@ void attach_to_wall(ENTITY *ent);
 
 void solid_ent_fnc();
 
-void game_build_walls(Map *map, Cell *cell);
-
 void dynamic_object_fnc();
+
+void game_build_walls(Map *map, Cell *cell);
 
 void game_build_dynamic_objects(Cell *cell);
 

@@ -218,17 +218,19 @@ void on_frame_event()
 		// map settings
 	case EDITOR_STATE_TO_MAP_SETTINGS:
 		cell_info_tooltip_counter = 0; // reset tooltip counter
+		editor_grid_sprites_hide();
 		editor_map_settings_show(current_map);
+		editor_camera_in_map_settings();
 		editor_switch_state_to(EDITOR_STATE_MAP_SETTINGS);
 		break;
 
 	case EDITOR_STATE_MAP_SETTINGS:
 		editor_map_settings_update(&def_episode);
-		editor_camera_in_map_settings();
 		break;
 
 	case EDITOR_STATE_FROM_MAP_SETTINGS:
 		editor_camera_restore_pos_n_angle();
+		editor_grid_sprites_show(&def_episode);
 		editor_map_settings_hide();
 		editor_grid_sprites_refresh(&def_episode);
 		weather_stop_sound();

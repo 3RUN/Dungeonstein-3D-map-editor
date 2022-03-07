@@ -71,6 +71,14 @@ float4 worldPos : TEXCOORD2) : COLOR0
 	color.rgb = lerp ( color.rgb, vecFogColor, Fog );
 	
 	color.a = 1;
+
+	// if color is black (RGB < 8, 8, 8)
+	// then make invisible !
+	if(textureColor.r < 0.031 && textureColor.g < 0.031 && textureColor.b < 0.031)
+	{
+		color.rgb = 0;
+		color.a = 0;
+	}
 	
 	return color;
 }
@@ -79,9 +87,10 @@ technique
 {
 	pass pass0
 	{
-		ZWriteEnable = True;
-		AlphaBlendEnable = False;
-		AlphaTestEnable = False;
+		CullMode = None;
+		//ZWriteEnable = True;
+		//AlphaBlendEnable = False;
+		//AlphaTestEnable = False;
 		
 		VertexShader = compile vs_1_0 VS(); 
 		PixelShader  = compile ps_1_0 PS(); 
