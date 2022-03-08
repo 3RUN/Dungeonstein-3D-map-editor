@@ -73,6 +73,10 @@ void weather_rain_particle(PARTICLE *p);
 
 void weather_snow_particle(PARTICLE *p);
 
+void weather_pause_sound();
+
+void weather_resume_sound();
+
 void weather_stop_sound();
 
 void weather_play_sound(int type);

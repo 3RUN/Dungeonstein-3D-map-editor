@@ -5,9 +5,8 @@
 
 // to do
 //
-// * color bug in map settings level
+// * draw bug (on cell x = 0 y = 0) when top_bar is opened and clicked on the grid
 // * add connection to map edit state (draw_line3d) between cells with similar ID
-// * add floor and ceiling models
 // * add proper functions for test build state
 
 #define PRAGMA_POINTER

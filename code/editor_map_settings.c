@@ -265,6 +265,7 @@ void editor_map_settings_update(Episode *episode)
     imgui_same_line();
     if (imgui_button_withsize(_chr(editor_browse_str), -1, EDITOR_MAP_SETTINGS_MUSIC_BROWSE_BUTTON_HEIGHT))
     {
+        weather_pause_sound();
         is_popup_opened = true;
     }
     imgui_separator();

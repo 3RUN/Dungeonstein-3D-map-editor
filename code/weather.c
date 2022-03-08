@@ -110,6 +110,16 @@ void weather_snow_particle(PARTICLE *p)
     p->event = weather_particle_event;
 }
 
+void weather_pause_sound()
+{
+    snd_pause(weather_sound_handle);
+}
+
+void weather_resume_sound()
+{
+    snd_start(weather_sound_handle);
+}
+
 void weather_stop_sound()
 {
     if (!snd_playing(weather_sound_handle))
