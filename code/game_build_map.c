@@ -366,18 +366,30 @@ void game_build_map(Episode *episode)
         return;
     }
 
+    // find center of the map
+    VECTOR temp_center;
+    vec_set(&temp_center, vector((MAP_WIDTH / 2) * MAP_CELL_SIZE, -(MAP_HEIGHT / 2) * MAP_CELL_SIZE, 0));
+
+    // find scale factor
+    var size_width = MAP_WIDTH * MAP_CELL_SIZE;
+    var size_height = MAP_HEIGHT * MAP_CELL_SIZE;
+    var target_size_width = size_width / ASSET_PREVIEW_IMAGE_WIDTH;
+    var target_size_height = size_height / ASSET_PREVIEW_IMAGE_HEIGHT;
+
     // create ceiling only if there is no weather !
     if (current_map->weather_id <= WEATHER_CLEAR)
     {
-        map_ceiling_ent = ent_create(empty_sprite_pcx, vector(0, 0, MAP_CELL_SIZE / 2), ceiling_floor_ent_fnc);
+        map_ceiling_ent = ent_create(empty_sprite_pcx, vector(temp_center.x, temp_center.y, MAP_CELL_SIZE / 2), ceiling_floor_ent_fnc);
         map_ceiling_ent->tilt = -90;
+        vec_set(&map_ceiling_ent->scale_x, vector(target_size_height, target_size_width, 1));
         map_ceiling_ent->red = get_color_from_hsv(current_map->ceiling_color[0]);
         map_ceiling_ent->green = get_color_from_hsv(current_map->ceiling_color[1]);
         map_ceiling_ent->blue = get_color_from_hsv(current_map->ceiling_color[2]);
     }
 
-    map_floor_ent = ent_create(empty_sprite_pcx, vector(0, 0, -(MAP_CELL_SIZE / 2)), ceiling_floor_ent_fnc);
+    map_floor_ent = ent_create(empty_sprite_pcx, vector(temp_center.x, temp_center.y, -(MAP_CELL_SIZE / 2)), ceiling_floor_ent_fnc);
     map_floor_ent->tilt = 90;
+    vec_set(&map_floor_ent->scale_x, vector(target_size_height, target_size_width, 1));
     map_floor_ent->red = get_color_from_hsv(current_map->floor_color[0]);
     map_floor_ent->green = get_color_from_hsv(current_map->floor_color[1]);
     map_floor_ent->blue = get_color_from_hsv(current_map->floor_color[2]);

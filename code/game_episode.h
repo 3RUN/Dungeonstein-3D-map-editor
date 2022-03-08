@@ -29,8 +29,8 @@
 #define FOG_MAX_END 4096
 
 #define FOG_DEF_COLOR 128
-#define FLOOR_DEF_COLOR 64
-#define CEILING_DEF_COLOR 32
+#define FLOOR_DEF_COLOR 128
+#define CEILING_DEF_COLOR 16
 
 char episode_save_name[EPISODE_FILENAME_LENGTH];
 
