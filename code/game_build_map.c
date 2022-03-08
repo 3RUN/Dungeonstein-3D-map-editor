@@ -382,17 +382,13 @@ void game_build_map(Episode *episode)
         map_ceiling_ent = ent_create(empty_sprite_pcx, vector(temp_center.x, temp_center.y, MAP_CELL_SIZE / 2), ceiling_floor_ent_fnc);
         map_ceiling_ent->tilt = -90;
         vec_set(&map_ceiling_ent->scale_x, vector(target_size_height, target_size_width, 1));
-        map_ceiling_ent->red = get_color_from_hsv(current_map->ceiling_color[0]);
-        map_ceiling_ent->green = get_color_from_hsv(current_map->ceiling_color[1]);
-        map_ceiling_ent->blue = get_color_from_hsv(current_map->ceiling_color[2]);
+        change_color_from_hsv(&map_ceiling_ent->blue, current_map->ceiling_color[0], current_map->ceiling_color[1], current_map->ceiling_color[2]);
     }
 
     map_floor_ent = ent_create(empty_sprite_pcx, vector(temp_center.x, temp_center.y, -(MAP_CELL_SIZE / 2)), ceiling_floor_ent_fnc);
     map_floor_ent->tilt = 90;
     vec_set(&map_floor_ent->scale_x, vector(target_size_height, target_size_width, 1));
-    map_floor_ent->red = get_color_from_hsv(current_map->floor_color[0]);
-    map_floor_ent->green = get_color_from_hsv(current_map->floor_color[1]);
-    map_floor_ent->blue = get_color_from_hsv(current_map->floor_color[2]);
+    change_color_from_hsv(&map_floor_ent->blue, current_map->floor_color[0], current_map->floor_color[1], current_map->floor_color[2]);
 
     int x = 0, y = 0, id = 0;
     for (y = 0; y < MAP_HEIGHT; y++)
@@ -418,6 +414,38 @@ void game_build_map(Episode *episode)
     }
 }
 
+void game_build_weather_settings(Map *map)
+{
+    if (!map)
+    {
+        return;
+    }
+
+    // apply all the settings at the test level
+    // so user can see the changes instantly
+    // camera and fog settings
+    camera->fog_end = map->fog_end;
+    camera->fog_start = map->fog_start;
+
+    camera->clip_near = 0.1;
+    camera->clip_far = FOG_MAX_END * 1.25;
+
+    fog_color = 4;
+    change_color_from_hsv(&d3d_fogcolor4.blue, map->fog_color[0], map->fog_color[1], map->fog_color[2]);
+
+    if (map->weather_id > WEATHER_CLEAR)
+    {
+        change_color_from_hsv(&sky_color.blue, map->ceiling_color[0], map->ceiling_color[1], map->ceiling_color[2]);
+    }
+    else
+    {
+        vec_set(&sky_color, &d3d_fogcolor4);
+    }
+
+    // weather
+    weather_update(map->weather_id);
+}
+
 void game_build_map_update(Episode *episode)
 {
     if (!episode)
@@ -441,30 +469,7 @@ void game_build_map_update(Episode *episode)
     // apply all the settings at the test level
     // so user can see the changes instantly
     // camera and fog settings
-    camera->fog_end = current_map->fog_end;
-    camera->fog_start = current_map->fog_start;
-
-    camera->clip_near = 0.1;
-    camera->clip_far = FOG_MAX_END * 1.25;
-
-    fog_color = 4;
-    d3d_fogcolor4.red = get_color_from_hsv(current_map->fog_color[0]);
-    d3d_fogcolor4.green = get_color_from_hsv(current_map->fog_color[1]);
-    d3d_fogcolor4.blue = get_color_from_hsv(current_map->fog_color[2]);
-
-    if (current_map->weather_id > WEATHER_CLEAR)
-    {
-        sky_color.red = get_color_from_hsv(current_map->ceiling_color[0]);
-        sky_color.green = get_color_from_hsv(current_map->ceiling_color[1]);
-        sky_color.blue = get_color_from_hsv(current_map->ceiling_color[2]);
-    }
-    else
-    {
-        vec_set(&sky_color, &d3d_fogcolor4);
-    }
-
-    // weather
-    weather_update(current_map->weather_id);
+    game_build_weather_settings(current_map);
 
     if (key_esc)
     {

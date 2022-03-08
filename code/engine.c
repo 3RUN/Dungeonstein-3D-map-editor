@@ -9,6 +9,13 @@ float get_color_from_hsv(float value)
     return value * 255;
 }
 
+void change_color_from_hsv(COLOR *color, float color_red, float color_green, float color_blue)
+{
+    color->red = get_color_from_hsv(color_red);
+    color->green = get_color_from_hsv(color_green);
+    color->blue = get_color_from_hsv(color_blue);
+}
+
 void mouse_set_position(VECTOR *pos)
 {
     VECTOR offset;

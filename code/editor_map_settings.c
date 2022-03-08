@@ -313,44 +313,17 @@ void editor_map_settings_update(Episode *episode)
     // apply all the settings at the test level
     // so user can see the changes instantly
     // camera and fog settings
-    camera->fog_end = map_settings.fog_end;
-    camera->fog_start = map_settings.fog_start;
-
-    camera->clip_near = 0.1;
-    camera->clip_far = FOG_MAX_END * 1.25;
-
-    fog_color = 4;
-    d3d_fogcolor4.red = get_color_from_hsv(map_settings.fog_color[0]);
-    d3d_fogcolor4.green = get_color_from_hsv(map_settings.fog_color[1]);
-    d3d_fogcolor4.blue = get_color_from_hsv(map_settings.fog_color[2]);
-
-    if (map_settings.weather_id > WEATHER_CLEAR)
-    {
-        sky_color.red = get_color_from_hsv(map_settings.ceiling_color[0]);
-        sky_color.green = get_color_from_hsv(map_settings.ceiling_color[1]);
-        sky_color.blue = get_color_from_hsv(map_settings.ceiling_color[2]);
-    }
-    else
-    {
-        vec_set(&sky_color, &d3d_fogcolor4);
-    }
-
-    // weather
-    weather_update(map_settings.weather_id);
+    game_build_weather_settings(&map_settings);
 
     // ceiling and floor
     if (map_settings_ceiling_ent)
     {
-        map_settings_ceiling_ent->red = get_color_from_hsv(map_settings.ceiling_color[0]);
-        map_settings_ceiling_ent->green = get_color_from_hsv(map_settings.ceiling_color[1]);
-        map_settings_ceiling_ent->blue = get_color_from_hsv(map_settings.ceiling_color[2]);
+        change_color_from_hsv(&map_settings_ceiling_ent->blue, map_settings.ceiling_color[0], map_settings.ceiling_color[1], map_settings.ceiling_color[2]);
     }
 
     if (map_settings_floor_ent)
     {
-        map_settings_floor_ent->red = get_color_from_hsv(map_settings.floor_color[0]);
-        map_settings_floor_ent->green = get_color_from_hsv(map_settings.floor_color[1]);
-        map_settings_floor_ent->blue = get_color_from_hsv(map_settings.floor_color[2]);
+        change_color_from_hsv(&map_settings_floor_ent->blue, map_settings.floor_color[0], map_settings.floor_color[1], map_settings.floor_color[2]);
     }
 
     // update shaders

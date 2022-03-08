@@ -78,10 +78,6 @@ STRING *editor_info_enemy_behaviour_wait_str = "wait";
 STRING *editor_info_enemy_behaviour_deaf_str = "deaf";
 STRING *editor_info_enemy_behaviour_patrol_str = "patrol";
 
-float get_hsv_from_color(float value);
-
-float get_color_from_hsv(float value);
-
 void editor_create_tooltip(char *tooltip);
 
 void editor_help_maker(char *desc);

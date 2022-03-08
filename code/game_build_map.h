@@ -64,6 +64,8 @@ void game_build_dynamic_objects(Cell *cell);
 
 void game_build_map(Episode *episode);
 
+void game_build_weather_settings(Map *map);
+
 void game_build_map_update(Episode *episode);
 
 #endif

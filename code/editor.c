@@ -1,14 +1,4 @@
 
-float get_hsv_from_color(float value)
-{
-    return value / 255;
-}
-
-float get_color_from_hsv(float value)
-{
-    return value * 255;
-}
-
 void editor_create_tooltip(char *tooltip)
 {
     if (imgui_is_item_hovered())

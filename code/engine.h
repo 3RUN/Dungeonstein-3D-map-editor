@@ -9,6 +9,8 @@ float get_hsv_from_color(float value);
 
 float get_color_from_hsv(float value);
 
+void change_color_from_hsv(COLOR *color, float color_red, float color_green, float color_blue);
+
 void mouse_set_position(VECTOR *pos);
 
 VECTOR *mouse_get_position();

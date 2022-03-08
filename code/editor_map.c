@@ -426,9 +426,7 @@ void editor_map_background()
     camera->clip_far = FOG_MAX_END * 1.25;
 
     fog_color = 4;
-    sky_color.red = get_color_from_hsv(config_current.background_color[0]);
-    sky_color.green = get_color_from_hsv(config_current.background_color[1]);
-    sky_color.blue = get_color_from_hsv(config_current.background_color[2]);
+    change_color_from_hsv(&sky_color.blue, config_current.background_color[0], config_current.background_color[1], config_current.background_color[2]);
     vec_set(&d3d_fogcolor4, &sky_color);
 }
 
