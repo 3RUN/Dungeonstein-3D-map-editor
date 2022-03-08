@@ -5,6 +5,7 @@
 
 // to do
 //
+// * color bug in map settings level
 // * add connection to map edit state (draw_line3d) between cells with similar ID
 // * add floor and ceiling models
 // * add proper functions for test build state
@@ -165,6 +166,7 @@ void map_editor_startup()
 	imgui_change_theme();		   // and apply custom theme
 
 	game_build_map_initialize(); // initialize everything for building the map
+	wait_for(game_build_map_initialize);
 
 	editor_map_initialize();				// initialize everything related to the main editor ui (preview, etc)
 	editor_episode_list_initialize();		// initialize everything to load list of episodes from episodes folder

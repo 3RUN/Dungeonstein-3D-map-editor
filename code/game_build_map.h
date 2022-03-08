@@ -18,6 +18,9 @@ MATERIAL *mtl_two_sided;
 var shader_level_ambient = 0.5;
 var shader_angle_surface_darken = 0.9;
 
+ENTITY *map_ceiling_ent = NULL;
+ENTITY *map_floor_ent = NULL;
+
 array_t *map_solid = NULL;
 array_t *map_props = NULL;
 array_t *map_events = NULL;
@@ -50,6 +53,8 @@ int is_a_switch(int type, int asset);
 void attach_to_wall(ENTITY *ent);
 
 void solid_ent_fnc();
+
+void ceiling_floor_ent_fnc();
 
 void dynamic_object_fnc();
 

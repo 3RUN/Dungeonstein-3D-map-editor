@@ -4,6 +4,7 @@
 #define GRID_SPRITE_SCALE_FACTOR 0.95
 
 STRING *blank_sprite_pcx = "blank.pcx";
+STRING *empty_sprite_pcx = "empty.pcx";
 
 array_t *grid_ents = NULL;
 array_t *grid_dir = NULL;

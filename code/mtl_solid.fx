@@ -43,8 +43,8 @@ out float4 outworldPos : TEXCOORD2)
 
 	outcolor = (vecAmbient * vecLight) + float4(vecEmissive.xyz * vecColor.xyz, vecLight.w);
 
-	outcolor.rgb = saturate(outcolor.rgb);
-	outcolor.rgb = pow(outcolor.rgb, vecSkill1.x); // adjustable brightness
+	outcolor.rgb = clamp(outcolor.rgb, 0.004, 255); // 1 ... 255
+	outcolor.rgb = pow(outcolor.rgb, vecSkill1.x);
 }
 
 float4 PS(
@@ -63,9 +63,9 @@ float4 worldPos : TEXCOORD2) : COLOR0
 	
 	color.rgb *= textureColor.rgb;
 	
-	float fDepth = distance ( vecViewPos.xyz, worldPos.xyz );
-	float Fog = saturate ( ( fDepth - vecFog.x ) * vecFog.z );
-	color.rgb = lerp ( color.rgb, vecFogColor, Fog );
+	float fDepth = distance(vecViewPos.xyz, worldPos.xyz);
+	float Fog = saturate((fDepth - vecFog.x) * vecFog.z);
+	color.rgb = lerp(color.rgb, vecFogColor, Fog);
 	
 	color.a = 1;
 
@@ -88,8 +88,8 @@ technique
 		//AlphaBlendEnable = False;
 		//AlphaTestEnable = False;
 		
-		VertexShader = compile vs_1_0 VS(); 
-		PixelShader  = compile ps_1_0 PS(); 
+		VertexShader = compile vs_1_1 VS(); 
+		PixelShader  = compile ps_1_1 PS(); 
 	}
 }
 

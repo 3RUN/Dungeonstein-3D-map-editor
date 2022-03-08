@@ -14,13 +14,9 @@ void game_build_map_initialize()
     // create materials
     mtl_solid = mtl_create();
     effect_load(mtl_solid, "mtl_solid.fx");
-    mtl_solid->skill1 = floatv(shader_level_ambient);
-    mtl_solid->skill2 = floatv(shader_angle_surface_darken);
 
     mtl_two_sided = mtl_create();
     effect_load(mtl_two_sided, "mtl_two_sided.fx");
-    mtl_two_sided->skill1 = floatv(shader_level_ambient);
-    mtl_two_sided->skill2 = floatv(shader_angle_surface_darken);
 
     map_solid = array_create(ENTITY *, 1);
     map_props = array_create(ENTITY *, 1);
@@ -60,6 +56,16 @@ void game_build_destroy_array(array_t *array)
 
 void game_build_map_free()
 {
+    if (map_ceiling_ent)
+    {
+        safe_remove(map_ceiling_ent);
+    }
+
+    if (map_floor_ent)
+    {
+        safe_remove(map_floor_ent);
+    }
+
     game_build_free_array(map_solid);
     game_build_free_array(map_props);
     game_build_free_array(map_events);
@@ -81,6 +87,17 @@ void game_build_map_destroy()
         effect_load(mtl_two_sided, NULL);
         ptr_remove(mtl_two_sided);
     }
+
+    if (map_ceiling_ent)
+    {
+        safe_remove(map_ceiling_ent);
+    }
+
+    if (map_floor_ent)
+    {
+        safe_remove(map_floor_ent);
+    }
+
     game_build_destroy_array(map_solid);
     game_build_destroy_array(map_props);
     game_build_destroy_array(map_events);
@@ -208,19 +225,20 @@ void attach_to_wall(ENTITY *ent)
 
 void solid_ent_fnc()
 {
-    set(my, PASSABLE | NOFILTER | UNLIT | DECAL);
-    my->ambient = 100;
-    vec_fill(&my->blue, 255);
+    set(my, PASSABLE | LIGHT | NOFILTER | UNLIT | DECAL);
     vec_fill(&my->scale_x, 0.5);
+    my->material = mtl_solid;
+}
 
+void ceiling_floor_ent_fnc()
+{
+    set(my, PASSABLE | LIGHT | NOFILTER | UNLIT | DECAL);
     my->material = mtl_solid;
 }
 
 void dynamic_object_fnc()
 {
-    set(my, PASSABLE | NOFILTER | UNLIT);
-    my->ambient = 100;
-    vec_fill(&my->blue, 255);
+    set(my, PASSABLE | LIGHT | NOFILTER | UNLIT);
     vec_fill(&my->scale_x, 0.5);
 }
 
@@ -347,6 +365,22 @@ void game_build_map(Episode *episode)
     {
         return;
     }
+
+    // create ceiling only if there is no weather !
+    if (current_map->weather_id <= WEATHER_CLEAR)
+    {
+        map_ceiling_ent = ent_create(empty_sprite_pcx, vector(0, 0, MAP_CELL_SIZE / 2), ceiling_floor_ent_fnc);
+        map_ceiling_ent->tilt = -90;
+        map_ceiling_ent->red = get_color_from_hsv(current_map->ceiling_color[0]);
+        map_ceiling_ent->green = get_color_from_hsv(current_map->ceiling_color[1]);
+        map_ceiling_ent->blue = get_color_from_hsv(current_map->ceiling_color[2]);
+    }
+
+    map_floor_ent = ent_create(empty_sprite_pcx, vector(0, 0, -(MAP_CELL_SIZE / 2)), ceiling_floor_ent_fnc);
+    map_floor_ent->tilt = 90;
+    map_floor_ent->red = get_color_from_hsv(current_map->floor_color[0]);
+    map_floor_ent->green = get_color_from_hsv(current_map->floor_color[1]);
+    map_floor_ent->blue = get_color_from_hsv(current_map->floor_color[2]);
 
     int x = 0, y = 0, id = 0;
     for (y = 0; y < MAP_HEIGHT; y++)

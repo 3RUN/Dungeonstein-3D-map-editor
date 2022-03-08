@@ -1,7 +1,7 @@
 
 void editor_map_fnc()
 {
-    set(my, INVISIBLE | UNLIT | LIGHT);
+    set(my, INVISIBLE | PASSABLE | LIGHT | NOFILTER | UNLIT | DECAL);
     my->material = mtl_solid;
 }
 
@@ -352,4 +352,11 @@ void editor_map_settings_update(Episode *episode)
         map_settings_floor_ent->green = get_color_from_hsv(map_settings.floor_color[1]);
         map_settings_floor_ent->blue = get_color_from_hsv(map_settings.floor_color[2]);
     }
+
+    // update shaders
+    mtl_solid->skill1 = floatv(shader_level_ambient);
+    mtl_solid->skill2 = floatv(shader_angle_surface_darken);
+
+    mtl_two_sided->skill1 = floatv(shader_level_ambient);
+    mtl_two_sided->skill2 = floatv(shader_angle_surface_darken);
 }
