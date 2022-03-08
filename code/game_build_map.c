@@ -11,6 +11,17 @@ void game_build_map_initialize()
     cardinal_rot[BOTTOM] = 90; // bottom
     cardinal_rot[LEFT] = 0;    // left
 
+    // create materials
+    mtl_solid = mtl_create();
+    effect_load(mtl_solid, "mtl_solid.fx");
+    mtl_solid->skill1 = floatv(shader_level_ambient);
+    mtl_solid->skill2 = floatv(shader_angle_surface_darken);
+
+    mtl_two_sided = mtl_create();
+    effect_load(mtl_two_sided, "mtl_two_sided.fx");
+    mtl_two_sided->skill1 = floatv(shader_level_ambient);
+    mtl_two_sided->skill2 = floatv(shader_angle_surface_darken);
+
     map_solid = array_create(ENTITY *, 1);
     map_props = array_create(ENTITY *, 1);
     map_events = array_create(ENTITY *, 1);
@@ -59,6 +70,17 @@ void game_build_map_free()
 
 void game_build_map_destroy()
 {
+    if (mtl_solid)
+    {
+        effect_load(mtl_solid, NULL);
+        ptr_remove(mtl_solid);
+    }
+
+    if (mtl_two_sided)
+    {
+        effect_load(mtl_two_sided, NULL);
+        ptr_remove(mtl_two_sided);
+    }
     game_build_destroy_array(map_solid);
     game_build_destroy_array(map_props);
     game_build_destroy_array(map_events);
@@ -200,8 +222,6 @@ void dynamic_object_fnc()
     my->ambient = 100;
     vec_fill(&my->blue, 255);
     vec_fill(&my->scale_x, 0.5);
-
-    my->material = mtl_solid;
 }
 
 void game_build_walls(Map *map, Cell *cell)
@@ -272,11 +292,13 @@ void game_build_dynamic_objects(Cell *cell)
     vec_set(&spawn_pos, &cell->worldpos);
 
     ENTITY *ent = ent_create(asset_get_filename(type, asset), &spawn_pos, dynamic_object_fnc);
+    ent->material = mtl_solid;
 
     if (is_cell_allowed_rotation(type, asset) == true && is_npc(type, asset) == false) // but ignore enemies/bosses
     {
         set(ent, DECAL);
         ent->pan = cell->pan;
+        ent->material = mtl_two_sided;
         if (is_a_door(type, asset) == true || is_a_fence(type, asset) == true)
         {
             ent->pan = cell->pan - 90; // correct door position
@@ -362,6 +384,13 @@ void game_build_map_update(Episode *episode)
     {
         return;
     }
+
+    // update shaders
+    mtl_solid->skill1 = floatv(shader_level_ambient);
+    mtl_solid->skill2 = floatv(shader_angle_surface_darken);
+
+    mtl_two_sided->skill1 = floatv(shader_level_ambient);
+    mtl_two_sided->skill2 = floatv(shader_angle_surface_darken);
 
     // apply all the settings at the test level
     // so user can see the changes instantly

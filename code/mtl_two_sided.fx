@@ -84,6 +84,7 @@ technique
 {
 	pass pass0
 	{
+		CullMode = None;
 		//ZWriteEnable = True;
 		//AlphaBlendEnable = False;
 		//AlphaTestEnable = False;

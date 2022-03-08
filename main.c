@@ -5,7 +5,8 @@
 
 // to do
 //
-// * add connection (draw_line3d) between cells with similar ID
+// * add connection to map edit state (draw_line3d) between cells with similar ID
+// * add floor and ceiling models
 // * add proper functions for test build state
 
 #define PRAGMA_POINTER

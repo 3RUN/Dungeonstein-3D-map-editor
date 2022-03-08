@@ -7,10 +7,6 @@ void editor_map_fnc()
 
 void editor_map_settings_initialize()
 {
-    // create materials first
-    mtl_solid = mtl_create();
-    effect_load(mtl_solid, "mtl_solid.fx");
-
     // create visible entities
     map_settings_ceiling_ent = ent_create(map_settings_ceiling_mdl, nullvector, editor_map_fnc);
     map_settings_walls_ent = ent_create(map_settings_map_wmb, nullvector, editor_map_fnc);
@@ -73,12 +69,6 @@ void editor_map_settings_destroy()
     if (map_settings_floor_ent)
     {
         safe_remove(map_settings_floor_ent);
-    }
-
-    if (mtl_solid)
-    {
-        effect_load(mtl_solid, NULL);
-        ptr_remove(mtl_solid);
     }
 
     int i = 0;

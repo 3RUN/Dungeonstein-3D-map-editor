@@ -12,6 +12,12 @@
 VECTOR cardinal_dir[MAX_DIRECTION_STEP]; // top/right/bottom/left
 var cardinal_rot[MAX_DIRECTION_STEP];    // top/right/bottom/left
 
+MATERIAL *mtl_solid;
+MATERIAL *mtl_two_sided;
+
+var shader_level_ambient = 0.5;
+var shader_angle_surface_darken = 0.9;
+
 array_t *map_solid = NULL;
 array_t *map_props = NULL;
 array_t *map_events = NULL;

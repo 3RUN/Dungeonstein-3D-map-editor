@@ -11,8 +11,6 @@ ENTITY *map_settings_ceiling_ent = NULL;
 ENTITY *map_settings_walls_ent = NULL;
 ENTITY *map_settings_floor_ent = NULL;
 
-MATERIAL *mtl_solid;
-
 char *map_settings_window_id = "Map settings##Map settings window";
 char *map_settings_weather_combobox_id = "##Weather type combobox";
 char *map_settings_fog_start_slider_id = "##Fog start slider";
