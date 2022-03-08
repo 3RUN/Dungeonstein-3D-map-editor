@@ -43,6 +43,7 @@ void editor_map_draw_cell(Cell *to, Cell *from)
 
     cell_copy(to, from);
     editor_grid_sprite_update_by_id(to->id, to->pan, to->type, to->asset);
+    editor_grid_direction_sprite_update_by_id(to->id, to->pan, to->type, to->asset);
 }
 
 void editor_map_erase_cell(Cell *cell)
@@ -56,6 +57,7 @@ void editor_map_erase_cell(Cell *cell)
 
     cell_copy(cell, NULL);
     editor_grid_sprite_update_by_id(cell->id, cell->pan, cell->type, cell->asset);
+    editor_grid_direction_sprite_update_by_id(cell->id, cell->pan, cell->type, cell->asset);
 }
 
 void editor_mouse_draw_update(Episode *episode, Cell *drawing_cell)
