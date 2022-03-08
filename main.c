@@ -5,7 +5,7 @@
 
 // to do
 //
-// * add connection to map edit state (draw_line3d) between cells with similar ID
+// * add flood fill (from player's start position) to remove backfaces of the level
 // * add proper functions for test build state
 
 #define PRAGMA_POINTER
@@ -66,7 +66,7 @@ int is_top_bar_used = false; // true when top bar's contex menu is opened
 int is_grid_visible = true;
 int is_walls_visible = true;
 int is_objects_visible = true;
-int is_connections_visible = true;
+int is_cell_links_visible = true;
 
 int mouse_x = 0;
 int mouse_y = 0;
@@ -83,7 +83,7 @@ int current_map_id = 0;
 #include "config.h"
 #include "assets.h"
 #include "game_episode.h"
-#include "game_episode_save_n_load.h"
+#include "game_e_save_n_load.h"
 #include "game_build_map.h"
 #include "editor.h"
 #include "editor_episode_list.h"
@@ -96,6 +96,7 @@ int current_map_id = 0;
 #include "editor_cam_n_grid.h"
 #include "editor_obj_params.h"
 #include "editor_mouse_draw.h"
+#include "editor_cell_links.h"
 #include "weather.h"
 
 Episode def_episode;
@@ -112,7 +113,7 @@ void editor_switch_state_to(int new_state)
 #include "config.c"
 #include "assets.c"
 #include "game_episode.c"
-#include "game_episode_save_n_load.c"
+#include "game_e_save_n_load.c"
 #include "game_build_map.c"
 #include "editor.c"
 #include "editor_episode_list.c"
@@ -125,11 +126,13 @@ void editor_switch_state_to(int new_state)
 #include "editor_cam_n_grid.c"
 #include "editor_obj_params.c"
 #include "editor_mouse_draw.c"
+#include "editor_cell_links.c"
 #include "weather.c"
 
 void editor_reset()
 {
 	editor_map_reset();
+	editor_cell_links_destroy();
 
 	current_map_id = 0;
 
@@ -141,7 +144,7 @@ void editor_reset()
 	is_grid_visible = true;
 	is_walls_visible = true;
 	is_objects_visible = true;
-	is_connections_visible = true;
+	is_cell_links_visible = true;
 }
 
 void map_editor_startup()
@@ -213,6 +216,7 @@ void on_frame_event()
 	case EDITOR_STATE_EDIT_MAP:
 		editor_grid_get_mouse_pos(&mouse_x, &mouse_y);
 		editor_map_update(&def_episode);
+		editor_cell_links_update(&def_episode);
 		editor_camera_n_grid_update();
 		break;
 
@@ -250,6 +254,7 @@ void on_frame_event()
 
 	case EDITOR_STATE_TEST_BUILD:
 		game_build_map_update(&def_episode);
+		editor_cell_links_update(&def_episode);
 		editor_camera_in_test_build();
 		break;
 
@@ -288,6 +293,7 @@ void on_exit_event()
 	editor_map_settings_destroy();
 	editor_music_browser_destroy();
 	editor_grid_sprites_destroy();
+	editor_cell_links_destroy();
 }
 
 void on_esc_event()

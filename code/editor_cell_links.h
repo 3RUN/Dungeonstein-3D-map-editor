@@ -1,0 +1,35 @@
+#ifndef _EDITOR_CELL_LINKS_H_
+#define _EDITOR_CELL_LINKS_H_
+
+#define CELL_LINK_Z_OFFSET 0.5
+#define LASERBEAM_COLOR COLOR_GREEN
+
+array_t *switch_n_trigger_list = NULL;
+array_t *objects_to_link_list = NULL;
+
+var link_refresh_cooldown = 1; // update each second !
+var link_refresh_timer = 0;
+
+var laserbeam_fade_speed = 5;
+var laserbeam_alpha = 75;
+var laserbeam_size = 10;
+
+void particle_laserbeam_event(PARTICLE *p);
+
+void particle_laserbeam(PARTICLE *p);
+
+int is_activation_cell(Cell *cell);
+
+int is_object_to_link(Cell *cell);
+
+void editor_cell_links_destroy_array(array_t *array);
+
+void editor_cell_links_destroy();
+
+void editor_cell_show_links();
+
+void editor_cell_find_links(Map *map);
+
+void editor_cell_links_update(Episode *episode);
+
+#endif

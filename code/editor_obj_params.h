@@ -3,7 +3,7 @@
 
 // WALLS
 // * "flas" is telling wether it's a secret wall (true) or not (false)
-// * "event_type" is holding activation type (0 - interaction (default), 1 - trigger zone or 0 - switch)
+// * "event_type" is holding activation type (0 - interaction (default), 1 - trigger zone or 2 - switch)
 // * "event_id" is holding id of a trigger zone or switch (range: 0...MAX_ID_RANGE)
 
 // PROPS

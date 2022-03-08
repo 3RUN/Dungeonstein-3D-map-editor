@@ -361,7 +361,7 @@ void editor_map_top_bar(Episode *episode)
             {
                 editor_grid_sprites_refresh(episode);
             }
-            imgui_checkbox(_chr(editor_view_connections_str), &is_connections_visible);
+            imgui_checkbox(_chr(editor_view_cell_links_str), &is_cell_links_visible);
             imgui_end_menu();
         }
 
