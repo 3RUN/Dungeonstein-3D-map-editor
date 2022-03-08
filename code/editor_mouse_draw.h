@@ -1,6 +1,8 @@
 #ifndef _EDITOR_MOUSE_DRAW_H_
 #define _EDITOR_MOUSE_DRAW_H_
 
+var mouse_resume_drawing = true; // used to prevent drawing when 'top bar' menu is used
+
 var mouse_draw_timer = 0;
 var mouse_draw_cooldown = 0.01;
 var mouse_draw_once = false;

@@ -479,10 +479,10 @@ void editor_map_update(Episode *episode)
 
     imgui_start_imode();
     editor_map_side_bar(episode);
+    editor_mouse_draw_update(episode, &preview_cell);
     editor_map_top_bar(episode);
     editor_map_popup(episode);
     editor_map_background();
     editor_map_tooltip(episode);
-    editor_mouse_draw_update(episode, &preview_cell);
     imgui_end_imode();
 }

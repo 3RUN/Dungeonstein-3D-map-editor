@@ -79,6 +79,11 @@ void editor_mouse_draw_update(Episode *episode, Cell *drawing_cell)
 
     if (is_allowed_to_draw() == false)
     {
+        if (is_top_bar_used == true)
+        {
+            mouse_resume_drawing = false;
+            mouse_draw_once = true;
+        }
         return;
     }
 
@@ -98,6 +103,20 @@ void editor_mouse_draw_update(Episode *episode, Cell *drawing_cell)
     else
     {
         rotate_cell_once = true;
+    }
+
+    if (mouse_resume_drawing == false)
+    {
+        if (mouse_left)
+        {
+            if (mouse_draw_once == true)
+            {
+                mouse_resume_drawing = true;
+                mouse_draw_once = false;
+            }
+        }
+
+        return;
     }
 
     if (mouse_left)
