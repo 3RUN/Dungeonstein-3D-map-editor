@@ -1,6 +1,7 @@
 
 void editor_music_browser_initialize()
 {
+    master_vol = 100;
     music_found_txt = txt_create(MAX_AMOUNT_OF_MUSIC_TO_LOAD, 0);
     editor_music_browser_refresh_list();
 }

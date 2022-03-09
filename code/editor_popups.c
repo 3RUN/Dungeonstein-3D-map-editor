@@ -779,6 +779,7 @@ void editor_popup_music_browser(Episode *episode)
     {
         if (found_music_index >= 0)
         {
+            master_vol = 100;
             weather_resume_sound();
             media_stop(playing_music_handle);
             is_music_playing_failed = false;
@@ -802,6 +803,7 @@ void editor_popup_music_browser(Episode *episode)
     imgui_same_line();
     if (imgui_button_withsize(_chr(editor_close_str), width, EDITOR_POPUP_BUTTON_HEIGHT) || key_esc)
     {
+        master_vol = 100;
         weather_resume_sound();
         media_stop(playing_music_handle);
         is_music_playing_failed = false;
