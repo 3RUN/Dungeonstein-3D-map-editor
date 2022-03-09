@@ -12,6 +12,11 @@ void editor_grid_sprites_show(Episode *episode)
         return;
     }
 
+    if (cursor_sprite_ent)
+    {
+        reset(cursor_sprite_ent, INVISIBLE);
+    }
+
     int x = 0, y = 0;
     for (y = 0; y < MAP_HEIGHT; y++)
     {
@@ -47,6 +52,11 @@ void editor_grid_sprites_show(Episode *episode)
 
 void editor_grid_sprites_hide()
 {
+    if (cursor_sprite_ent)
+    {
+        set(cursor_sprite_ent, INVISIBLE);
+    }
+
     int x = 0, y = 0, id = 0;
     for (y = 0; y < MAP_HEIGHT; y++)
     {
@@ -223,6 +233,11 @@ void editor_grid_sprites_refresh(Episode *episode)
         return;
     }
 
+    if (cursor_sprite_ent)
+    {
+        reset(cursor_sprite_ent, INVISIBLE);
+    }
+
     int x = 0, y = 0;
     for (y = 0; y < MAP_HEIGHT; y++)
     {
@@ -255,8 +270,18 @@ void grid_direction_ent_fnc()
     my->tilt = 90;                                          // look upwards !
 }
 
+void cursor_sprite_ent_fnc()
+{
+    set(my, PASSABLE | INVISIBLE | TRANSLUCENT | NOFILTER | BRIGHT | UNLIT);
+    vec_fill(&my->scale_x, 0.5 * GRID_SPRITE_SCALE_FACTOR); // scale down from 64x64 to 32x32 (tile_size)
+    my->pan = CELL_DEF_PAN;                                 // default pan, and don't change this !
+    my->tilt = 90;                                          // look upwards !
+}
+
 void editor_grid_sprites_create()
 {
+    cursor_sprite_ent = ent_create(cursor_sprite_tga, nullvector, cursor_sprite_ent_fnc);
+
     if (grid_ents)
     {
         editor_grid_sprite_destroy_array(grid_ents);
@@ -320,6 +345,36 @@ void editor_grid_sprite_destroy_array(array_t *array)
 
 void editor_grid_sprites_destroy()
 {
+    if (cursor_sprite_ent)
+    {
+        safe_remove(cursor_sprite_ent);
+    }
+
     editor_grid_sprite_destroy_array(grid_ents);
     editor_grid_sprite_destroy_array(grid_dir);
+}
+
+void editor_grid_update(Episode *episode)
+{
+    if (!episode)
+    {
+        return;
+    }
+
+    if (is_allowed_to_draw() == false)
+    {
+        return;
+    }
+
+    if (cursor_sprite_ent)
+    {
+        VECTOR cursor_pos;
+        vec_set(&cursor_pos, &vec_mouse_on_grid);
+        vec_scale(&cursor_pos, MAP_CELL_SIZE);
+        vec_set(&cursor_sprite_ent->x, &cursor_pos);
+
+        cursor_sprite_ent->alpha -= cursor_fade_speed * time_step;
+        cursor_sprite_ent->alpha = cycle(cursor_sprite_ent->alpha, cursor_alpha_min, cursor_alpha_max);
+        cursor_sprite_ent->ambient = cursor_sprite_ent->alpha;
+    }
 }

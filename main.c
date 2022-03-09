@@ -5,7 +5,6 @@
 
 // to do
 //
-// * add blinking tile onto the map to show where we are going to add/remove/rotate
 // * change mouse icon when tool is changed (draw, eyedropper)
 // * add help info
 // * add flood fill (from player's start position) to remove backfaces of the level
@@ -226,6 +225,7 @@ void on_frame_event()
 		editor_grid_get_mouse_pos(&mouse_x, &mouse_y);
 		editor_map_update(&def_episode);
 		editor_cell_links_update(&def_episode);
+		editor_grid_update(&def_episode);
 		editor_camera_n_grid_update();
 		break;
 

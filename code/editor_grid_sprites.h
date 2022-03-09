@@ -12,6 +12,13 @@
 STRING *blank_sprite_pcx = "blank.pcx";
 STRING *empty_sprite_pcx = "empty.pcx";
 STRING *secret_sprite_tga = "secret.tga";
+STRING *cursor_sprite_tga = "cursor.tga";
+
+ENTITY *cursor_sprite_ent = NULL;
+
+var cursor_fade_speed = 7.5;
+var cursor_alpha_min = 50;
+var cursor_alpha_max = 100;
 
 array_t *grid_ents = NULL;
 array_t *grid_dir = NULL;
@@ -30,10 +37,14 @@ void grid_sprite_ent_fnc();
 
 void grid_direction_ent_fnc();
 
+void cursor_sprite_ent_fnc();
+
 void editor_grid_sprites_create();
 
 void editor_grid_sprite_destroy_array(array_t *array);
 
 void editor_grid_sprites_destroy();
+
+void editor_grid_update(Episode *episode);
 
 #endif
