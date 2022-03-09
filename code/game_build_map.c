@@ -212,6 +212,21 @@ int is_player_start(int type, int asset)
     return true;
 }
 
+int is_map_finish_elevator(int type, int asset)
+{
+    if (type != ASSET_TYPE_WALLS)
+    {
+        return false;
+    }
+
+    if (asset != WALLS_ELEVATOR_SWITCH)
+    {
+        return false;
+    }
+
+    return true;
+}
+
 int is_a_switch(int type, int asset)
 {
     if (type != ASSET_TYPE_PROPS)
@@ -276,6 +291,11 @@ void game_build_walls(Map *map, Cell *cell)
     VECTOR world_pos;
     vec_set(&world_pos, &cell->worldpos);
 
+    if (is_map_finish_elevator(type, asset) == true)
+    {
+        is_level_finish_found = true;
+    }
+
     int i = 0;
     for (i = 0; i < MAX_DIRECTION_STEP; i++)
     {
@@ -339,7 +359,11 @@ void game_build_dynamic_objects(Cell *cell)
         }
     }
 
-    if (is_a_switch(type, asset) == true)
+    if (is_player_start(type, asset) == true)
+    {
+        is_player_position_found = true;
+    }
+    else if (is_a_switch(type, asset) == true)
     {
         attach_to_wall(ent);
     }

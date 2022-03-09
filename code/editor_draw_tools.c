@@ -64,6 +64,36 @@ void editor_erase_player(Episode *episode)
     }
 }
 
+void editor_erase_finish(Episode *episode)
+{
+    if (!episode)
+    {
+        return;
+    }
+
+    Map *current_map = map_get_active(episode);
+    if (!current_map)
+    {
+        return;
+    }
+
+    int x = 0, y = 0, id = 0;
+    for (y = 0; y < MAP_HEIGHT; y++)
+    {
+        for (x = 0; x < MAP_WIDTH; x++)
+        {
+            Cell *cell = &current_map->cell[x][y];
+
+            if (is_map_finish_elevator(cell->type, cell->asset) == false)
+            {
+                continue;
+            }
+
+            editor_erase_cell(cell);
+        }
+    }
+}
+
 void editor_draw_cell(Episode *episode, Cell *to, Cell *from)
 {
     if (!episode)
@@ -79,6 +109,10 @@ void editor_draw_cell(Episode *episode, Cell *to, Cell *from)
     if (is_player_start(from->type, from->asset) == true)
     {
         editor_erase_player(episode);
+    }
+    else if (is_map_finish_elevator(from->type, from->asset) == true)
+    {
+        editor_erase_finish(episode);
     }
 
     cell_copy(to, from);

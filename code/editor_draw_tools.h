@@ -17,6 +17,10 @@ STRING *current_tool_str = "Editing tool: none;";
 
 int is_cell_allowed_rotation(int type, int asset);
 
+void editor_erase_player(Episode *episode);
+
+void editor_erase_finish(Episode *episode);
+
 void editor_draw_cell(Episode *episode, Cell *to, Cell *from);
 
 void editor_erase_cell(Cell *cell);

@@ -150,6 +150,11 @@ void editor_cell_show_links()
 
 void editor_cell_find_links(Map *map)
 {
+    if (proc_status(editor_cell_find_links) > 1)
+    {
+        return;
+    }
+
     if (!map)
     {
         return;

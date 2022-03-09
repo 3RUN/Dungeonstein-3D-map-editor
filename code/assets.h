@@ -33,6 +33,9 @@ typedef struct Asset
 #define TOTAL_ENEMY_TEXTURES 9
 #define TOTAL_BOSS_TEXTURES 5
 
+// walls
+#define WALLS_ELEVATOR_SWITCH 42
+
 // props id
 #define PROPS_KNIGHT 0
 #define PROPS_BARREL_WOODEN 1

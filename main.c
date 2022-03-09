@@ -5,12 +5,11 @@
 
 // to do
 //
+// * add "ctrl + s" shortcut for saving
 // * add flood fill (from player's start position) to remove backfaces of the level
 // * add proper functions for test build state
 //
 // * expand test build state with info:
-// - player found or not
-// - exit switch found or not
 // - level leaking or not (optional)
 // - map settings inside of the test build state
 
@@ -91,6 +90,7 @@ int current_map_id = 0;
 #include "game_episode.h"
 #include "game_e_save_n_load.h"
 #include "game_build_map.h"
+#include "game_build_info.h"
 #include "editor.h"
 #include "editor_episode_list.h"
 #include "editor_popups.h"
@@ -121,6 +121,7 @@ void editor_switch_state_to(int new_state)
 #include "game_episode.c"
 #include "game_e_save_n_load.c"
 #include "game_build_map.c"
+#include "game_build_info.c"
 #include "editor.c"
 #include "editor_episode_list.c"
 #include "editor_popups.c"
@@ -182,6 +183,8 @@ void map_editor_startup()
 
 	game_build_map_initialize(); // initialize everything for building the map
 	wait_for(game_build_map_initialize);
+
+	game_build_info_initialize();
 
 	editor_map_initialize();				// initialize everything related to the main editor ui (preview, etc)
 	editor_episode_list_initialize();		// initialize everything to load list of episodes from episodes folder
@@ -269,6 +272,7 @@ void on_frame_event()
 
 	case EDITOR_STATE_TEST_BUILD:
 		game_build_map_update(&def_episode);
+		game_build_info_update(&def_episode);
 		editor_cell_links_update(&def_episode);
 		editor_camera_in_test_build();
 		break;
@@ -277,6 +281,7 @@ void on_frame_event()
 		weather_stop_sound();
 		editor_camera_restore_pos_n_angle();
 		game_build_map_free();
+		game_build_info_reset();
 		editor_grid_sprites_show(&def_episode);
 		editor_switch_state_to(EDITOR_STATE_EDIT_MAP);
 		break;
