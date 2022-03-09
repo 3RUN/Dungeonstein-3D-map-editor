@@ -5,6 +5,9 @@
 
 // to do
 //
+// * reset 'master_vol' to default when music browser is closed
+// * don't allow to place 'EVENT_PLAYER' cell twice
+// * add 'pick cell' functionality (mouse_left + key_alt)
 // * add flood fill (from player's start position) to remove backfaces of the level
 // * add proper functions for test build state
 
@@ -95,7 +98,7 @@ int current_map_id = 0;
 #include "editor_grid_sprites.h"
 #include "editor_cam_n_grid.h"
 #include "editor_obj_params.h"
-#include "editor_mouse_draw.h"
+#include "editor_draw_tools.h"
 #include "editor_cell_links.h"
 #include "weather.h"
 
@@ -125,7 +128,7 @@ void editor_switch_state_to(int new_state)
 #include "editor_grid_sprites.c"
 #include "editor_cam_n_grid.c"
 #include "editor_obj_params.c"
-#include "editor_mouse_draw.c"
+#include "editor_draw_tools.c"
 #include "editor_cell_links.c"
 #include "weather.c"
 
@@ -140,6 +143,12 @@ void editor_reset()
 	mouse_y = 0;
 
 	cell_info_tooltip_counter = 0;
+
+	found_episode_index = -1;
+	found_music_index = -1;
+
+	editor_asset_type = ASSET_TYPE_WALLS;
+	editor_asset_index = 0;
 
 	is_grid_visible = true;
 	is_walls_visible = true;
@@ -344,8 +353,59 @@ void on_f_event(var scancode)
 	}
 }
 
+void test()
+{
+	Map *m = map_get_active(&def_episode);
+
+	int x = 0, y = 0, id = 0;
+	for (y = 0; y < MAP_HEIGHT; y++)
+	{
+		for (x = 0; x < MAP_WIDTH - 1; x++)
+		{
+			if ((x % 2) == true)
+			{
+				if (random(2) > 1)
+				{
+					m->cell[x][y].type = ASSET_TYPE_PROPS;
+					m->cell[x][y].asset = PROPS_SWITCH;
+					m->cell[x][y].event_id = id;
+				}
+				else
+				{
+					m->cell[x][y].type = ASSET_TYPE_EVENTS;
+					m->cell[x][y].asset = EVENT_TRIGGER_ZONE;
+					m->cell[x][y].event_id = id;
+				}
+
+				id++;
+			}
+			else
+			{
+				if (random(2) > 1)
+				{
+					m->cell[x][y].type = ASSET_TYPE_PROPS;
+					m->cell[x][y].asset = PROPS_DOOR;
+					m->cell[x][y].event_type = 2; // switch
+					m->cell[x][y].event_id = id;
+				}
+				else
+				{
+					m->cell[x][y].type = ASSET_TYPE_EVENTS;
+					m->cell[x][y].asset = EVENT_SPAWN_OBJECT;
+					m->cell[x][y].event_type = 1; // switch
+					m->cell[x][y].event_id = id;
+				}
+			}
+		}
+	}
+
+	editor_grid_sprites_refresh(&def_episode);
+}
+
 void main()
 {
+	on_1 = test;
+
 	max_entities = MAX_ENTITIES;
 
 	on_d3d_lost = imgui_reset;

@@ -51,7 +51,14 @@ int is_object_to_link(Cell *cell)
 
     if (cell->type == ASSET_TYPE_PROPS && cell->event_type >= 1) // 1 - trigger zone or 2 - switch)
     {
-        return true;
+        if (cell->asset == PROPS_DOOR || cell->asset == PROPS_DOOR_ELEVATOR || cell->asset == PROPS_FENCE || cell->asset == PROPS_FENCE_DIRTY)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     if (cell->type == ASSET_TYPE_EVENTS && cell->asset == EVENT_SPAWN_OBJECT && cell->event_type >= 1) // 1 - trigger zone or 2 - switch)
@@ -109,6 +116,14 @@ void editor_cell_show_links()
         VECTOR from;
         vec_set(&from, vector(activator_cell->worldpos.x, activator_cell->worldpos.y, activator_cell->worldpos.z + CELL_LINK_Z_OFFSET));
         int id = activator_cell->event_id;
+        int type = activator_cell->type;
+        int asset = activator_cell->asset;
+
+        int activator_type = 1; // default is trigger zone
+        if (type == ASSET_TYPE_PROPS && asset == PROPS_SWITCH)
+        {
+            activator_type = 2;
+        }
 
         for (j = 0; j < array_get_count(objects_to_link_list); j++)
         {
@@ -121,8 +136,9 @@ void editor_cell_show_links()
             VECTOR to;
             vec_set(&to, vector(object_cell->worldpos.x, object_cell->worldpos.y, object_cell->worldpos.z + CELL_LINK_Z_OFFSET));
             int obj_id = object_cell->event_id;
+            int obj_activator_type = object_cell->event_type; // 1 - trigger zone or 2 - switch
 
-            if (id == obj_id)
+            if (id == obj_id && activator_type == obj_activator_type)
             {
                 VECTOR diff;
                 vec_diff(&diff, &to, &from);

@@ -34,7 +34,7 @@ int is_cell_allowed_rotation(int type, int asset)
     return false;
 }
 
-void editor_map_draw_cell(Cell *to, Cell *from)
+void editor_draw_cell(Cell *to, Cell *from)
 {
     if (!to || !from)
     {
@@ -42,11 +42,11 @@ void editor_map_draw_cell(Cell *to, Cell *from)
     }
 
     cell_copy(to, from);
-    editor_grid_sprite_update_by_id(to->id, to->pan, to->type, to->asset);
-    editor_grid_direction_sprite_update_by_id(to->id, to->pan, to->type, to->asset);
+    editor_grid_sprite_update_by_id(to);
+    editor_grid_direction_sprite_update_by_id(to);
 }
 
-void editor_map_erase_cell(Cell *cell)
+void editor_erase_cell(Cell *cell)
 {
     if (!cell)
     {
@@ -56,11 +56,11 @@ void editor_map_erase_cell(Cell *cell)
     cell->pan = CELL_DEF_PAN;
 
     cell_copy(cell, NULL);
-    editor_grid_sprite_update_by_id(cell->id, cell->pan, cell->type, cell->asset);
-    editor_grid_direction_sprite_update_by_id(cell->id, cell->pan, cell->type, cell->asset);
+    editor_grid_sprite_update_by_id(cell);
+    editor_grid_direction_sprite_update_by_id(cell);
 }
 
-void editor_mouse_draw_update(Episode *episode, Cell *drawing_cell)
+void editor_draw_tools_update(Episode *episode, Cell *drawing_cell)
 {
     if (!episode)
     {
@@ -86,6 +86,11 @@ void editor_mouse_draw_update(Episode *episode, Cell *drawing_cell)
             mouse_resume_drawing = false;
             mouse_draw_once = true;
         }
+        else
+        {
+            mouse_resume_drawing = true;
+            mouse_draw_once = false;
+        }
         return;
     }
 
@@ -97,7 +102,7 @@ void editor_mouse_draw_update(Episode *episode, Cell *drawing_cell)
             {
                 current_cell->pan -= 90;
                 current_cell->pan = cycle(current_cell->pan, 0, 360);
-                editor_grid_direction_sprite_update_by_id(current_cell->id, current_cell->pan, current_cell->type, current_cell->asset);
+                editor_grid_direction_sprite_update_by_id(current_cell);
                 rotate_cell_once = false;
             }
         }
@@ -128,7 +133,7 @@ void editor_mouse_draw_update(Episode *episode, Cell *drawing_cell)
             mouse_draw_timer += time_frame / 16;
             while (mouse_draw_timer > mouse_draw_cooldown)
             {
-                editor_map_draw_cell(current_cell, drawing_cell);
+                editor_draw_cell(current_cell, drawing_cell);
                 mouse_draw_timer -= mouse_draw_cooldown;
             }
         }
@@ -136,7 +141,7 @@ void editor_mouse_draw_update(Episode *episode, Cell *drawing_cell)
         {
             if (mouse_draw_once == true)
             {
-                editor_map_draw_cell(current_cell, drawing_cell);
+                editor_draw_cell(current_cell, drawing_cell);
                 mouse_draw_once = false;
             }
         }
@@ -153,7 +158,7 @@ void editor_mouse_draw_update(Episode *episode, Cell *drawing_cell)
                 mouse_erase_timer += time_frame / 16;
                 while (mouse_erase_timer > mouse_erase_cooldown)
                 {
-                    editor_map_erase_cell(current_cell);
+                    editor_erase_cell(current_cell);
                     mouse_erase_timer -= mouse_erase_cooldown;
                 }
             }
@@ -161,7 +166,7 @@ void editor_mouse_draw_update(Episode *episode, Cell *drawing_cell)
             {
                 if (mouse_erase_once == true)
                 {
-                    editor_map_erase_cell(current_cell);
+                    editor_erase_cell(current_cell);
                     mouse_erase_once = false;
                 }
             }

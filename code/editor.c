@@ -133,7 +133,7 @@ STRING *get_cell_info(Cell *cell)
                 }
                 else if (cell_event_type == 2)
                 {
-                    str_cat(info_str, str_printf(NULL, editor_info_siwtch_id_str, (long)cell_event_id));
+                    str_cat(info_str, str_printf(NULL, editor_info_switch_id_str, (long)cell_event_id));
                 }
             }
             else if (cell_asset == PROPS_DOOR_LOCKED)
@@ -181,7 +181,7 @@ STRING *get_cell_info(Cell *cell)
                 }
                 else if (cell_event_type == 2)
                 {
-                    str_cat(info_str, str_printf(NULL, editor_info_siwtch_id_str, (long)cell_event_id));
+                    str_cat(info_str, str_printf(NULL, editor_info_switch_id_str, (long)cell_event_id));
                 }
 
                 // category

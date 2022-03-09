@@ -10,9 +10,9 @@ array_t *objects_to_link_list = NULL;
 var link_refresh_cooldown = 1; // update each second !
 var link_refresh_timer = 0;
 
-var laserbeam_fade_speed = 5;
-var laserbeam_alpha = 75;
-var laserbeam_size = 10;
+var laserbeam_fade_speed = 2;
+var laserbeam_alpha = 70;
+var laserbeam_size = 5;
 
 void particle_laserbeam_event(PARTICLE *p);
 

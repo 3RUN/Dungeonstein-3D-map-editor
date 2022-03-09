@@ -37,6 +37,7 @@
         "editor_grid_sprites.h": "c",
         "editor_cam_n_grid.h": "c",
         "editor_obj_params.h": "c",
-        "game_e_save_n_load.h": "c"
+        "game_e_save_n_load.h": "c",
+        "editor_map_settings.h": "c"
     }
 }

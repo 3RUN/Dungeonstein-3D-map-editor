@@ -1,5 +1,5 @@
-#ifndef _EDITOR_MOUSE_DRAW_H_
-#define _EDITOR_MOUSE_DRAW_H_
+#ifndef _EDITOR_DRAW_TOOLS_H_
+#define _EDITOR_DRAW_TOOLS_H_
 
 var mouse_resume_drawing = true; // used to prevent drawing when 'top bar' menu is used
 
@@ -15,10 +15,10 @@ var rotate_cell_once = false;
 
 int is_cell_allowed_rotation(int type, int asset);
 
-void editor_map_draw_cell(Cell *to, Cell *from);
+void editor_draw_cell(Cell *to, Cell *from);
 
-void editor_map_erase_cell(Cell *cell);
+void editor_erase_cell(Cell *cell);
 
-void editor_mouse_draw_update(Episode *episode, Cell *drawing_cell);
+void editor_draw_tools_update(Episode *episode, Cell *drawing_cell);
 
 #endif

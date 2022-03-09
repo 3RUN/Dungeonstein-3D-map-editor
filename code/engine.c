@@ -157,8 +157,9 @@ void engine_apply_settings()
 void engine_initialize()
 {
     d3d_instancing = 1; // sprite instancing
-
     vec_set(&d3d_lodfactor, vector(100, 110, 120)); // disable lods (ugly)
+
+    sun_light = 0;
 
     fps_max = 60;
     warn_level = 6;
