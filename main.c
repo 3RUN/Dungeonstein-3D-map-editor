@@ -7,6 +7,7 @@
 //
 // * add flood fill (from player's start position) to remove backfaces of the level
 // * add proper functions for test build state
+//
 // * expand test build state with info:
 // - player found or not
 // - exit switch found or not
@@ -136,6 +137,8 @@ void editor_switch_state_to(int new_state)
 
 void editor_reset()
 {
+	mouse_pointer = 2;
+
 	editor_map_reset();
 	editor_cell_links_destroy();
 

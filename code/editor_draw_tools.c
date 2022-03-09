@@ -165,6 +165,7 @@ void editor_draw_tools_update(Episode *episode, Cell *drawing_cell)
     }
     else
     {
+        mouse_pointer = 2;
         str_cpy(current_tool_str, "Editing tool: draw/erase/rotate;");
     }
 
