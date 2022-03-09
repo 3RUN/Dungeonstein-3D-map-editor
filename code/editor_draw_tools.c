@@ -34,11 +34,51 @@ int is_cell_allowed_rotation(int type, int asset)
     return false;
 }
 
-void editor_draw_cell(Cell *to, Cell *from)
+void editor_erase_player(Episode *episode)
 {
+    if (!episode)
+    {
+        return;
+    }
+
+    Map *current_map = map_get_active(episode);
+    if (!current_map)
+    {
+        return;
+    }
+
+    int x = 0, y = 0, id = 0;
+    for (y = 0; y < MAP_HEIGHT; y++)
+    {
+        for (x = 0; x < MAP_WIDTH; x++)
+        {
+            Cell *cell = &current_map->cell[x][y];
+
+            if (is_player_start(cell->type, cell->asset) == false)
+            {
+                continue;
+            }
+
+            editor_erase_cell(cell);
+        }
+    }
+}
+
+void editor_draw_cell(Episode *episode, Cell *to, Cell *from)
+{
+    if (!episode)
+    {
+        return;
+    }
+
     if (!to || !from)
     {
         return;
+    }
+
+    if (is_player_start(from->type, from->asset) == true)
+    {
+        editor_erase_player(episode);
     }
 
     cell_copy(to, from);
@@ -133,7 +173,7 @@ void editor_draw_tools_update(Episode *episode, Cell *drawing_cell)
             mouse_draw_timer += time_frame / 16;
             while (mouse_draw_timer > mouse_draw_cooldown)
             {
-                editor_draw_cell(current_cell, drawing_cell);
+                editor_draw_cell(episode, current_cell, drawing_cell);
                 mouse_draw_timer -= mouse_draw_cooldown;
             }
         }
@@ -141,7 +181,7 @@ void editor_draw_tools_update(Episode *episode, Cell *drawing_cell)
         {
             if (mouse_draw_once == true)
             {
-                editor_draw_cell(current_cell, drawing_cell);
+                editor_draw_cell(episode, current_cell, drawing_cell);
                 mouse_draw_once = false;
             }
         }

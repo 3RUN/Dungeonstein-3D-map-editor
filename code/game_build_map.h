@@ -48,6 +48,8 @@ int is_a_fence(int type, int asset);
 
 int is_npc(int type, int asset);
 
+int is_player_start(int type, int asset);
+
 int is_a_switch(int type, int asset);
 
 void attach_to_wall(ENTITY *ent);

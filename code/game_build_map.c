@@ -197,6 +197,21 @@ int is_npc(int type, int asset)
     return true;
 }
 
+int is_player_start(int type, int asset)
+{
+    if (type != ASSET_TYPE_EVENTS)
+    {
+        return false;
+    }
+
+    if (asset != EVENT_PLAYER)
+    {
+        return false;
+    }
+
+    return true;
+}
+
 int is_a_switch(int type, int asset)
 {
     if (type != ASSET_TYPE_PROPS)
