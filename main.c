@@ -287,8 +287,6 @@ void on_frame_event()
 		break;
 	}
 
-	DEBUG_VAR(master_vol, 200);
-
 	editor_camera_resize();
 	mouse_lock_in_window();
 }
