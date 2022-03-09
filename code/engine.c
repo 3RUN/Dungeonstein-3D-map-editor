@@ -168,6 +168,7 @@ void engine_apply_settings()
 
 void engine_initialize()
 {
+    d3d_alpharef = 1;                               // proper alpha fading
     d3d_instancing = 1;                             // sprite instancing
     vec_set(&d3d_lodfactor, vector(100, 110, 120)); // disable lods (ugly)
 

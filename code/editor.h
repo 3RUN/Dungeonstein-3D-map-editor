@@ -29,6 +29,7 @@ STRING *editor_view_grid_str = "Grid";
 STRING *editor_view_walls_str = "Walls";
 STRING *editor_view_objects_str = "Objects";
 STRING *editor_view_cell_links_str = "Cell links";
+STRING *editor_view_debug_panel_str = "Debug panel";
 STRING *editor_save_as_hint_str = "name";
 STRING *editor_filename_str = "File name:";
 STRING *editor_decrease_str = "Decrease";

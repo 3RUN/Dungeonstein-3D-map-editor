@@ -1,14 +1,24 @@
 #include <acknex.h>
 #include <windows.h>
-#include <default.c>
 #include <strio.c>
 
 // to do
 //
-// * add "ctrl + s" shortcut for saving
-// * add flood fill (from player's start position) to remove backfaces of the level
-// * add proper functions for test build state
+// * add shortcuts:
+// - ctrl + s - save (done)
+// - ctrl + alt + s - save as
+// - ctrl + o - open episode
+// - shift + cursor keys (shift the whole map in 4 directions)
+// - ctrl + pagedn - prior level
+// - ctrl + pageup - next level
+// - ctrl + r - reset current map
+// - ctrl + m - map properties
+// - ctrl + b - test build
+// - f1 - help
 //
+// * proper editing tool tips
+// * proper build info tips
+// * add flood fill (from player's start position) to remove backfaces of the level
 // * expand test build state with info:
 // - level leaking or not (optional)
 // - map settings inside of the test build state
@@ -72,6 +82,7 @@ int is_grid_visible = true;
 int is_walls_visible = true;
 int is_objects_visible = true;
 int is_cell_links_visible = true;
+int is_debug_panel_visible = false;
 
 int mouse_x = 0;
 int mouse_y = 0;
@@ -91,6 +102,7 @@ int current_map_id = 0;
 #include "game_e_save_n_load.h"
 #include "game_build_map.h"
 #include "game_build_info.h"
+#include "game_debug_panel.h"
 #include "editor.h"
 #include "editor_episode_list.h"
 #include "editor_popups.h"
@@ -122,6 +134,7 @@ void editor_switch_state_to(int new_state)
 #include "game_e_save_n_load.c"
 #include "game_build_map.c"
 #include "game_build_info.c"
+#include "game_debug_panel.c"
 #include "editor.c"
 #include "editor_episode_list.c"
 #include "editor_popups.c"
@@ -160,6 +173,7 @@ void editor_reset()
 	is_walls_visible = true;
 	is_objects_visible = true;
 	is_cell_links_visible = true;
+	is_debug_panel_visible = false;
 }
 
 void map_editor_startup()
@@ -184,7 +198,8 @@ void map_editor_startup()
 	game_build_map_initialize(); // initialize everything for building the map
 	wait_for(game_build_map_initialize);
 
-	game_build_info_initialize();
+	game_build_info_initialize();  // info showed when in test build state (start found, etc)
+	game_debug_panel_initialize(); // debug panel (from 'default.c')
 
 	editor_map_initialize();				// initialize everything related to the main editor ui (preview, etc)
 	editor_episode_list_initialize();		// initialize everything to load list of episodes from episodes folder
@@ -299,6 +314,7 @@ void on_frame_event()
 	}
 
 	editor_camera_resize();
+	game_debug_panel_update();
 	mouse_lock_in_window();
 }
 
@@ -334,6 +350,7 @@ void on_f_event(var scancode)
 		break;
 
 	case 62: // f4
+		def_exit();
 		break;
 
 	case 63: // f5
@@ -356,7 +373,6 @@ void on_f_event(var scancode)
 		break;
 
 	case 87: // f11
-		def_debug();
 		break;
 
 	case 88: // f12
@@ -429,7 +445,7 @@ void main()
 	on_f1 = on_f_event;
 	on_f2 = on_f_event;
 	on_f3 = on_f_event;
-	// on_f4 = on_f_event;
+	on_f4 = on_f_event;
 	on_f5 = on_f_event;
 	on_f6 = on_f_event;
 	on_f7 = on_f_event;
@@ -438,6 +454,8 @@ void main()
 	on_f10 = on_f_event;
 	on_f11 = on_f_event;
 	on_f12 = on_f_event;
+
+	on_s = def_save;
 
 	level_load("");
 }

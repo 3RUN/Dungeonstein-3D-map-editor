@@ -204,7 +204,7 @@ void editor_draw_tools_update(Episode *episode, Cell *drawing_cell)
     }
 
     var tool_x = 5;
-    var tool_y = 20;
+    var tool_y = 100;
     draw_text(current_tool_str, tool_x, tool_y, COLOR_WHITE);
 
     if (key_r)
