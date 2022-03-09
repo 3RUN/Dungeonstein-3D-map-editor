@@ -5,7 +5,9 @@
 
 // to do
 //
-// * add 'pick cell' functionality (mouse_left + key_alt)
+// * add blinking tile onto the map to show where we are going to add/remove/rotate
+// * change mouse icon when tool is changed (draw, eyedropper)
+// * add help info
 // * add flood fill (from player's start position) to remove backfaces of the level
 // * add proper functions for test build state
 

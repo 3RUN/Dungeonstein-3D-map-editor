@@ -100,6 +100,25 @@ void editor_erase_cell(Cell *cell)
     editor_grid_direction_sprite_update_by_id(cell);
 }
 
+void editor_pick_tool(Cell *to, Cell *from)
+{
+    if (!to || !from)
+    {
+        return;
+    }
+
+    int type = from->type;
+    int asset = from->asset;
+
+    editor_selected_asset_type = editor_asset_types_combobox[type];
+    editor_asset_type = type;
+    editor_asset_index = asset;
+
+    cell_copy(to, from);
+    cell_copy(&preview_cell, from);
+    editor_map_preview_update(type, asset);
+}
+
 void editor_draw_tools_update(Episode *episode, Cell *drawing_cell)
 {
     if (!episode)
@@ -133,6 +152,23 @@ void editor_draw_tools_update(Episode *episode, Cell *drawing_cell)
         }
         return;
     }
+
+    if (key_alt)
+    {
+        str_cpy(current_tool_str, "Editing tool: pick tile;");
+    }
+    else if (key_shift)
+    {
+        str_cpy(current_tool_str, "Editing tool: draw/erase/rotate (shift);");
+    }
+    else
+    {
+        str_cpy(current_tool_str, "Editing tool: draw/erase/rotate;");
+    }
+
+    var tool_x = 5;
+    var tool_y = 20;
+    draw_text(current_tool_str, tool_x, tool_y, COLOR_WHITE);
 
     if (key_r)
     {
@@ -168,7 +204,15 @@ void editor_draw_tools_update(Episode *episode, Cell *drawing_cell)
 
     if (mouse_left)
     {
-        if (key_shift)
+        if (key_alt)
+        {
+            if (mouse_draw_once == true)
+            {
+                editor_pick_tool(drawing_cell, current_cell);
+                mouse_draw_once = false;
+            }
+        }
+        else if (key_shift)
         {
             mouse_draw_timer += time_frame / 16;
             while (mouse_draw_timer > mouse_draw_cooldown)
@@ -193,6 +237,14 @@ void editor_draw_tools_update(Episode *episode, Cell *drawing_cell)
 
         if (mouse_right)
         {
+            if (key_alt)
+            {
+                if (mouse_erase_once == true)
+                {
+                    editor_pick_tool(drawing_cell, current_cell);
+                    mouse_erase_once = false;
+                }
+            }
             if (key_shift)
             {
                 mouse_erase_timer += time_frame / 16;

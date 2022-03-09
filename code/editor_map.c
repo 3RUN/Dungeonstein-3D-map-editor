@@ -27,17 +27,17 @@ void editor_map_destroy()
     preview_bmap = NULL;
 }
 
-void editor_map_preview_update(int type, int index)
+void editor_map_preview_update(int type, int asset)
 {
-    preview_bmap = asset_get_bmap(type, index);
+    preview_bmap = asset_get_bmap(type, asset);
     strcpy(preview_name, _chr(map_preview_name_str));
-    strcat(preview_name, _chr(asset_get_desc(type, index)));
+    strcat(preview_name, _chr(asset_get_desc(type, asset)));
 
     preview_cell.type = type;
-    preview_cell.asset = index;
+    preview_cell.asset = asset;
 }
 
-void editor_map_create_asset_item(void *draw_list, int type, int index)
+void editor_map_create_asset_item(void *draw_list, int type, int asset)
 {
     if (!draw_list)
     {
@@ -50,25 +50,25 @@ void editor_map_create_asset_item(void *draw_list, int type, int index)
     var width = imgui_get_content_region_avail_width();
 
     int is_temp_boolean = false;
-    if (editor_asset_index == index)
+    if (editor_asset_index == asset)
     {
         is_temp_boolean = true;
     }
 
     STRING *asset_desc_str = "";
-    str_cpy(asset_desc_str, asset_get_desc(type, index));
+    str_cpy(asset_desc_str, asset_get_desc(type, asset));
 
     STRING *selectable_id_str = "";
     str_cpy(selectable_id_str, "##");
     str_cat(selectable_id_str, asset_desc_str);
     str_cat(selectable_id_str, " index:");
-    str_cat(selectable_id_str, str_for_num(NULL, index));
+    str_cat(selectable_id_str, str_for_num(NULL, asset));
 
     if (imgui_selectable_size(_chr(selectable_id_str), &is_temp_boolean, ImGuiSelectableFlags_None, vector(width, 64, 0)))
     {
-        editor_asset_index = index;
+        editor_asset_index = asset;
         cell_copy(&preview_cell, NULL);
-        editor_map_preview_update(type, index);
+        editor_map_preview_update(type, asset);
     }
 
     var text_pos_x = cursor_screen_pos.x + ASSET_PREVIEW_IMAGE_WIDTH + engine_theme_item_spacing[0];
@@ -79,7 +79,7 @@ void editor_map_create_asset_item(void *draw_list, int type, int index)
     var image_start_y = cursor_screen_pos.y;
     var image_end_x = image_start_x + ASSET_PREVIEW_IMAGE_WIDTH;
     var image_end_y = image_start_y + ASSET_PREVIEW_IMAGE_HEIGHT;
-    imgui_drawlist_add_image(asset_draw_list, asset_get_bmap(type, index), vector(image_start_x, image_start_y, 0), vector(image_end_x, image_end_y, 0), vector(0, 0, 0), vector(1, 1, 0), color4_image, 1.0);
+    imgui_drawlist_add_image(asset_draw_list, asset_get_bmap(type, asset), vector(image_start_x, image_start_y, 0), vector(image_end_x, image_end_y, 0), vector(0, 0, 0), vector(1, 1, 0), color4_image, 1.0);
 }
 
 void editor_map_popup_state_change_to(int state)

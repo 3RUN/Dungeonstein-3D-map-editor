@@ -58,9 +58,9 @@ void editor_map_reset();
 
 void editor_map_destroy();
 
-void editor_map_preview_update(int type, int index);
+void editor_map_preview_update(int type, int asset);
 
-void editor_map_create_asset_item(void *draw_list, int type, int index);
+void editor_map_create_asset_item(void *draw_list, int type, int asset);
 
 void editor_map_popup_state_change_to(int state);
 
