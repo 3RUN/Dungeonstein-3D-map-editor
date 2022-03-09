@@ -107,7 +107,12 @@ STRING *editor_popup_controlls_cmd_3_str = "ERASE ONCE:     MBR";
 STRING *editor_popup_controlls_cmd_4_str = "ERASE ENDLESS:  MBR + SHIFT (hold)";
 STRING *editor_popup_controlls_cmd_5_str = "ROTATE CELL:    R";
 
-STRING *editor_popup_credits_str = "Created by: Magomet Kochkarov aka 3RUN\nEmail: parkour09@mail.ru";
+STRING *editor_popup_episode_saved_at_str = "Episodes saved at:";
+STRING *editor_popup_episode_save_path_str = "username\\Documents\\MapEditor\\episodes";
+STRING *editor_popup_credit_name_str = "Created by:";
+STRING *editor_popup_credit_info_0_str = "Magomet Kochkarov aka 3RUN";
+STRING *editor_popup_credit_email_str = "Email:";
+STRING *editor_popup_credit_info_1_str = "parkour09@mail.ru";
 
 STRING *editor_popup_exit_str = "Are you sure you want to exit?\nAll unsaved data will be lost!";
 
