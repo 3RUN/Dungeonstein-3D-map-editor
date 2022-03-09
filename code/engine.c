@@ -36,14 +36,26 @@ VECTOR *mouse_get_position()
     return &pos;
 }
 
+void mouse_set_map(BMAP *new_mouse_map)
+{
+    if (!new_mouse_map)
+    {
+        return;
+    }
+
+    if (mouse_map != new_mouse_map)
+    {
+        mouse_map = new_mouse_map;
+    }
+}
+
 void mouse_enable(int is_mouse_centered)
 {
     if (mouse_mode != 4)
     {
         mouse_sync = 0;
         mouse_mode = 4;
-        mouse_map = mouse_tga;
-        mouse_pointer = 1;
+        mouse_pointer = 2;
 
         if (is_mouse_centered == true)
         {
@@ -156,7 +168,7 @@ void engine_apply_settings()
 
 void engine_initialize()
 {
-    d3d_instancing = 1; // sprite instancing
+    d3d_instancing = 1;                             // sprite instancing
     vec_set(&d3d_lodfactor, vector(100, 110, 120)); // disable lods (ugly)
 
     sun_light = 0;

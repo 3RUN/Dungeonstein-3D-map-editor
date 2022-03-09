@@ -5,10 +5,13 @@
 
 // to do
 //
-// * change mouse icon when tool is changed (draw, eyedropper)
-// * add help info
 // * add flood fill (from player's start position) to remove backfaces of the level
 // * add proper functions for test build state
+// * expand test build state with info:
+// - player found or not
+// - exit switch found or not
+// - level leaking or not (optional)
+// - map settings inside of the test build state
 
 #define PRAGMA_POINTER
 

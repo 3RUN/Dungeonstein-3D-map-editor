@@ -5,6 +5,9 @@
 #define EDITOR_POPUP_OPEN_HEIGHT 320
 #define EDITOR_POPUP_OPEN_SURE_WIDTH 340
 
+#define EDITOR_POPUP_ABOUT_CHILD_WIDTH 270
+#define EDITOR_POPUP_ABOUT_CHILD_HEIGHT 114
+
 #define EDITOR_POPUP_NEW_WIDTH 395
 #define EDITOR_POPUP_NEW_SURE_WIDTH 320
 
@@ -46,6 +49,8 @@ char *editor_popup_settings_grid_color_picker_id = "##Grid color picker";
 char *editor_popup_music_browser_child_id = "##Music browser child";
 char *editor_popup_music_browser_listbox_id = "##Music browser listbox";
 char *editor_popup_music_browser_volume_slider_id = "##Music browser volume slider";
+
+char *editor_popup_about_child_id = "##About child";
 
 char new_filename[EPISODE_FILENAME_LENGTH];
 char new_name[EPISODE_NAME_LENGTH];
@@ -94,7 +99,16 @@ STRING *editor_popup_settings_hover_cell_tooltip_str = "Hovering cell tooltip: "
 STRING *editor_popup_settings_background_color_str = "Background color: ";
 STRING *editor_popup_settings_grid_color_str = "Grid color:       ";
 
-STRING *editor_popup_help_info_str = "blahahahaha";
+STRING *editor_popup_controlls_str = "Controlls:";
+STRING *editor_popup_controlls_cmd_0_str = "PICK TOOL:      MBL + ALT (hold)";
+STRING *editor_popup_controlls_cmd_1_str = "DRAW ONCE:      MBL";
+STRING *editor_popup_controlls_cmd_2_str = "DRAW ENDLESS:   MBL + SHIFT (hold)";
+STRING *editor_popup_controlls_cmd_3_str = "ERASE ONCE:     MBR";
+STRING *editor_popup_controlls_cmd_4_str = "ERASE ENDLESS:  MBR + SHIFT (hold)";
+STRING *editor_popup_controlls_cmd_5_str = "ROTATE CELL:    R";
+
+STRING *editor_popup_credits_str = "Created by: Magomet Kochkarov aka 3RUN\nEmail: parkour09@mail.ru";
+
 STRING *editor_popup_exit_str = "Are you sure you want to exit?\nAll unsaved data will be lost!";
 
 STRING *editor_popup_episode_edit_str = "Edit episode";

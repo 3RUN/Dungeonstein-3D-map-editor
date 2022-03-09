@@ -546,7 +546,22 @@ void editor_popup_about()
     imgui_text(_chr(editor_help_str));
     imgui_separator();
 
-    imgui_text(_chr(editor_popup_help_info_str));
+    imgui_text(_chr(editor_popup_controlls_str));
+    int editor_popup_about_controlls_child_flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
+    imgui_begin_child(editor_popup_about_child_id, vector(EDITOR_POPUP_ABOUT_CHILD_WIDTH, EDITOR_POPUP_ABOUT_CHILD_HEIGHT, 0), 1, editor_popup_about_controlls_child_flags);
+
+    imgui_text(_chr(editor_popup_controlls_cmd_0_str));
+    imgui_text(_chr(editor_popup_controlls_cmd_1_str));
+    imgui_text(_chr(editor_popup_controlls_cmd_2_str));
+    imgui_text(_chr(editor_popup_controlls_cmd_3_str));
+    imgui_text(_chr(editor_popup_controlls_cmd_4_str));
+    imgui_text(_chr(editor_popup_controlls_cmd_5_str));
+
+    imgui_end_child();
+    imgui_separator();
+
+    imgui_text(_chr(editor_popup_credits_str));
+    imgui_separator();
 
     if (imgui_button_withsize(_chr(editor_close_str), -1, EDITOR_POPUP_BUTTON_HEIGHT) || key_esc)
     {

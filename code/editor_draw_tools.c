@@ -155,10 +155,12 @@ void editor_draw_tools_update(Episode *episode, Cell *drawing_cell)
 
     if (key_alt)
     {
+        mouse_pointer = 3;
         str_cpy(current_tool_str, "Editing tool: pick tile;");
     }
     else if (key_shift)
     {
+        mouse_pointer = 2;
         str_cpy(current_tool_str, "Editing tool: draw/erase/rotate (shift);");
     }
     else
@@ -237,29 +239,24 @@ void editor_draw_tools_update(Episode *episode, Cell *drawing_cell)
 
         if (mouse_right)
         {
-            if (key_alt)
+            if (!key_alt)
             {
-                if (mouse_erase_once == true)
+                if (key_shift)
                 {
-                    editor_pick_tool(drawing_cell, current_cell);
-                    mouse_erase_once = false;
+                    mouse_erase_timer += time_frame / 16;
+                    while (mouse_erase_timer > mouse_erase_cooldown)
+                    {
+                        editor_erase_cell(current_cell);
+                        mouse_erase_timer -= mouse_erase_cooldown;
+                    }
                 }
-            }
-            if (key_shift)
-            {
-                mouse_erase_timer += time_frame / 16;
-                while (mouse_erase_timer > mouse_erase_cooldown)
+                else
                 {
-                    editor_erase_cell(current_cell);
-                    mouse_erase_timer -= mouse_erase_cooldown;
-                }
-            }
-            else
-            {
-                if (mouse_erase_once == true)
-                {
-                    editor_erase_cell(current_cell);
-                    mouse_erase_once = false;
+                    if (mouse_erase_once == true)
+                    {
+                        editor_erase_cell(current_cell);
+                        mouse_erase_once = false;
+                    }
                 }
             }
         }
