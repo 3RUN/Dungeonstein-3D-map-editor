@@ -5,16 +5,20 @@
 // to do
 //
 // * add shortcuts:
-// - ctrl + s - save (done)
-// - ctrl + alt + s - save as
+// - f1 - help
+// - f2 - shortcut_preferences
+// - f6 - screenshot
+// - alt + f4 - instant exit
+// - ctrl + s (+ alt) - save/save as
 // - ctrl + o - open episode
+// - ctrl + n - new episode
+// - ctrl + e - edit episode
 // - shift + cursor keys (shift the whole map in 4 directions)
 // - ctrl + pagedn - prior level
 // - ctrl + pageup - next level
 // - ctrl + r - reset current map
 // - ctrl + m - map properties
-// - ctrl + b - test build
-// - f1 - help
+// - ctrl + t - test build
 //
 // * proper editing tool tips
 // * proper build info tips
@@ -115,6 +119,7 @@ int current_map_id = 0;
 #include "editor_obj_params.h"
 #include "editor_draw_tools.h"
 #include "editor_cell_links.h"
+#include "editor_shortcuts.h"
 #include "weather.h"
 
 Episode def_episode;
@@ -147,6 +152,7 @@ void editor_switch_state_to(int new_state)
 #include "editor_obj_params.c"
 #include "editor_draw_tools.c"
 #include "editor_cell_links.c"
+#include "editor_shortcuts.c"
 #include "weather.c"
 
 void editor_reset()
@@ -208,6 +214,7 @@ void map_editor_startup()
 	editor_music_browser_initialize();		// initialize music loading
 	editor_camera_initialize();				// initialize camera and visual grid
 	editor_grid_sprites_create();			// create all sprites that will visualize the map
+	editor_shortcuts_initialize();			// initialize editor shortcuts
 }
 
 void on_frame_event()
@@ -315,6 +322,7 @@ void on_frame_event()
 
 	editor_camera_resize();
 	game_debug_panel_update();
+	editor_shortcuts_update();
 	mouse_lock_in_window();
 }
 
@@ -330,6 +338,7 @@ void on_exit_event()
 	editor_music_browser_destroy();
 	editor_grid_sprites_destroy();
 	editor_cell_links_destroy();
+	editor_shortcuts_destroy();
 }
 
 void on_esc_event()
@@ -341,23 +350,25 @@ void on_f_event(var scancode)
 	switch (scancode)
 	{
 	case 59: // f1
+		shortcut_help();
 		break;
 
 	case 60: // f2
+		shortcut_settings();
 		break;
 
 	case 61: // f3
 		break;
 
 	case 62: // f4
-		def_exit();
+		shortcut_exit();
 		break;
 
 	case 63: // f5
 		break;
 
 	case 64: // f6
-		def_shot();
+		shortcut_screenshot();
 		break;
 
 	case 65: // f7
@@ -455,7 +466,13 @@ void main()
 	on_f11 = on_f_event;
 	on_f12 = on_f_event;
 
-	on_s = def_save;
+	on_s = shortcut_save;
+	on_o = shortcut_open;
+	on_n = shortcut_new;
+	on_e = shortcut_episode_edit;
+	on_r = shortcut_reset_map;
+	on_m = shortcut_map_settings;
+	on_t = shortcut_test_build;
 
 	level_load("");
 }

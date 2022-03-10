@@ -52,19 +52,11 @@ void game_debug_panel_initialize()
     pan_setdigits(debug_pan, 0, 270, 42, "unr%4.0f", debug_ackfont, 1, &dplay_bpsunreliable);
     pan_setdigits(debug_pan, 0, 270, 52, "com%4.0f", debug_ackfont, 1, &dplay_compression);
     pan_setdigits(debug_pan, 0, 270, 62, "num%4.0f", debug_ackfont, 1, &num_clients);
-
-    debug_tip = pan_create(NULL, DEBUG_PANEL_LAYER);
-    layer_sort(debug_tip, DEBUG_PANEL_LAYER);
-    set(debug_tip, TRANSLUCENT | SHOW);
-    debug_tip->alpha = 0;
-
-    pan_setstring(debug_tip, 0, 0, 0, debug_ackfont, debug_tip_screenshot_saved_str);
 }
 
 void game_debug_panel_destroy()
 {
     safe_remove(debug_pan);
-    safe_remove(debug_tip);
 }
 
 void game_debug_panel_show()
@@ -81,37 +73,6 @@ void game_debug_panel_hide()
     {
         reset(debug_pan, SHOW);
     }
-}
-
-void game_debug_tip_show(STRING *msg)
-{
-    if (beep_once == true)
-    {
-        beep_once = false;
-    }
-
-    if (snd_playing(beep_handle))
-    {
-        snd_stop(beep_handle);
-    }
-    beep_handle = snd_play(beep_ogg, beep_volume, 0);
-    pan_setstring(debug_tip, 1, 0, 0, debug_ackfont, msg);
-
-    wait(1);
-    beep_once = true;
-
-    debug_tip->alpha = DEBUG_TIP_PANEL_ALPHA;
-    while (debug_tip->alpha > 0)
-    {
-        if (beep_once == false)
-        {
-            return;
-        }
-
-        debug_tip->alpha -= 2.5 * time_step;
-        wait(1);
-    }
-    debug_tip->alpha = 0;
 }
 
 void game_debug_panel_update()
@@ -137,50 +98,5 @@ void game_debug_panel_update()
         {
             game_debug_panel_hide();
         }
-    }
-
-    if (debug_tip)
-    {
-        debug_tip->pos_x = 10;
-        debug_tip->pos_y = camera->pos_y + 10;
-    }
-}
-
-void def_shot()
-{
-    file_for_screen("shot_", def_shot_num);
-    def_shot_num++;
-    game_debug_tip_show(debug_tip_screenshot_saved_str);
-}
-
-void def_exit()
-{
-    if (!key_f4 || key_alt)
-    {
-        sys_exit(NULL);
-    }
-}
-
-void def_save()
-{
-    if (!key_s || key_ctrl)
-    {
-        if (is_popup_opened == true)
-        {
-            return false;
-        }
-
-        if (editor_state != EDITOR_STATE_EDIT_MAP)
-        {
-            return false;
-        }
-
-        if (is_game_episode_loaded() == false)
-        {
-            return false;
-        }
-
-        episode_save(episode_save_name, &def_episode);
-        game_debug_tip_show(debug_tip_episode_saved_str);
     }
 }
