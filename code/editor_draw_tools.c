@@ -189,17 +189,14 @@ void editor_draw_tools_update(Episode *episode, Cell *drawing_cell)
 
     if (key_alt)
     {
-        mouse_pointer = 3;
         str_cpy(current_tool_str, "Editing tool: pick tile;");
     }
     else if (key_shift)
     {
-        mouse_pointer = 2;
         str_cpy(current_tool_str, "Editing tool: draw/erase/rotate (shift);");
     }
     else
     {
-        mouse_pointer = 2;
         str_cpy(current_tool_str, "Editing tool: draw/erase/rotate;");
     }
 

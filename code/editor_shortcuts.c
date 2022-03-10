@@ -149,7 +149,6 @@ void shortcut_save()
     }
     else if (!key_s || key_ctrl && key_alt) // save as
     {
-        shortcut_show_info(shortcut_episode_saved_str);
         strcpy(save_as_filename, episode_save_name);
         editor_map_popup_state_change_to(MAP_POPUP_SAVE_AS);
     }

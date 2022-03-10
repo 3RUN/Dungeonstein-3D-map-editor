@@ -546,16 +546,38 @@ void editor_popup_about()
     imgui_text(_chr(editor_help_str));
     imgui_separator();
 
-    imgui_text_disabled(_chr(editor_popup_controlls_str));
     int editor_popup_about_controlls_child_flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
     imgui_begin_child(editor_popup_about_child_id, vector(EDITOR_POPUP_ABOUT_CHILD_WIDTH, EDITOR_POPUP_ABOUT_CHILD_HEIGHT, 0), 1, editor_popup_about_controlls_child_flags);
 
+    imgui_text_disabled(_chr(editor_popup_shortcuts_str));
+    imgui_separator();
     imgui_text(_chr(editor_popup_controlls_cmd_0_str));
     imgui_text(_chr(editor_popup_controlls_cmd_1_str));
     imgui_text(_chr(editor_popup_controlls_cmd_2_str));
     imgui_text(_chr(editor_popup_controlls_cmd_3_str));
     imgui_text(_chr(editor_popup_controlls_cmd_4_str));
     imgui_text(_chr(editor_popup_controlls_cmd_5_str));
+    imgui_separator();
+
+    imgui_text_disabled(_chr(editor_popup_shortcuts_str));
+    imgui_separator();
+    imgui_text(_chr(editor_popup_shortcut_cmd_0_str));
+    imgui_text(_chr(editor_popup_shortcut_cmd_1_str));
+    imgui_text(_chr(editor_popup_shortcut_cmd_2_str));
+    imgui_text(_chr(editor_popup_shortcut_cmd_3_str));
+    imgui_text(_chr(editor_popup_shortcut_cmd_4_str));
+    imgui_text(_chr(editor_popup_shortcut_cmd_5_str));
+    imgui_text(_chr(editor_popup_shortcut_cmd_6_str));
+    imgui_text(_chr(editor_popup_shortcut_cmd_7_str));
+    imgui_text(_chr(editor_popup_shortcut_cmd_8_str));
+    imgui_text(_chr(editor_popup_shortcut_cmd_9_str));
+    imgui_text(_chr(editor_popup_shortcut_cmd_10_str));
+    imgui_text(_chr(editor_popup_shortcut_cmd_11_str));
+    imgui_text(_chr(editor_popup_shortcut_cmd_12_str));
+    imgui_text(_chr(editor_popup_shortcut_cmd_13_str));
+    imgui_text(_chr(editor_popup_shortcut_cmd_14_str));
+    imgui_text(_chr(editor_popup_shortcut_cmd_15_str));
+    imgui_text(_chr(editor_popup_shortcut_cmd_16_str));
 
     imgui_end_child();
     imgui_separator();

@@ -4,22 +4,7 @@
 
 // to do
 //
-// * add shortcuts:
-// - f1 - help
-// - f2 - shortcut_preferences
-// - f6 - screenshot
-// - alt + f4 - instant exit
-// - ctrl + s (+ alt) - save/save as
-// - ctrl + o - open episode
-// - ctrl + n - new episode
-// - ctrl + e - edit episode
-// - shift + cursor keys (shift the whole map in 4 directions)
-// - ctrl + pagedn - prior level
-// - ctrl + pageup - next level
-// - ctrl + r - reset current map
-// - ctrl + m - map properties
-// - ctrl + t - test build
-//
+// * add map shifting functionality
 // * proper editing tool tips
 // * proper build info tips
 // * add flood fill (from player's start position) to remove backfaces of the level
@@ -157,8 +142,6 @@ void editor_switch_state_to(int new_state)
 
 void editor_reset()
 {
-	mouse_pointer = 2;
-
 	editor_map_reset();
 	editor_cell_links_destroy();
 
@@ -169,23 +152,8 @@ void editor_reset()
 
 	cell_info_tooltip_counter = 0;
 
-	if (found_episodes_total > 0)
-	{
-		found_episode_index = 0;
-	}
-	else
-	{
-		found_episode_index = -1;
-	}
-
-	if (found_music_total > 0)
-	{
-		found_music_index = 0;
-	}
-	else
-	{
-		found_music_index = -1;
-	}
+	found_episode_index = -1;
+	found_music_index = -1;
 
 	editor_asset_type = ASSET_TYPE_WALLS;
 	editor_asset_index = 0;
@@ -230,6 +198,7 @@ void map_editor_startup()
 	editor_camera_initialize();				// initialize camera and visual grid
 	editor_grid_sprites_create();			// create all sprites that will visualize the map
 	editor_shortcuts_initialize();			// initialize editor shortcuts
+	editor_draw_tools_initialize();			// initialize panel for showing currently used tools
 }
 
 void on_frame_event()
@@ -335,11 +304,6 @@ void on_frame_event()
 		break;
 	}
 
-	DEBUG_VAR(is_popup_opened, 300);
-	DEBUG_VAR(editor_state, 320);
-	DEBUG_VAR(empty_popup_state, 340);
-	DEBUG_VAR(found_episode_index, 360);
-
 	editor_camera_resize();
 	game_debug_panel_update();
 	editor_shortcuts_update();
@@ -359,6 +323,7 @@ void on_exit_event()
 	editor_grid_sprites_destroy();
 	editor_cell_links_destroy();
 	editor_shortcuts_destroy();
+	editor_draw_tools_destroy();
 }
 
 void on_esc_event()

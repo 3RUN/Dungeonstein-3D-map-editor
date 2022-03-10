@@ -55,7 +55,8 @@ void mouse_enable(int is_mouse_centered)
     {
         mouse_sync = 0;
         mouse_mode = 4;
-        mouse_pointer = 2;
+        mouse_set_map(mouse_tga);
+        mouse_pointer = 1;
 
         if (is_mouse_centered == true)
         {

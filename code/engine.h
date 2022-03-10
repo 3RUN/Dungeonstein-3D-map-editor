@@ -1,6 +1,8 @@
 #ifndef _ENGINE_H_
 #define _ENGINE_H_
 
+BMAP *mouse_tga = "mouse.tga";
+
 int autolock_mouse_locked = false;
 
 float get_hsv_from_color(float value);

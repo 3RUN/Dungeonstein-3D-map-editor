@@ -6,7 +6,7 @@
 #define EDITOR_POPUP_OPEN_SURE_WIDTH 340
 
 #define EDITOR_POPUP_ABOUT_CHILD_WIDTH 270
-#define EDITOR_POPUP_ABOUT_CHILD_HEIGHT 114
+#define EDITOR_POPUP_ABOUT_CHILD_HEIGHT 450
 
 #define EDITOR_POPUP_NEW_WIDTH 395
 #define EDITOR_POPUP_NEW_SURE_WIDTH 320
@@ -106,6 +106,24 @@ STRING *editor_popup_controlls_cmd_2_str = "DRAW ENDLESS:   MBL + SHIFT (hold)";
 STRING *editor_popup_controlls_cmd_3_str = "ERASE ONCE:     MBR";
 STRING *editor_popup_controlls_cmd_4_str = "ERASE ENDLESS:  MBR + SHIFT (hold)";
 STRING *editor_popup_controlls_cmd_5_str = "ROTATE CELL:    R";
+STRING *editor_popup_shortcuts_str = "Shortcuts";
+STRING *editor_popup_shortcut_cmd_0_str = "HELP: F1";
+STRING *editor_popup_shortcut_cmd_1_str = "SETTINGS: F2";
+STRING *editor_popup_shortcut_cmd_2_str = "SCREENSHOT: F6";
+STRING *editor_popup_shortcut_cmd_3_str = "EXIT: ALT + F4";
+STRING *editor_popup_shortcut_cmd_4_str = "SAVE (SAVE AS): CTRL + S (+ ALT)";
+STRING *editor_popup_shortcut_cmd_5_str = "OPEN EPISODE: CTRL + O";
+STRING *editor_popup_shortcut_cmd_6_str = "NEW EPISODE: CTRL + N";
+STRING *editor_popup_shortcut_cmd_7_str = "EDIT EPISODE: CTRL + E";
+STRING *editor_popup_shortcut_cmd_8_str = "RESET MAP: CTRL + R";
+STRING *editor_popup_shortcut_cmd_9_str = "MAP SETTINGS: CTRL + M";
+STRING *editor_popup_shortcut_cmd_10_str = "MAP TEST BUILD: CTRL + T";
+STRING *editor_popup_shortcut_cmd_11_str = "MAP SHIFT UP: CTRL + CUU";
+STRING *editor_popup_shortcut_cmd_12_str = "MAP SHIFT DOWN: CTRL + CUD";
+STRING *editor_popup_shortcut_cmd_13_str = "MAP SHIFT RIGHT: CTRL + CUR";
+STRING *editor_popup_shortcut_cmd_14_str = "MAP SHIFT LEFT: CTRL + CUL";
+STRING *editor_popup_shortcut_cmd_15_str = "MAP PRIOR: CTRL + PAGEDN";
+STRING *editor_popup_shortcut_cmd_16_str = "MAP NEXT: CTRL + PAGEUP";
 
 STRING *editor_popup_episode_saved_at_str = "Episodes saved at:";
 STRING *editor_popup_episode_save_path_str = "username\\Documents\\MapEditor\\episodes";
