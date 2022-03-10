@@ -198,7 +198,6 @@ void map_editor_startup()
 	editor_camera_initialize();				// initialize camera and visual grid
 	editor_grid_sprites_create();			// create all sprites that will visualize the map
 	editor_shortcuts_initialize();			// initialize editor shortcuts
-	editor_draw_tools_initialize();			// initialize panel for showing currently used tools
 }
 
 void on_frame_event()
@@ -323,7 +322,6 @@ void on_exit_event()
 	editor_grid_sprites_destroy();
 	editor_cell_links_destroy();
 	editor_shortcuts_destroy();
-	editor_draw_tools_destroy();
 }
 
 void on_esc_event()
