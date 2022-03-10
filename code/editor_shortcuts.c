@@ -208,19 +208,22 @@ void shortcut_shift_map()
 {
     if (is_edit_shortcuts_allowed() == true)
     {
-        if (!key_cuu || key_shift && !key_cud && !key_cur && !key_cul) // up
+        if (key_cuu && !key_cud && !key_cur && !key_cul && key_shift) // up
         {
             shortcut_show_info(shortcut_map_shifted_up_str);
         }
-        else if (!key_cud || key_shift && !key_cuu && !key_cur && !key_cul) // down
+
+        if (!key_cuu && key_cud && !key_cur && !key_cul && key_shift) // down
         {
             shortcut_show_info(shortcut_map_shifted_down_str);
         }
-        else if (!key_cur || key_shift && !key_cud && !key_cuu && !key_cul) // right
+
+        if (!key_cuu && !key_cud && key_cur && !key_cul && key_shift) // right
         {
             shortcut_show_info(shortcut_map_shifted_right_str);
         }
-        else if (!key_cul || key_shift && !key_cud && !key_cur && !key_cuu) // left
+
+        if (!key_cuu && !key_cud && !key_cur && key_cul && key_shift) // left
         {
             shortcut_show_info(shortcut_map_shifted_left_str);
         }
