@@ -149,6 +149,7 @@ void shortcut_save()
     }
     else if (!key_s || key_ctrl && key_alt) // save as
     {
+        shortcut_show_info(shortcut_episode_saved_str);
         strcpy(save_as_filename, episode_save_name);
         editor_map_popup_state_change_to(MAP_POPUP_SAVE_AS);
     }
@@ -205,22 +206,24 @@ void shortcut_episode_edit()
 
 void shortcut_shift_map()
 {
-    if (is_edit_shortcuts_allowed() == false)
+    if (is_edit_shortcuts_allowed() == true)
     {
-        return;
-    }
-
-    if (!key_cuu || key_shift && !key_cud && !key_cur && !key_cul) // up
-    {
-    }
-    else if (!key_cud || key_shift && !key_cuu && !key_cur && !key_cul) // down
-    {
-    }
-    else if (!key_cur || key_shift && !key_cud && !key_cuu && !key_cul) // right
-    {
-    }
-    else if (!key_cul || key_shift && !key_cud && !key_cur && !key_cuu) // left
-    {
+        if (!key_cuu || key_shift && !key_cud && !key_cur && !key_cul) // up
+        {
+            shortcut_show_info(shortcut_map_shifted_up_str);
+        }
+        else if (!key_cud || key_shift && !key_cuu && !key_cur && !key_cul) // down
+        {
+            shortcut_show_info(shortcut_map_shifted_down_str);
+        }
+        else if (!key_cur || key_shift && !key_cud && !key_cuu && !key_cul) // right
+        {
+            shortcut_show_info(shortcut_map_shifted_right_str);
+        }
+        else if (!key_cul || key_shift && !key_cud && !key_cur && !key_cuu) // left
+        {
+            shortcut_show_info(shortcut_map_shifted_left_str);
+        }
     }
 }
 
@@ -231,8 +234,9 @@ void shortcut_prior_map()
         return;
     }
 
-    if (!key_pgup || key_ctrl)
+    if (!key_pgdn || key_ctrl)
     {
+        shortcut_show_info(shortcut_prior_map_loaded_str);
         current_map_id--;
         current_map_id = clamp(current_map_id, 0, def_episode.map_count - 1);
         editor_grid_sprites_refresh(&def_episode);
@@ -248,6 +252,7 @@ void shortcut_next_map()
 
     if (!key_pgup || key_ctrl)
     {
+        shortcut_show_info(shortcut_next_map_loaded_str);
         current_map_id++;
         current_map_id = clamp(current_map_id, 0, def_episode.map_count - 1);
         editor_grid_sprites_refresh(&def_episode);

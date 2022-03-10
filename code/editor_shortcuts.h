@@ -10,6 +10,12 @@ FONT *shortcut_ackfont = "Arial#16";
 
 STRING *shortcut_screenshot_saved_str = "Screenshot saved";
 STRING *shortcut_episode_saved_str = "Episode saved";
+STRING *shortcut_prior_map_loaded_str = "Prior map loaded";
+STRING *shortcut_next_map_loaded_str = "Next map loaded";
+STRING *shortcut_map_shifted_up_str = "Map shifted up";
+STRING *shortcut_map_shifted_down_str = "Map shifted down";
+STRING *shortcut_map_shifted_right_str = "Map shifted right";
+STRING *shortcut_map_shifted_left_str = "Map shifted left";
 
 SOUND *beep_ogg = "beep.ogg";
 

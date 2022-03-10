@@ -169,8 +169,23 @@ void editor_reset()
 
 	cell_info_tooltip_counter = 0;
 
-	found_episode_index = -1;
-	found_music_index = -1;
+	if (found_episodes_total > 0)
+	{
+		found_episode_index = 0;
+	}
+	else
+	{
+		found_episode_index = -1;
+	}
+
+	if (found_music_total > 0)
+	{
+		found_music_index = 0;
+	}
+	else
+	{
+		found_music_index = -1;
+	}
 
 	editor_asset_type = ASSET_TYPE_WALLS;
 	editor_asset_index = 0;
@@ -319,6 +334,11 @@ void on_frame_event()
 		sys_exit(NULL);
 		break;
 	}
+
+	DEBUG_VAR(is_popup_opened, 300);
+	DEBUG_VAR(editor_state, 320);
+	DEBUG_VAR(empty_popup_state, 340);
+	DEBUG_VAR(found_episode_index, 360);
 
 	editor_camera_resize();
 	game_debug_panel_update();
@@ -470,6 +490,15 @@ void main()
 	on_o = shortcut_open;
 	on_n = shortcut_new;
 	on_e = shortcut_episode_edit;
+
+	on_cuu = shortcut_shift_map;
+	on_cud = shortcut_shift_map;
+	on_cur = shortcut_shift_map;
+	on_cul = shortcut_shift_map;
+
+	on_pgdn = shortcut_prior_map;
+	on_pgup = shortcut_next_map;
+
 	on_r = shortcut_reset_map;
 	on_m = shortcut_map_settings;
 	on_t = shortcut_test_build;

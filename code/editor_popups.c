@@ -186,7 +186,7 @@ void editor_popup_open_sure()
 
     var width = EDITOR_POPUP_OPEN_SURE_WIDTH / 2;
 
-    if (imgui_button_withsize(_chr(editor_yes_str), width, EDITOR_POPUP_BUTTON_HEIGHT))
+    if (imgui_button_withsize(_chr(editor_yes_str), width, EDITOR_POPUP_BUTTON_HEIGHT) || key_y)
     {
         // we first need to close old popup
         // because new one's positions won't be centered correctly !
@@ -307,7 +307,7 @@ void editor_popup_new_sure()
 
     var width = EDITOR_POPUP_NEW_SURE_WIDTH / 2;
 
-    if (imgui_button_withsize(_chr(editor_yes_str), width, EDITOR_POPUP_BUTTON_HEIGHT))
+    if (imgui_button_withsize(_chr(editor_yes_str), width, EDITOR_POPUP_BUTTON_HEIGHT) || key_y)
     {
         // we first need to close old popup
         // because new one's positions won't be centered correctly !
@@ -678,7 +678,7 @@ void editor_popup_reset_map(Episode *episode)
 
     var width = EDITOR_POPUP_RESET_MAP_WIDTH / 2;
 
-    if (imgui_button_withsize(_chr(editor_yes_str), width, EDITOR_POPUP_BUTTON_HEIGHT))
+    if (imgui_button_withsize(_chr(editor_yes_str), width, EDITOR_POPUP_BUTTON_HEIGHT) || key_y)
     {
         is_popup_opened = false;
         imgui_close_current_popup();
@@ -858,7 +858,7 @@ void editor_popup_exit()
 
     var width = EDITOR_POPUP_EXIT_WIDTH / 2;
 
-    if (imgui_button_withsize(_chr(editor_yes_str), width, EDITOR_POPUP_BUTTON_HEIGHT))
+    if (imgui_button_withsize(_chr(editor_yes_str), width, EDITOR_POPUP_BUTTON_HEIGHT) || key_y)
     {
         is_popup_opened = false;
         imgui_close_current_popup();
