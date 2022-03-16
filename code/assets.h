@@ -140,11 +140,6 @@ typedef struct Asset
 #define BOSS_MECHA_SOLDIER 3
 #define BOSS_DEMON 4
 
-// map settings models and level (weather, fog, sky, etc)
-STRING *map_settings_ceiling_mdl = "map_settings_ceiling.mdl";
-STRING *map_settings_map_wmb = "map_settings_walls.wmb";
-STRING *map_settings_floor_mdl = "map_settings_floor.mdl";
-
 // walls
 STRING *wall_00_pcx = "wall_0.pcx";
 STRING *wall_01_pcx = "wall_1.pcx";

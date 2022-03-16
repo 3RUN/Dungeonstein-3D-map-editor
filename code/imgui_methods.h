@@ -127,7 +127,9 @@ void imgui_progress_bar(var fraction, VECTOR *size_arg, char *overlay);
 
 // imgui_dll_text.cpp
 void imgui_text(char *fmt);
+void imgui_text_centered(char *fmt);
 void imgui_text_disabled(char *fmt);
+void imgui_text_disabled_centered(char *fmt);
 void imgui_push_text_wrap_pos(var wrap_local_pos_x);
 void imgui_pop_text_wrap_pos();
 void imgui_text_unformatted(char *text);
@@ -254,6 +256,29 @@ void imgui_init(long config_flags);
 void imgui_reset();
 long custom_scan_message(UINT message, WPARAM wParam, LPARAM lParam);
 
+void imgui_create_tooltip(char *tooltip)
+{
+    if (imgui_is_item_hovered())
+    {
+        imgui_set_tooltip(tooltip);
+        imgui_begin_tooltip();
+        imgui_end_tooltip();
+    }
+}
+
+void imgui_help_maker(char *desc)
+{
+    imgui_text_disabled("(?)");
+    if (imgui_is_item_hovered())
+    {
+        imgui_begin_tooltip();
+        imgui_push_text_wrap_pos(imgui_get_font_size() * 35);
+        imgui_text_unformatted(desc);
+        imgui_pop_text_wrap_pos();
+        imgui_end_tooltip();
+    }
+}
+
 void imgui_align_right_with_offset(var offset)
 {
     VECTOR pos;
@@ -266,7 +291,6 @@ void imgui_align_bottom_with_offset(var offset)
 {
     VECTOR pos;
     vec_set(&pos, imgui_get_cursor_screen_pos());
-    var offset = pos.y + imgui_get_window_height() - (offset + engine_theme_win_padding[1]);
-    pos.y = offset;
+    pos.y = (imgui_get_window_y() + imgui_get_window_height()) - (offset + ((engine_theme_win_padding[1] * 1.5)));
     imgui_set_cursor_screen_pos(&pos);
 }

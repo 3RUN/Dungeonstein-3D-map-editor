@@ -26,7 +26,7 @@ var engine_theme_button_textalign[2] = {0.5, 0.5};
 var engine_theme_selectable_textalign[2] = {0.5, 0.5};
 
 // theme colors
-COLOR4* imgui_theme_bg_color = { red = 33; green = 33; blue = 33; alpha = 255; }
+COLOR4* imgui_theme_bg_color = { red = 33; green = 33; blue = 33; alpha = 225; }
 COLOR4* imgui_theme_light_bg_color = { red = 66; green = 66; blue = 66; alpha = 255; }
 COLOR4* imgui_theme_very_light_bg_color = { red = 99; green = 99; blue = 99; alpha = 255; }
 

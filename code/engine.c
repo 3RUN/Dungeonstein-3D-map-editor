@@ -146,7 +146,7 @@ void engine_set_resolution_from_id(int id, int display_mode)
     }
 }
 
-void engine_apply_settings()
+void engine_apply_video_settings()
 {
     // remove window's borders
     // otherwise window won't fit the screen and will cause troubles
@@ -167,6 +167,10 @@ void engine_apply_settings()
     engine_set_resolution_from_id(id, config_current.graphics_display_mode);
 }
 
+void engine_update_settings_from_config()
+{
+}
+
 void engine_initialize()
 {
     d3d_alpharef = 1;                               // proper alpha fading
@@ -181,6 +185,5 @@ void engine_initialize()
     video_mode = 8;
     random_seed(0);
 
-    engine_apply_settings();
     mouse_enable(true);
 }
