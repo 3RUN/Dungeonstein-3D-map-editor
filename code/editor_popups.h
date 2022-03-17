@@ -13,14 +13,14 @@
 #define POPUP_EPISODE_RESET_WIDTH 340
 #define POPUP_EPISODE_EDIT_WIDTH 395
 #define POPUP_RESET_MAP_WIDTH 300
-#define POPUP_HELP_WIDTH 800
+#define POPUP_HELP_WIDTH 550
+#define POPUP_HELP_CHILD_HEIGHT 320
 
 #define POPUP_BUTTON_HEIGHT 24
 #define POPUP_COMBOBOX_WIDTH 340
 
 char *popup_episode_browser_id = "##Popup episode browser child id";
 char *popup_episode_listbox_id = "##Popup episode browser listbox id";
-
 char *popup_new_filename_input_id = "##Popup new episode filename input id";
 char *popup_new_episode_name_input_id = "##Popup new episode name input id";
 char *popup_new_episode_story_start_input_id = "##Popup new episode story start input id";
@@ -41,6 +41,8 @@ char *popup_episode_edit_name_id = "##Popup episode edit name input id";
 char *popup_episode_edit_story_start_id = "##Popup episode edit story start input id";
 char *popup_episode_edit_story_end_id = "##Popup episode edit story end input id";
 char *popup_episode_edit_map_count_slider_id = "##Popup episode edit map count slider id";
+char *popup_help_child_id = "##Popup help child id";
+char *popup_help_columns_id = "##Popup help columns id";
 
 char new_episode_filename[EPISODE_FILENAME_LENGTH];
 char new_episode_name[EPISODE_NAME_LENGTH];
@@ -108,8 +110,8 @@ void popup_ep_edit(Episode *episode);
 
 void popup_map_reset(Episode *episode);
 
-void popups_help();
+void popup_help();
 
-void popups_wait_for_input();
+void popup_wait_for_input();
 
 #endif

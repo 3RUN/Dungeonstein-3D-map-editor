@@ -843,9 +843,69 @@ void popup_map_reset(Episode *episode)
     }
 }
 
-void popups_help()
+void popup_help()
 {
     imgui_text_centered("Help");
+    imgui_separator();
+
+    int popup_help_controlls_child_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
+    imgui_begin_child(popup_help_child_id, vector(-1, POPUP_HELP_CHILD_HEIGHT * config_saved.font_scale, 0), 1, popup_help_controlls_child_flags);
+
+    imgui_columns(2, popup_help_columns_id, true);
+    var column_width = ((POPUP_HELP_WIDTH * config_saved.font_scale) / 2) - engine_theme_win_bordersize * 2;
+
+    imgui_set_column_width(0, column_width);
+    imgui_set_column_width(1, column_width);
+
+    {
+        imgui_text_disabled("Shortcuts");
+        imgui_text(_chr(str_printf(NULL, "Help: %s", config_current.short_help)));
+        imgui_text(_chr(str_printf(NULL, "New episode: %s", config_current.short_new)));
+        imgui_text(_chr(str_printf(NULL, "Open episode: %s", config_current.short_open)));
+        imgui_text(_chr(str_printf(NULL, "Save: %s", config_current.short_save)));
+        imgui_text(_chr(str_printf(NULL, "Save as: ctrl + %s", config_current.short_save)));
+        imgui_text(_chr(str_printf(NULL, "Episode reset: %s", config_current.short_ep_reset)));
+        imgui_text(_chr(str_printf(NULL, "Episode edit: %s", config_current.short_ep_edit)));
+        imgui_text(_chr(str_printf(NULL, "Reset active map: %s", config_current.short_reset_map)));
+        imgui_text(_chr(str_printf(NULL, "Active map settings: %s", config_current.short_map_settings)));
+        imgui_text(_chr(str_printf(NULL, "Take screenshot: %s", config_current.short_screenshot)));
+        imgui_text(_chr(str_printf(NULL, "Settings: %s", config_current.short_settings)));
+        imgui_text(_chr(str_printf(NULL, "Prior map: ctrl + %s", config_current.short_prior_map)));
+        imgui_text(_chr(str_printf(NULL, "Next map: ctrl + %s", config_current.short_next_map)));
+        imgui_text(_chr(str_printf(NULL, "Shift map to the West: ctrl + %s", config_current.short_shift_map_west)));
+        imgui_text(_chr(str_printf(NULL, "Shift map to the East: ctrl + %s", config_current.short_shift_map_east)));
+        imgui_text(_chr(str_printf(NULL, "Shift map to the South: ctrl + %s", config_current.short_shift_map_south)));
+        imgui_text(_chr(str_printf(NULL, "Shift map to the North: ctrl + %s", config_current.short_shift_map_north)));
+    }
+    imgui_next_column();
+    {
+        imgui_text_disabled("Input");
+        imgui_text(_chr(str_printf(NULL, "Move forward: %s", config_current.input_forward)));
+        imgui_text(_chr(str_printf(NULL, "Move backward: %s", config_current.input_backward)));
+        imgui_text(_chr(str_printf(NULL, "Move left (strafe): %s", config_current.input_strafe_left)));
+        imgui_text(_chr(str_printf(NULL, "Move right (strafe): %s", config_current.input_strafe_right)));
+        imgui_text(_chr(str_printf(NULL, "Interact/Use: %s", config_current.input_interact)));
+        imgui_text(_chr(str_printf(NULL, "Run (hold): %s", config_current.input_run)));
+        imgui_text(_chr(str_printf(NULL, "Draw cell: %s", config_current.input_draw)));
+        imgui_text(_chr(str_printf(NULL, "Erase cell: %s", config_current.input_erase)));
+        imgui_text(_chr(str_printf(NULL, "Pick cell: %s", config_current.input_pick)));
+        imgui_text(_chr(str_printf(NULL, "Rotate cell: %s", config_current.input_rotate)));
+    }
+
+    imgui_end_child();
+
+    imgui_separator();
+
+    imgui_text_disabled("Episodes saved at:");
+    imgui_text("username\\Documents\\MapEditor\\episodes");
+    imgui_separator();
+
+    imgui_text_disabled("Created by:");
+    imgui_same_line();
+    imgui_text("Magomet Kochkarov aka 3RUN");
+    imgui_text_disabled("Email:");
+    imgui_same_line();
+    imgui_text("parkour09@mail.ru");
     imgui_separator();
 
     var width = (POPUP_HELP_WIDTH * config_saved.font_scale);
@@ -856,7 +916,7 @@ void popups_help()
     }
 }
 
-void popups_wait_for_input()
+void popup_wait_for_input()
 {
     imgui_text_centered("Press anykey to bind it to selected command!");
 

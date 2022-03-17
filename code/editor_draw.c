@@ -64,11 +64,11 @@ void editor_popups(Episode *episode)
             break;
 
         case DRAW_POPUP_HELP:
-            popups_help();
+            popup_help();
             break;
 
         case DRAW_POPUP_WAIT_FOR_INPUT:
-            popups_wait_for_input();
+            popup_wait_for_input();
             break;
         }
         imgui_end_popup();
