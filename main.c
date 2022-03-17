@@ -130,6 +130,7 @@ void map_editor_startup()
 	music_list_initialize();   // same as above, but for music
 	camera_initialize();	   // initialize all camera
 	popups_initialize();	   // initialize popups
+	editor_draw_initialize();  // initialize everything related to drawing/editing state ui
 }
 
 void on_frame_event()

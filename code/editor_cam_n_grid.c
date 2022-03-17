@@ -58,8 +58,8 @@ void grid_get_mouse_pos(int *x, int *y)
     }
     else
     {
-        *x = 0;
-        *y = 0;
+        *x = -1;
+        *y = -1;
     }
 }
 
