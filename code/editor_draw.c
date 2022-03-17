@@ -151,7 +151,7 @@ void editor_top_bar(Episode *episode)
             if (imgui_checkbox("Walls", &is_walls_visible) || imgui_checkbox("Objects", &is_objects_visible))
             {
             }
-            imgui_checkbox("Object connections", &is_cell_links_visible);
+            imgui_checkbox("Cell connections", &is_cell_links_visible);
             imgui_checkbox("Debug panel", &is_debug_panel_visible);
             imgui_end_menu();
         }

@@ -1,7 +1,6 @@
 
 #include <acknex.h>
 #include <windows.h>
-#include <default.c>
 #include <strio.c>
 
 #define PRAGMA_POINTER
@@ -69,6 +68,7 @@ int mouse_y = 0;
 #include "screenres_list.h"
 #include "engine.h"
 #include "engine_keybind.h"
+#include "debug_panel.h"
 #include "config.h"
 #include "assets.h"
 #include "shaders.h"
@@ -87,6 +87,7 @@ int mouse_y = 0;
 #include "screenres_list.c"
 #include "engine.c"
 #include "engine_keybind.c"
+#include "debug_panel.c"
 #include "config.c"
 #include "assets.c"
 #include "shaders.c"
@@ -116,6 +117,7 @@ void map_editor_startup()
 	screen_resolutions_find_all(); // find all available screen resolution (primary monitor only)
 	engine_initialize();		   // initialize all engine settings
 	assets_initialize();		   // load all editor assets (textures, sprites)
+	debug_panel_initialize();	   // initialize debug panel
 	shaders_initialize();		   // initialize all shaders used in editor
 	imgui_init(0);				   // initialize imgui
 	imgui_change_theme();		   // and apply custom theme
@@ -173,7 +175,8 @@ void on_frame_event()
 		sys_exit(NULL);
 		break;
 	}
-
+	
+	debug_panel_update();
 	shaders_update();
 	camera_auto_resize();
 	mouse_lock_in_window();
@@ -187,6 +190,7 @@ void on_frame_event()
 void on_exit_event()
 {
 	assets_destroy_all();
+	debug_panel_destroy();
 	shaders_destroy();
 	episode_list_destroy();
 	music_list_destroy();
