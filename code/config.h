@@ -36,13 +36,18 @@ STRING *input_strafe_left_entry_str = "Move left (strafe)";
 STRING *input_strafe_right_entry_str = "Move right (strafe)";
 STRING *input_interact_entry_str = "Interact/Use";
 STRING *input_run_entry_str = "Run (hold)";
+STRING *input_draw_entry_str = "Draw cell";
+STRING *input_erase_entry_str = "Erase cell";
+STRING *input_pick_entry_str = "Pick cell";
+STRING *input_rotate_entry_str = "Rotate cell";
 
 // config shortcut entries
 STRING *short_help_entry_str = "Help";
 STRING *short_new_entry_str = "New episode";
 STRING *short_open_entry_str = "Open episode";
 STRING *short_save_entry_str = "Save episode";
-STRING *short_ep_edit_entry_str = "Edit episode";
+STRING *short_ep_reset_entry_str = "Episode reset";
+STRING *short_ep_edit_entry_str = "Episode edit";
 STRING *short_reset_map_entry_str = "Reset active map";
 STRING *short_map_settings_entry_str = "Active map settings";
 STRING *short_screenshot_entry_str = "Take screenshot";
@@ -82,19 +87,20 @@ STRING *input_def_strafe_left_str = "a";
 STRING *input_def_strafe_right_str = "d";
 STRING *input_def_interact_str = "e";
 STRING *input_def_run_str = "shiftl";
-STRING *input_def_obj_create_str = "mouse_left";
-STRING *input_def_obj_erase_str = "mouse_right";
-STRING *input_def_obj_rotata_str = "mouse_middle";
-STRING *input_def_asset_list_str = "tab";
+STRING *input_def_draw_str = "mouse_left";
+STRING *input_def_erase_str = "mouse_right";
+STRING *input_def_pick_str = "mouse_middle";
+STRING *input_def_rotate_str = "r";
 
 // default shortcuts
 STRING *short_def_help_str = "f1";
 STRING *short_def_new_str = "f2";
 STRING *short_def_open_str = "f3";
 STRING *short_def_save_str = "f4";
-STRING *short_def_ep_edit_str = "f5";
-STRING *short_def_reset_map_str = "f6";
-STRING *short_def_map_settings_str = "f7";
+STRING *short_def_ep_reset_str = "f5";
+STRING *short_def_ep_edit_str = "f6";
+STRING *short_def_reset_map_str = "f7";
+STRING *short_def_map_settings_str = "f8";
 STRING *short_def_screenshot_str = "f11";
 STRING *short_def_settings_str = "f12";
 STRING *short_def_prior_map_str = "pgdn";
@@ -130,12 +136,17 @@ typedef struct CONFIG
     char input_strafe_right[32];
     char input_interact[32];
     char input_run[32];
+    char input_draw[32];
+    char input_erase[32];
+    char input_pick[32];
+    char input_rotate[32];
 
     // shortcuts
     char short_help[32];
     char short_new[32];
     char short_open[32];
     char short_save[32];
+    char short_ep_reset[32];
     char short_ep_edit[32];
     char short_reset_map[32];
     char short_map_settings[32];

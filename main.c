@@ -39,8 +39,9 @@ STRING *music_extension_str = ".mid";  // only mid music is used
 #define EDITOR_STATE_TO_BUILD 7
 #define EDITOR_STATE_BUILD 8
 #define EDITOR_STATE_FROM_BUILD 9
-#define EDITOR_STATE_RESET_MAP 10
-#define EDITOR_STATE_EXIT 11
+#define EDITOR_STATE_RESET_EPISODE 10
+#define EDITOR_STATE_RESET_MAP 11
+#define EDITOR_STATE_EXIT 12
 
 // editor booleans
 int is_top_bar_used = false;
@@ -67,6 +68,7 @@ int mouse_y = 0;
 #include "savedir.h"
 #include "screenres_list.h"
 #include "engine.h"
+#include "engine_keybind.h"
 #include "config.h"
 #include "assets.h"
 #include "shaders.h"
@@ -75,6 +77,7 @@ int mouse_y = 0;
 #include "game_music_list.h"
 #include "game_ep_save_n_load.h"
 #include "editor.h"
+#include "editor_settings_input.h"
 #include "editor_cam_n_grid.h"
 #include "editor_popups.h"
 #include "editor_draw.h"
@@ -82,6 +85,7 @@ int mouse_y = 0;
 #include "savedir.c"
 #include "screenres_list.c"
 #include "engine.c"
+#include "engine_keybind.c"
 #include "config.c"
 #include "assets.c"
 #include "shaders.c"
@@ -90,6 +94,7 @@ int mouse_y = 0;
 #include "game_music_list.c"
 #include "game_ep_save_n_load.c"
 #include "editor.c"
+#include "editor_settings_input.c"
 #include "editor_cam_n_grid.c"
 #include "editor_popups.c"
 #include "editor_draw.c"
@@ -117,6 +122,7 @@ void map_editor_startup()
 	episode_list_initialize(); // load all episodes from 'episodes' folder
 	music_list_initialize();   // same as above, but for music
 	camera_initialize();	   // initialize all camera
+	popups_initialize();	   // initialize popups
 }
 
 void on_frame_event()
@@ -162,6 +168,7 @@ void on_frame_event()
 		break;
 
 	case EDITOR_STATE_EXIT:
+		sys_exit(NULL);
 		break;
 	}
 
@@ -181,6 +188,7 @@ void on_exit_event()
 	shaders_destroy();
 	episode_list_destroy();
 	music_list_destroy();
+	popups_destroy();
 }
 
 void on_esc_event()

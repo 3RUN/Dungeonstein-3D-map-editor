@@ -8,12 +8,17 @@ void config_initialize(STRING *config_file)
     strcpy(config_default.input_strafe_right, _chr(input_def_strafe_right_str));
     strcpy(config_default.input_interact, _chr(input_def_interact_str));
     strcpy(config_default.input_run, _chr(input_def_run_str));
+    strcpy(config_default.input_draw, _chr(input_def_draw_str));
+    strcpy(config_default.input_erase, _chr(input_def_erase_str));
+    strcpy(config_default.input_pick, _chr(input_def_pick_str));
+    strcpy(config_default.input_rotate, _chr(input_def_rotate_str));
 
     // default shortcut
     strcpy(config_default.short_help, _chr(short_def_help_str));
     strcpy(config_default.short_new, _chr(short_def_new_str));
     strcpy(config_default.short_open, _chr(short_def_open_str));
     strcpy(config_default.short_save, _chr(short_def_save_str));
+    strcpy(config_default.short_ep_reset, _chr(short_def_ep_reset_str));
     strcpy(config_default.short_ep_edit, _chr(short_def_ep_edit_str));
     strcpy(config_default.short_reset_map, _chr(short_def_reset_map_str));
     strcpy(config_default.short_map_settings, _chr(short_def_map_settings_str));
@@ -85,12 +90,17 @@ void config_reset_to_default(var tab)
         strcpy(config_current.input_strafe_right, config_default.input_strafe_right);
         strcpy(config_current.input_interact, config_default.input_interact);
         strcpy(config_current.input_run, config_default.input_run);
+        strcpy(config_current.input_draw, config_default.input_draw);
+        strcpy(config_current.input_erase, config_default.input_erase);
+        strcpy(config_current.input_pick, config_default.input_pick);
+        strcpy(config_current.input_rotate, config_default.input_rotate);
 
         // shortcuts
         strcpy(config_current.short_help, config_default.short_help);
         strcpy(config_current.short_new, config_default.short_new);
         strcpy(config_current.short_open, config_default.short_open);
         strcpy(config_current.short_save, config_default.short_save);
+        strcpy(config_current.short_ep_reset, config_default.short_ep_reset);
         strcpy(config_current.short_ep_edit, config_default.short_ep_edit);
         strcpy(config_current.short_reset_map, config_default.short_reset_map);
         strcpy(config_current.short_map_settings, config_default.short_map_settings);
@@ -136,12 +146,17 @@ void config_reset_to_saved()
     strcpy(config_current.input_strafe_right, config_saved.input_strafe_right);
     strcpy(config_current.input_interact, config_saved.input_interact);
     strcpy(config_current.input_run, config_saved.input_run);
+    strcpy(config_current.input_draw, config_saved.input_draw);
+    strcpy(config_current.input_erase, config_saved.input_erase);
+    strcpy(config_current.input_pick, config_saved.input_pick);
+    strcpy(config_current.input_rotate, config_saved.input_rotate);
 
     // shortcuts
     strcpy(config_current.short_help, config_saved.short_help);
     strcpy(config_current.short_new, config_saved.short_new);
     strcpy(config_current.short_open, config_saved.short_open);
     strcpy(config_current.short_save, config_saved.short_save);
+    strcpy(config_current.short_ep_reset, config_saved.short_ep_reset);
     strcpy(config_current.short_ep_edit, config_saved.short_ep_edit);
     strcpy(config_current.short_reset_map, config_saved.short_reset_map);
     strcpy(config_current.short_map_settings, config_saved.short_map_settings);
@@ -184,12 +199,17 @@ void config_load_from_file(STRING *config_file)
     ini_read_write_char(config_current.input_strafe_right, config_file, config_input_section_str, input_strafe_right_entry_str, config_default.input_strafe_right);
     ini_read_write_char(config_current.input_interact, config_file, config_input_section_str, input_interact_entry_str, config_default.input_interact);
     ini_read_write_char(config_current.input_run, config_file, config_input_section_str, input_run_entry_str, config_default.input_run);
+    ini_read_write_char(config_current.input_draw, config_file, config_input_section_str, input_draw_entry_str, config_default.input_draw);
+    ini_read_write_char(config_current.input_erase, config_file, config_input_section_str, input_erase_entry_str, config_default.input_erase);
+    ini_read_write_char(config_current.input_pick, config_file, config_input_section_str, input_pick_entry_str, config_default.input_pick);
+    ini_read_write_char(config_current.input_rotate, config_file, config_input_section_str, input_rotate_entry_str, config_default.input_rotate);
 
     // shortcuts
     ini_read_write_char(config_current.short_help, config_file, config_shortcuts_section_str, short_help_entry_str, config_default.short_help);
     ini_read_write_char(config_current.short_new, config_file, config_shortcuts_section_str, short_new_entry_str, config_default.short_new);
     ini_read_write_char(config_current.short_open, config_file, config_shortcuts_section_str, short_open_entry_str, config_default.short_open);
     ini_read_write_char(config_current.short_save, config_file, config_shortcuts_section_str, short_save_entry_str, config_default.short_save);
+    ini_read_write_char(config_current.short_ep_reset, config_file, config_shortcuts_section_str, short_ep_reset_entry_str, config_default.short_ep_reset);
     ini_read_write_char(config_current.short_ep_edit, config_file, config_shortcuts_section_str, short_ep_edit_entry_str, config_default.short_ep_edit);
     ini_read_write_char(config_current.short_reset_map, config_file, config_shortcuts_section_str, short_reset_map_entry_str, config_default.short_reset_map);
     ini_read_write_char(config_current.short_map_settings, config_file, config_shortcuts_section_str, short_map_settings_entry_str, config_default.short_map_settings);
@@ -235,12 +255,17 @@ void config_save_to_file(STRING *config_file)
     ini_write(config_file, config_input_section_str, input_strafe_right_entry_str, config_current.input_strafe_right);
     ini_write(config_file, config_input_section_str, input_interact_entry_str, config_current.input_interact);
     ini_write(config_file, config_input_section_str, input_run_entry_str, config_current.input_run);
+    ini_write(config_file, config_input_section_str, input_draw_entry_str, config_current.input_draw);
+    ini_write(config_file, config_input_section_str, input_erase_entry_str, config_current.input_erase);
+    ini_write(config_file, config_input_section_str, input_pick_entry_str, config_current.input_pick);
+    ini_write(config_file, config_input_section_str, input_rotate_entry_str, config_current.input_rotate);
 
     // shortcut
     ini_write(config_file, config_shortcuts_section_str, short_help_entry_str, config_current.short_help);
     ini_write(config_file, config_shortcuts_section_str, short_new_entry_str, config_current.short_new);
     ini_write(config_file, config_shortcuts_section_str, short_open_entry_str, config_current.short_open);
     ini_write(config_file, config_shortcuts_section_str, short_save_entry_str, config_current.short_save);
+    ini_write(config_file, config_shortcuts_section_str, short_ep_reset_entry_str, config_current.short_ep_reset);
     ini_write(config_file, config_shortcuts_section_str, short_ep_edit_entry_str, config_current.short_ep_edit);
     ini_write(config_file, config_shortcuts_section_str, short_reset_map_entry_str, config_current.short_reset_map);
     ini_write(config_file, config_shortcuts_section_str, short_map_settings_entry_str, config_current.short_map_settings);
