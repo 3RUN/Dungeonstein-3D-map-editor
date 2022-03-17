@@ -700,7 +700,7 @@ void popup_ep_reset(Episode *episode)
     imgui_text_centered("Are you sure you want to reset the whole episode?");
     imgui_separator();
 
-    var width = (POPUP_RESET_MAP_WIDTH * config_saved.font_scale) / 2;
+    var width = (POPUP_EPISODE_RESET_WIDTH * config_saved.font_scale) / 2;
     if (imgui_button_withsize("Yes", width, POPUP_BUTTON_HEIGHT * config_saved.font_scale) || key_y)
     {
         is_popup_opened = false;
@@ -736,7 +736,14 @@ void popup_ep_edit(Episode *episode)
         return;
     }
 
-    imgui_text_centered(_chr(str_printf(NULL, "Edit: %s", episode->name)));
+    if (is_game_episode_loaded() == true)
+    {
+        imgui_text_centered(_chr(str_printf(NULL, "Edit: %s", episode->name)));
+    }
+    else
+    {
+        imgui_text_centered("Edit episode");
+    }
     imgui_separator();
 
     imgui_text("Episode name");
