@@ -148,6 +148,11 @@ void shortcut_save()
 
     if (is_game_episode_loaded() == true)
     {
+        STRING *temp_ep_name_str = "";
+        str_cpy(temp_ep_name_str, ep_save_name);
+        str_cat(temp_ep_name_str, " saved.");
+        message_add(temp_ep_name_str);
+
         editor_switch_state_to(EDITOR_STATE_SAVE);
     }
     else if (key_ctrl)

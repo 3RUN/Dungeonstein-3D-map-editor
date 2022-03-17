@@ -2,7 +2,7 @@
 #define _DEBUG_PANEL_H_
 
 #define DEBUG_PANEL_LAYER 998
-#define DEBUG_PANEL_ALPHA 55
+#define DEBUG_PANEL_ALPHA 75
 
 PANEL *debug_pan = NULL;
 

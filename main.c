@@ -139,18 +139,28 @@ void map_editor_startup()
 
 void on_frame_event()
 {
+	Map *active_map = map_get_active(&def_episode);
+
 	switch (editor_state)
 	{
 	case EDITOR_STATE_EDIT:
 		grid_get_mouse_pos(&mouse_x, &mouse_y);
-		camera_n_grid_update();
 		editor_main_update(&def_episode);
 		break;
 
 	case EDITOR_STATE_OPEN:
+		episode_reset(&def_episode);
+		episode_save_name_udpate_to(_str(selected_episode));
+		episode_load(ep_save_name, &def_episode);
+		editor_switch_state_to(EDITOR_STATE_EDIT);
 		break;
 
 	case EDITOR_STATE_NEW:
+		episode_reset(&def_episode);
+		episode_change_info(&def_episode, new_episode_name, new_episode_story_start, new_episode_story_end, new_episode_map_count);
+		episode_save_name_udpate_to(_str(new_episode_filename));
+		episode_save(ep_save_name, &def_episode);
+		editor_switch_state_to(EDITOR_STATE_EDIT);
 		break;
 
 	case EDITOR_STATE_SAVE:
@@ -176,7 +186,14 @@ void on_frame_event()
 	case EDITOR_STATE_FROM_BUILD:
 		break;
 
+	case EDITOR_STATE_RESET_EPISODE:
+		episode_reset(&def_episode);
+		editor_switch_state_to(EDITOR_STATE_EDIT);
+		break;
+
 	case EDITOR_STATE_RESET_MAP:
+		map_reset(active_map);
+		editor_switch_state_to(EDITOR_STATE_EDIT);
 		break;
 
 	case EDITOR_STATE_EXIT:
@@ -186,7 +203,7 @@ void on_frame_event()
 
 	debug_panel_update();
 	shaders_update();
-	camera_auto_resize();
+	camera_n_grid_update(&def_episode);
 	messages_update();
 	mouse_lock_in_window();
 

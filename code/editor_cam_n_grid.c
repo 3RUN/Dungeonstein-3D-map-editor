@@ -196,20 +196,85 @@ void camera_initialize()
     camera->z = camera_center.z - fsin(camera->tilt, camera->skill_y);
 }
 
-void camera_n_grid_update()
+void camera_fog_from_config()
 {
+    camera->fog_end = FOG_MAX_END;
+    camera->fog_start = FOG_MAX_END;
+
+    camera->clip_near = 0.1;
+    camera->clip_far = FOG_MAX_END * 1.25;
+
+    fog_color = 4;
+    change_color_from_hsv(&sky_color.blue, config_current.background_color[0], config_current.background_color[1], config_current.background_color[2]);
+    vec_set(&d3d_fogcolor4, &sky_color);
+}
+
+void camera_fog_from_map(Map *map)
+{
+    if (!map)
+    {
+        return;
+    }
+
+    camera->fog_end = map->fog_end;
+    camera->fog_start = map->fog_start;
+
+    camera->clip_near = 0.1;
+    camera->clip_far = FOG_MAX_END * 1.25;
+
+    fog_color = 4;
+    change_color_from_hsv(&d3d_fogcolor4.blue, map->fog_color[0], map->fog_color[1], map->fog_color[2]);
+
+    if (map->weather_id > WEATHER_CLEAR || map->is_ceiling_visible == false)
+    {
+        change_color_from_hsv(&sky_color.blue, map->ceiling_color[0], map->ceiling_color[1], map->ceiling_color[2]);
+    }
+    else
+    {
+        vec_set(&sky_color, &d3d_fogcolor4);
+    }
+}
+
+void camera_n_grid_update(Episode *episode)
+{
+    if (!episode)
+    {
+        return;
+    }
+
+    Map *active_map = map_get_active(episode);
+    if (!active_map)
+    {
+        return;
+    }
+
+    camera_auto_resize();
+
     VECTOR draw_offset;
     vec_set(&draw_offset, vector(0, 0, GRID_DRAW_OFFSET));
     vec_add(&draw_offset, &grid_center);
 
-    if (is_grid_visible == true)
+    switch (editor_state)
     {
-        COLOR grid_color;
-        grid_color.red = get_color_from_hsv(config_current.grid_color[0]);
-        grid_color.green = get_color_from_hsv(config_current.grid_color[1]);
-        grid_color.blue = get_color_from_hsv(config_current.grid_color[2]);
-        grid_draw(&draw_offset, MAP_CELL_SIZE, MAP_WIDTH, MAP_HEIGHT, &grid_color);
-    }
+    case EDITOR_STATE_EDIT:
+        if (is_grid_visible == true)
+        {
+            COLOR grid_color;
+            grid_color.red = get_color_from_hsv(config_current.grid_color[0]);
+            grid_color.green = get_color_from_hsv(config_current.grid_color[1]);
+            grid_color.blue = get_color_from_hsv(config_current.grid_color[2]);
+            grid_draw(&draw_offset, MAP_CELL_SIZE, MAP_WIDTH, MAP_HEIGHT, &grid_color);
+        }
+        camera_movement(grid_center.z, MAP_CELL_SIZE);
+        camera_fog_from_config();
+        break;
 
-    camera_movement(grid_center.z, MAP_CELL_SIZE);
+    case EDITOR_STATE_MAP_SETTINGS:
+        camera_fog_from_map(active_map);
+        break;
+
+    case EDITOR_STATE_BUILD:
+        camera_fog_from_map(active_map);
+        break;
+    }
 }

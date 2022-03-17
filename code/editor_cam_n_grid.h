@@ -28,6 +28,10 @@ void camera_movement(var grid_height, var grid_size);
 
 void camera_initialize();
 
-void camera_n_grid_update();
+void camera_fog_from_config();
+
+void camera_fog_from_map(Map *map);
+
+void camera_n_grid_update(Episode *episode);
 
 #endif
