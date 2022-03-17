@@ -120,6 +120,12 @@ void editor_top_bar(Episode *episode)
         return;
     }
 
+    Map *active_map = map_get_active(episode);
+    if (!active_map)
+    {
+        return;
+    }
+
     imgui_set_next_window_pos(0, 0, ImGuiCond_Always);
     imgui_set_next_window_size(screen_size.x, EDITOR_TOP_BAR_HEIGHT * config_saved.font_scale, ImGuiCond_Always);
     int top_bar_window_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoFocusOnAppearing;
@@ -188,6 +194,7 @@ void editor_top_bar(Episode *episode)
             imgui_checkbox("Grid", &is_grid_visible);
             if (imgui_checkbox("Walls", &is_walls_visible) || imgui_checkbox("Objects", &is_objects_visible))
             {
+                map_sketch_refresh(active_map);
             }
             imgui_checkbox("Cell connections", &is_cell_links_visible);
             imgui_checkbox("Debug panel", &is_debug_panel_visible);

@@ -28,6 +28,14 @@ STRING *music_extension_str = ".mid";  // only mid music is used
 #define MAP_CELL_SIZE 32
 #define MAP_Z_POS 0
 
+#define OBJ_ID skill50
+#define OBJ_POS_X skill51
+#define OBJ_POS_Y skill52
+#define OBJ_POS_Z skill53
+#define OBJ_TYPE skill54
+#define OBJ_ASSET skill55
+#define OBJ_TRIGGERED skill56
+
 #define EDITOR_STATE_EDIT 0
 #define EDITOR_STATE_OPEN 1
 #define EDITOR_STATE_NEW 2
@@ -71,12 +79,12 @@ int mouse_y = 0;
 #include "debug_panel.h"
 #include "config.h"
 #include "assets.h"
-#include "assets_helper.h"
 #include "shaders.h"
 #include "game_ep.h"
 #include "game_ep_list.h"
 #include "game_music_list.h"
 #include "game_ep_save_n_load.h"
+#include "assets_helper.h"
 #include "editor.h"
 #include "editor_msg.h"
 #include "editor_shortcuts.h"
@@ -84,6 +92,7 @@ int mouse_y = 0;
 #include "editor_cam_n_grid.h"
 #include "editor_popups.h"
 #include "editor_asset_params.h"
+#include "editor_map_sketch.h"
 #include "editor_main.h"
 
 #include "savedir.c"
@@ -93,12 +102,12 @@ int mouse_y = 0;
 #include "debug_panel.c"
 #include "config.c"
 #include "assets.c"
-#include "assets_helper.c"
 #include "shaders.c"
 #include "game_ep.c"
 #include "game_ep_list.c"
 #include "game_music_list.c"
 #include "game_ep_save_n_load.c"
+#include "assets_helper.c"
 #include "editor.c"
 #include "editor_msg.c"
 #include "editor_shortcuts.c"
@@ -106,6 +115,7 @@ int mouse_y = 0;
 #include "editor_cam_n_grid.c"
 #include "editor_popups.c"
 #include "editor_asset_params.c"
+#include "editor_map_sketch.c"
 #include "editor_main.c"
 
 void map_editor_startup()
@@ -129,12 +139,14 @@ void map_editor_startup()
 	imgui_change_theme();		   // and apply custom theme
 	config_initialize(temp_str);   // initialize config (set defaults and load from the config file)engine_initialize()
 
-	messages_initialize();	   // initialize editor message system
-	episode_list_initialize(); // load all episodes from 'episodes' folder
-	music_list_initialize();   // same as above, but for music
-	camera_initialize();	   // initialize all camera
-	popups_initialize();	   // initialize popups
-	editor_main_initialize();  // initialize everything related to drawing/editing state ui
+	messages_initialize();		 // initialize editor message system
+	episode_list_initialize();	 // load all episodes from 'episodes' folder
+	music_list_initialize();	 // same as above, but for music
+	camera_initialize();		 // initialize all camera
+	popups_initialize();		 // initialize popups
+	map_sketch_initialize();		 // grid of entities to visualize the map while drawing it
+	editor_main_initialize();	 // initialize everything related to drawing/editing state ui
+	episode_reset(&def_episode); // initialize default episode with default values
 }
 
 void on_frame_event()
@@ -146,12 +158,14 @@ void on_frame_event()
 	case EDITOR_STATE_EDIT:
 		grid_get_mouse_pos(&mouse_x, &mouse_y);
 		editor_main_update(&def_episode);
+		map_sketch_update(&def_episode);
 		break;
 
 	case EDITOR_STATE_OPEN:
 		episode_reset(&def_episode);
 		episode_save_name_udpate_to(_str(selected_episode));
 		episode_load(ep_save_name, &def_episode);
+		map_sketch_refresh(active_map);
 		editor_switch_state_to(EDITOR_STATE_EDIT);
 		break;
 
@@ -160,6 +174,7 @@ void on_frame_event()
 		episode_change_info(&def_episode, new_episode_name, new_episode_story_start, new_episode_story_end, new_episode_map_count);
 		episode_save_name_udpate_to(_str(new_episode_filename));
 		episode_save(ep_save_name, &def_episode);
+		map_sketch_refresh(active_map);
 		editor_switch_state_to(EDITOR_STATE_EDIT);
 		break;
 
@@ -188,11 +203,13 @@ void on_frame_event()
 
 	case EDITOR_STATE_RESET_EPISODE:
 		episode_reset(&def_episode);
+		map_sketch_refresh(active_map);
 		editor_switch_state_to(EDITOR_STATE_EDIT);
 		break;
 
 	case EDITOR_STATE_RESET_MAP:
 		map_reset(active_map);
+		map_sketch_refresh(active_map);
 		editor_switch_state_to(EDITOR_STATE_EDIT);
 		break;
 
@@ -222,6 +239,7 @@ void on_exit_event()
 	episode_list_destroy();
 	music_list_destroy();
 	popups_destroy();
+	map_sketch_destroy();
 	editor_main_destroy();
 }
 
@@ -229,8 +247,54 @@ void on_esc_event()
 {
 }
 
+void test()
+{
+	Map *active_map = map_get_active(&def_episode);
+
+	int x = 0, y = 0, id = 0;
+	for (y = 0; y < MAP_HEIGHT; y++)
+	{
+		for (x = 0; x < MAP_WIDTH; x++)
+		{
+			Cell *cell = &active_map->cell[x][y];
+			cell->type = integer(random(MAX_ASSET_TYPES));
+
+			switch (cell->type)
+			{
+			case ASSET_TYPE_WALLS:
+				cell->asset = integer(random(TOTAL_WALL_TEXTURES));
+				break;
+
+			case ASSET_TYPE_PROPS:
+				cell->asset = integer(random(TOTAL_PROPS_TEXTURES));
+				break;
+
+			case ASSET_TYPE_EVENTS:
+				cell->asset = integer(random(TOTAL_EVENT_TEXTURES));
+				break;
+
+			case ASSET_TYPE_ITEMS:
+				cell->asset = integer(random(TOTAL_ITEM_TEXTURES));
+				break;
+
+			case ASSET_TYPE_ENEMIES:
+				cell->asset = integer(random(TOTAL_ENEMY_TEXTURES));
+				break;
+
+			case ASSET_TYPE_BOSSES:
+				cell->asset = integer(random(TOTAL_BOSS_TEXTURES));
+				break;
+			}
+		}
+	}
+
+	map_sketch_refresh(active_map);
+}
+
 void main()
 {
+	on_1 = test;
+
 	max_entities = MAX_ENTITIES;
 
 	on_d3d_lost = imgui_reset;

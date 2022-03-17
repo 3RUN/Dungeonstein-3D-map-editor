@@ -12,6 +12,8 @@ VECTOR camera_center;
 VECTOR mouse_on_grid;
 VECTOR mouse_3d;
 
+VECTOR *vec_world_to_grid(VECTOR *world_pos);
+
 int is_pos_on_grid(VECTOR *pos);
 
 int is_pos_within_camera(VECTOR *pos);

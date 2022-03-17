@@ -40,6 +40,7 @@ typedef struct Cell
     VECTOR worldpos;
     var pan;
 
+    int id;
     int x;
     int y;
 

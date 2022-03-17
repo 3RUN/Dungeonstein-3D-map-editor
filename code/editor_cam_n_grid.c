@@ -1,4 +1,22 @@
 
+VECTOR *vec_world_to_grid(VECTOR *world_pos)
+{
+    if (!world_pos)
+    {
+        return vector(-1, -1, -1);
+    }
+
+    int grid_x = -1, grid_y = -1;
+
+    grid_x = floor(world_pos->x / MAP_CELL_SIZE);
+    grid_x = clamp(grid_x, -1, MAP_WIDTH);
+
+    grid_y = floor(-world_pos->y / MAP_CELL_SIZE);
+    grid_y = clamp(grid_y, -1, MAP_HEIGHT);
+
+    return vector(grid_x, grid_y, 0);
+}
+
 int is_pos_on_grid(VECTOR *pos)
 {
     if (!pos)
@@ -128,8 +146,6 @@ void camera_movement(var grid_height, var grid_size)
 {
     int is_allowed = is_allowed_to_draw();
 
-    DEBUG_VAR(is_allowed, 300);
-
     if (mouse_middle && is_allowed == true)
     {
         VECTOR vtemp;
@@ -254,9 +270,16 @@ void camera_n_grid_update(Episode *episode)
     vec_set(&draw_offset, vector(0, 0, GRID_DRAW_OFFSET));
     vec_add(&draw_offset, &grid_center);
 
-    switch (editor_state)
+    if (editor_state == EDITOR_STATE_MAP_SETTINGS)
     {
-    case EDITOR_STATE_EDIT:
+        camera_fog_from_map(active_map);
+    }
+    else if (editor_state == EDITOR_STATE_BUILD)
+    {
+        camera_fog_from_map(active_map);
+    }
+    else
+    {
         if (is_grid_visible == true)
         {
             COLOR grid_color;
@@ -267,14 +290,5 @@ void camera_n_grid_update(Episode *episode)
         }
         camera_movement(grid_center.z, MAP_CELL_SIZE);
         camera_fog_from_config();
-        break;
-
-    case EDITOR_STATE_MAP_SETTINGS:
-        camera_fog_from_map(active_map);
-        break;
-
-    case EDITOR_STATE_BUILD:
-        camera_fog_from_map(active_map);
-        break;
     }
 }

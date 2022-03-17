@@ -11,6 +11,11 @@ typedef struct Asset
 	BMAP *bmap;
 } Asset;
 
+// colors for locked doors
+#define DOOR_LOCKED_BLUE vector(128, 0, 0)
+#define DOOR_LOCKED_RED vector(0, 0, 128)
+#define DOOR_LOCKED_YELLOW vector(0, 128, 128)
+
 // used for preview image in the asset list
 #define ASSET_PREVIEW_IMAGE_WIDTH 64
 #define ASSET_PREVIEW_IMAGE_HEIGHT 64

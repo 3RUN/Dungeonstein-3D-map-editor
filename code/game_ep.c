@@ -106,7 +106,7 @@ void map_reset(Map *map)
 
     map_copy_weather(map, NULL);
 
-    int x = 0, y = 0;
+    int x = 0, y = 0, id = 0;
     for (y = 0; y < MAP_HEIGHT; y++)
     {
         for (x = 0; x < MAP_WIDTH; x++)
@@ -116,10 +116,13 @@ void map_reset(Map *map)
             vec_set(&cell->worldpos, vector((MAP_CELL_SIZE * x), -(MAP_CELL_SIZE * y), MAP_Z_POS));
             cell->pan = DEF_CELL_PAN;
 
+            cell->id = id;
             cell->x = x;
             cell->y = y;
 
             cell_copy(cell, NULL);
+
+            id++;
         }
     }
 }

@@ -37,7 +37,7 @@ void asset_params_id(Cell *cell)
     }
 }
 
-void asset_params_wall_params(Cell *cell, int index)
+void asset_params_wall_params(Cell *cell, int asset)
 {
     if (!cell)
     {
@@ -67,14 +67,14 @@ void asset_params_wall_params(Cell *cell, int index)
     }
 }
 
-void asset_params_props_params(Cell *cell, int index)
+void asset_params_props_params(Cell *cell, int asset)
 {
     if (!cell)
     {
         return;
     }
 
-    if (index == PROPS_FENCE || index == PROPS_FENCE_DIRTY || index == PROPS_DOOR || index == PROPS_DOOR_ELEVATOR)
+    if (asset == PROPS_FENCE || asset == PROPS_FENCE_DIRTY || asset == PROPS_DOOR || asset == PROPS_DOOR_ELEVATOR)
     {
         asset_params_activation_type(cell);
 
@@ -85,20 +85,20 @@ void asset_params_props_params(Cell *cell, int index)
             asset_params_id(cell);
         }
     }
-    else if (index == PROPS_DOOR_LOCKED)
+    else if (asset == PROPS_DOOR_LOCKED)
     {
         imgui_text(_chr(params_key_type_str));
         imgui_radiobutton(_chr(params_key_type_blue_str), &cell->event_type, 0);
         imgui_radiobutton(_chr(params_key_type_red_str), &cell->event_type, 1);
         imgui_radiobutton(_chr(params_key_type_yellow_str), &cell->event_type, 2);
     }
-    else if (index == PROPS_SWITCH)
+    else if (asset == PROPS_SWITCH)
     {
         asset_params_id(cell);
     }
 }
 
-void asset_params_events_params(Cell *cell, int index)
+void asset_params_events_params(Cell *cell, int asset)
 {
     if (!cell)
     {
@@ -192,7 +192,7 @@ void asset_params_events_params(Cell *cell, int index)
     }
 }
 
-void asset_params_enemies_params(Cell *cell, int index)
+void asset_params_enemies_params(Cell *cell, int asset)
 {
     if (!cell)
     {
@@ -216,7 +216,7 @@ void asset_params_enemies_params(Cell *cell, int index)
         imgui_radiobutton(_chr(params_drop_item_key_yellow_str), &cell->event_type, 2);
         imgui_radiobutton(_chr(params_drop_item_small_medkit_str), &cell->event_type, 3);
         imgui_radiobutton(_chr(params_drop_item_big_medkit_str), &cell->event_type, 4);
-        if (index >= ENEMY_GUARD_PISTOL && index != ENEMY_SUICIDE_BOMBER && index != ENEMY_ZOMBIE)
+        if (asset >= ENEMY_GUARD_PISTOL && asset != ENEMY_SUICIDE_BOMBER && asset != ENEMY_ZOMBIE)
         {
             imgui_radiobutton(_chr(params_drop_item_ammo_str), &cell->event_type, 5);
             imgui_radiobutton(_chr(params_drop_item_weapon_str), &cell->event_type, 6);
@@ -224,7 +224,7 @@ void asset_params_enemies_params(Cell *cell, int index)
     }
 }
 
-void asset_params_bosses_params(Cell *cell, int index)
+void asset_params_bosses_params(Cell *cell, int asset)
 {
     if (!cell)
     {
@@ -251,7 +251,7 @@ void asset_params_bosses_params(Cell *cell, int index)
     }
 }
 
-void asset_params_obj_params_update(Cell *cell, int type, int index)
+void asset_params_obj_params_update(Cell *cell, int type, int asset)
 {
     if (!cell)
     {
@@ -259,25 +259,25 @@ void asset_params_obj_params_update(Cell *cell, int type, int index)
     }
 
     // walls
-    if (type == ASSET_TYPE_WALLS && index != TOTAL_WALL_TEXTURES - 1)
+    if (can_become_secret_wall(type, asset) == true)
     {
-        asset_params_wall_params(cell, index);
+        asset_params_wall_params(cell, asset);
     }
-    else if (is_fence(type, index) == true || type == ASSET_TYPE_PROPS && index == PROPS_DOOR || type == ASSET_TYPE_PROPS && index == PROPS_DOOR_ELEVATOR || type == ASSET_TYPE_PROPS && index == PROPS_DOOR_LOCKED || type == ASSET_TYPE_PROPS && index == PROPS_SWITCH)
+    else if (is_fence(type, asset) == true || type == ASSET_TYPE_PROPS && asset == PROPS_DOOR || type == ASSET_TYPE_PROPS && asset == PROPS_DOOR_ELEVATOR || type == ASSET_TYPE_PROPS && asset == PROPS_DOOR_LOCKED || type == ASSET_TYPE_PROPS && asset == PROPS_SWITCH)
     {
-        asset_params_props_params(cell, index);
+        asset_params_props_params(cell, asset);
     }
-    else if (type == ASSET_TYPE_EVENTS && index == EVENT_TRIGGER_ZONE || type == ASSET_TYPE_EVENTS && index == EVENT_SPAWN_OBJECT)
+    else if (type == ASSET_TYPE_EVENTS && asset == EVENT_TRIGGER_ZONE || type == ASSET_TYPE_EVENTS && asset == EVENT_SPAWN_OBJECT)
     {
-        asset_params_events_params(cell, index);
+        asset_params_events_params(cell, asset);
     }
     else if (type == ASSET_TYPE_ENEMIES)
     {
-        asset_params_enemies_params(cell, index);
+        asset_params_enemies_params(cell, asset);
     }
     else if (type == ASSET_TYPE_BOSSES)
     {
-        asset_params_bosses_params(cell, index);
+        asset_params_bosses_params(cell, asset);
     }
     else
     {

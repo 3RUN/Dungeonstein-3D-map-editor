@@ -1,4 +1,33 @@
 
+int can_become_secret_wall(int type, int asset)
+{
+    if (type != ASSET_TYPE_WALLS || asset == TOTAL_WALL_TEXTURES - 1)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+int is_secret_wall(Cell *cell)
+{
+    if (!cell)
+    {
+        return false;
+    }
+
+    int cell_type = cell->type;
+    int cell_asset = cell->asset;
+    int cell_flag = cell->flag;
+
+    if (cell_type != ASSET_TYPE_WALLS || cell_asset == TOTAL_WALL_TEXTURES - 1)
+    {
+        return false;
+    }
+
+    return cell_flag;
+}
+
 int is_door(int type, int asset)
 {
     if (type != ASSET_TYPE_PROPS)
@@ -82,4 +111,39 @@ int is_switch(int type, int asset)
     }
 
     return true;
+}
+
+int is_rotatable(int type, int asset)
+{
+    if (is_npc(type, asset) == true) // enemies/bosses
+    {
+        return true;
+    }
+
+    if (is_door(type, asset) == true) // doors
+    {
+        return true;
+    }
+
+    if (is_fence(type, asset) == true) // dirty fences
+    {
+        return true;
+    }
+
+    if (type == ASSET_TYPE_PROPS && asset == PROPS_SWITCH) // switch
+    {
+        return true;
+    }
+
+    if (type == ASSET_TYPE_EVENTS && asset == EVENT_PLAYER) // start position (player spawn)
+    {
+        return true;
+    }
+
+    if (type == ASSET_TYPE_EVENTS && asset == EVENT_NPC_TURN_POINT) // turning point for npcs
+    {
+        return true;
+    }
+
+    return false;
 }
