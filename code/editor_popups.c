@@ -590,9 +590,11 @@ void popup_settings_input()
     editor_shortcut_add_keybinding(short_ep_reset_entry_str, "", config_current.short_ep_reset);
     editor_shortcut_add_keybinding(short_ep_edit_entry_str, "", config_current.short_ep_edit);
     editor_shortcut_add_keybinding(short_reset_map_entry_str, "", config_current.short_reset_map);
+    editor_shortcut_add_keybinding(short_test_run_entry_str, "", config_current.short_test_run);
     editor_shortcut_add_keybinding(short_map_settings_entry_str, "", config_current.short_map_settings);
     editor_shortcut_add_keybinding(short_screenshot_entry_str, "", config_current.short_screenshot);
     editor_shortcut_add_keybinding(short_settings_entry_str, "", config_current.short_settings);
+    editor_shortcut_add_keybinding(short_toggle_debug_entry_str, "", config_current.short_toggle_debug);
     editor_shortcut_add_keybinding(short_prior_map_entry_str, "ctrl +", config_current.short_prior_map);
     editor_shortcut_add_keybinding(short_next_map_entry_str, "ctrl +", config_current.short_next_map);
     editor_shortcut_add_keybinding(short_shift_map_west_entry_str, "shift +", config_current.short_shift_map_west);
@@ -867,9 +869,11 @@ void popup_help()
         imgui_text(_chr(str_printf(NULL, "Episode reset: %s", config_current.short_ep_reset)));
         imgui_text(_chr(str_printf(NULL, "Episode edit: %s", config_current.short_ep_edit)));
         imgui_text(_chr(str_printf(NULL, "Reset active map: %s", config_current.short_reset_map)));
+        imgui_text(_chr(str_printf(NULL, "Test run active map: %s", config_current.short_test_run)));
         imgui_text(_chr(str_printf(NULL, "Active map settings: %s", config_current.short_map_settings)));
         imgui_text(_chr(str_printf(NULL, "Take screenshot: %s", config_current.short_screenshot)));
         imgui_text(_chr(str_printf(NULL, "Settings: %s", config_current.short_settings)));
+        imgui_text(_chr(str_printf(NULL, "Debug mode ON/OFF: %s", config_current.short_toggle_debug)));
         imgui_text(_chr(str_printf(NULL, "Prior map: ctrl + %s", config_current.short_prior_map)));
         imgui_text(_chr(str_printf(NULL, "Next map: ctrl + %s", config_current.short_next_map)));
         imgui_text(_chr(str_printf(NULL, "Shift map to the West: ctrl + %s", config_current.short_shift_map_west)));

@@ -44,9 +44,11 @@ void shortcuts_update_from_config(CONFIG *config)
     shortcut_remove_binding(scancode_ep_reset);
     shortcut_remove_binding(scancode_ep_edit);
     shortcut_remove_binding(scancode_reset_map);
+    shortcut_remove_binding(scancode_test_run);
     shortcut_remove_binding(scancode_map_settings);
     shortcut_remove_binding(scancode_screenshot);
     shortcut_remove_binding(scancode_settings);
+    shortcut_remove_binding(scancode_toggle_debug);
     shortcut_remove_binding(scancode_prior_map);
     shortcut_remove_binding(scancode_next_map);
     shortcut_remove_binding(scancode_shift_map_west);
@@ -61,9 +63,11 @@ void shortcuts_update_from_config(CONFIG *config)
     scancode_ep_reset = engine_key_return_scancode_from_letter(config->short_ep_reset);
     scancode_ep_edit = engine_key_return_scancode_from_letter(config->short_ep_edit);
     scancode_reset_map = engine_key_return_scancode_from_letter(config->short_reset_map);
+    scancode_test_run = engine_key_return_scancode_from_letter(config->short_test_run);
     scancode_map_settings = engine_key_return_scancode_from_letter(config->short_map_settings);
     scancode_screenshot = engine_key_return_scancode_from_letter(config->short_screenshot);
     scancode_settings = engine_key_return_scancode_from_letter(config->short_settings);
+    scancode_toggle_debug = engine_key_return_scancode_from_letter(config->short_toggle_debug);
     scancode_prior_map = engine_key_return_scancode_from_letter(config->short_prior_map);
     scancode_next_map = engine_key_return_scancode_from_letter(config->short_next_map);
     scancode_shift_map_west = engine_key_return_scancode_from_letter(config->short_shift_map_west);
@@ -78,9 +82,11 @@ void shortcuts_update_from_config(CONFIG *config)
     shortcut_update_binding(scancode_ep_reset, shortcut_ep_reset);
     shortcut_update_binding(scancode_ep_edit, shortcut_ep_edit);
     shortcut_update_binding(scancode_reset_map, shortcut_reset_map);
+    shortcut_update_binding(scancode_test_run, shortcut_test_run);
     shortcut_update_binding(scancode_map_settings, shortcut_map_settings);
     shortcut_update_binding(scancode_screenshot, shortcut_screenshot);
     shortcut_update_binding(scancode_settings, shortcut_settings);
+    shortcut_update_binding(scancode_toggle_debug, shortcut_toggle_debug);
     shortcut_update_binding(scancode_prior_map, shortcut_prior_map);
     shortcut_update_binding(scancode_next_map, shortcut_next_map);
     shortcut_update_binding(scancode_shift_map_west, shortcut_shift_map_west);
@@ -91,85 +97,198 @@ void shortcuts_update_from_config(CONFIG *config)
 
 void shortcut_help()
 {
-    cprintf0("\nhelp");
+    if (is_shortcut_allowed() == false)
+    {
+        return;
+    }
+
+    editor_switch_popup_to(DRAW_POPUP_HELP);
 }
 
 void shortcut_new()
 {
-    cprintf0("\nnew");
+    if (is_shortcut_allowed() == false)
+    {
+        return;
+    }
+
+    if (is_game_episode_loaded() == true)
+    {
+        editor_switch_popup_to(DRAW_POPUP_SURE_NEW);
+    }
+    else
+    {
+        editor_switch_popup_to(DRAW_POPUP_NEW);
+    }
 }
 
 void shortcut_open()
 {
-    cprintf0("\nopen");
+    if (is_shortcut_allowed() == false)
+    {
+        return;
+    }
+
+    if (is_game_episode_loaded() == true)
+    {
+        editor_switch_popup_to(DRAW_POPUP_SURE_OPEN);
+    }
+    else
+    {
+        editor_switch_popup_to(DRAW_POPUP_OPEN);
+    }
 }
 
 void shortcut_save()
 {
-    cprintf0("\nsave");
+    if (is_shortcut_allowed() == false)
+    {
+        return;
+    }
+
+    if (is_game_episode_loaded() == true)
+    {
+        editor_switch_state_to(EDITOR_STATE_SAVE);
+    }
+    else if (key_ctrl)
+    {
+        strcpy(save_as_filename, ep_save_name);
+        editor_switch_popup_to(DRAW_POPUP_SAVE_AS);
+    }
 }
 
 void shortcut_ep_reset()
 {
-    cprintf0("\nepisode reset");
+    if (is_shortcut_allowed() == false)
+    {
+        return;
+    }
+
+    editor_switch_popup_to(DRAW_POPUP_EP_RESET);
 }
 
 void shortcut_ep_edit()
 {
-    cprintf0("\nepisode edit");
+    if (is_shortcut_allowed() == false)
+    {
+        return;
+    }
+
+    strcpy(episode_edit_name, def_episode.name);
+    strcpy(episode_edit_story_start, def_episode.story_start);
+    strcpy(episode_edit_story_end, def_episode.story_end);
+    episode_edit_map_count = def_episode.map_count;
+    editor_switch_popup_to(DRAW_POPUP_EP_EDIT);
 }
 
 void shortcut_reset_map()
 {
-    cprintf0("\nreset map");
+    if (is_shortcut_allowed() == false)
+    {
+        return;
+    }
+
+    editor_switch_popup_to(DRAW_POPUP_MAP_RESET);
+}
+
+void shortcut_test_run()
+{
+    if (is_shortcut_allowed() == false)
+    {
+        return;
+    }
+
+    editor_switch_state_to(EDITOR_STATE_TO_BUILD);
 }
 
 void shortcut_map_settings()
 {
-    cprintf0("\nmap settings");
+    if (is_shortcut_allowed() == false)
+    {
+        return;
+    }
+
+    editor_switch_state_to(EDITOR_STATE_TO_MAP_SETTINGS);
 }
 
 void shortcut_screenshot()
 {
-    cprintf0("\nscreenshot");
-
     beep();
-
     file_for_screen(str_printf(NULL, "shot_%d_%d_%d_", (long)sys_day, (long)sys_month, (long)sys_year), screenshot_num);
     screenshot_num++;
 }
 
 void shortcut_settings()
 {
-    cprintf0("\nsettings");
+    if (is_shortcut_allowed() == false)
+    {
+        return;
+    }
+
+    editor_switch_popup_to(DRAW_POPUP_SETTINGS);
+}
+
+void shortcut_toggle_debug()
+{
+    is_debug_panel_visible = 1 - is_debug_panel_visible;
 }
 
 void shortcut_prior_map()
 {
+    if (is_shortcut_allowed() == false)
+    {
+        return;
+    }
+
     cprintf0("\nprior map");
 }
 
 void shortcut_next_map()
 {
+    if (is_shortcut_allowed() == false)
+    {
+        return;
+    }
+
     cprintf0("\nnext map");
 }
 
 void shortcut_shift_map_west()
 {
+    if (is_shortcut_allowed() == false)
+    {
+        return;
+    }
+
     cprintf0("\nshift west");
 }
 
 void shortcut_shift_map_east()
 {
+    if (is_shortcut_allowed() == false)
+    {
+        return;
+    }
+
     cprintf0("\nshift east");
 }
 
 void shortcut_shift_map_south()
 {
+    if (is_shortcut_allowed() == false)
+    {
+        return;
+    }
+
     cprintf0("\nshift south");
 }
 
 void shortcut_shift_map_north()
 {
+    if (is_shortcut_allowed() == false)
+    {
+        return;
+    }
+
     cprintf0("\nshift north");
 }

@@ -10,9 +10,11 @@ var scancode_save = 0;
 var scancode_ep_reset = 0;
 var scancode_ep_edit = 0;
 var scancode_reset_map = 0;
+var scancode_test_run = 0;
 var scancode_map_settings = 0;
 var scancode_screenshot = 0;
 var scancode_settings = 0;
+var scancode_toggle_debug = 0;
 var scancode_prior_map = 0;
 var scancode_next_map = 0;
 var scancode_shift_map_west = 0;
@@ -42,11 +44,15 @@ void shortcut_ep_edit();
 
 void shortcut_reset_map();
 
+void shortcut_test_run();
+
 void shortcut_map_settings();
 
 void shortcut_screenshot();
 
 void shortcut_settings();
+
+void shortcut_toggle_debug();
 
 void shortcut_prior_map();
 
