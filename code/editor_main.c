@@ -422,6 +422,35 @@ void editor_side_bar(Episode *episode)
     }
     imgui_separator();
 
+    imgui_text("Active map id: ");
+    imgui_same_line();
+    imgui_align_right_with_offset(80);
+    if (imgui_arrow_button("Decrease", ImGuiDir_Left))
+    {
+        active_map_id--;
+        active_map_id = clamp(active_map_id, 0, episode->map_count - 1);
+
+        Map *active_map = map_get_active(episode);
+        if (active_map)
+        {
+            map_sketch_refresh(active_map);
+        }
+    }
+    imgui_same_line();
+    imgui_text(_chr(str_printf(NULL, "%d / %d", (long)(active_map_id + 1), (long)episode->map_count)));
+    imgui_same_line();
+    if (imgui_arrow_button("Increase", ImGuiDir_Right))
+    {
+        active_map_id++;
+        active_map_id = clamp(active_map_id, 0, episode->map_count - 1);
+
+        Map *active_map = map_get_active(episode);
+        if (active_map)
+        {
+            map_sketch_refresh(active_map);
+        }
+    }
+    active_map_id = clamp(active_map_id, 0, episode->map_count - 1);
     imgui_separator();
 
     imgui_text(_chr(str_printf(NULL, "Mouse pos x = %d; y = %d;", (long)mouse_x, (long)mouse_y)));

@@ -97,6 +97,17 @@ int mouse_y = 0;
 #include "editor_cell_linker.h"
 #include "editor_main.h"
 
+void editor_reset()
+{
+	episode_selection_reset();
+	music_selection_reset();
+
+	active_map_id = 0;
+
+	selected_type = ASSET_TYPE_WALLS;
+	selected_asset = 0;
+}
+
 #include "savedir.c"
 #include "screenres_list.c"
 #include "engine.c"
@@ -172,6 +183,7 @@ void on_frame_event()
 		episode_save_name_udpate_to(_str(selected_episode));
 		episode_load(ep_save_name, &def_episode);
 		map_sketch_refresh(active_map);
+		editor_reset();
 		editor_switch_state_to(EDITOR_STATE_EDIT);
 		break;
 
@@ -181,6 +193,7 @@ void on_frame_event()
 		episode_save_name_udpate_to(_str(new_episode_filename));
 		episode_save(ep_save_name, &def_episode);
 		map_sketch_refresh(active_map);
+		editor_reset();
 		editor_switch_state_to(EDITOR_STATE_EDIT);
 		break;
 

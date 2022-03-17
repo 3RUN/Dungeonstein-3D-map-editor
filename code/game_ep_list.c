@@ -28,11 +28,6 @@ int episode_list_load()
 void episode_selection_reset()
 {
     found_episode_index = -1;
-
-    if (found_episodes_total > 0)
-    {
-        found_episode_index = 0;
-    }
 }
 
 void episode_list_refresh()

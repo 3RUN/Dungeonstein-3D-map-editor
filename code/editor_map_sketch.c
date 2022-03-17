@@ -15,8 +15,18 @@ void map_sketch_sprite_parent_ent_fnc()
     my->tilt = 90;                                            // look upwards !
 }
 
+void map_cursor_sprite_ent_fnc()
+{
+    set(my, PASSABLE | TRANSLUCENT | NOFILTER | BRIGHT | UNLIT);
+    vec_fill(&my->scale_x, 0.5 * SKETCH_SPRITE_SCALE_FACTOR); // scale down from 64x64 to 32x32 (tile_size)
+    my->pan = DEF_CELL_PAN;                                   // default pan, and don't change this !
+    my->tilt = 90;                                            // look upwards !
+}
+
 void map_sketch_initialize()
 {
+    cursor_sprite_ent = ent_create(cursor_sprite_tga, nullvector, map_cursor_sprite_ent_fnc);
+
     if (sketch_ents)
     {
         map_sketch_destroy_array(sketch_ents);
@@ -70,6 +80,11 @@ void map_sketch_destroy_array(array_t *array)
 
 void map_sketch_destroy()
 {
+    if (cursor_sprite_ent)
+    {
+        safe_remove(cursor_sprite_ent);
+    }
+
     map_sketch_destroy_array(sketch_ents);
     sketch_ents = NULL;
 }
@@ -187,6 +202,11 @@ void map_sketch_refresh(Map *map)
         return;
     }
 
+    if (cursor_sprite_ent)
+    {
+        reset(cursor_sprite_ent, INVISIBLE);
+    }
+
     int x = 0, y = 0;
     for (y = 0; y < MAP_HEIGHT; y++)
     {
@@ -200,6 +220,11 @@ void map_sketch_refresh(Map *map)
 
 void map_sketch_show()
 {
+    if (cursor_sprite_ent)
+    {
+        reset(cursor_sprite_ent, INVISIBLE);
+    }
+
     int x = 0, y = 0, id = 0;
     for (y = 0; y < MAP_HEIGHT; y++)
     {
@@ -237,6 +262,11 @@ void map_sketch_show()
 
 void map_sketch_hide()
 {
+    if (cursor_sprite_ent)
+    {
+        set(cursor_sprite_ent, INVISIBLE);
+    }
+
     int x = 0, y = 0, id = 0;
     for (y = 0; y < MAP_HEIGHT; y++)
     {
@@ -265,6 +295,27 @@ void map_sketch_update(Episode *episode)
 
     if (is_allowed_to_draw() == false)
     {
+        if (cursor_sprite_ent)
+        {
+            set(cursor_sprite_ent, INVISIBLE);
+        }
         return;
+    }
+
+    if (cursor_sprite_ent)
+    {
+        if (is(cursor_sprite_ent, INVISIBLE))
+        {
+            reset(cursor_sprite_ent, INVISIBLE);
+        }
+
+        VECTOR cursor_pos;
+        vec_set(&cursor_pos, &mouse_on_grid);
+        vec_scale(&cursor_pos, MAP_CELL_SIZE);
+        vec_set(&cursor_sprite_ent->x, &cursor_pos);
+
+        cursor_sprite_ent->alpha -= cursor_fade_speed * time_step;
+        cursor_sprite_ent->alpha = cycle(cursor_sprite_ent->alpha, cursor_alpha_min, cursor_alpha_max);
+        cursor_sprite_ent->ambient = cursor_sprite_ent->alpha;
     }
 }

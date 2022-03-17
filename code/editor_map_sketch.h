@@ -8,12 +8,21 @@
 STRING *empty_sprite_pcx = "empty.pcx";
 STRING *rotation_sprite_tga = "rotation.tga";
 STRING *secret_sprite_tga = "secret.tga";
+STRING *cursor_sprite_tga = "cursor.tga";
+
+ENTITY *cursor_sprite_ent = NULL;
 
 array_t *sketch_ents = NULL;
+
+var cursor_fade_speed = 7.5;
+var cursor_alpha_min = 50;
+var cursor_alpha_max = 100;
 
 void map_sketch_sprite_ent_fnc();
 
 void map_sketch_sprite_parent_ent_fnc();
+
+void map_cursor_sprite_ent_fnc();
 
 void map_sketch_initialize();
 

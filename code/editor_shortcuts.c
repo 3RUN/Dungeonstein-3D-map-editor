@@ -146,6 +146,11 @@ void shortcut_save()
         return;
     }
 
+    if (key_ctrl)
+    {
+        strcpy(save_as_filename, ep_save_name);
+        editor_switch_popup_to(MAIN_POPUP_SAVE_AS);
+    }
     if (is_game_episode_loaded() == true)
     {
         STRING *temp_ep_name_str = "";
@@ -155,14 +160,10 @@ void shortcut_save()
 
         editor_switch_state_to(EDITOR_STATE_SAVE);
     }
-    else if (key_ctrl)
+    else
     {
         strcpy(save_as_filename, ep_save_name);
         editor_switch_popup_to(MAIN_POPUP_SAVE_AS);
-    }
-    else
-    {
-        message_add("Episode saving failed.");
     }
 }
 
@@ -266,6 +267,15 @@ void shortcut_prior_map()
         return;
     }
 
+    active_map_id--;
+    active_map_id = clamp(active_map_id, 0, def_episode.map_count - 1);
+
+    Map *active_map = map_get_active(&def_episode);
+    if (active_map)
+    {
+        map_sketch_refresh(active_map);
+    }
+
     message_add(str_printf(NULL, "Moved to prior map! Active map id is %d", (long)active_map_id));
 }
 
@@ -274,6 +284,15 @@ void shortcut_next_map()
     if (is_shortcut_allowed() == false)
     {
         return;
+    }
+
+    active_map_id++;
+    active_map_id = clamp(active_map_id, 0, def_episode.map_count - 1);
+
+    Map *active_map = map_get_active(&def_episode);
+    if (active_map)
+    {
+        map_sketch_refresh(active_map);
     }
 
     message_add(str_printf(NULL, "Moved to next map! Active map id is %d", (long)active_map_id));
@@ -286,6 +305,34 @@ void shortcut_shift_map_west()
         return;
     }
 
+    if (!key_shift)
+    {
+        return;
+    }
+
+    Map *active_map = map_get_active(&def_episode);
+    if (!active_map)
+    {
+        return;
+    }
+
+    int x = 0, y = 0;
+    for (x = 0; x < MAP_WIDTH; x++)
+    {
+        Cell saved;
+        cell_copy(&saved, &active_map->cell[x][0]);
+
+        for (y = 0; y < MAP_HEIGHT; y++)
+        {
+            Cell *from = &active_map->cell[x][y + 1];
+            Cell *to = &active_map->cell[x][y];
+            cell_copy(to, from);
+        }
+
+        cell_copy(&active_map->cell[x][MAP_HEIGHT - 1], &saved);
+    }
+    map_sketch_refresh(active_map);
+
     message_add("Map shifted to the West");
 }
 
@@ -295,6 +342,34 @@ void shortcut_shift_map_east()
     {
         return;
     }
+
+    if (!key_shift)
+    {
+        return;
+    }
+
+    Map *active_map = map_get_active(&def_episode);
+    if (!active_map)
+    {
+        return;
+    }
+
+    int x = 0, y = 0;
+    for (x = 0; x < MAP_WIDTH; x++)
+    {
+        Cell saved;
+        cell_copy(&saved, &active_map->cell[x][MAP_HEIGHT - 1]);
+
+        for (y = MAP_HEIGHT - 1; y >= 0; y--)
+        {
+            Cell *from = &active_map->cell[x][y - 1];
+            Cell *to = &active_map->cell[x][y];
+            cell_copy(to, from);
+        }
+
+        cell_copy(&active_map->cell[x][0], &saved);
+    }
+    map_sketch_refresh(active_map);
 
     message_add("Map shifted to the East");
 }
@@ -306,6 +381,34 @@ void shortcut_shift_map_south()
         return;
     }
 
+    if (!key_shift)
+    {
+        return;
+    }
+
+    Map *active_map = map_get_active(&def_episode);
+    if (!active_map)
+    {
+        return;
+    }
+
+    int x = 0, y = 0;
+    for (y = 0; y < MAP_HEIGHT; y++)
+    {
+        Cell saved;
+        cell_copy(&saved, &active_map->cell[0][y]);
+
+        for (x = 0; x < MAP_WIDTH; x++)
+        {
+            Cell *from = &active_map->cell[x + 1][y];
+            Cell *to = &active_map->cell[x][y];
+            cell_copy(to, from);
+        }
+
+        cell_copy(&active_map->cell[MAP_WIDTH - 1][y], &saved);
+    }
+    map_sketch_refresh(active_map);
+
     message_add("Map shifted to the South");
 }
 
@@ -315,6 +418,34 @@ void shortcut_shift_map_north()
     {
         return;
     }
+
+    if (!key_shift)
+    {
+        return;
+    }
+
+    Map *active_map = map_get_active(&def_episode);
+    if (!active_map)
+    {
+        return;
+    }
+
+    int x = 0, y = 0;
+    for (y = 0; y < MAP_HEIGHT; y++)
+    {
+        Cell saved;
+        cell_copy(&saved, &active_map->cell[MAP_WIDTH - 1][y]);
+
+        for (x = MAP_WIDTH - 1; x >= 0; x--)
+        {
+            Cell *from = &active_map->cell[x - 1][y];
+            Cell *to = &active_map->cell[x][y];
+            cell_copy(to, from);
+        }
+
+        cell_copy(&active_map->cell[0][y], &saved);
+    }
+    map_sketch_refresh(active_map);
 
     message_add("Map shifted to the North");
 }

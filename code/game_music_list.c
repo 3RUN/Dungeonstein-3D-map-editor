@@ -27,11 +27,6 @@ int scan_music_folder()
 void music_selection_reset()
 {
     found_music_index = -1;
-
-    if (found_music_total > 0)
-    {
-        found_music_index = 0;
-    }
 }
 
 void music_list_refresh()

@@ -596,8 +596,8 @@ void popup_settings_input()
     editor_shortcut_add_keybinding(short_screenshot_entry_str, "", config_current.short_screenshot);
     editor_shortcut_add_keybinding(short_settings_entry_str, "", config_current.short_settings);
     editor_shortcut_add_keybinding(short_toggle_debug_entry_str, "", config_current.short_toggle_debug);
-    editor_shortcut_add_keybinding(short_prior_map_entry_str, "ctrl +", config_current.short_prior_map);
-    editor_shortcut_add_keybinding(short_next_map_entry_str, "ctrl +", config_current.short_next_map);
+    editor_shortcut_add_keybinding(short_prior_map_entry_str, "", config_current.short_prior_map);
+    editor_shortcut_add_keybinding(short_next_map_entry_str, "", config_current.short_next_map);
     editor_shortcut_add_keybinding(short_shift_map_west_entry_str, "shift +", config_current.short_shift_map_west);
     editor_shortcut_add_keybinding(short_shift_map_east_entry_str, "shift +", config_current.short_shift_map_east);
     editor_shortcut_add_keybinding(short_shift_map_south_entry_str, "shift +", config_current.short_shift_map_south);
@@ -875,8 +875,8 @@ void popup_help()
         imgui_text(_chr(str_printf(NULL, "Take screenshot: %s", config_current.short_screenshot)));
         imgui_text(_chr(str_printf(NULL, "Settings: %s", config_current.short_settings)));
         imgui_text(_chr(str_printf(NULL, "Debug mode ON/OFF: %s", config_current.short_toggle_debug)));
-        imgui_text(_chr(str_printf(NULL, "Prior map: ctrl + %s", config_current.short_prior_map)));
-        imgui_text(_chr(str_printf(NULL, "Next map: ctrl + %s", config_current.short_next_map)));
+        imgui_text(_chr(str_printf(NULL, "Prior map: %s", config_current.short_prior_map)));
+        imgui_text(_chr(str_printf(NULL, "Next map: %s", config_current.short_next_map)));
         imgui_text(_chr(str_printf(NULL, "Shift map to the West: ctrl + %s", config_current.short_shift_map_west)));
         imgui_text(_chr(str_printf(NULL, "Shift map to the East: ctrl + %s", config_current.short_shift_map_east)));
         imgui_text(_chr(str_printf(NULL, "Shift map to the South: ctrl + %s", config_current.short_shift_map_south)));
