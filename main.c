@@ -71,6 +71,7 @@ int mouse_y = 0;
 #include "debug_panel.h"
 #include "config.h"
 #include "assets.h"
+#include "assets_helper.h"
 #include "shaders.h"
 #include "game_ep.h"
 #include "game_ep_list.h"
@@ -82,6 +83,7 @@ int mouse_y = 0;
 #include "editor_settings_input.h"
 #include "editor_cam_n_grid.h"
 #include "editor_popups.h"
+#include "editor_asset_params.h"
 #include "editor_draw.h"
 
 #include "savedir.c"
@@ -91,6 +93,7 @@ int mouse_y = 0;
 #include "debug_panel.c"
 #include "config.c"
 #include "assets.c"
+#include "assets_helper.c"
 #include "shaders.c"
 #include "game_ep.c"
 #include "game_ep_list.c"
@@ -102,6 +105,7 @@ int mouse_y = 0;
 #include "editor_settings_input.c"
 #include "editor_cam_n_grid.c"
 #include "editor_popups.c"
+#include "editor_asset_params.c"
 #include "editor_draw.c"
 
 void map_editor_startup()

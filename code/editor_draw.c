@@ -323,6 +323,8 @@ void editor_side_bar(Episode *episode)
         var width = imgui_get_content_region_avail_width();
         imgui_begin_child(editor_preview_parameters_child_id, vector(width, (SIDEBAR_PARAM_CHILD_HEIGHT * config_saved.font_scale), 0), 1, selected_asset_parameters_child_flag);
 
+        asset_params_obj_params_update(&preview_cell, selected_type, selected_asset);
+
         imgui_end_child();
     }
     imgui_separator();
