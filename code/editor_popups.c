@@ -891,7 +891,7 @@ void popup_help()
         imgui_text(_chr(str_printf(NULL, "Move right (strafe): %s", config_current.input_strafe_right)));
         imgui_text(_chr(str_printf(NULL, "Interact/Use: %s", config_current.input_interact)));
         imgui_text(_chr(str_printf(NULL, "Run (hold): %s", config_current.input_run)));
-        imgui_text(_chr(str_printf(NULL, "Drag map with mouse (hold): %s", config_current.input_drag_map)));
+        imgui_text(_chr(str_printf(NULL, "Drag map (hold): %s", config_current.input_drag_map)));
         imgui_text(_chr(str_printf(NULL, "Draw cell: %s", config_current.input_draw)));
         imgui_text(_chr(str_printf(NULL, "Erase cell: %s", config_current.input_erase)));
         imgui_text(_chr(str_printf(NULL, "Pick cell (hold + draw): %s", config_current.input_pick)));
@@ -903,16 +903,12 @@ void popup_help()
 
     imgui_separator();
 
-    imgui_text_disabled("Episodes saved at:");
-    imgui_text("username\\Documents\\MapEditor\\episodes");
+    imgui_text_disabled_centered("Episodes saved at:");
+    imgui_text_centered("username\\Documents\\MapEditor\\episodes");
     imgui_separator();
 
-    imgui_text_disabled("Created by:");
-    imgui_same_line();
-    imgui_text("Magomet Kochkarov aka 3RUN");
-    imgui_text_disabled("Email:");
-    imgui_same_line();
-    imgui_text("parkour09@mail.ru");
+    imgui_text_disabled_centered("Created by:");
+    imgui_text_centered("Magomet Kochkarov aka 3RUN (parkour09@mail.ru)");
     imgui_separator();
 
     var width = (POPUP_HELP_WIDTH * config_saved.font_scale);

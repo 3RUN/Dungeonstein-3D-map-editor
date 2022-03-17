@@ -156,7 +156,7 @@ void tools_update(Map *map, Cell *p_cell)
 
     if (mouse_resume_drawing == false)
     {
-        if (key_draw)
+        if (key_draw || key_erase)
         {
             if (mouse_draw_once == true)
             {
