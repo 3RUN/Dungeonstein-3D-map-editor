@@ -95,6 +95,7 @@ int mouse_y = 0;
 #include "editor_map_sketch.h"
 #include "editor_draw_tools.h"
 #include "editor_cell_linker.h"
+#include "editor_cell_info.h"
 #include "editor_main.h"
 
 void editor_reset()
@@ -131,6 +132,7 @@ void editor_reset()
 #include "editor_map_sketch.c"
 #include "editor_draw_tools.c"
 #include "editor_cell_linker.c"
+#include "editor_cell_info.c"
 #include "editor_main.c"
 
 void map_editor_startup()

@@ -459,6 +459,46 @@ void editor_side_bar(Episode *episode)
     imgui_end();
 }
 
+void editor_main_cell_tooltip(Episode *episode)
+{
+    if (!episode)
+    {
+        return;
+    }
+
+    if (config_current.is_cell_tooltip_enabled == false)
+    {
+        return;
+    }
+
+    Map *current_map = map_get_active(episode);
+    if (!current_map)
+    {
+        return;
+    }
+
+    if (mouse_moving == false)
+    {
+        cell_info_tooltip_counter += time_frame / 16;
+        cell_info_tooltip_counter = clamp(cell_info_tooltip_counter, 0, CELL_TOOLTIP_TIME + 1);
+
+        if (cell_info_tooltip_counter > CELL_TOOLTIP_TIME)
+        {
+            STRING *info_str = draw_map_info(current_map, mouse_x, mouse_y);
+            if (info_str)
+            {
+                imgui_set_tooltip(_chr(info_str));
+                imgui_begin_tooltip();
+                imgui_end_tooltip();
+            }
+        }
+    }
+    else
+    {
+        cell_info_tooltip_counter = 0;
+    }
+}
+
 void editor_main_update(Episode *episode)
 {
     if (!episode)
@@ -470,6 +510,7 @@ void editor_main_update(Episode *episode)
     editor_side_bar(episode);
     editor_top_bar(episode);
     editor_popups(episode);
+    editor_main_cell_tooltip(episode);
     imgui_end_imode();
 
     // handle esc without on_esc
