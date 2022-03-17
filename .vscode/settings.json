@@ -40,6 +40,7 @@
         "game_e_save_n_load.h": "c",
         "editor_map_settings.h": "c",
         "game_debug_panel.h": "c",
-        "editor_shortcuts.h": "c"
+        "editor_shortcuts.h": "c",
+        "game_ep.h": "c"
     }
 }

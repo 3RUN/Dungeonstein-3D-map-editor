@@ -71,8 +71,13 @@ int mouse_y = 0;
 #include "config.h"
 #include "assets.h"
 #include "shaders.h"
+#include "game_ep.h"
+#include "game_ep_list.h"
+#include "game_music_list.h"
+#include "game_ep_save_n_load.h"
 #include "editor.h"
 #include "editor_cam_n_grid.h"
+#include "editor_draw.h"
 
 #include "savedir.c"
 #include "screenres_list.c"
@@ -80,8 +85,13 @@ int mouse_y = 0;
 #include "config.c"
 #include "assets.c"
 #include "shaders.c"
+#include "game_ep.c"
+#include "game_ep_list.c"
+#include "game_music_list.c"
+#include "game_ep_save_n_load.c"
 #include "editor.c"
 #include "editor_cam_n_grid.c"
+#include "editor_draw.c"
 
 void map_editor_startup()
 {
@@ -102,6 +112,9 @@ void map_editor_startup()
 	imgui_init(0);				   // initialize imgui
 	imgui_change_theme();		   // and apply custom theme
 	config_initialize(temp_str);   // initialize config (set defaults and load from the config file)engine_initialize()
+
+	episode_list_initialize(); // load all episodes from 'episodes' folder
+	music_list_initialize();   // same as above, but for music
 
 	camera_initialize(); // initialize camera
 }
@@ -163,6 +176,8 @@ void on_exit_event()
 {
 	assets_destroy_all();
 	shaders_destroy();
+	episode_list_destroy();
+	music_list_destroy();
 }
 
 void on_esc_event()
