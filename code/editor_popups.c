@@ -369,7 +369,7 @@ void popup_save_as(Episode *episode)
             imgui_close_current_popup();
 
             episode_save_name_udpate_to(_str(save_as_filename));
-            episode_save(ep_save_name, &def_episode);
+            episode_save(ep_save_name, episode);
         }
         else
         {
@@ -593,7 +593,6 @@ void popup_settings_input()
     editor_shortcut_add_keybinding(short_map_settings_entry_str, "", config_current.short_map_settings);
     editor_shortcut_add_keybinding(short_screenshot_entry_str, "", config_current.short_screenshot);
     editor_shortcut_add_keybinding(short_settings_entry_str, "", config_current.short_settings);
-
     editor_shortcut_add_keybinding(short_prior_map_entry_str, "ctrl +", config_current.short_prior_map);
     editor_shortcut_add_keybinding(short_next_map_entry_str, "ctrl +", config_current.short_next_map);
     editor_shortcut_add_keybinding(short_shift_map_west_entry_str, "shift +", config_current.short_shift_map_west);

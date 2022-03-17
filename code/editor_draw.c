@@ -222,4 +222,41 @@ void editor_draw_update(Episode *episode)
     editor_top_bar(episode);
     editor_popups(episode);
     imgui_end_imode();
+
+    // handle esc without on_esc
+    // because on_ engine events are handled after imgui
+    // I've also separated esc from popup esc
+    if (is_popup_opened == false)
+    {
+        is_esc_popup_allowed = false;
+
+        if (key_esc)
+        {
+            if (is_esc_allowed == true)
+            {
+                editor_switch_popup_to(DRAW_POPUP_EXIT);
+                is_esc_allowed = false;
+            }
+        }
+        else
+        {
+            is_esc_allowed = true;
+        }
+    }
+    else // this part is used in popup functions
+    {
+        is_esc_allowed = false;
+
+        if (key_esc)
+        {
+            if (is_esc_popup_allowed == true)
+            {
+                is_esc_popup_allowed = false;
+            }
+        }
+        else
+        {
+            is_esc_popup_allowed = true;
+        }
+    }
 }

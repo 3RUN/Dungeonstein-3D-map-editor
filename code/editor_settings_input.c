@@ -23,17 +23,17 @@ void editor_input_check_overwrite(STRING *bindkey)
 
     // shortcuts
     editor_input_overwrite(config_current.short_help, bindkey);
-    editor_input_overwrite(config_current.short_settings, bindkey);
-    editor_input_overwrite(config_current.short_screenshot, bindkey);
-    editor_input_overwrite(config_current.short_save, bindkey);
     editor_input_overwrite(config_current.short_new, bindkey);
     editor_input_overwrite(config_current.short_open, bindkey);
+    editor_input_overwrite(config_current.short_save, bindkey);
     editor_input_overwrite(config_current.short_ep_reset, bindkey);
     editor_input_overwrite(config_current.short_ep_edit, bindkey);
-    editor_input_overwrite(config_current.short_prior_map, bindkey);
-    editor_input_overwrite(config_current.short_next_map, bindkey);
     editor_input_overwrite(config_current.short_reset_map, bindkey);
     editor_input_overwrite(config_current.short_map_settings, bindkey);
+    editor_input_overwrite(config_current.short_screenshot, bindkey);
+    editor_input_overwrite(config_current.short_settings, bindkey);
+    editor_input_overwrite(config_current.short_prior_map, bindkey);
+    editor_input_overwrite(config_current.short_next_map, bindkey);
     editor_input_overwrite(config_current.short_shift_map_west, bindkey);
     editor_input_overwrite(config_current.short_shift_map_east, bindkey);
     editor_input_overwrite(config_current.short_shift_map_south, bindkey);
@@ -68,17 +68,17 @@ void editor_input_bind_new_key(STRING *entry, STRING *bindkey)
     editor_input_bind_key(config_current.input_rotate, input_rotate_entry_str, entry, bindkey);
 
     editor_input_bind_key(config_current.short_help, short_help_entry_str, entry, bindkey); // shortcuts
-    editor_input_bind_key(config_current.short_settings, short_settings_entry_str, entry, bindkey);
-    editor_input_bind_key(config_current.short_screenshot, short_screenshot_entry_str, entry, bindkey);
-    editor_input_bind_key(config_current.short_save, short_save_entry_str, entry, bindkey);
     editor_input_bind_key(config_current.short_new, short_new_entry_str, entry, bindkey);
     editor_input_bind_key(config_current.short_open, short_open_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.short_save, short_save_entry_str, entry, bindkey);
     editor_input_bind_key(config_current.short_ep_reset, short_ep_reset_entry_str, entry, bindkey);
     editor_input_bind_key(config_current.short_ep_edit, short_ep_edit_entry_str, entry, bindkey);
-    editor_input_bind_key(config_current.short_prior_map, short_prior_map_entry_str, entry, bindkey);
-    editor_input_bind_key(config_current.short_next_map, short_next_map_entry_str, entry, bindkey);
     editor_input_bind_key(config_current.short_reset_map, short_reset_map_entry_str, entry, bindkey);
     editor_input_bind_key(config_current.short_map_settings, short_map_settings_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.short_screenshot, short_screenshot_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.short_settings, short_settings_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.short_prior_map, short_prior_map_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.short_next_map, short_next_map_entry_str, entry, bindkey);
     editor_input_bind_key(config_current.short_shift_map_west, short_shift_map_west_entry_str, entry, bindkey);
     editor_input_bind_key(config_current.short_shift_map_east, short_shift_map_east_entry_str, entry, bindkey);
     editor_input_bind_key(config_current.short_shift_map_south, short_shift_map_south_entry_str, entry, bindkey);
@@ -100,17 +100,17 @@ void editor_input_remove_bind_key(STRING *entry)
     editor_input_bind_key(config_current.input_rotate, input_rotate_entry_str, entry, input_none_str);
 
     editor_input_bind_key(config_current.short_help, short_help_entry_str, entry, input_none_str); // shortcuts
-    editor_input_bind_key(config_current.short_settings, short_settings_entry_str, entry, input_none_str);
-    editor_input_bind_key(config_current.short_screenshot, short_screenshot_entry_str, entry, input_none_str);
-    editor_input_bind_key(config_current.short_save, short_save_entry_str, entry, input_none_str);
     editor_input_bind_key(config_current.short_new, short_new_entry_str, entry, input_none_str);
     editor_input_bind_key(config_current.short_open, short_open_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.short_save, short_save_entry_str, entry, input_none_str);
     editor_input_bind_key(config_current.short_ep_reset, short_ep_reset_entry_str, entry, input_none_str);
     editor_input_bind_key(config_current.short_ep_edit, short_ep_edit_entry_str, entry, input_none_str);
-    editor_input_bind_key(config_current.short_prior_map, short_prior_map_entry_str, entry, input_none_str);
-    editor_input_bind_key(config_current.short_next_map, short_next_map_entry_str, entry, input_none_str);
     editor_input_bind_key(config_current.short_reset_map, short_reset_map_entry_str, entry, input_none_str);
     editor_input_bind_key(config_current.short_map_settings, short_map_settings_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.short_screenshot, short_screenshot_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.short_settings, short_settings_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.short_prior_map, short_prior_map_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.short_next_map, short_next_map_entry_str, entry, input_none_str);
     editor_input_bind_key(config_current.short_shift_map_west, short_shift_map_west_entry_str, entry, input_none_str);
     editor_input_bind_key(config_current.short_shift_map_east, short_shift_map_east_entry_str, entry, input_none_str);
     editor_input_bind_key(config_current.short_shift_map_south, short_shift_map_south_entry_str, entry, input_none_str);
