@@ -42,6 +42,8 @@
         "game_debug_panel.h": "c",
         "editor_shortcuts.h": "c",
         "game_ep.h": "c",
-        "editor_settings_input.h": "c"
+        "editor_settings_input.h": "c",
+        "editor_input.h": "c",
+        "sketcher_tools.h": "c"
     }
 }

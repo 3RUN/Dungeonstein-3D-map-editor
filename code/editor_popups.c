@@ -894,6 +894,7 @@ void popup_help()
         imgui_text(_chr(str_printf(NULL, "Erase cell: %s", config_current.input_erase)));
         imgui_text(_chr(str_printf(NULL, "Pick cell: %s", config_current.input_pick)));
         imgui_text(_chr(str_printf(NULL, "Rotate cell: %s", config_current.input_rotate)));
+        imgui_text(_chr(str_printf(NULL, "Rapid mode (hold): %s", config_current.input_run)));
     }
 
     imgui_end_child();

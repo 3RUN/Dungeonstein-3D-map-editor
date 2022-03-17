@@ -107,7 +107,7 @@ void map_sketch_sprite_update_from_cell(Cell *cell)
 
     if (cell_type >= ASSET_TYPE_WALLS)
     {
-        if (cell_ent->OBJ_TYPE != cell_type && cell_ent->OBJ_ASSET != cell_asset)
+        if (cell_ent->OBJ_TYPE != cell_type || cell_ent->OBJ_ASSET != cell_asset)
         {
             ent_morph(cell_ent, _chr(asset_get_filename(cell_type, cell_asset)));
             cell_ent->OBJ_TYPE = cell_type;

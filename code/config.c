@@ -79,6 +79,7 @@ void config_apply()
 {
     imgui_set_global_fontscale(config_current.font_scale);
     shortcuts_update_from_config(&config_current);
+    sketcher_update_input_from_config(&config_current);
     // player_update_input_from_config(&config_current);
     engine_apply_video_settings();
 }

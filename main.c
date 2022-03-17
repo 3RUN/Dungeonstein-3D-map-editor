@@ -88,11 +88,12 @@ int mouse_y = 0;
 #include "editor.h"
 #include "editor_msg.h"
 #include "editor_shortcuts.h"
-#include "editor_settings_input.h"
+#include "editor_input.h"
 #include "editor_cam_n_grid.h"
 #include "editor_popups.h"
 #include "editor_asset_params.h"
 #include "editor_map_sketch.h"
+#include "map_sketcher_tools.h"
 #include "editor_main.h"
 
 #include "savedir.c"
@@ -111,11 +112,12 @@ int mouse_y = 0;
 #include "editor.c"
 #include "editor_msg.c"
 #include "editor_shortcuts.c"
-#include "editor_settings_input.c"
+#include "editor_input.c"
 #include "editor_cam_n_grid.c"
 #include "editor_popups.c"
 #include "editor_asset_params.c"
 #include "editor_map_sketch.c"
+#include "map_sketcher_tools.c"
 #include "editor_main.c"
 
 void map_editor_startup()
@@ -159,6 +161,7 @@ void on_frame_event()
 		grid_get_mouse_pos(&mouse_x, &mouse_y);
 		editor_main_update(&def_episode);
 		map_sketch_update(&def_episode);
+		sketcher_tools_update(active_map, &preview_cell);
 		break;
 
 	case EDITOR_STATE_OPEN:
