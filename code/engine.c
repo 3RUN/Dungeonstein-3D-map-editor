@@ -165,6 +165,9 @@ void engine_apply_video_settings()
 
     // selected resolutionw with display modes
     engine_set_resolution_from_id(id, config_current.graphics_display_mode);
+
+    // relock the mouse !
+    autolock_mouse_locked = false;
 }
 
 void engine_update_settings_from_config()
