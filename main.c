@@ -24,6 +24,11 @@ STRING *music_extension_str = ".mid";  // only mid music is used
 
 #define MAX_ENTITIES 9999
 
+#define MAP_WIDTH 31
+#define MAP_HEIGHT 31
+#define MAP_CELL_SIZE 32
+#define MAP_Z_POS 0
+
 #include "cmd.h"
 #include "imgui.h"
 #include "ini.h"
