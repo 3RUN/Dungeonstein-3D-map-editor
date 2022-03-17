@@ -104,7 +104,7 @@ void pick_cell(Cell *to, Cell *from)
     preview_update(type, asset);
 }
 
-void sketcher_update_input_from_config(CONFIG *config)
+void tools_update_input_from_config(CONFIG *config)
 {
     scancode_draw = engine_key_return_scancode_from_letter(config->input_draw);
     scancode_erase = engine_key_return_scancode_from_letter(config->input_erase);
@@ -113,7 +113,7 @@ void sketcher_update_input_from_config(CONFIG *config)
     scancode_rapid = engine_key_return_scancode_from_letter(config->input_run);
 }
 
-void sketcher_tools_update(Map *map, Cell *p_cell)
+void tools_update(Map *map, Cell *p_cell)
 {
     if (!map || !p_cell)
     {

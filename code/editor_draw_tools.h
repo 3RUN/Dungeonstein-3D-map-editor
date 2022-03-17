@@ -1,5 +1,5 @@
-#ifndef _MAP_SKETCHER_TOOLS_H_
-#define _MAP_SKETCHER_TOOLS_H_
+#ifndef _EDITOR_DRAW_TOOLS_H_
+#define _EDITOR_DRAW_TOOLS_H_
 
 var mouse_resume_drawing = true; // used to prevent drawing when 'top bar' menu is used
 
@@ -37,8 +37,8 @@ void erase_cell(Cell *cell);
 
 void pick_cell(Cell *to, Cell *from);
 
-void sketcher_update_input_from_config(CONFIG *config);
+void tools_update_input_from_config(CONFIG *config);
 
-void sketcher_tools_update(Map *map, Cell *p_cell);
+void tools_update(Map *map, Cell *p_cell);
 
 #endif

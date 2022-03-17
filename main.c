@@ -93,7 +93,8 @@ int mouse_y = 0;
 #include "editor_popups.h"
 #include "editor_asset_params.h"
 #include "editor_map_sketch.h"
-#include "map_sketcher_tools.h"
+#include "editor_draw_tools.h"
+#include "editor_cell_linker.h"
 #include "editor_main.h"
 
 #include "savedir.c"
@@ -117,7 +118,8 @@ int mouse_y = 0;
 #include "editor_popups.c"
 #include "editor_asset_params.c"
 #include "editor_map_sketch.c"
-#include "map_sketcher_tools.c"
+#include "editor_draw_tools.c"
+#include "editor_cell_linker.c"
 #include "editor_main.c"
 
 void map_editor_startup()
@@ -146,7 +148,7 @@ void map_editor_startup()
 	music_list_initialize();	 // same as above, but for music
 	camera_initialize();		 // initialize all camera
 	popups_initialize();		 // initialize popups
-	map_sketch_initialize();		 // grid of entities to visualize the map while drawing it
+	map_sketch_initialize();	 // grid of entities to visualize the map while drawing it
 	editor_main_initialize();	 // initialize everything related to drawing/editing state ui
 	episode_reset(&def_episode); // initialize default episode with default values
 }
@@ -161,7 +163,7 @@ void on_frame_event()
 		grid_get_mouse_pos(&mouse_x, &mouse_y);
 		editor_main_update(&def_episode);
 		map_sketch_update(&def_episode);
-		sketcher_tools_update(active_map, &preview_cell);
+		tools_update(active_map, &preview_cell);
 		break;
 
 	case EDITOR_STATE_OPEN:
@@ -250,54 +252,8 @@ void on_esc_event()
 {
 }
 
-void test()
-{
-	Map *active_map = map_get_active(&def_episode);
-
-	int x = 0, y = 0, id = 0;
-	for (y = 0; y < MAP_HEIGHT; y++)
-	{
-		for (x = 0; x < MAP_WIDTH; x++)
-		{
-			Cell *cell = &active_map->cell[x][y];
-			cell->type = integer(random(MAX_ASSET_TYPES));
-
-			switch (cell->type)
-			{
-			case ASSET_TYPE_WALLS:
-				cell->asset = integer(random(TOTAL_WALL_TEXTURES));
-				break;
-
-			case ASSET_TYPE_PROPS:
-				cell->asset = integer(random(TOTAL_PROPS_TEXTURES));
-				break;
-
-			case ASSET_TYPE_EVENTS:
-				cell->asset = integer(random(TOTAL_EVENT_TEXTURES));
-				break;
-
-			case ASSET_TYPE_ITEMS:
-				cell->asset = integer(random(TOTAL_ITEM_TEXTURES));
-				break;
-
-			case ASSET_TYPE_ENEMIES:
-				cell->asset = integer(random(TOTAL_ENEMY_TEXTURES));
-				break;
-
-			case ASSET_TYPE_BOSSES:
-				cell->asset = integer(random(TOTAL_BOSS_TEXTURES));
-				break;
-			}
-		}
-	}
-
-	map_sketch_refresh(active_map);
-}
-
 void main()
 {
-	on_1 = test;
-
 	max_entities = MAX_ENTITIES;
 
 	on_d3d_lost = imgui_reset;
