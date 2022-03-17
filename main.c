@@ -84,7 +84,7 @@ int mouse_y = 0;
 #include "editor_cam_n_grid.h"
 #include "editor_popups.h"
 #include "editor_asset_params.h"
-#include "editor_draw.h"
+#include "editor_main.h"
 
 #include "savedir.c"
 #include "screenres_list.c"
@@ -106,7 +106,7 @@ int mouse_y = 0;
 #include "editor_cam_n_grid.c"
 #include "editor_popups.c"
 #include "editor_asset_params.c"
-#include "editor_draw.c"
+#include "editor_main.c"
 
 void map_editor_startup()
 {
@@ -134,7 +134,7 @@ void map_editor_startup()
 	music_list_initialize();   // same as above, but for music
 	camera_initialize();	   // initialize all camera
 	popups_initialize();	   // initialize popups
-	editor_draw_initialize();  // initialize everything related to drawing/editing state ui
+	editor_main_initialize();  // initialize everything related to drawing/editing state ui
 }
 
 void on_frame_event()
@@ -144,7 +144,7 @@ void on_frame_event()
 	case EDITOR_STATE_EDIT:
 		grid_get_mouse_pos(&mouse_x, &mouse_y);
 		camera_n_grid_update();
-		editor_draw_update(&def_episode);
+		editor_main_update(&def_episode);
 		break;
 
 	case EDITOR_STATE_OPEN:
@@ -205,6 +205,7 @@ void on_exit_event()
 	episode_list_destroy();
 	music_list_destroy();
 	popups_destroy();
+	editor_main_destroy();
 }
 
 void on_esc_event()

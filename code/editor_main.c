@@ -1,5 +1,5 @@
 
-void editor_draw_initialize()
+void editor_main_initialize()
 {
     // asset types
     asset_categories_combobox[ASSET_TYPE_WALLS] = "Walls";
@@ -13,7 +13,7 @@ void editor_draw_initialize()
     preview_update(selected_type, selected_asset);
 }
 
-void editor_draw_reset()
+void editor_main_reset()
 {
     selected_type = 0;
     selected_asset = 0;
@@ -22,7 +22,7 @@ void editor_draw_reset()
     preview_update(selected_type, selected_asset);
 }
 
-void editor_draw_destroy()
+void editor_main_destroy()
 {
     preview_bmap = NULL;
 }
@@ -40,8 +40,8 @@ void preview_update(int type, int asset)
 void editor_switch_popup_to(int state)
 {
     is_popup_opened = true;
-    draw_popup_old_state = draw_popup_state;
-    draw_popup_state = state;
+    main_popup_old_state = main_popup_state;
+    main_popup_state = state;
 }
 
 void editor_popups(Episode *episode)
@@ -53,59 +53,59 @@ void editor_popups(Episode *episode)
 
     if (is_popup_opened == true)
     {
-        imgui_open_popup(editor_draw_popup_id);
+        imgui_open_popup(editor_main_popup_id);
     }
 
     int editor_pause_popup_flags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings;
-    if (imgui_begin_popup_modals_params(editor_draw_popup_id, NULL, editor_pause_popup_flags))
+    if (imgui_begin_popup_modals_params(editor_main_popup_id, NULL, editor_pause_popup_flags))
     {
-        switch (draw_popup_state)
+        switch (main_popup_state)
         {
-        case DRAW_POPUP_OPEN:
+        case MAIN_POPUP_OPEN:
             popup_open(episode);
             break;
 
-        case DRAW_POPUP_SURE_OPEN:
+        case MAIN_POPUP_SURE_OPEN:
             popup_open_sure();
             break;
 
-        case DRAW_POPUP_NEW:
+        case MAIN_POPUP_NEW:
             popup_new(episode);
             break;
 
-        case DRAW_POPUP_SURE_NEW:
+        case MAIN_POPUP_SURE_NEW:
             popup_new_sure();
             break;
 
-        case DRAW_POPUP_SAVE_AS:
+        case MAIN_POPUP_SAVE_AS:
             popup_save_as(episode);
             break;
 
-        case DRAW_POPUP_SETTINGS:
+        case MAIN_POPUP_SETTINGS:
             popup_settings();
             break;
 
-        case DRAW_POPUP_EXIT:
+        case MAIN_POPUP_EXIT:
             popup_exit();
             break;
 
-        case DRAW_POPUP_EP_RESET:
+        case MAIN_POPUP_EP_RESET:
             popup_ep_reset(episode);
             break;
 
-        case DRAW_POPUP_EP_EDIT:
+        case MAIN_POPUP_EP_EDIT:
             popup_ep_edit(episode);
             break;
 
-        case DRAW_POPUP_MAP_RESET:
+        case MAIN_POPUP_MAP_RESET:
             popup_map_reset(episode);
             break;
 
-        case DRAW_POPUP_HELP:
+        case MAIN_POPUP_HELP:
             popup_help();
             break;
 
-        case DRAW_POPUP_WAIT_FOR_INPUT:
+        case MAIN_POPUP_WAIT_FOR_INPUT:
             popup_wait_for_input();
             break;
         }
@@ -137,22 +137,22 @@ void editor_top_bar(Episode *episode)
             {
                 if (is_game_episode_loaded() == true)
                 {
-                    editor_switch_popup_to(DRAW_POPUP_SURE_OPEN);
+                    editor_switch_popup_to(MAIN_POPUP_SURE_OPEN);
                 }
                 else
                 {
-                    editor_switch_popup_to(DRAW_POPUP_OPEN);
+                    editor_switch_popup_to(MAIN_POPUP_OPEN);
                 }
             }
             if (imgui_menu_item("New", "", 0, 1))
             {
                 if (is_game_episode_loaded() == true)
                 {
-                    editor_switch_popup_to(DRAW_POPUP_SURE_NEW);
+                    editor_switch_popup_to(MAIN_POPUP_SURE_NEW);
                 }
                 else
                 {
-                    editor_switch_popup_to(DRAW_POPUP_NEW);
+                    editor_switch_popup_to(MAIN_POPUP_NEW);
                 }
             }
             imgui_separator();
@@ -166,17 +166,17 @@ void editor_top_bar(Episode *episode)
             if (imgui_menu_item("Save as", "", 0, 1))
             {
                 strcpy(save_as_filename, ep_save_name);
-                editor_switch_popup_to(DRAW_POPUP_SAVE_AS);
+                editor_switch_popup_to(MAIN_POPUP_SAVE_AS);
             }
             imgui_separator();
             if (imgui_menu_item("Settings", "", 0, 1))
             {
-                editor_switch_popup_to(DRAW_POPUP_SETTINGS);
+                editor_switch_popup_to(MAIN_POPUP_SETTINGS);
             }
             imgui_separator();
             if (imgui_menu_item("Exit", "", 0, 1))
             {
-                editor_switch_popup_to(DRAW_POPUP_EXIT);
+                editor_switch_popup_to(MAIN_POPUP_EXIT);
             }
             imgui_end_menu();
         }
@@ -200,7 +200,7 @@ void editor_top_bar(Episode *episode)
 
             if (imgui_menu_item("Reset", "", 0, 1))
             {
-                editor_switch_popup_to(DRAW_POPUP_EP_RESET);
+                editor_switch_popup_to(MAIN_POPUP_EP_RESET);
             }
             if (imgui_menu_item("Edit", "", 0, 1))
             {
@@ -208,7 +208,7 @@ void editor_top_bar(Episode *episode)
                 strcpy(episode_edit_story_start, episode->story_start);
                 strcpy(episode_edit_story_end, episode->story_end);
                 episode_edit_map_count = episode->map_count;
-                editor_switch_popup_to(DRAW_POPUP_EP_EDIT);
+                editor_switch_popup_to(MAIN_POPUP_EP_EDIT);
             }
             imgui_end_menu();
         }
@@ -219,7 +219,7 @@ void editor_top_bar(Episode *episode)
 
             if (imgui_menu_item("Reset", "", 0, 1))
             {
-                editor_switch_popup_to(DRAW_POPUP_MAP_RESET);
+                editor_switch_popup_to(MAIN_POPUP_MAP_RESET);
             }
             if (imgui_menu_item("Settings", "", 0, 1))
             {
@@ -238,7 +238,7 @@ void editor_top_bar(Episode *episode)
 
             if (imgui_menu_item("Help", "", 0, 1))
             {
-                editor_switch_popup_to(DRAW_POPUP_HELP);
+                editor_switch_popup_to(MAIN_POPUP_HELP);
             }
             imgui_end_menu();
         }
@@ -423,7 +423,7 @@ void editor_side_bar(Episode *episode)
     imgui_end();
 }
 
-void editor_draw_update(Episode *episode)
+void editor_main_update(Episode *episode)
 {
     if (!episode)
     {
@@ -447,7 +447,7 @@ void editor_draw_update(Episode *episode)
         {
             if (is_esc_allowed == true)
             {
-                editor_switch_popup_to(DRAW_POPUP_EXIT);
+                editor_switch_popup_to(MAIN_POPUP_EXIT);
                 is_esc_allowed = false;
             }
         }

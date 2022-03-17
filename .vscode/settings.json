@@ -41,6 +41,7 @@
         "editor_map_settings.h": "c",
         "game_debug_panel.h": "c",
         "editor_shortcuts.h": "c",
-        "game_ep.h": "c"
+        "game_ep.h": "c",
+        "editor_settings_input.h": "c"
     }
 }
