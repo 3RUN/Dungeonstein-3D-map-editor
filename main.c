@@ -29,6 +29,38 @@ STRING *music_extension_str = ".mid";  // only mid music is used
 #define MAP_CELL_SIZE 32
 #define MAP_Z_POS 0
 
+#define EDITOR_STATE_EDIT 0
+#define EDITOR_STATE_OPEN 1
+#define EDITOR_STATE_NEW 2
+#define EDITOR_STATE_SAVE 3
+#define EDITOR_STATE_TO_MAP_SETTINGS 4
+#define EDITOR_STATE_MAP_SETTINGS 5
+#define EDITOR_STATE_FROM_MAP_SETTINGS 6
+#define EDITOR_STATE_TO_BUILD 7
+#define EDITOR_STATE_BUILD 8
+#define EDITOR_STATE_FROM_BUILD 9
+#define EDITOR_STATE_RESET_MAP 10
+#define EDITOR_STATE_EXIT 11
+
+// editor booleans
+int is_top_bar_used = false;
+int is_popup_opened = false;
+int is_popup_check_failed = false;
+int is_esc_allowed = false;
+int is_esc_popup_allowed = false;
+
+// view booleans
+int is_grid_visible = true;
+int is_walls_visible = true;
+int is_objects_visible = true;
+int is_bboxes_visible = false;
+int is_cell_links_visible = true;
+int is_debug_panel_visible = true;
+
+// mouse position on the grid
+int mouse_x = 0;
+int mouse_y = 0;
+
 #include "cmd.h"
 #include "imgui.h"
 #include "ini.h"
@@ -39,6 +71,8 @@ STRING *music_extension_str = ".mid";  // only mid music is used
 #include "config.h"
 #include "assets.h"
 #include "shaders.h"
+#include "editor.h"
+#include "editor_cam_n_grid.h"
 
 #include "savedir.c"
 #include "screenres_list.c"
@@ -46,6 +80,8 @@ STRING *music_extension_str = ".mid";  // only mid music is used
 #include "config.c"
 #include "assets.c"
 #include "shaders.c"
+#include "editor.c"
+#include "editor_cam_n_grid.c"
 
 void map_editor_startup()
 {
@@ -66,11 +102,55 @@ void map_editor_startup()
 	imgui_init(0);				   // initialize imgui
 	imgui_change_theme();		   // and apply custom theme
 	config_initialize(temp_str);   // initialize config (set defaults and load from the config file)engine_initialize()
+
+	camera_initialize(); // initialize camera
 }
 
 void on_frame_event()
 {
+	switch (editor_state)
+	{
+	case EDITOR_STATE_EDIT:
+		grid_get_mouse_pos(&mouse_x, &mouse_y);
+		camera_n_grid_update();
+		break;
+
+	case EDITOR_STATE_OPEN:
+		break;
+
+	case EDITOR_STATE_NEW:
+		break;
+
+	case EDITOR_STATE_SAVE:
+		break;
+
+	case EDITOR_STATE_TO_MAP_SETTINGS:
+		break;
+
+	case EDITOR_STATE_MAP_SETTINGS:
+		break;
+
+	case EDITOR_STATE_FROM_MAP_SETTINGS:
+		break;
+
+	case EDITOR_STATE_TO_BUILD:
+		break;
+
+	case EDITOR_STATE_BUILD:
+		break;
+
+	case EDITOR_STATE_FROM_BUILD:
+		break;
+
+	case EDITOR_STATE_RESET_MAP:
+		break;
+
+	case EDITOR_STATE_EXIT:
+		break;
+	}
+
 	shaders_update();
+	camera_auto_resize();
 	mouse_lock_in_window();
 
 	if (key_f4 && key_alt)
