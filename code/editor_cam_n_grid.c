@@ -146,7 +146,9 @@ void camera_movement(var grid_height, var grid_size)
 {
     int is_allowed = is_allowed_to_draw();
 
-    if (mouse_middle && is_allowed == true)
+    key_drag_map = key_pressed(scancode_drag_map);
+
+    if (key_drag_map && is_allowed == true)
     {
         VECTOR vtemp;
         vec_set(&vtemp, &mouse_dir3d);
@@ -210,6 +212,11 @@ void camera_initialize()
     camera->x = camera_center.x - fcos(camera->pan, camera->skill_x);
     camera->y = camera_center.y - fsin(camera->pan, camera->skill_x);
     camera->z = camera_center.z - fsin(camera->tilt, camera->skill_y);
+}
+
+void camera_update_input_from_config(CONFIG *config)
+{
+    scancode_drag_map = engine_key_return_scancode_from_letter(config->input_drag_map);
 }
 
 void camera_fog_from_config()

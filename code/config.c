@@ -8,6 +8,7 @@ void config_initialize(STRING *config_file)
     strcpy(config_default.input_strafe_right, _chr(input_def_strafe_right_str));
     strcpy(config_default.input_interact, _chr(input_def_interact_str));
     strcpy(config_default.input_run, _chr(input_def_run_str));
+    strcpy(config_default.input_drag_map, _chr(input_def_drag_map_str));
     strcpy(config_default.input_draw, _chr(input_def_draw_str));
     strcpy(config_default.input_erase, _chr(input_def_erase_str));
     strcpy(config_default.input_pick, _chr(input_def_pick_str));
@@ -80,6 +81,7 @@ void config_apply()
     imgui_set_global_fontscale(config_current.font_scale);
     shortcuts_update_from_config(&config_current);
     tools_update_input_from_config(&config_current);
+    camera_update_input_from_config(&config_current);
     // player_update_input_from_config(&config_current);
     engine_apply_video_settings();
 }
@@ -95,6 +97,7 @@ void config_reset_to_default(var tab)
         strcpy(config_current.input_strafe_right, config_default.input_strafe_right);
         strcpy(config_current.input_interact, config_default.input_interact);
         strcpy(config_current.input_run, config_default.input_run);
+        strcpy(config_current.input_drag_map, config_default.input_drag_map);
         strcpy(config_current.input_draw, config_default.input_draw);
         strcpy(config_current.input_erase, config_default.input_erase);
         strcpy(config_current.input_pick, config_default.input_pick);
@@ -153,6 +156,7 @@ void config_reset_to_saved()
     strcpy(config_current.input_strafe_right, config_saved.input_strafe_right);
     strcpy(config_current.input_interact, config_saved.input_interact);
     strcpy(config_current.input_run, config_saved.input_run);
+    strcpy(config_current.input_drag_map, config_saved.input_drag_map);
     strcpy(config_current.input_draw, config_saved.input_draw);
     strcpy(config_current.input_erase, config_saved.input_erase);
     strcpy(config_current.input_pick, config_saved.input_pick);
@@ -208,6 +212,7 @@ void config_load_from_file(STRING *config_file)
     ini_read_write_char(config_current.input_strafe_right, config_file, config_input_section_str, input_strafe_right_entry_str, config_default.input_strafe_right);
     ini_read_write_char(config_current.input_interact, config_file, config_input_section_str, input_interact_entry_str, config_default.input_interact);
     ini_read_write_char(config_current.input_run, config_file, config_input_section_str, input_run_entry_str, config_default.input_run);
+    ini_read_write_char(config_current.input_drag_map, config_file, config_input_section_str, input_drag_map_entry_str, config_default.input_drag_map);
     ini_read_write_char(config_current.input_draw, config_file, config_input_section_str, input_draw_entry_str, config_default.input_draw);
     ini_read_write_char(config_current.input_erase, config_file, config_input_section_str, input_erase_entry_str, config_default.input_erase);
     ini_read_write_char(config_current.input_pick, config_file, config_input_section_str, input_pick_entry_str, config_default.input_pick);
@@ -266,6 +271,7 @@ void config_save_to_file(STRING *config_file)
     ini_write(config_file, config_input_section_str, input_strafe_right_entry_str, config_current.input_strafe_right);
     ini_write(config_file, config_input_section_str, input_interact_entry_str, config_current.input_interact);
     ini_write(config_file, config_input_section_str, input_run_entry_str, config_current.input_run);
+    ini_write(config_file, config_input_section_str, input_drag_map_entry_str, config_current.input_drag_map);
     ini_write(config_file, config_input_section_str, input_draw_entry_str, config_current.input_draw);
     ini_write(config_file, config_input_section_str, input_erase_entry_str, config_current.input_erase);
     ini_write(config_file, config_input_section_str, input_pick_entry_str, config_current.input_pick);

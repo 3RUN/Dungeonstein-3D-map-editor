@@ -575,6 +575,7 @@ void popup_settings_input()
     editor_input_add_keybinding(input_strafe_right_entry_str, config_current.input_strafe_right);
     editor_input_add_keybinding(input_interact_entry_str, config_current.input_interact);
     editor_input_add_keybinding(input_run_entry_str, config_current.input_run);
+    editor_input_add_keybinding(input_drag_map_entry_str, config_current.input_drag_map);
     editor_input_add_keybinding(input_draw_entry_str, config_current.input_draw);
     editor_input_add_keybinding(input_erase_entry_str, config_current.input_erase);
     editor_input_add_keybinding(input_pick_entry_str, config_current.input_pick);
@@ -890,9 +891,10 @@ void popup_help()
         imgui_text(_chr(str_printf(NULL, "Move right (strafe): %s", config_current.input_strafe_right)));
         imgui_text(_chr(str_printf(NULL, "Interact/Use: %s", config_current.input_interact)));
         imgui_text(_chr(str_printf(NULL, "Run (hold): %s", config_current.input_run)));
+        imgui_text(_chr(str_printf(NULL, "Drag map with mouse (hold): %s", config_current.input_drag_map)));
         imgui_text(_chr(str_printf(NULL, "Draw cell: %s", config_current.input_draw)));
         imgui_text(_chr(str_printf(NULL, "Erase cell: %s", config_current.input_erase)));
-        imgui_text(_chr(str_printf(NULL, "Pick cell: %s", config_current.input_pick)));
+        imgui_text(_chr(str_printf(NULL, "Pick cell (hold + draw): %s", config_current.input_pick)));
         imgui_text(_chr(str_printf(NULL, "Rotate cell: %s", config_current.input_rotate)));
         imgui_text(_chr(str_printf(NULL, "Rapid mode (hold): %s", config_current.input_run)));
     }

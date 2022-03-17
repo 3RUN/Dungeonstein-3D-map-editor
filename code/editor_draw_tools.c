@@ -92,6 +92,11 @@ void pick_cell(Cell *to, Cell *from)
         return;
     }
 
+    if (from->type < 0)
+    {
+        return;
+    }
+
     int type = from->type;
     int asset = from->asset;
 
@@ -167,7 +172,15 @@ void tools_update(Map *map, Cell *p_cell)
     // draw and erase
     if (key_draw)
     {
-        if (key_rapid)
+        if (key_pick)
+        {
+            if (mouse_draw_once == true)
+            {
+                pick_cell(p_cell, current_cell);
+                mouse_draw_once = false;
+            }
+        }
+        else if (key_rapid)
         {
             mouse_draw_timer += time_frame / 16;
             while (mouse_draw_timer > mouse_draw_cooldown)
@@ -192,21 +205,24 @@ void tools_update(Map *map, Cell *p_cell)
 
         if (key_erase)
         {
-            if (key_rapid)
+            if (!key_pick)
             {
-                mouse_erase_timer += time_frame / 16;
-                while (mouse_erase_timer > mouse_erase_cooldown)
+                if (key_rapid)
                 {
-                    erase_cell(current_cell);
-                    mouse_erase_timer -= mouse_erase_cooldown;
+                    mouse_erase_timer += time_frame / 16;
+                    while (mouse_erase_timer > mouse_erase_cooldown)
+                    {
+                        erase_cell(current_cell);
+                        mouse_erase_timer -= mouse_erase_cooldown;
+                    }
                 }
-            }
-            else
-            {
-                if (mouse_erase_once == true)
+                else
                 {
-                    erase_cell(current_cell);
-                    mouse_erase_once = false;
+                    if (mouse_erase_once == true)
+                    {
+                        erase_cell(current_cell);
+                        mouse_erase_once = false;
+                    }
                 }
             }
         }
@@ -215,20 +231,6 @@ void tools_update(Map *map, Cell *p_cell)
             mouse_erase_timer = 0;
             mouse_erase_once = true;
         }
-    }
-
-    // pick cell
-    if (key_pick)
-    {
-        if (pick_cell_once == true)
-        {
-            pick_cell(p_cell, current_cell);
-            pick_cell_once = false;
-        }
-    }
-    else
-    {
-        pick_cell_once = true;
     }
 
     // rotate cell

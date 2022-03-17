@@ -12,6 +12,10 @@ VECTOR camera_center;
 VECTOR mouse_on_grid;
 VECTOR mouse_3d;
 
+var scancode_drag_map = 0;
+
+var key_drag_map = 0;
+
 VECTOR *vec_world_to_grid(VECTOR *world_pos);
 
 int is_pos_on_grid(VECTOR *pos);
@@ -29,6 +33,8 @@ void camera_auto_resize();
 void camera_movement(var grid_height, var grid_size);
 
 void camera_initialize();
+
+void camera_update_input_from_config(CONFIG *config);
 
 void camera_fog_from_config();
 

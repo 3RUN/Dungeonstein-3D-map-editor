@@ -36,6 +36,7 @@ STRING *input_strafe_left_entry_str = "Move left (strafe)";
 STRING *input_strafe_right_entry_str = "Move right (strafe)";
 STRING *input_interact_entry_str = "Interact/Use";
 STRING *input_run_entry_str = "Run (hold)";
+STRING *input_drag_map_entry_str = "Drag map";
 STRING *input_draw_entry_str = "Draw cell";
 STRING *input_erase_entry_str = "Erase cell";
 STRING *input_pick_entry_str = "Pick cell";
@@ -89,9 +90,10 @@ STRING *input_def_strafe_left_str = "a";
 STRING *input_def_strafe_right_str = "d";
 STRING *input_def_interact_str = "e";
 STRING *input_def_run_str = "shiftl";
+STRING *input_def_drag_map_str = "mouse_middle";
 STRING *input_def_draw_str = "mouse_left";
 STRING *input_def_erase_str = "mouse_right";
-STRING *input_def_pick_str = "mouse_middle";
+STRING *input_def_pick_str = "alt";
 STRING *input_def_rotate_str = "r";
 
 // default shortcuts
@@ -140,6 +142,7 @@ typedef struct CONFIG
     char input_strafe_right[32];
     char input_interact[32];
     char input_run[32];
+    char input_drag_map[32];
     char input_draw[32];
     char input_erase[32];
     char input_pick[32];

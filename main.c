@@ -164,6 +164,7 @@ void on_frame_event()
 		editor_main_update(&def_episode);
 		map_sketch_update(&def_episode);
 		tools_update(active_map, &preview_cell);
+		editor_cell_linker_update(active_map);
 		break;
 
 	case EDITOR_STATE_OPEN:
@@ -246,6 +247,7 @@ void on_exit_event()
 	popups_destroy();
 	map_sketch_destroy();
 	editor_main_destroy();
+	editor_cell_linker_destroy();
 }
 
 void on_esc_event()
