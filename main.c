@@ -53,7 +53,6 @@ int is_esc_popup_allowed = false;
 int is_grid_visible = true;
 int is_walls_visible = true;
 int is_objects_visible = true;
-int is_bboxes_visible = false;
 int is_cell_links_visible = true;
 int is_debug_panel_visible = true;
 
@@ -77,6 +76,7 @@ int mouse_y = 0;
 #include "game_ep_save_n_load.h"
 #include "editor.h"
 #include "editor_cam_n_grid.h"
+#include "editor_popups.h"
 #include "editor_draw.h"
 
 #include "savedir.c"
@@ -91,6 +91,7 @@ int mouse_y = 0;
 #include "game_ep_save_n_load.c"
 #include "editor.c"
 #include "editor_cam_n_grid.c"
+#include "editor_popups.c"
 #include "editor_draw.c"
 
 void map_editor_startup()
@@ -115,8 +116,7 @@ void map_editor_startup()
 
 	episode_list_initialize(); // load all episodes from 'episodes' folder
 	music_list_initialize();   // same as above, but for music
-
-	camera_initialize(); // initialize camera
+	camera_initialize();	   // initialize all camera
 }
 
 void on_frame_event()
@@ -126,6 +126,7 @@ void on_frame_event()
 	case EDITOR_STATE_EDIT:
 		grid_get_mouse_pos(&mouse_x, &mouse_y);
 		camera_n_grid_update();
+		editor_draw_update(&def_episode);
 		break;
 
 	case EDITOR_STATE_OPEN:
@@ -135,6 +136,8 @@ void on_frame_event()
 		break;
 
 	case EDITOR_STATE_SAVE:
+		episode_save(ep_save_name, &def_episode);
+		editor_switch_state_to(editor_old_state);
 		break;
 
 	case EDITOR_STATE_TO_MAP_SETTINGS:
