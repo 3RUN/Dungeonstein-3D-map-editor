@@ -110,10 +110,10 @@ void camera_auto_resize()
     if (editor_state == EDITOR_STATE_EDIT)
     {
         camera->pos_x = 0;
-        camera->pos_y = EDITOR_TOP_BAR_HEIGHT;
+        camera->pos_y = (EDITOR_TOP_BAR_HEIGHT * config_saved.font_scale);
         camera->size_x = screen_size.x;
-        camera->size_y = screen_size.y - EDITOR_TOP_BAR_HEIGHT;
-        camera->size_x = screen_size.x - EDITOR_SIDE_BAR_WIDTH;
+        camera->size_y = screen_size.y - (EDITOR_TOP_BAR_HEIGHT * config_saved.font_scale);
+        camera->size_x = screen_size.x - (EDITOR_SIDE_BAR_WIDTH * config_saved.font_scale);
     }
     else
     {

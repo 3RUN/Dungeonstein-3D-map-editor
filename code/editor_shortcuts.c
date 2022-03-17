@@ -155,6 +155,10 @@ void shortcut_save()
         strcpy(save_as_filename, ep_save_name);
         editor_switch_popup_to(DRAW_POPUP_SAVE_AS);
     }
+    else
+    {
+        message_add("Episode saving failed.");
+    }
 }
 
 void shortcut_ep_reset()
@@ -213,8 +217,16 @@ void shortcut_map_settings()
 
 void shortcut_screenshot()
 {
-    beep();
-    file_for_screen(str_printf(NULL, "shot_%d_%d_%d_", (long)sys_day, (long)sys_month, (long)sys_year), screenshot_num);
+    STRING *screenshot_str = "";
+    str_printf(screenshot_str, "shot_%d_%d_%d_", (long)sys_day, (long)sys_month, (long)sys_year);
+
+    STRING *temp_message_str = "";
+    str_cpy(temp_message_str, screenshot_str);
+    str_cat(temp_message_str, str_for_num(NULL, screenshot_num));
+    str_cat(temp_message_str, " was saved.");
+    message_add(temp_message_str);
+
+    file_for_screen(screenshot_str, screenshot_num);
     screenshot_num++;
 }
 
@@ -231,6 +243,15 @@ void shortcut_settings()
 void shortcut_toggle_debug()
 {
     is_debug_panel_visible = 1 - is_debug_panel_visible;
+
+    if (is_debug_panel_visible == true)
+    {
+        message_add("Debug mode is ON");
+    }
+    else
+    {
+        message_add("Debug mode is OFF");
+    }
 }
 
 void shortcut_prior_map()
@@ -240,7 +261,7 @@ void shortcut_prior_map()
         return;
     }
 
-    cprintf0("\nprior map");
+    message_add(str_printf(NULL, "Moved to prior map! Active map id is %d", (long)active_map_id));
 }
 
 void shortcut_next_map()
@@ -250,7 +271,7 @@ void shortcut_next_map()
         return;
     }
 
-    cprintf0("\nnext map");
+    message_add(str_printf(NULL, "Moved to next map! Active map id is %d", (long)active_map_id));
 }
 
 void shortcut_shift_map_west()
@@ -260,7 +281,7 @@ void shortcut_shift_map_west()
         return;
     }
 
-    cprintf0("\nshift west");
+    message_add("Map shifted to the West");
 }
 
 void shortcut_shift_map_east()
@@ -270,7 +291,7 @@ void shortcut_shift_map_east()
         return;
     }
 
-    cprintf0("\nshift east");
+    message_add("Map shifted to the East");
 }
 
 void shortcut_shift_map_south()
@@ -280,7 +301,7 @@ void shortcut_shift_map_south()
         return;
     }
 
-    cprintf0("\nshift south");
+    message_add("Map shifted to the South");
 }
 
 void shortcut_shift_map_north()
@@ -290,5 +311,5 @@ void shortcut_shift_map_north()
         return;
     }
 
-    cprintf0("\nshift north");
+    message_add("Map shifted to the North");
 }
