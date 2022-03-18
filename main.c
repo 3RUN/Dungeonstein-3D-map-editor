@@ -216,18 +216,23 @@ void on_frame_event()
 		break;
 
 	case EDITOR_STATE_TO_MAP_SETTINGS:
+		camera_reset(active_map, EDITOR_STATE_MAP_SETTINGS);
+		editor_switch_state_to(EDITOR_STATE_MAP_SETTINGS);
 		break;
 
 	case EDITOR_STATE_MAP_SETTINGS:
 		break;
 
 	case EDITOR_STATE_FROM_MAP_SETTINGS:
+		camera_reset(active_map, EDITOR_STATE_EDIT);
+		editor_switch_state_to(EDITOR_STATE_EDIT);
 		break;
 
 	case EDITOR_STATE_TO_BUILD:
-		// editor_reset();
+		editor_reset();
 		map_sketch_hide();
 		map_load(active_map);
+		camera_reset(active_map, EDITOR_STATE_BUILD);
 		editor_switch_state_to(EDITOR_STATE_BUILD);
 		break;
 
@@ -238,6 +243,7 @@ void on_frame_event()
 	case EDITOR_STATE_FROM_BUILD:
 		map_sketch_show();
 		map_destroy(active_map);
+		camera_reset(active_map, EDITOR_STATE_EDIT);
 		editor_switch_state_to(EDITOR_STATE_EDIT);
 		break;
 
@@ -273,6 +279,8 @@ void on_frame_event()
 	camera_n_grid_update(&def_episode);
 	messages_update();
 	mouse_lock_in_window();
+
+	draw_point3d(nullvector, COLOR_RED, 100, 1);
 
 	if (key_f4 && key_alt)
 	{

@@ -142,11 +142,9 @@ void camera_auto_resize()
     }
 }
 
-void camera_movement(var grid_height, var grid_size)
+void camera_topdown_movement(var grid_height, var grid_size)
 {
     int is_allowed = is_allowed_to_draw();
-
-    key_drag_map = key_pressed(scancode_drag_map);
 
     if (key_drag_map && is_allowed == true)
     {
@@ -198,6 +196,26 @@ void camera_movement(var grid_height, var grid_size)
     }
 }
 
+void camera_fp_movement()
+{
+    camera->pan = cycle(camera->pan - mickey.x / (6.5 * config_saved.mouse_sensitivity), 0, 360);
+    camera->tilt = clamp(camera->tilt - mickey.y / (6.5 * config_saved.mouse_sensitivity), -90, 90);
+    camera->roll = 0;
+
+    VECTOR input;
+    input.x = MOVEMENT_SPEED * (key_forward - key_backward);
+    input.y = MOVEMENT_SPEED * (key_strafe_left - key_strafe_right);
+    input.z = 0;
+
+    if (key_run)
+    {
+        input.x *= RUN_FACTOR;
+        input.y *= RUN_FACTOR;
+    }
+
+    vec_add(&camera->x, vec_rotate(&input, &camera->pan));
+}
+
 void camera_initialize()
 {
     vec_set(&grid_center, vector((MAP_WIDTH / 2) * MAP_CELL_SIZE, -(MAP_HEIGHT / 2) * MAP_CELL_SIZE, MAP_Z_POS));
@@ -216,6 +234,12 @@ void camera_initialize()
 
 void camera_update_input_from_config(CONFIG *config)
 {
+    scancode_forward = engine_key_return_scancode_from_letter(config->input_forward);
+    scancode_backward = engine_key_return_scancode_from_letter(config->input_backward);
+    scancode_strafe_left = engine_key_return_scancode_from_letter(config->input_strafe_left);
+    scancode_strafe_right = engine_key_return_scancode_from_letter(config->input_strafe_right);
+    scancode_interact = engine_key_return_scancode_from_letter(config->input_interact);
+    scancode_run = engine_key_return_scancode_from_letter(config->input_run);
     scancode_drag_map = engine_key_return_scancode_from_letter(config->input_drag_map);
 }
 
@@ -258,6 +282,50 @@ void camera_fog_from_map(Map *map)
     }
 }
 
+void camera_reset(Map *map, int state)
+{
+    if (!map)
+    {
+        return;
+    }
+
+    if (state == EDITOR_STATE_MAP_SETTINGS || state == EDITOR_STATE_BUILD)
+    {
+        int x = 0, y = 0, player_found = false;
+        for (y = 0; y < MAP_HEIGHT; y++)
+        {
+            for (x = 0; x < MAP_WIDTH; x++)
+            {
+                Cell *cell = &map->cell[x][y];
+                if (!cell)
+                {
+                    continue;
+                }
+
+                if (is_player_start(cell->type, cell->asset) == false)
+                {
+                    continue;
+                }
+
+                vec_set(&camera->x, vector(cell->worldpos.x, cell->worldpos.y, cell->worldpos.z + (MAP_CELL_SIZE / 2)));
+                vec_set(&camera->pan, vector(cell->pan, 0, 0));
+                return;
+            }
+        }
+
+        vec_set(&camera->x, vector(0, 0, MAP_Z_POS + (MAP_CELL_SIZE / 2)));
+        vec_set(&camera->pan, vector(DEF_CELL_PAN, 0, 0));
+    }
+    else
+    {
+        camera->arc = CAMERA_ARC;
+        vec_set(&camera->pan, vector(90, -90, 0));
+        camera->x = camera_center.x - fcos(camera->pan, camera->skill_x);
+        camera->y = camera_center.y - fsin(camera->pan, camera->skill_x);
+        camera->z = camera_center.z - fsin(camera->tilt, camera->skill_y);
+    }
+}
+
 void camera_n_grid_update(Episode *episode)
 {
     if (!episode)
@@ -277,12 +345,22 @@ void camera_n_grid_update(Episode *episode)
     vec_set(&draw_offset, vector(0, 0, GRID_DRAW_OFFSET));
     vec_add(&draw_offset, &grid_center);
 
+    key_forward = key_pressed(scancode_forward);
+    key_backward = key_pressed(scancode_backward);
+    key_strafe_left = key_pressed(scancode_strafe_left);
+    key_strafe_right = key_pressed(scancode_strafe_right);
+    key_interact = key_pressed(scancode_interact);
+    key_run = key_pressed(scancode_run);
+    key_drag_map = key_pressed(scancode_drag_map);
+
     if (editor_state == EDITOR_STATE_MAP_SETTINGS)
     {
+        camera_fp_movement();
         camera_fog_from_map(active_map);
     }
     else if (editor_state == EDITOR_STATE_BUILD)
     {
+        camera_fp_movement();
         camera_fog_from_map(active_map);
     }
     else
@@ -295,7 +373,7 @@ void camera_n_grid_update(Episode *episode)
             grid_color.blue = get_color_from_hsv(config_current.grid_color[2]);
             grid_draw(&draw_offset, MAP_CELL_SIZE, MAP_WIDTH, MAP_HEIGHT, &grid_color);
         }
-        camera_movement(grid_center.z, MAP_CELL_SIZE);
+        camera_topdown_movement(grid_center.z, MAP_CELL_SIZE);
         camera_fog_from_config();
     }
 }

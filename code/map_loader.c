@@ -57,7 +57,7 @@ void map_loader_initialize(Episode *episode)
     vec_set(&floor_ent->scale_x, vector(target_size_height, target_size_width, 1));
     change_color_from_hsv(&floor_ent->blue, active_map->floor_color[0], active_map->floor_color[1], active_map->floor_color[2]);
 
-    ceiling_ent = ent_create(empty_sprite_pcx, vector(temp_center.x, temp_center.y, temp_center.z + (MAP_CELL_SIZE / 2)), map_ceiling_ent_fnc);
+    ceiling_ent = ent_create(empty_sprite_pcx, vector(temp_center.x, temp_center.y, temp_center.z + MAP_CELL_SIZE), map_ceiling_ent_fnc);
     vec_set(&ceiling_ent->scale_x, vector(target_size_height, target_size_width, 1));
     change_color_from_hsv(&ceiling_ent->blue, active_map->ceiling_color[0], active_map->ceiling_color[1], active_map->ceiling_color[2]);
 
@@ -246,6 +246,7 @@ void map_load(Map *map)
                             vec_set(&spawn_pos, &spawn_dir);
                             vec_scale(&spawn_pos, MAP_CELL_SIZE / 2);
                             vec_add(&spawn_pos, &cell->worldpos);
+                            spawn_pos.z += MAP_CELL_SIZE / 2;
 
                             if (is_neighbour_is_door(map, vector(x, y, 0), &cardinal_dir[i]) == true) // make sure to place a doorway texture
                             {

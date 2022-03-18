@@ -4,6 +4,8 @@
 #define GRID_DRAW_OFFSET 0.1
 
 #define CAMERA_ARC 110
+#define MOVEMENT_SPEED 5
+#define RUN_FACTOR 2
 
 POINTL mouse_pos_PL;
 
@@ -12,8 +14,20 @@ VECTOR camera_center;
 VECTOR mouse_on_grid;
 VECTOR mouse_3d;
 
+var scancode_forward = 0;
+var scancode_backward = 0;
+var scancode_strafe_left = 0;
+var scancode_strafe_right = 0;
+var scancode_interact = 0;
+var scancode_run = 0;
 var scancode_drag_map = 0;
 
+var key_forward = 0;
+var key_backward = 0;
+var key_strafe_left = 0;
+var key_strafe_right = 0;
+var key_interact = 0;
+var key_run = 0;
 var key_drag_map = 0;
 
 VECTOR *vec_world_to_grid(VECTOR *world_pos);
@@ -30,7 +44,9 @@ void grid_draw(VECTOR *center, var grid_size, int width, int height, COLOR *colo
 
 void camera_auto_resize();
 
-void camera_movement(var grid_height, var grid_size);
+void camera_topdown_movement(var grid_height, var grid_size);
+
+void camera_fp_movement();
 
 void camera_initialize();
 
@@ -39,6 +55,8 @@ void camera_update_input_from_config(CONFIG *config);
 void camera_fog_from_config();
 
 void camera_fog_from_map(Map *map);
+
+void camera_reset(Map *map, int state);
 
 void camera_n_grid_update(Episode *episode);
 
