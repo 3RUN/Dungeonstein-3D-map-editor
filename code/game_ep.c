@@ -18,6 +18,8 @@ void cell_copy(Cell *to, Cell *from)
 
     if (from == NULL)
     {
+        to->pan = DEF_CELL_PAN;
+
         to->type = CELL_TYPE_NONE;
         to->asset = CELL_ASSET_NONE;
 
@@ -27,6 +29,8 @@ void cell_copy(Cell *to, Cell *from)
         to->temp_skill = 0;
         return;
     }
+
+    to->pan = from->pan;
 
     to->type = from->type;
     to->asset = from->asset;
