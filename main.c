@@ -264,23 +264,11 @@ void on_frame_event()
 		break;
 	}
 
-	ENTITY *cell_ent = array_get_element_at(ENTITY *, sketch_ents, 0);
-	if (cell_ent)
-	{
-		var type = cell_ent->OBJ_TYPE;
-		var asset = cell_ent->OBJ_ASSET;
-
-		DEBUG_VAR(type, 300);
-		DEBUG_VAR(asset, 320);
-	}
-
 	debug_panel_update();
 	shaders_update();
 	camera_n_grid_update(&def_episode);
 	messages_update();
 	mouse_lock_in_window();
-
-	draw_point3d(nullvector, COLOR_RED, 100, 1);
 
 	if (key_f4 && key_alt)
 	{

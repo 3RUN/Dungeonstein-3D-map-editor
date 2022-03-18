@@ -198,8 +198,8 @@ void camera_topdown_movement(var grid_height, var grid_size)
 
 void camera_fp_movement()
 {
-    camera->pan = cycle(camera->pan - mickey.x / (6.5 * config_saved.mouse_sensitivity), 0, 360);
-    camera->tilt = clamp(camera->tilt - mickey.y / (6.5 * config_saved.mouse_sensitivity), -90, 90);
+    camera->pan = cycle(camera->pan - mickey.x / 6.5 * config_saved.mouse_sensitivity, 0, 360);
+    camera->tilt = clamp(camera->tilt - mickey.y / 6.5 * config_saved.mouse_sensitivity, -90, 90);
     camera->roll = 0;
 
     VECTOR input;
@@ -291,6 +291,11 @@ void camera_reset(Map *map, int state)
 
     if (state == EDITOR_STATE_MAP_SETTINGS || state == EDITOR_STATE_BUILD)
     {
+        if (state == EDITOR_STATE_BUILD)
+        {
+            mouse_disable();
+        }
+
         int x = 0, y = 0, player_found = false;
         for (y = 0; y < MAP_HEIGHT; y++)
         {
@@ -318,6 +323,8 @@ void camera_reset(Map *map, int state)
     }
     else
     {
+        mouse_enable(true);
+
         camera->arc = CAMERA_ARC;
         vec_set(&camera->pan, vector(90, -90, 0));
         camera->x = camera_center.x - fcos(camera->pan, camera->skill_x);
