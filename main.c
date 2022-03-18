@@ -3,6 +3,12 @@
 #include <windows.h>
 #include <strio.c>
 
+// TO DO
+//
+// * add clickable bbox for all cells in 'test run' with CLICK event to show their info !
+// * create proper 'editor_test_run' ui to show the clicked cell info when in 'test run'
+// * create proper 'map_settings' ui to tweek the map settings
+
 #define PRAGMA_POINTER
 
 #define PRAGMA_PATH "code"
