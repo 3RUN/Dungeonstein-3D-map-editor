@@ -36,7 +36,7 @@ void map_loader_destroy();
 
 void map_destroy(Map *map);
 
-int map_wall_check_neighbours(Map *map, VECTOR *pos, VECTOR *dir);
+int is_neighbour_solid(Map *map, VECTOR *pos, VECTOR *dir);
 
 void map_load(Map *map);
 

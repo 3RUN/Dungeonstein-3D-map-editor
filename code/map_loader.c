@@ -143,7 +143,7 @@ void map_destroy(Map *map)
     map_loader_free_array(map_bosses);
 }
 
-int map_wall_check_neighbours(Map *map, VECTOR *pos, VECTOR *dir)
+int is_neighbour_solid(Map *map, VECTOR *pos, VECTOR *dir)
 {
     if (!map || !pos || !dir)
     {
@@ -164,7 +164,18 @@ int map_wall_check_neighbours(Map *map, VECTOR *pos, VECTOR *dir)
     int x = endpos.x;
     int y = endpos.y;
 
-    return map->cell[x][y].type != ASSET_TYPE_WALLS;
+    Cell *cell = &map->cell[x][y];
+    if (!cell)
+    {
+        return false;
+    }
+
+    if (cell->type == ASSET_TYPE_WALLS && cell->asset != TOTAL_WALL_TEXTURES - 1 && cell->flag == false)
+    {
+        return false;
+    }
+
+    return true;
 }
 
 void map_load(Map *map)
@@ -214,16 +225,20 @@ void map_load(Map *map)
             {
                 if (is_secret_wall(cell) == true)
                 {
+                    ENTITY *ent = ent_create(CUBE_MDL, &cell->worldpos, NULL);
+                    array_add(ENTITY *, map_walls, ent);
                 }
                 else if (is_finish_elevator(cell_type, cell_asset) == true)
                 {
+                    ENTITY *ent = ent_create(CUBE_MDL, &cell->worldpos, NULL);
+                    array_add(ENTITY *, map_walls, ent);
                 }
                 else
                 {
                     int i = 0;
                     for (i = 0; i < MAX_DIRECTION_STEP; i++)
                     {
-                        if (map_wall_check_neighbours(map, vector(x, y, 0), &cardinal_dir[i]) == true)
+                        if (is_neighbour_solid(map, vector(x, y, 0), &cardinal_dir[i]) == true)
                         {
                             int neighbour_x = x + cardinal_dir[i].x;
                             int neighbour_y = y + cardinal_dir[i].y;

@@ -4,8 +4,8 @@
 #define GRID_DRAW_OFFSET 0.1
 
 #define CAMERA_ARC 110
-#define MOVEMENT_SPEED 5
-#define RUN_FACTOR 2
+#define MOVEMENT_SPEED 2
+#define RUN_FACTOR 4
 
 POINTL mouse_pos_PL;
 
