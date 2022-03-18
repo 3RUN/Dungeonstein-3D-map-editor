@@ -307,13 +307,13 @@ void camera_reset(Map *map, int state)
                     continue;
                 }
 
-                vec_set(&camera->x, vector(cell->worldpos.x, cell->worldpos.y, cell->worldpos.z + (MAP_CELL_SIZE / 2)));
+                vec_set(&camera->x, &cell->worldpos);
                 vec_set(&camera->pan, vector(cell->pan, 0, 0));
                 return;
             }
         }
 
-        vec_set(&camera->x, vector(0, 0, MAP_Z_POS + (MAP_CELL_SIZE / 2)));
+        vec_set(&camera->x, vector(0, 0, MAP_Z_POS));
         vec_set(&camera->pan, vector(DEF_CELL_PAN, 0, 0));
     }
     else

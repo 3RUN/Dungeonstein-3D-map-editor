@@ -17,6 +17,8 @@ array_t *map_items = NULL;
 array_t *map_enemies = NULL;
 array_t *map_bosses = NULL;
 
+STRING *wall_mdl = "wall.mdl"; // used for secret walls, elevator switch, etc
+
 VECTOR cardinal_dir[MAX_DIRECTION_STEP]; // top/right/bottom/left
 var cardinal_rot[MAX_DIRECTION_STEP];    // top/right/bottom/left
 
@@ -25,6 +27,10 @@ void map_floor_ent_fnc();
 void map_ceiling_ent_fnc();
 
 void map_solid_ent_fnc();
+
+void map_secret_wall_ent_fnc();
+
+void map_finish_wall_ent_fnc();
 
 void map_loader_initialize(Episode *episode);
 
