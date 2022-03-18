@@ -204,7 +204,7 @@ void popup_open_sure()
         imgui_close_current_popup();
 
         // now move to the open state !
-        editor_switch_popup_to(MAIN_POPUP_OPEN);
+        editor_main_switch_popup_to(MAIN_POPUP_OPEN);
     }
 
     imgui_same_line();
@@ -332,7 +332,7 @@ void popup_new_sure()
         imgui_close_current_popup();
 
         // now move to the open state !
-        editor_switch_popup_to(MAIN_POPUP_NEW);
+        editor_main_switch_popup_to(MAIN_POPUP_NEW);
     }
 
     imgui_same_line();

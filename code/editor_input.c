@@ -127,7 +127,7 @@ void editor_input_wait_for_binding(STRING *entry)
 {
     is_popup_opened = false;
     imgui_close_current_popup();
-    editor_switch_popup_to(MAIN_POPUP_WAIT_FOR_INPUT);
+    editor_main_switch_popup_to(MAIN_POPUP_WAIT_FOR_INPUT);
 
     while (key_any) // wait untill we 'unpress' all keys
     {
@@ -173,7 +173,7 @@ void editor_input_wait_for_binding(STRING *entry)
 
     wait(1);
 
-    editor_switch_popup_to(main_popup_old_state);
+    editor_main_switch_popup_to(main_popup_old_state);
 }
 
 void editor_input_add_keybinding(STRING *entry, STRING *input)

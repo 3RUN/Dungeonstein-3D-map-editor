@@ -55,7 +55,7 @@ void editor_main_destroy();
 
 void preview_update(int type, int asset);
 
-void editor_switch_popup_to(int state);
+void editor_main_switch_popup_to(int state);
 
 void editor_popups(Episode *episode);
 

@@ -102,7 +102,7 @@ void shortcut_help()
         return;
     }
 
-    editor_switch_popup_to(MAIN_POPUP_HELP);
+    editor_main_switch_popup_to(MAIN_POPUP_HELP);
 }
 
 void shortcut_new()
@@ -114,11 +114,11 @@ void shortcut_new()
 
     if (is_game_episode_loaded() == true)
     {
-        editor_switch_popup_to(MAIN_POPUP_SURE_NEW);
+        editor_main_switch_popup_to(MAIN_POPUP_SURE_NEW);
     }
     else
     {
-        editor_switch_popup_to(MAIN_POPUP_NEW);
+        editor_main_switch_popup_to(MAIN_POPUP_NEW);
     }
 }
 
@@ -131,11 +131,11 @@ void shortcut_open()
 
     if (is_game_episode_loaded() == true)
     {
-        editor_switch_popup_to(MAIN_POPUP_SURE_OPEN);
+        editor_main_switch_popup_to(MAIN_POPUP_SURE_OPEN);
     }
     else
     {
-        editor_switch_popup_to(MAIN_POPUP_OPEN);
+        editor_main_switch_popup_to(MAIN_POPUP_OPEN);
     }
 }
 
@@ -149,7 +149,7 @@ void shortcut_save()
     if (key_ctrl)
     {
         strcpy(save_as_filename, ep_save_name);
-        editor_switch_popup_to(MAIN_POPUP_SAVE_AS);
+        editor_main_switch_popup_to(MAIN_POPUP_SAVE_AS);
     }
     if (is_game_episode_loaded() == true)
     {
@@ -163,7 +163,7 @@ void shortcut_save()
     else
     {
         strcpy(save_as_filename, ep_save_name);
-        editor_switch_popup_to(MAIN_POPUP_SAVE_AS);
+        editor_main_switch_popup_to(MAIN_POPUP_SAVE_AS);
     }
 }
 
@@ -174,7 +174,7 @@ void shortcut_ep_reset()
         return;
     }
 
-    editor_switch_popup_to(MAIN_POPUP_EP_RESET);
+    editor_main_switch_popup_to(MAIN_POPUP_EP_RESET);
 }
 
 void shortcut_ep_edit()
@@ -188,7 +188,7 @@ void shortcut_ep_edit()
     strcpy(episode_edit_story_start, def_episode.story_start);
     strcpy(episode_edit_story_end, def_episode.story_end);
     episode_edit_map_count = def_episode.map_count;
-    editor_switch_popup_to(MAIN_POPUP_EP_EDIT);
+    editor_main_switch_popup_to(MAIN_POPUP_EP_EDIT);
 }
 
 void shortcut_reset_map()
@@ -198,7 +198,7 @@ void shortcut_reset_map()
         return;
     }
 
-    editor_switch_popup_to(MAIN_POPUP_MAP_RESET);
+    editor_main_switch_popup_to(MAIN_POPUP_MAP_RESET);
 }
 
 void shortcut_test_run()
@@ -243,7 +243,7 @@ void shortcut_settings()
         return;
     }
 
-    editor_switch_popup_to(MAIN_POPUP_SETTINGS);
+    editor_main_switch_popup_to(MAIN_POPUP_SETTINGS);
 }
 
 void shortcut_toggle_debug()

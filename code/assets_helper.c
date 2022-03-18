@@ -147,3 +147,30 @@ int is_rotatable(int type, int asset)
 
     return false;
 }
+
+int is_neighbour_is_door(Map *map, VECTOR *pos, VECTOR *dir)
+{
+    if (!map)
+    {
+        return false;
+    }
+
+    VECTOR endpos, tempdir;
+
+    vec_set(&tempdir, dir);
+    vec_set(&endpos, pos);
+    vec_add(&endpos, &tempdir);
+
+    if (is_pos_on_grid(&endpos) == false)
+    {
+        return false;
+    }
+
+    int x = endpos.x;
+    int y = endpos.y;
+
+    int type = map->cell[x][y].type;
+    int asset = map->cell[x][y].asset;
+
+    return is_door(type, asset);
+}

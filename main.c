@@ -34,7 +34,11 @@ STRING *music_extension_str = ".mid";  // only mid music is used
 #define OBJ_POS_Z skill53
 #define OBJ_TYPE skill54
 #define OBJ_ASSET skill55
-#define OBJ_TRIGGERED skill56
+#define OBJ_FLAG skill56
+#define OBJ_EVENT_TYPE skill57
+#define OBJ_EVENT_ID skill58
+#define OBJ_TEMP_SKILL skill59
+#define OBJ_TRIGGERED skill60
 
 #define EDITOR_STATE_EDIT 0
 #define EDITOR_STATE_OPEN 1
@@ -62,7 +66,7 @@ int is_grid_visible = true;
 int is_walls_visible = true;
 int is_objects_visible = true;
 int is_cell_links_visible = true;
-int is_debug_panel_visible = true;
+int is_debug_panel_visible = false;
 
 // mouse position on the grid
 int mouse_x = 0;
@@ -97,11 +101,15 @@ int mouse_y = 0;
 #include "editor_cell_linker.h"
 #include "editor_cell_info.h"
 #include "editor_main.h"
+#include "editor_test_run.h"
+#include "map_loader.h"
 
 void editor_reset()
 {
 	episode_selection_reset();
 	music_selection_reset();
+
+	cell_info_tooltip_counter = 0;
 
 	active_map_id = 0;
 
@@ -134,6 +142,8 @@ void editor_reset()
 #include "editor_cell_linker.c"
 #include "editor_cell_info.c"
 #include "editor_main.c"
+#include "editor_test_run.c"
+#include "map_loader.c"
 
 void map_editor_startup()
 {
@@ -156,14 +166,15 @@ void map_editor_startup()
 	imgui_change_theme();		   // and apply custom theme
 	config_initialize(temp_str);   // initialize config (set defaults and load from the config file)engine_initialize()
 
-	messages_initialize();		 // initialize editor message system
-	episode_list_initialize();	 // load all episodes from 'episodes' folder
-	music_list_initialize();	 // same as above, but for music
-	camera_initialize();		 // initialize all camera
-	popups_initialize();		 // initialize popups
-	map_sketch_initialize();	 // grid of entities to visualize the map while drawing it
-	editor_main_initialize();	 // initialize everything related to drawing/editing state ui
-	episode_reset(&def_episode); // initialize default episode with default values
+	messages_initialize();				 // initialize editor message system
+	episode_list_initialize();			 // load all episodes from 'episodes' folder
+	music_list_initialize();			 // same as above, but for music
+	camera_initialize();				 // initialize all camera
+	popups_initialize();				 // initialize popups
+	map_sketch_initialize();			 // grid of entities to visualize the map while drawing it
+	editor_main_initialize();			 // initialize everything related to drawing/editing state ui
+	episode_reset(&def_episode);		 // initialize default episode with default values
+	map_loader_initialize(&def_episode); // initialize everything needed for test building the maps
 }
 
 void on_frame_event()
@@ -214,12 +225,20 @@ void on_frame_event()
 		break;
 
 	case EDITOR_STATE_TO_BUILD:
+		// editor_reset();
+		map_sketch_hide();
+		map_load(active_map);
+		editor_switch_state_to(EDITOR_STATE_BUILD);
 		break;
 
 	case EDITOR_STATE_BUILD:
+		editor_test_run_update(&def_episode);
 		break;
 
 	case EDITOR_STATE_FROM_BUILD:
+		map_sketch_show();
+		map_destroy(active_map);
+		editor_switch_state_to(EDITOR_STATE_EDIT);
 		break;
 
 	case EDITOR_STATE_RESET_EPISODE:
@@ -237,6 +256,16 @@ void on_frame_event()
 	case EDITOR_STATE_EXIT:
 		sys_exit(NULL);
 		break;
+	}
+
+	ENTITY *cell_ent = array_get_element_at(ENTITY *, sketch_ents, 0);
+	if (cell_ent)
+	{
+		var type = cell_ent->OBJ_TYPE;
+		var asset = cell_ent->OBJ_ASSET;
+
+		DEBUG_VAR(type, 300);
+		DEBUG_VAR(asset, 320);
 	}
 
 	debug_panel_update();
@@ -263,6 +292,7 @@ void on_exit_event()
 	map_sketch_destroy();
 	editor_main_destroy();
 	editor_cell_linker_destroy();
+	map_loader_destroy();
 }
 
 void on_esc_event()

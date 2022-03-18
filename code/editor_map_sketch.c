@@ -127,6 +127,10 @@ void map_sketch_sprite_update_from_cell(Cell *cell)
             ent_morph(cell_ent, _chr(asset_get_filename(cell_type, cell_asset)));
             cell_ent->OBJ_TYPE = cell_type;
             cell_ent->OBJ_ASSET = cell_asset;
+            cell_ent->OBJ_FLAG = cell_flag;
+            cell_ent->OBJ_EVENT_TYPE = cell_event_type;
+            cell_ent->OBJ_EVENT_ID = cell_event_id;
+            cell_ent->OBJ_TEMP_SKILL = cell_temp_skill;
         }
 
         if (is_walls_visible == true && cell_type == ASSET_TYPE_WALLS)
@@ -244,7 +248,7 @@ void map_sketch_show()
 
                 if (sprite_ent->parent)
                 {
-                    if (is_secret_wall(sprite_ent) == true)
+                    if (sprite_ent->OBJ_TYPE == ASSET_TYPE_WALLS && sprite_ent->OBJ_ASSET != TOTAL_WALL_TEXTURES - 1 && sprite_ent->OBJ_FLAG == 1)
                     {
                         reset(sprite_ent->parent, INVISIBLE);
                     }
@@ -253,7 +257,6 @@ void map_sketch_show()
                         reset(sprite_ent->parent, INVISIBLE);
                     }
                 }
-                set(sprite_ent, INVISIBLE);
             }
             id++;
         }

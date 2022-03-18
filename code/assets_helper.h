@@ -19,4 +19,6 @@ int is_switch(int type, int asset);
 
 int is_rotatable(int type, int asset);
 
+int is_neighbour_is_door(Map *map, VECTOR *pos, VECTOR *dir);
+
 #endif

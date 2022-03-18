@@ -37,7 +37,7 @@ void preview_update(int type, int asset)
     preview_cell.asset = asset;
 }
 
-void editor_switch_popup_to(int state)
+void editor_main_switch_popup_to(int state)
 {
     is_popup_opened = true;
     main_popup_old_state = main_popup_state;
@@ -143,22 +143,22 @@ void editor_top_bar(Episode *episode)
             {
                 if (is_game_episode_loaded() == true)
                 {
-                    editor_switch_popup_to(MAIN_POPUP_SURE_OPEN);
+                    editor_main_switch_popup_to(MAIN_POPUP_SURE_OPEN);
                 }
                 else
                 {
-                    editor_switch_popup_to(MAIN_POPUP_OPEN);
+                    editor_main_switch_popup_to(MAIN_POPUP_OPEN);
                 }
             }
             if (imgui_menu_item("New", "", 0, 1))
             {
                 if (is_game_episode_loaded() == true)
                 {
-                    editor_switch_popup_to(MAIN_POPUP_SURE_NEW);
+                    editor_main_switch_popup_to(MAIN_POPUP_SURE_NEW);
                 }
                 else
                 {
-                    editor_switch_popup_to(MAIN_POPUP_NEW);
+                    editor_main_switch_popup_to(MAIN_POPUP_NEW);
                 }
             }
             imgui_separator();
@@ -172,17 +172,17 @@ void editor_top_bar(Episode *episode)
             if (imgui_menu_item("Save as", "", 0, 1))
             {
                 strcpy(save_as_filename, ep_save_name);
-                editor_switch_popup_to(MAIN_POPUP_SAVE_AS);
+                editor_main_switch_popup_to(MAIN_POPUP_SAVE_AS);
             }
             imgui_separator();
             if (imgui_menu_item("Settings", "", 0, 1))
             {
-                editor_switch_popup_to(MAIN_POPUP_SETTINGS);
+                editor_main_switch_popup_to(MAIN_POPUP_SETTINGS);
             }
             imgui_separator();
             if (imgui_menu_item("Exit", "", 0, 1))
             {
-                editor_switch_popup_to(MAIN_POPUP_EXIT);
+                editor_main_switch_popup_to(MAIN_POPUP_EXIT);
             }
             imgui_end_menu();
         }
@@ -207,7 +207,7 @@ void editor_top_bar(Episode *episode)
 
             if (imgui_menu_item("Reset", "", 0, 1))
             {
-                editor_switch_popup_to(MAIN_POPUP_EP_RESET);
+                editor_main_switch_popup_to(MAIN_POPUP_EP_RESET);
             }
             if (imgui_menu_item("Edit", "", 0, 1))
             {
@@ -215,7 +215,7 @@ void editor_top_bar(Episode *episode)
                 strcpy(episode_edit_story_start, episode->story_start);
                 strcpy(episode_edit_story_end, episode->story_end);
                 episode_edit_map_count = episode->map_count;
-                editor_switch_popup_to(MAIN_POPUP_EP_EDIT);
+                editor_main_switch_popup_to(MAIN_POPUP_EP_EDIT);
             }
             imgui_end_menu();
         }
@@ -226,14 +226,18 @@ void editor_top_bar(Episode *episode)
 
             if (imgui_menu_item("Reset", "", 0, 1))
             {
-                editor_switch_popup_to(MAIN_POPUP_MAP_RESET);
+                editor_main_switch_popup_to(MAIN_POPUP_MAP_RESET);
             }
             if (imgui_menu_item("Settings", "", 0, 1))
             {
+                is_popup_opened = false;
+                imgui_close_current_popup();
                 editor_switch_state_to(EDITOR_STATE_TO_MAP_SETTINGS);
             }
             if (imgui_menu_item("Test run", "", 0, 1))
             {
+                is_popup_opened = false;
+                imgui_close_current_popup();
                 editor_switch_state_to(EDITOR_STATE_TO_BUILD);
             }
             imgui_end_menu();
@@ -245,7 +249,7 @@ void editor_top_bar(Episode *episode)
 
             if (imgui_menu_item("Help", "", 0, 1))
             {
-                editor_switch_popup_to(MAIN_POPUP_HELP);
+                editor_main_switch_popup_to(MAIN_POPUP_HELP);
             }
             imgui_end_menu();
         }
@@ -466,14 +470,22 @@ void editor_main_cell_tooltip(Episode *episode)
         return;
     }
 
+    if (is_allowed_to_draw() == false)
+    {
+        cell_info_tooltip_counter = 0;
+        return;
+    }
+
     if (config_current.is_cell_tooltip_enabled == false)
     {
+        cell_info_tooltip_counter = 0;
         return;
     }
 
     Map *current_map = map_get_active(episode);
     if (!current_map)
     {
+        cell_info_tooltip_counter = 0;
         return;
     }
 
@@ -485,12 +497,14 @@ void editor_main_cell_tooltip(Episode *episode)
         if (cell_info_tooltip_counter > CELL_TOOLTIP_TIME)
         {
             STRING *info_str = draw_map_info(current_map, mouse_x, mouse_y);
-            if (info_str)
+            if (!info_str)
             {
-                imgui_set_tooltip(_chr(info_str));
-                imgui_begin_tooltip();
-                imgui_end_tooltip();
+                return;
             }
+
+            imgui_set_tooltip(_chr(info_str));
+            imgui_begin_tooltip();
+            imgui_end_tooltip();
         }
     }
     else
@@ -524,7 +538,7 @@ void editor_main_update(Episode *episode)
         {
             if (is_esc_allowed == true)
             {
-                editor_switch_popup_to(MAIN_POPUP_EXIT);
+                editor_main_switch_popup_to(MAIN_POPUP_EXIT);
                 is_esc_allowed = false;
             }
         }
