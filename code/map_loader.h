@@ -42,6 +42,8 @@ void object_attach_to_wall(ENTITY *ent);
 
 void object_change_skin_to(ENTITY *ent, STRING *bmap_filename, BMAP *bmap);
 
+void object_update_skills(ENTITY *ent, var id, var type, var asset, var flag, var e_type, var e_id, var temp_skill);
+
 void map_loader_initialize(Episode *episode);
 
 void map_loader_free_array(array_t *array);

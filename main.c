@@ -246,6 +246,7 @@ void on_frame_event()
 
 	case EDITOR_STATE_BUILD:
 		editor_test_run_update(&def_episode);
+		editor_cell_linker_update(active_map);
 		break;
 
 	case EDITOR_STATE_FROM_BUILD:
