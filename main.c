@@ -103,6 +103,7 @@ int mouse_y = 0;
 #include "editor_main.h"
 #include "editor_test_run.h"
 #include "map_loader.h"
+#include "map_settings.h"
 
 void editor_reset()
 {
@@ -144,6 +145,7 @@ void editor_reset()
 #include "editor_main.c"
 #include "editor_test_run.c"
 #include "map_loader.c"
+#include "map_settings.c"
 
 void map_editor_startup()
 {
@@ -216,14 +218,20 @@ void on_frame_event()
 		break;
 
 	case EDITOR_STATE_TO_MAP_SETTINGS:
+		editor_reset();
+		map_sketch_hide();
+		map_load(active_map);
 		camera_reset(active_map, EDITOR_STATE_MAP_SETTINGS);
 		editor_switch_state_to(EDITOR_STATE_MAP_SETTINGS);
 		break;
 
 	case EDITOR_STATE_MAP_SETTINGS:
+		map_settings_update(&def_episode);
 		break;
 
 	case EDITOR_STATE_FROM_MAP_SETTINGS:
+		map_sketch_show();
+		map_destroy(active_map);
 		camera_reset(active_map, EDITOR_STATE_EDIT);
 		editor_switch_state_to(EDITOR_STATE_EDIT);
 		break;
