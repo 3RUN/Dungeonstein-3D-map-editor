@@ -205,7 +205,7 @@ void camera_fp_movement()
     VECTOR input;
     input.x = MOVEMENT_SPEED * (key_forward - key_backward);
     input.y = MOVEMENT_SPEED * (key_strafe_left - key_strafe_right);
-    input.z = 0;
+    input.z = MOVEMENT_SPEED * (key_surface - key_dive);
 
     if (key_run)
     {
@@ -238,6 +238,8 @@ void camera_update_input_from_config(CONFIG *config)
     scancode_backward = engine_key_return_scancode_from_letter(config->input_backward);
     scancode_strafe_left = engine_key_return_scancode_from_letter(config->input_strafe_left);
     scancode_strafe_right = engine_key_return_scancode_from_letter(config->input_strafe_right);
+    scancode_surface = engine_key_return_scancode_from_letter(config->input_surface);
+    scancode_dive = engine_key_return_scancode_from_letter(config->input_dive);
     scancode_interact = engine_key_return_scancode_from_letter(config->input_interact);
     scancode_run = engine_key_return_scancode_from_letter(config->input_run);
     scancode_drag_map = engine_key_return_scancode_from_letter(config->input_drag_map);
@@ -356,6 +358,8 @@ void camera_n_grid_update(Episode *episode)
     key_backward = key_pressed(scancode_backward);
     key_strafe_left = key_pressed(scancode_strafe_left);
     key_strafe_right = key_pressed(scancode_strafe_right);
+    key_surface = key_pressed(scancode_surface);
+    key_dive = key_pressed(scancode_dive);
     key_interact = key_pressed(scancode_interact);
     key_run = key_pressed(scancode_run);
     key_drag_map = key_pressed(scancode_drag_map);

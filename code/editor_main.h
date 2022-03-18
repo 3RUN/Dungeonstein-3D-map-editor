@@ -5,7 +5,7 @@
 #define SIDEBAR_ASSET_LIST_CHILD_HEIGHT 215
 #define SIDEBAR_PARAM_CHILD_HEIGHT 145
 
-#define CELL_TOOLTIP_TIME 0.25
+#define CELL_TOOLTIP_TIME 0.5
 
 void *asset_draw_list = NULL;
 

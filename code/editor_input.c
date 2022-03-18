@@ -14,6 +14,8 @@ void editor_input_check_overwrite(STRING *bindkey)
     editor_input_overwrite(config_current.input_backward, bindkey);
     editor_input_overwrite(config_current.input_strafe_left, bindkey);
     editor_input_overwrite(config_current.input_strafe_right, bindkey);
+    editor_input_overwrite(config_current.input_surface, bindkey);
+    editor_input_overwrite(config_current.input_dive, bindkey);
     editor_input_overwrite(config_current.input_interact, bindkey);
     editor_input_overwrite(config_current.input_run, bindkey);
     editor_input_overwrite(config_current.input_draw, bindkey);
@@ -62,6 +64,8 @@ void editor_input_bind_new_key(STRING *entry, STRING *bindkey)
     editor_input_bind_key(config_current.input_backward, input_backward_entry_str, entry, bindkey);
     editor_input_bind_key(config_current.input_strafe_left, input_strafe_left_entry_str, entry, bindkey);
     editor_input_bind_key(config_current.input_strafe_right, input_strafe_right_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.input_surface, input_surface_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.input_dive, input_dive_entry_str, entry, bindkey);
     editor_input_bind_key(config_current.input_interact, input_interact_entry_str, entry, bindkey);
     editor_input_bind_key(config_current.input_run, input_run_entry_str, entry, bindkey);
     editor_input_bind_key(config_current.input_draw, input_draw_entry_str, entry, bindkey);
@@ -96,6 +100,8 @@ void editor_input_remove_bind_key(STRING *entry)
     editor_input_bind_key(config_current.input_backward, input_backward_entry_str, entry, input_none_str);
     editor_input_bind_key(config_current.input_strafe_left, input_strafe_left_entry_str, entry, input_none_str);
     editor_input_bind_key(config_current.input_strafe_right, input_strafe_right_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.input_surface, input_surface_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.input_dive, input_dive_entry_str, entry, input_none_str);
     editor_input_bind_key(config_current.input_interact, input_interact_entry_str, entry, input_none_str);
     editor_input_bind_key(config_current.input_run, input_run_entry_str, entry, input_none_str);
     editor_input_bind_key(config_current.input_draw, input_draw_entry_str, entry, input_none_str);

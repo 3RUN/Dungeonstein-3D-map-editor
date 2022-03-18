@@ -1,6 +1,8 @@
 #ifndef _MAP_LOADER_H_
 #define _MAP_LOADER_H_
 
+#define OBJECT_OFFSET_FROM_WALL 0.01
+
 #define MAX_DIRECTION_STEP 4 // cardinal directions - top/right/bottom/left
 #define TOP 0
 #define RIGHT 1
@@ -28,9 +30,17 @@ void map_ceiling_ent_fnc();
 
 void map_solid_ent_fnc();
 
+void map_fixed_rotation_ent_fnc();
+
+void map_camera_facing_ent_fnc();
+
 void map_secret_wall_ent_fnc();
 
 void map_finish_wall_ent_fnc();
+
+void object_attach_to_wall(ENTITY *ent);
+
+void object_change_skin_to(ENTITY *ent, STRING *bmap_filename, BMAP *bmap);
 
 void map_loader_initialize(Episode *episode);
 

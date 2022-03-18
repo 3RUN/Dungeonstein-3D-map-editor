@@ -20,6 +20,20 @@ void map_solid_ent_fnc()
     my->material = mtl_solid;
 }
 
+void map_fixed_rotation_ent_fnc()
+{
+    set(my, PASSABLE | LIGHT | NOFILTER | UNLIT | DECAL);
+    vec_fill(&my->scale_x, 0.5);
+    my->material = mtl_two_sided;
+}
+
+void map_camera_facing_ent_fnc()
+{
+    set(my, PASSABLE | LIGHT | NOFILTER | UNLIT);
+    vec_fill(&my->scale_x, 0.5);
+    my->material = mtl_solid;
+}
+
 void map_secret_wall_ent_fnc()
 {
     set(my, POLYGON | LIGHT | NOFILTER | UNLIT);
@@ -30,6 +44,44 @@ void map_finish_wall_ent_fnc()
 {
     set(my, POLYGON | LIGHT | NOFILTER | UNLIT);
     my->material = mtl_solid;
+}
+
+void object_attach_to_wall(ENTITY *ent)
+{
+    if (!ent)
+    {
+        return;
+    }
+
+    VECTOR pos;
+    vec_set(&pos, vector((MAP_CELL_SIZE / 2) - OBJECT_OFFSET_FROM_WALL, 0, 0));
+    vec_rotate(&pos, &ent->pan);
+    vec_add(&pos, &ent->x);
+
+    vec_set(&ent->x, &pos);
+    ent->pan += 180;
+}
+
+void object_change_skin_to(ENTITY *ent, STRING *bmap_filename, BMAP *bmap)
+{
+    if (!ent || !bmap_filename || !bmap)
+    {
+        return;
+    }
+
+    ent_cloneskin(ent);
+
+    // first we remove the old skin...
+    BMAP *old = ent_getskin(ent, 1);
+    ptr_remove(old);
+    old = NULL;
+
+    // then we create a new one from the assets
+    BMAP *new = bmap_create(bmap_filename);
+    bmap_blit(new, bmap, NULL, NULL);
+
+    // and we assign it
+    ent_setskin(ent, new, 1);
 }
 
 void map_loader_initialize(Episode *episode)
@@ -238,15 +290,13 @@ void map_load(Map *map)
                 if (is_secret_wall(cell) == true)
                 {
                     ENTITY *ent = ent_create(wall_mdl, &cell->worldpos, map_secret_wall_ent_fnc);
-                    ent_cloneskin(ent);
-                    ent_setskin(ent, asset_get_bmap(cell_type, cell_asset), 1);
+                    object_change_skin_to(ent, asset_get_filename(cell_type, cell_asset), asset_get_bmap(cell_type, cell_asset));
                     array_add(ENTITY *, map_walls, ent);
                 }
                 else if (is_finish_elevator(cell_type, cell_asset) == true)
                 {
                     ENTITY *ent = ent_create(wall_mdl, &cell->worldpos, map_finish_wall_ent_fnc);
-                    ent_cloneskin(ent);
-                    ent_setskin(ent, asset_get_bmap(cell_type, cell_asset), 1);
+                    object_change_skin_to(ent, asset_get_filename(cell_type, cell_asset), asset_get_bmap(cell_type, cell_asset));
                     array_add(ENTITY *, map_walls, ent);
                 }
                 else
@@ -298,9 +348,23 @@ void map_load(Map *map)
             {
                 if (is_rotatable(cell_type, cell_asset) == true)
                 {
+
+                    ENTITY *ent = ent_create(asset_get_filename(cell_type, cell_asset), &cell->worldpos, map_fixed_rotation_ent_fnc);
+                    ent->pan = cell_pan;
+                    if (is_switch(cell_type, cell_asset) == true)
+                    {
+                        object_attach_to_wall(ent);
+                    }
+                    else if (is_door(cell_type, cell_asset) == true || is_fence(cell_type, cell_asset) == true)
+                    {
+                        ent->pan -= 90; // add correction for doors
+                    }
+                    array_add(ENTITY *, map_props, ent);
                 }
                 else
                 {
+                    ENTITY *ent = ent_create(asset_get_filename(cell_type, cell_asset), &cell->worldpos, map_camera_facing_ent_fnc);
+                    array_add(ENTITY *, map_props, ent);
                 }
             }
             else if (cell_type == ASSET_TYPE_EVENTS)

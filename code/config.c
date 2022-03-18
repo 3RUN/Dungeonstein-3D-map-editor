@@ -6,6 +6,8 @@ void config_initialize(STRING *config_file)
     strcpy(config_default.input_backward, _chr(input_def_backward_str));
     strcpy(config_default.input_strafe_left, _chr(input_def_strafe_left_str));
     strcpy(config_default.input_strafe_right, _chr(input_def_strafe_right_str));
+    strcpy(config_default.input_surface, _chr(input_def_surface_str));
+    strcpy(config_default.input_dive, _chr(input_def_dive_str));
     strcpy(config_default.input_interact, _chr(input_def_interact_str));
     strcpy(config_default.input_run, _chr(input_def_run_str));
     strcpy(config_default.input_drag_map, _chr(input_def_drag_map_str));
@@ -95,6 +97,8 @@ void config_reset_to_default(var tab)
         strcpy(config_current.input_backward, config_default.input_backward);
         strcpy(config_current.input_strafe_left, config_default.input_strafe_left);
         strcpy(config_current.input_strafe_right, config_default.input_strafe_right);
+        strcpy(config_current.input_surface, config_default.input_surface);
+        strcpy(config_current.input_dive, config_default.input_dive);
         strcpy(config_current.input_interact, config_default.input_interact);
         strcpy(config_current.input_run, config_default.input_run);
         strcpy(config_current.input_drag_map, config_default.input_drag_map);
@@ -154,6 +158,8 @@ void config_reset_to_saved()
     strcpy(config_current.input_backward, config_saved.input_backward);
     strcpy(config_current.input_strafe_left, config_saved.input_strafe_left);
     strcpy(config_current.input_strafe_right, config_saved.input_strafe_right);
+    strcpy(config_current.input_surface, config_saved.input_surface);
+    strcpy(config_current.input_dive, config_saved.input_dive);
     strcpy(config_current.input_interact, config_saved.input_interact);
     strcpy(config_current.input_run, config_saved.input_run);
     strcpy(config_current.input_drag_map, config_saved.input_drag_map);
@@ -210,6 +216,8 @@ void config_load_from_file(STRING *config_file)
     ini_read_write_char(config_current.input_backward, config_file, config_input_section_str, input_backward_entry_str, config_default.input_backward);
     ini_read_write_char(config_current.input_strafe_left, config_file, config_input_section_str, input_strafe_left_entry_str, config_default.input_strafe_left);
     ini_read_write_char(config_current.input_strafe_right, config_file, config_input_section_str, input_strafe_right_entry_str, config_default.input_strafe_right);
+    ini_read_write_char(config_current.input_surface, config_file, config_input_section_str, input_surface_entry_str, config_default.input_surface);
+    ini_read_write_char(config_current.input_dive, config_file, config_input_section_str, input_dive_entry_str, config_default.input_dive);
     ini_read_write_char(config_current.input_interact, config_file, config_input_section_str, input_interact_entry_str, config_default.input_interact);
     ini_read_write_char(config_current.input_run, config_file, config_input_section_str, input_run_entry_str, config_default.input_run);
     ini_read_write_char(config_current.input_drag_map, config_file, config_input_section_str, input_drag_map_entry_str, config_default.input_drag_map);
@@ -269,6 +277,8 @@ void config_save_to_file(STRING *config_file)
     ini_write(config_file, config_input_section_str, input_backward_entry_str, config_current.input_backward);
     ini_write(config_file, config_input_section_str, input_strafe_left_entry_str, config_current.input_strafe_left);
     ini_write(config_file, config_input_section_str, input_strafe_right_entry_str, config_current.input_strafe_right);
+    ini_write(config_file, config_input_section_str, input_surface_entry_str, config_current.input_surface);
+    ini_write(config_file, config_input_section_str, input_dive_entry_str, config_current.input_dive);
     ini_write(config_file, config_input_section_str, input_interact_entry_str, config_current.input_interact);
     ini_write(config_file, config_input_section_str, input_run_entry_str, config_current.input_run);
     ini_write(config_file, config_input_section_str, input_drag_map_entry_str, config_current.input_drag_map);

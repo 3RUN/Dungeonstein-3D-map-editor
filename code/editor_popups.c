@@ -573,6 +573,8 @@ void popup_settings_input()
     editor_input_add_keybinding(input_backward_entry_str, config_current.input_backward);
     editor_input_add_keybinding(input_strafe_left_entry_str, config_current.input_strafe_left);
     editor_input_add_keybinding(input_strafe_right_entry_str, config_current.input_strafe_right);
+    editor_input_add_keybinding(input_surface_entry_str, config_current.input_surface);
+    editor_input_add_keybinding(input_dive_entry_str, config_current.input_dive);
     editor_input_add_keybinding(input_interact_entry_str, config_current.input_interact);
     editor_input_add_keybinding(input_run_entry_str, config_current.input_run);
     editor_input_add_keybinding(input_drag_map_entry_str, config_current.input_drag_map);
@@ -889,6 +891,8 @@ void popup_help()
         imgui_text(_chr(str_printf(NULL, "Move backward: %s", config_current.input_backward)));
         imgui_text(_chr(str_printf(NULL, "Move left (strafe): %s", config_current.input_strafe_left)));
         imgui_text(_chr(str_printf(NULL, "Move right (strafe): %s", config_current.input_strafe_right)));
+        imgui_text(_chr(str_printf(NULL, "Move up (surface): %s", config_current.input_surface)));
+        imgui_text(_chr(str_printf(NULL, "Move down (dive): %s", config_current.input_dive)));
         imgui_text(_chr(str_printf(NULL, "Interact/Use: %s", config_current.input_interact)));
         imgui_text(_chr(str_printf(NULL, "Run (hold): %s", config_current.input_run)));
         imgui_text(_chr(str_printf(NULL, "Drag map (hold): %s", config_current.input_drag_map)));
