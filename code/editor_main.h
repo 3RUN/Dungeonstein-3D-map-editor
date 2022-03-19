@@ -67,6 +67,4 @@ void editor_side_bar(Episode *episode);
 
 void editor_main_cell_tooltip(Episode *episode);
 
-void editor_draw_update(Episode *episode);
-
 #endif

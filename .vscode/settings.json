@@ -44,6 +44,8 @@
         "game_ep.h": "c",
         "editor_settings_input.h": "c",
         "editor_input.h": "c",
-        "sketcher_tools.h": "c"
+        "sketcher_tools.h": "c",
+        "editor_draw_tools.h": "c",
+        "editor_map_sketch.h": "c"
     }
 }

@@ -221,7 +221,6 @@ void on_frame_event()
 		message_add(temp_ep_name_str);
 
 		map_sketch_refresh(active_map);
-
 		editor_switch_state_to(EDITOR_STATE_EDIT);
 		break;
 
