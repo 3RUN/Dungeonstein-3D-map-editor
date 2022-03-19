@@ -84,11 +84,16 @@ void object_change_skin_to(ENTITY *ent, STRING *bmap_filename, BMAP *bmap)
     ent_setskin(ent, new, 1);
 }
 
-void object_update_skills(ENTITY *ent, var id, var type, var asset, var flag, var e_type, var e_id, var temp_skill)
+void object_update_skills(ENTITY *ent, var pan, int id, int type, int asset, int flag, int e_type, int e_id, int temp_skill)
 {
     if (!ent)
     {
         return;
+    }
+
+    if (is(ent, DECAL))
+    {
+        ent->pan = pan;
     }
 
     ent->OBJ_ID = id;
@@ -258,6 +263,244 @@ int is_neighbour_solid(Map *map, VECTOR *pos, VECTOR *dir)
     return true;
 }
 
+void map_create_walls(Map *map, Cell *cell)
+{
+    if (!map || !cell)
+    {
+        return;
+    }
+
+    var cell_pan = cell->pan;
+
+    int cell_id = cell->id;
+    int cell_x = cell->x;
+    int cell_y = cell->y;
+
+    int cell_type = cell->type;
+    int cell_asset = cell->asset;
+
+    int cell_flag = cell->flag;
+    int cell_event_type = cell->event_type;
+    int cell_event_id = cell->event_id;
+    int cell_temp_skill = cell->temp_skill;
+
+    if (is_secret_wall(cell) == true)
+    {
+        ENTITY *ent = ent_create(wall_mdl, &cell->worldpos, map_secret_wall_ent_fnc);
+        object_change_skin_to(ent, asset_get_filename(cell_type, cell_asset), asset_get_bmap(cell_type, cell_asset));
+        object_update_skills(ent, cell_pan, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
+        array_add(ENTITY *, map_walls, ent);
+    }
+    else if (is_finish_elevator(cell_type, cell_asset) == true)
+    {
+        ENTITY *ent = ent_create(wall_mdl, &cell->worldpos, map_finish_wall_ent_fnc);
+        object_change_skin_to(ent, asset_get_filename(cell_type, cell_asset), asset_get_bmap(cell_type, cell_asset));
+        object_update_skills(ent, cell_pan, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
+        array_add(ENTITY *, map_walls, ent);
+    }
+    else
+    {
+        int i = 0;
+        for (i = 0; i < MAX_DIRECTION_STEP; i++)
+        {
+            if (is_neighbour_solid(map, vector(cell_x, cell_y, 0), &cardinal_dir[i]) == true)
+            {
+                int neighbour_x = cell_x + cardinal_dir[i].x;
+                int neighbour_y = cell_y + cardinal_dir[i].y;
+                if (is_pos_on_grid(vector(neighbour_x, neighbour_y, 0)) == false)
+                {
+                    continue;
+                }
+
+                Cell *neighbour = &map->cell[neighbour_x][neighbour_y];
+                if (!neighbour)
+                {
+                    continue;
+                }
+
+                VECTOR spawn_dir;
+                vec_set(&spawn_dir, vec_diff(NULL, &neighbour->worldpos, &cell->worldpos));
+                vec_normalize(&spawn_dir, 1);
+
+                VECTOR spawn_pos;
+                vec_set(&spawn_pos, &spawn_dir);
+                vec_scale(&spawn_pos, MAP_CELL_SIZE / 2);
+                vec_add(&spawn_pos, &cell->worldpos);
+
+                if (is_neighbour_is_door(map, vector(cell_x, cell_y, 0), &cardinal_dir[i]) == true) // make sure to place a doorway texture
+                {
+                    ENTITY *ent = ent_create(wall_doorway_pcx, &spawn_pos, map_solid_ent_fnc);
+                    object_update_skills(ent, (cardinal_rot[i] - 180), cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
+                    array_add(ENTITY *, map_walls, ent);
+                }
+                else
+                {
+                    ENTITY *ent = ent_create(asset_get_filename(cell_type, cell_asset), &spawn_pos, map_solid_ent_fnc);
+                    object_update_skills(ent, (cardinal_rot[i] - 180), cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
+                    array_add(ENTITY *, map_walls, ent);
+                }
+            }
+        }
+    }
+}
+
+void map_create_props(Map *map, Cell *cell)
+{
+    if (!map || !cell)
+    {
+        return;
+    }
+
+    var cell_pan = cell->pan;
+
+    int cell_id = cell->id;
+    int cell_x = cell->x;
+    int cell_y = cell->y;
+
+    int cell_type = cell->type;
+    int cell_asset = cell->asset;
+
+    int cell_flag = cell->flag;
+    int cell_event_type = cell->event_type;
+    int cell_event_id = cell->event_id;
+    int cell_temp_skill = cell->temp_skill;
+
+    if (is_rotatable(cell_type, cell_asset) == true)
+    {
+        ENTITY *ent = ent_create(asset_get_filename(cell_type, cell_asset), &cell->worldpos, map_fixed_rotation_ent_fnc);
+        if (is_switch(cell_type, cell_asset) == true)
+        {
+            object_attach_to_wall(ent);
+            object_update_skills(ent, cell_pan, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
+        }
+        else if (is_door(cell_type, cell_asset) == true || is_fence(cell_type, cell_asset) == true)
+        {
+            object_update_skills(ent, (cell_pan - 90), cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
+        }
+        array_add(ENTITY *, map_props, ent);
+    }
+    else
+    {
+        ENTITY *ent = ent_create(asset_get_filename(cell_type, cell_asset), &cell->worldpos, map_camera_facing_ent_fnc);
+        object_update_skills(ent, cell_pan, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
+        array_add(ENTITY *, map_props, ent);
+    }
+}
+
+void map_create_events(Map *map, Cell *cell)
+{
+    if (!map || !cell)
+    {
+        return;
+    }
+
+    var cell_pan = cell->pan;
+
+    int cell_id = cell->id;
+    int cell_x = cell->x;
+    int cell_y = cell->y;
+
+    int cell_type = cell->type;
+    int cell_asset = cell->asset;
+
+    int cell_flag = cell->flag;
+    int cell_event_type = cell->event_type;
+    int cell_event_id = cell->event_id;
+    int cell_temp_skill = cell->temp_skill;
+
+    if (is_rotatable(cell_type, cell_asset) == true)
+    {
+        ENTITY *ent = ent_create(asset_get_filename(cell_type, cell_asset), &cell->worldpos, map_fixed_rotation_ent_fnc);
+        object_update_skills(ent, cell_pan, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
+        ent->pan = cell_pan;
+        array_add(ENTITY *, map_events, ent);
+    }
+    else
+    {
+        ENTITY *ent = ent_create(asset_get_filename(cell_type, cell_asset), &cell->worldpos, map_camera_facing_ent_fnc);
+        object_update_skills(ent, cell_pan, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
+        array_add(ENTITY *, map_events, ent);
+    }
+}
+
+void map_create_items(Map *map, Cell *cell)
+{
+    if (!map || !cell)
+    {
+        return;
+    }
+
+    var cell_pan = cell->pan;
+
+    int cell_id = cell->id;
+    int cell_x = cell->x;
+    int cell_y = cell->y;
+
+    int cell_type = cell->type;
+    int cell_asset = cell->asset;
+
+    int cell_flag = cell->flag;
+    int cell_event_type = cell->event_type;
+    int cell_event_id = cell->event_id;
+    int cell_temp_skill = cell->temp_skill;
+
+    ENTITY *ent = ent_create(asset_get_filename(cell_type, cell_asset), &cell->worldpos, map_camera_facing_ent_fnc);
+    object_update_skills(ent, cell_pan, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
+    array_add(ENTITY *, map_items, ent);
+}
+
+void map_create_enemies(Map *map, Cell *cell)
+{
+    if (!map || !cell)
+    {
+        return;
+    }
+
+    var cell_pan = cell->pan;
+
+    int cell_id = cell->id;
+    int cell_x = cell->x;
+    int cell_y = cell->y;
+
+    int cell_type = cell->type;
+    int cell_asset = cell->asset;
+
+    int cell_flag = cell->flag;
+    int cell_event_type = cell->event_type;
+    int cell_event_id = cell->event_id;
+    int cell_temp_skill = cell->temp_skill;
+
+    ENTITY *ent = ent_create(asset_get_filename(cell_type, cell_asset), &cell->worldpos, map_camera_facing_ent_fnc);
+    object_update_skills(ent, cell_pan, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
+    array_add(ENTITY *, map_enemies, ent);
+}
+
+void map_create_bosses(Map *map, Cell *cell)
+{
+    if (!map || !cell)
+    {
+        return;
+    }
+
+    var cell_pan = cell->pan;
+
+    int cell_id = cell->id;
+    int cell_x = cell->x;
+    int cell_y = cell->y;
+
+    int cell_type = cell->type;
+    int cell_asset = cell->asset;
+
+    int cell_flag = cell->flag;
+    int cell_event_type = cell->event_type;
+    int cell_event_id = cell->event_id;
+    int cell_temp_skill = cell->temp_skill;
+
+    ENTITY *ent = ent_create(asset_get_filename(cell_type, cell_asset), &cell->worldpos, map_camera_facing_ent_fnc);
+    object_update_skills(ent, cell_pan, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
+    array_add(ENTITY *, map_bosses, ent);
+}
+
 void map_load(Map *map)
 {
     if (!map)
@@ -289,138 +532,29 @@ void map_load(Map *map)
                 continue;
             }
 
-            var cell_pan = cell->pan;
-
-            int cell_id = cell->id;
-
-            int cell_type = cell->type;
-            int cell_asset = cell->asset;
-
-            int cell_flag = cell->flag;
-            int cell_event_type = cell->event_type;
-            int cell_event_id = cell->event_id;
-            int cell_temp_skill = cell->temp_skill;
-
-            if (cell_type == ASSET_TYPE_WALLS)
+            if (cell->type == ASSET_TYPE_WALLS)
             {
-                if (is_secret_wall(cell) == true)
-                {
-                    ENTITY *ent = ent_create(wall_mdl, &cell->worldpos, map_secret_wall_ent_fnc);
-                    object_change_skin_to(ent, asset_get_filename(cell_type, cell_asset), asset_get_bmap(cell_type, cell_asset));
-                    object_update_skills(ent, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
-                    array_add(ENTITY *, map_walls, ent);
-                }
-                else if (is_finish_elevator(cell_type, cell_asset) == true)
-                {
-                    ENTITY *ent = ent_create(wall_mdl, &cell->worldpos, map_finish_wall_ent_fnc);
-                    object_change_skin_to(ent, asset_get_filename(cell_type, cell_asset), asset_get_bmap(cell_type, cell_asset));
-                    object_update_skills(ent, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
-                    array_add(ENTITY *, map_walls, ent);
-                }
-                else
-                {
-                    int i = 0;
-                    for (i = 0; i < MAX_DIRECTION_STEP; i++)
-                    {
-                        if (is_neighbour_solid(map, vector(x, y, 0), &cardinal_dir[i]) == true)
-                        {
-                            int neighbour_x = x + cardinal_dir[i].x;
-                            int neighbour_y = y + cardinal_dir[i].y;
-                            if (is_pos_on_grid(vector(neighbour_x, neighbour_y, 0)) == false)
-                            {
-                                continue;
-                            }
-
-                            Cell *neighbour = &map->cell[neighbour_x][neighbour_y];
-                            if (!neighbour)
-                            {
-                                continue;
-                            }
-
-                            VECTOR spawn_dir;
-                            vec_set(&spawn_dir, vec_diff(NULL, &neighbour->worldpos, &cell->worldpos));
-                            vec_normalize(&spawn_dir, 1);
-
-                            VECTOR spawn_pos;
-                            vec_set(&spawn_pos, &spawn_dir);
-                            vec_scale(&spawn_pos, MAP_CELL_SIZE / 2);
-                            vec_add(&spawn_pos, &cell->worldpos);
-
-                            if (is_neighbour_is_door(map, vector(x, y, 0), &cardinal_dir[i]) == true) // make sure to place a doorway texture
-                            {
-                                ENTITY *ent = ent_create(wall_doorway_pcx, &spawn_pos, map_solid_ent_fnc);
-                                object_update_skills(ent, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
-                                ent->pan = cardinal_rot[i] - 180;
-                                array_add(ENTITY *, map_walls, ent);
-                            }
-                            else
-                            {
-                                ENTITY *ent = ent_create(asset_get_filename(cell_type, cell_asset), &spawn_pos, map_solid_ent_fnc);
-                                object_update_skills(ent, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
-                                ent->pan = cardinal_rot[i] - 180;
-                                array_add(ENTITY *, map_walls, ent);
-                            }
-                        }
-                    }
-                }
+                map_create_walls(map, cell);
             }
-            else if (cell_type == ASSET_TYPE_PROPS)
+            else if (cell->type == ASSET_TYPE_PROPS)
             {
-                if (is_rotatable(cell_type, cell_asset) == true)
-                {
-                    ENTITY *ent = ent_create(asset_get_filename(cell_type, cell_asset), &cell->worldpos, map_fixed_rotation_ent_fnc);
-                    object_update_skills(ent, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
-                    ent->pan = cell_pan;
-                    if (is_switch(cell_type, cell_asset) == true)
-                    {
-                        object_attach_to_wall(ent);
-                    }
-                    else if (is_door(cell_type, cell_asset) == true || is_fence(cell_type, cell_asset) == true)
-                    {
-                        ent->pan -= 90; // add correction for doors
-                    }
-                    array_add(ENTITY *, map_props, ent);
-                }
-                else
-                {
-                    ENTITY *ent = ent_create(asset_get_filename(cell_type, cell_asset), &cell->worldpos, map_camera_facing_ent_fnc);
-                    object_update_skills(ent, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
-                    array_add(ENTITY *, map_props, ent);
-                }
+                map_create_props(map, cell);
             }
-            else if (cell_type == ASSET_TYPE_EVENTS)
+            else if (cell->type == ASSET_TYPE_EVENTS)
             {
-                if (is_rotatable(cell_type, cell_asset) == true)
-                {
-                    ENTITY *ent = ent_create(asset_get_filename(cell_type, cell_asset), &cell->worldpos, map_fixed_rotation_ent_fnc);
-                    object_update_skills(ent, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
-                    ent->pan = cell_pan;
-                    array_add(ENTITY *, map_events, ent);
-                }
-                else
-                {
-                    ENTITY *ent = ent_create(asset_get_filename(cell_type, cell_asset), &cell->worldpos, map_camera_facing_ent_fnc);
-                    object_update_skills(ent, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
-                    array_add(ENTITY *, map_events, ent);
-                }
+                map_create_events(map, cell);
             }
-            else if (cell_type == ASSET_TYPE_ITEMS) // all NOT rotatable
+            else if (cell->type == ASSET_TYPE_ITEMS) // all NOT rotatable
             {
-                ENTITY *ent = ent_create(asset_get_filename(cell_type, cell_asset), &cell->worldpos, map_camera_facing_ent_fnc);
-                object_update_skills(ent, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
-                array_add(ENTITY *, map_items, ent);
+                map_create_items(map, cell);
             }
-            else if (cell_type == ASSET_TYPE_ENEMIES) // all rotatable
+            else if (cell->type == ASSET_TYPE_ENEMIES) // all rotatable
             {
-                ENTITY *ent = ent_create(asset_get_filename(cell_type, cell_asset), &cell->worldpos, map_camera_facing_ent_fnc);
-                object_update_skills(ent, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
-                array_add(ENTITY *, map_enemies, ent);
+                map_create_enemies(map, cell);
             }
-            else if (cell_type == ASSET_TYPE_BOSSES) // all rotatable
+            else if (cell->type == ASSET_TYPE_BOSSES) // all rotatable
             {
-                ENTITY *ent = ent_create(asset_get_filename(cell_type, cell_asset), &cell->worldpos, map_camera_facing_ent_fnc);
-                object_update_skills(ent, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
-                array_add(ENTITY *, map_bosses, ent);
+                map_create_bosses(map, cell);
             }
         }
     }
