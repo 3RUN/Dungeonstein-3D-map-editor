@@ -260,6 +260,7 @@ void on_frame_event()
 		map_sketch_hide();
 		map_load(active_map);
 		test_run_crosshair_show();
+		test_run_select_player_on_start(active_map);
 		camera_reset(active_map, EDITOR_STATE_BUILD);
 		editor_switch_state_to(EDITOR_STATE_BUILD);
 		break;

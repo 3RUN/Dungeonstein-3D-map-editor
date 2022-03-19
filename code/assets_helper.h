@@ -17,6 +17,8 @@ int is_finish_elevator(int type, int asset);
 
 int is_switch(int type, int asset);
 
+int is_treasure(int type, int asset);
+
 int is_rotatable(int type, int asset);
 
 int is_neighbour_is_door(Map *map, VECTOR *pos, VECTOR *dir);

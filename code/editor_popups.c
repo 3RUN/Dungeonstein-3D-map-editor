@@ -368,6 +368,11 @@ void popup_save_as(Episode *episode)
             is_popup_opened = false;
             imgui_close_current_popup();
 
+            STRING *temp_ep_name_str = "";
+            str_cpy(temp_ep_name_str, save_as_filename);
+            str_cat(temp_ep_name_str, " saved.");
+            message_add(temp_ep_name_str);
+
             episode_save_name_udpate_to(_str(save_as_filename));
             episode_save(ep_save_name, episode);
         }
@@ -575,7 +580,6 @@ void popup_settings_input()
     editor_input_add_keybinding(input_strafe_right_entry_str, config_current.input_strafe_right);
     editor_input_add_keybinding(input_surface_entry_str, config_current.input_surface);
     editor_input_add_keybinding(input_dive_entry_str, config_current.input_dive);
-    editor_input_add_keybinding(input_interact_entry_str, config_current.input_interact);
     editor_input_add_keybinding(input_run_entry_str, config_current.input_run);
     editor_input_add_keybinding(input_drag_map_entry_str, config_current.input_drag_map);
     editor_input_add_keybinding(input_draw_entry_str, config_current.input_draw);
@@ -893,10 +897,9 @@ void popup_help()
         imgui_text(_chr(str_printf(NULL, "Move right (strafe): %s", config_current.input_strafe_right)));
         imgui_text(_chr(str_printf(NULL, "Move up (surface): %s", config_current.input_surface)));
         imgui_text(_chr(str_printf(NULL, "Move down (dive): %s", config_current.input_dive)));
-        imgui_text(_chr(str_printf(NULL, "Interact/Use: %s", config_current.input_interact)));
         imgui_text(_chr(str_printf(NULL, "Run (hold): %s", config_current.input_run)));
         imgui_text(_chr(str_printf(NULL, "Drag map (hold): %s", config_current.input_drag_map)));
-        imgui_text(_chr(str_printf(NULL, "Draw cell: %s", config_current.input_draw)));
+        imgui_text(_chr(str_printf(NULL, "Draw/Select cell: %s", config_current.input_draw)));
         imgui_text(_chr(str_printf(NULL, "Erase cell: %s", config_current.input_erase)));
         imgui_text(_chr(str_printf(NULL, "Pick cell (hold + draw): %s", config_current.input_pick)));
         imgui_text(_chr(str_printf(NULL, "Rotate cell: %s", config_current.input_rotate)));

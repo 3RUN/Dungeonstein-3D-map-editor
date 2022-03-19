@@ -15,6 +15,10 @@ var scancode_interact = 0;
 
 void draw_bbox3d(VECTOR *position, VECTOR *bbox_min, VECTOR *bbox_max, ANGLE *angle, COLOR *color, var alpha);
 
+void test_run_get_cell_info(Map *map);
+
+void test_run_select_player_on_start(Map *map);
+
 void test_run_initialize();
 
 void test_run_destroy();

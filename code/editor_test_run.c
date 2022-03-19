@@ -14,6 +14,51 @@ void draw_bbox3d(VECTOR *position, VECTOR *bbox_min, VECTOR *bbox_max, ANGLE *an
     draw_box3d(&vMin, &vMax, color, alpha);
 }
 
+void test_run_get_cell_info(Map *map)
+{
+    if (!map)
+    {
+        return;
+    }
+
+    VECTOR pos;
+    vec_set(&pos, vec_world_to_grid(&selected_cell_pos));
+    str_cpy(selected_cell_info_str, get_cell_info(&map->cell[pos.x][pos.y]));
+}
+
+void test_run_select_player_on_start(Map *map)
+{
+    if (!map)
+    {
+        return;
+    }
+
+    int x = 0, y = 0, player_found = false;
+    for (y = 0; y < MAP_HEIGHT; y++)
+    {
+        for (x = 0; x < MAP_WIDTH; x++)
+        {
+            Cell *cell = &map->cell[x][y];
+            if (!cell)
+            {
+                continue;
+            }
+
+            if (is_player_start(cell->type, cell->asset) == false)
+            {
+                continue;
+            }
+
+            vec_set(&selected_cell_pos, &cell->worldpos);
+            test_run_get_cell_info(map);
+            return;
+        }
+    }
+
+    vec_set(&selected_cell_pos, nullvector);
+    test_run_get_cell_info(map);
+}
+
 void test_run_initialize()
 {
     crosshair_pan = pan_create(NULL, CROSSHAIR_LAYER);
@@ -71,7 +116,7 @@ void test_run_update_from_config(CONFIG *config)
 {
     test_run_remove_binding(scancode_interact);
 
-    scancode_interact = engine_key_return_scancode_from_letter(config->input_interact);
+    scancode_interact = engine_key_return_scancode_from_letter(config->input_draw);
 
     test_run_update_binding(scancode_interact, test_run_info_trace);
 }
@@ -97,16 +142,36 @@ void test_run_info_trace()
         Map *active_map = map_get_active(&def_episode);
         if (active_map)
         {
-            VECTOR pos;
-            vec_set(&pos, vec_world_to_grid(&selected_cell_pos));
-            str_cpy(selected_cell_info_str, get_cell_info(&active_map->cell[pos.x][pos.y]));
+            test_run_get_cell_info(active_map);
         }
     }
 }
 
 void editor_test_run_update(Episode *episode)
 {
-    draw_text(selected_cell_info_str, 5, 5, COLOR_WHITE);
+    if (is_player_found == false)
+    {
+        draw_text("Player is not created", 5, 5, COLOR_RED);
+    }
+    else
+    {
+        draw_text("Player is created", 5, 5, COLOR_GREEN);
+    }
+
+    if (is_finish_found == false)
+    {
+        draw_text("Elevator switch is not created", 5, 25, COLOR_RED);
+    }
+    else
+    {
+        draw_text("Elevator switch is created", 5, 25, COLOR_GREEN);
+    }
+
+    STRING *map_stat_str = "";
+    str_printf(map_stat_str, "Props: %d\nEvents: %d\nItems: %d\nEnemies: %d\nBosses: %d\nSecrets: %d\nTreasures: %d", (long)props_count, (long)event_count, (long)items_count, (long)enemies_cout, (long)bosses_count, (long)secrets_count, (long)treasure_count);
+    draw_text(map_stat_str, 5, 45, COLOR_WHITE);
+
+    draw_text(selected_cell_info_str, 5, 170, COLOR_WHITE);
 
     VECTOR selected_bbox_min, selected_bbox_max;
     vec_fill(&selected_bbox_min, -(MAP_CELL_SIZE / 2));

@@ -25,6 +25,17 @@ STRING *wall_mdl = "wall.mdl"; // used for secret walls, elevator switch, etc
 VECTOR cardinal_dir[MAX_DIRECTION_STEP]; // top/right/bottom/left
 var cardinal_rot[MAX_DIRECTION_STEP];    // top/right/bottom/left
 
+int is_player_found = false;
+int is_finish_found = false;
+
+var props_count = 0;
+var event_count = 0;
+var items_count = 0;
+var enemies_cout = 0;
+var bosses_count = 0;
+var secrets_count = 0;
+var treasure_count = 0;
+
 void map_floor_ent_fnc();
 
 void map_ceiling_ent_fnc();
@@ -76,6 +87,8 @@ void map_create_enemies(Map *map, Cell *cell);
 void map_create_bosses(Map *map, Cell *cell);
 
 void map_create_bbox(Map *map, Cell *cell);
+
+void map_reset_statistic();
 
 void map_load(Map *map);
 

@@ -113,6 +113,21 @@ int is_switch(int type, int asset)
     return true;
 }
 
+int is_treasure(int type, int asset)
+{
+    if (type != ASSET_TYPE_ITEMS)
+    {
+        return false;
+    }
+
+    if (asset != ITEM_TREASURE_1 && asset != ITEM_TREASURE_2 && asset != ITEM_TREASURE_3 && asset != ITEM_TREASURE_4)
+    {
+        return false;
+    }
+
+    return true;
+}
+
 int is_rotatable(int type, int asset)
 {
     if (is_npc(type, asset) == true) // enemies/bosses

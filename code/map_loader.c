@@ -360,6 +360,7 @@ void map_create_walls(Map *map, Cell *cell)
         object_change_skin_to(ent, asset_get_filename(cell_type, cell_asset), asset_get_bmap(cell_type, cell_asset));
         object_update_skills(ent, cell_pan, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
         array_add(ENTITY *, map_walls, ent);
+        secrets_count++;
     }
     else if (is_finish_elevator(cell_type, cell_asset) == true)
     {
@@ -367,6 +368,7 @@ void map_create_walls(Map *map, Cell *cell)
         object_change_skin_to(ent, asset_get_filename(cell_type, cell_asset), asset_get_bmap(cell_type, cell_asset));
         object_update_skills(ent, cell_pan, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
         array_add(ENTITY *, map_walls, ent);
+        is_finish_found = true;
     }
     else
     {
@@ -464,12 +466,14 @@ void map_create_props(Map *map, Cell *cell)
             }
         }
         array_add(ENTITY *, map_props, ent);
+        props_count++;
     }
     else
     {
         ENTITY *ent = ent_create(asset_get_filename(cell_type, cell_asset), &cell->worldpos, map_camera_facing_ent_fnc);
         object_update_skills(ent, cell_pan, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
         array_add(ENTITY *, map_props, ent);
+        props_count++;
     }
 }
 
@@ -496,16 +500,23 @@ void map_create_events(Map *map, Cell *cell)
 
     if (is_rotatable(cell_type, cell_asset) == true)
     {
+        if (is_player_start(cell_type, cell_asset) == true)
+        {
+            is_player_found = true;
+        }
+
         ENTITY *ent = ent_create(asset_get_filename(cell_type, cell_asset), &cell->worldpos, map_fixed_rotation_ent_fnc);
         object_update_skills(ent, cell_pan, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
         ent->pan = cell_pan;
         array_add(ENTITY *, map_events, ent);
+        event_count++;
     }
     else
     {
         ENTITY *ent = ent_create(asset_get_filename(cell_type, cell_asset), &cell->worldpos, map_camera_facing_ent_fnc);
         object_update_skills(ent, cell_pan, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
         array_add(ENTITY *, map_events, ent);
+        event_count++;
     }
 }
 
@@ -530,9 +541,15 @@ void map_create_items(Map *map, Cell *cell)
     int cell_event_id = cell->event_id;
     int cell_temp_skill = cell->temp_skill;
 
+    if (is_treasure(cell_type, cell_asset) == true)
+    {
+        treasure_count++;
+    }
+
     ENTITY *ent = ent_create(asset_get_filename(cell_type, cell_asset), &cell->worldpos, map_camera_facing_ent_fnc);
     object_update_skills(ent, cell_pan, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
     array_add(ENTITY *, map_items, ent);
+    items_count++;
 }
 
 void map_create_enemies(Map *map, Cell *cell)
@@ -559,6 +576,7 @@ void map_create_enemies(Map *map, Cell *cell)
     ENTITY *ent = ent_create(asset_get_filename(cell_type, cell_asset), &cell->worldpos, map_camera_facing_ent_fnc);
     object_update_skills(ent, cell_pan, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
     array_add(ENTITY *, map_enemies, ent);
+    enemies_cout++;
 }
 
 void map_create_bosses(Map *map, Cell *cell)
@@ -585,6 +603,7 @@ void map_create_bosses(Map *map, Cell *cell)
     ENTITY *ent = ent_create(asset_get_filename(cell_type, cell_asset), &cell->worldpos, map_camera_facing_ent_fnc);
     object_update_skills(ent, cell_pan, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
     array_add(ENTITY *, map_bosses, ent);
+    bosses_count++;
 }
 
 void map_create_bbox(Map *map, Cell *cell)
@@ -613,6 +632,20 @@ void map_create_bbox(Map *map, Cell *cell)
     array_add(ENTITY *, map_bboxes, ent);
 }
 
+void map_reset_statistic()
+{
+    is_player_found = false;
+    is_finish_found = false;
+
+    props_count = 0;
+    event_count = 0;
+    items_count = 0;
+    enemies_cout = 0;
+    bosses_count = 0;
+    secrets_count = 0;
+    treasure_count = 0;
+}
+
 void map_load(Map *map)
 {
     if (!map)
@@ -620,10 +653,9 @@ void map_load(Map *map)
         return;
     }
 
+    map_reset_statistic();
     weather_play_sound(map->weather_id);
-
     player_music_from_map(map);
-
     ceiling_update_from_map(map);
     floor_update_from_map(map);
 
