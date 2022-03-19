@@ -119,15 +119,14 @@ void editor_reset()
 	episode_selection_reset();
 	music_selection_reset();
 
-	vec_set(&selected_cell_pos, nullvector);
-	str_cpy(selected_cell_info_str, "");
-
 	cell_info_tooltip_counter = 0;
 
-	active_map_id = 0;
-
-	selected_type = ASSET_TYPE_WALLS;
-	selected_asset = 0;
+	if (editor_state == EDITOR_STATE_OPEN || editor_state == EDITOR_STATE_NEW)
+	{
+		active_map_id = 0;
+		selected_type = ASSET_TYPE_WALLS;
+		selected_asset = 0;
+	}
 }
 
 #include "savedir.c"

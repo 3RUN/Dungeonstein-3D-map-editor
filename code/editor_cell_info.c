@@ -92,7 +92,27 @@ STRING *get_cell_info(Cell *cell)
         else if (cell_type == ASSET_TYPE_PROPS && cell_asset == PROPS_FENCE || cell_type == ASSET_TYPE_PROPS && cell_asset == PROPS_FENCE_DIRTY || cell_type == ASSET_TYPE_PROPS && cell_asset == PROPS_DOOR || cell_type == ASSET_TYPE_PROPS && cell_asset == PROPS_DOOR_ELEVATOR || cell_type == ASSET_TYPE_PROPS && cell_asset == PROPS_DOOR_LOCKED || cell_type == ASSET_TYPE_PROPS && cell_asset == PROPS_SWITCH)
         {
             str_cat(info_str, "\n\nparams:");
-            if (cell_asset == PROPS_FENCE || cell_asset == PROPS_FENCE_DIRTY || cell_asset == PROPS_DOOR || cell_asset == PROPS_DOOR_ELEVATOR)
+            if (cell_asset == PROPS_FENCE || cell_asset == PROPS_FENCE_DIRTY)
+            {
+                str_cat(info_str, "\n* activation: ");
+                if (cell_event_type == 0)
+                {
+                    str_cat(info_str, "none (static);");
+                }
+                else if (cell_event_type == 1)
+                {
+                    str_cat(info_str, "on interaction;");
+                }
+                else if (cell_event_type == 2)
+                {
+                    str_cat(info_str, str_printf(NULL, "trigger zone id = %d;", (long)cell_event_id));
+                }
+                else if (cell_event_type == 3)
+                {
+                    str_cat(info_str, str_printf(NULL, "switch id = %d;", (long)cell_event_id));
+                }
+            }
+            else if (cell_asset == PROPS_DOOR || cell_asset == PROPS_DOOR_ELEVATOR)
             {
                 str_cat(info_str, "\n* activation: ");
                 if (cell_event_type == 0)

@@ -7,7 +7,9 @@
 // * "event_id" is holding id of a trigger zone or switch (range: 0...MAX_ID_RANGE)
 
 // PROPS
-// * "event_type" is holding activation type (0 - interaction (default), 1 - trigger zone or 2 - switch) or type of a key (0 - blue, 1 - red, 2 - yellow) for locked doors
+// * "event_type" is holding activation type (0 - interaction (default), 1 - trigger zone or 2 - switch) 
+//    or type of a key (0 - blue, 1 - red, 2 - yellow) for locked doors
+//    or 0 - none (default), 1 - interaction, 2 - trigger zone or 3 - switch for fences
 // * "event_id" is holding id of a trigger zone or switch (range: 0...MAX_ID_RANGE)
 
 // TRIGGER ZONE EVENT

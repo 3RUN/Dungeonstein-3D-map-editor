@@ -74,7 +74,22 @@ void asset_params_props_params(Cell *cell, int asset)
         return;
     }
 
-    if (asset == PROPS_FENCE || asset == PROPS_FENCE_DIRTY || asset == PROPS_DOOR || asset == PROPS_DOOR_ELEVATOR)
+    if (asset == PROPS_FENCE || asset == PROPS_FENCE_DIRTY)
+    {
+        imgui_text("Activation");
+        imgui_radiobutton("None (static)", &cell->event_type, 0);
+        imgui_radiobutton("Interaction", &cell->event_type, 1);
+        imgui_radiobutton("Trigger zone - id", &cell->event_type, 2);
+        imgui_radiobutton("Switch - id", &cell->event_type, 3);
+
+        // trigger zone or switch ?
+        if (cell->event_type >= 2)
+        {
+            imgui_separator();
+            asset_params_id(cell);
+        }
+    }
+    else if (asset == PROPS_DOOR || asset == PROPS_DOOR_ELEVATOR)
     {
         asset_params_activation_type(cell);
 
