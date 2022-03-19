@@ -216,7 +216,7 @@ void on_frame_event()
 
 		STRING *temp_ep_name_str = "";
 		str_cpy(temp_ep_name_str, "Episode ");
-		str_cat(temp_ep_name_str, ep_save_name);
+		str_cat(temp_ep_name_str, _str(ep_save_name));
 		str_cat(temp_ep_name_str, " opened.");
 		message_add(temp_ep_name_str);
 
@@ -234,7 +234,7 @@ void on_frame_event()
 
 		STRING *temp_ep_name_str = "";
 		str_cpy(temp_ep_name_str, "Episode ");
-		str_cat(temp_ep_name_str, ep_save_name);
+		str_cat(temp_ep_name_str, _str(ep_save_name));
 		str_cat(temp_ep_name_str, " created.");
 		message_add(temp_ep_name_str);
 
@@ -312,9 +312,6 @@ void on_frame_event()
 		sys_exit(NULL);
 		break;
 	}
-
-	DEBUG_VAR(master_vol, 500);
-	DEBUG_VAR(playing_music_volume, 520);
 
 	debug_panel_update();
 	shaders_update();

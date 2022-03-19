@@ -369,7 +369,7 @@ void popup_save_as(Episode *episode)
             imgui_close_current_popup();
 
             STRING *temp_ep_name_str = "";
-            str_cpy(temp_ep_name_str, save_as_filename);
+            str_cpy(temp_ep_name_str, _str(save_as_filename));
             str_cat(temp_ep_name_str, " saved.");
             message_add(temp_ep_name_str);
 
