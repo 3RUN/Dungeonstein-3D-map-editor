@@ -1,6 +1,7 @@
 
 void music_list_initialize()
 {
+    playing_music_volume = MUSIC_DEF_VOLUME;
     music_found_txt = txt_create(MAX_AMOUNT_OF_MUSIC_TO_LOAD, 0);
     music_list_refresh();
 }
@@ -47,7 +48,7 @@ void play_selection_from_music_list()
     STRING *music_to_play_str = "";
     str_cpy(music_to_play_str, episode_music_folder_str);
     str_cat(music_to_play_str, selected_music);
-    playing_music_handle = media_play(music_to_play_str, NULL, playing_music_volume);
+    playing_music_handle = media_loop(music_to_play_str, NULL, playing_music_volume);
     playing_music_index = found_music_index;
 }
 
@@ -65,7 +66,7 @@ void player_music_from_map(Map *map)
 
     STRING *music_to_play_str = "";
     str_cpy(music_to_play_str, _str(map->music));
-    playing_music_handle = media_play(music_to_play_str, NULL, playing_music_volume);
+    playing_music_handle = media_loop(music_to_play_str, NULL, playing_music_volume);
 }
 
 void stop_playing_music()

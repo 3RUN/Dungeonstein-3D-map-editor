@@ -67,13 +67,18 @@ void messages_update()
 
 void message_add(STRING *msg)
 {
-    int i = 0;
-    for (i = MAX_MESSAGES - 1; i > 0; i--)
+    if (editor_state != EDITOR_STATE_BUILD && editor_state != EDITOR_STATE_MAP_SETTINGS)
     {
-        str_cpy((message_txt->pstring)[i], (message_txt->pstring)[i - 1]);
-        message_timer[i] = message_timer[i - 1];
+        int i = 0;
+        for (i = MAX_MESSAGES - 1; i > 0; i--)
+        {
+            str_cpy((message_txt->pstring)[i], (message_txt->pstring)[i - 1]);
+            message_timer[i] = message_timer[i - 1];
+        }
+        message_timer[0] = MESSAGE_FADE_SPEED;
+        str_cpy((message_txt->pstring)[0], msg);
+        messages_show();
     }
-    message_timer[0] = MESSAGE_FADE_SPEED;
-    str_cpy((message_txt->pstring)[0], msg);
-    messages_show();
+
+    snd_play(beep_ogg, beep_volume, 0);
 }

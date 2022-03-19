@@ -23,7 +23,7 @@ STRING *project_name_str = "MapEditor";
 STRING *episode_save_folder_str = "episodes\\";
 STRING *episode_music_folder_str = "music\\";
 STRING *episode_extension_str = ".ep"; // this added to the episode's file name on load/save
-STRING *music_extension_str = ".mid";  // only mid music is used
+STRING *music_extension_str = ".mp3";
 
 #define TRACE_FLAGS (IGNORE_ME | IGNORE_PASSABLE | IGNORE_PASSENTS | IGNORE_MAPS | IGNORE_CONTENT)
 #define MOVE_FLAGS (IGNORE_ME | IGNORE_PASSABLE | IGNORE_PASSENTS | IGNORE_MAPS | IGNORE_CONTENT)
@@ -212,8 +212,16 @@ void on_frame_event()
 		episode_reset(&def_episode);
 		episode_save_name_udpate_to(_str(selected_episode));
 		episode_load(ep_save_name, &def_episode);
-		map_sketch_refresh(active_map);
 		editor_reset();
+
+		STRING *temp_ep_name_str = "";
+		str_cpy(temp_ep_name_str, "Episode ");
+		str_cat(temp_ep_name_str, ep_save_name);
+		str_cat(temp_ep_name_str, " opened.");
+		message_add(temp_ep_name_str);
+
+		map_sketch_refresh(active_map);
+
 		editor_switch_state_to(EDITOR_STATE_EDIT);
 		break;
 
@@ -222,8 +230,15 @@ void on_frame_event()
 		episode_change_info(&def_episode, new_episode_name, new_episode_story_start, new_episode_story_end, new_episode_map_count);
 		episode_save_name_udpate_to(_str(new_episode_filename));
 		episode_save(ep_save_name, &def_episode);
-		map_sketch_refresh(active_map);
 		editor_reset();
+
+		STRING *temp_ep_name_str = "";
+		str_cpy(temp_ep_name_str, "Episode ");
+		str_cat(temp_ep_name_str, ep_save_name);
+		str_cat(temp_ep_name_str, " created.");
+		message_add(temp_ep_name_str);
+
+		map_sketch_refresh(active_map);
 		editor_switch_state_to(EDITOR_STATE_EDIT);
 		break;
 
@@ -297,6 +312,9 @@ void on_frame_event()
 		sys_exit(NULL);
 		break;
 	}
+
+	DEBUG_VAR(master_vol, 500);
+	DEBUG_VAR(playing_music_volume, 520);
 
 	debug_panel_update();
 	shaders_update();

@@ -122,7 +122,7 @@ STRING *short_def_shift_map_north_str = "cur";
 float mouse_def_sensitivity = 1;
 
 // audio
-float master_def_volume = 100;
+float master_def_volume = 50;
 
 // config others
 float font_def_scale = 1;

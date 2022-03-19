@@ -27,8 +27,6 @@ void engine_set_resolution_from_id(int id, int display_mode);
 
 void engine_apply_video_settings();
 
-void engine_update_settings_from_config();
-
 void engine_initialize();
 
 #endif

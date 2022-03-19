@@ -5,6 +5,14 @@ void vec_randomize(VECTOR *vec, var range)
     vec_normalize(vec, random(range));
 }
 
+void particle_hide(PARTICLE *p)
+{
+    if (editor_state != EDITOR_STATE_BUILD && editor_state != EDITOR_STATE_MAP_SETTINGS)
+    {
+        p->lifespan = 0;
+    }
+}
+
 void weather_impact_particle_event(PARTICLE *p)
 {
     p->alpha -= p->skill_x * time_step;
@@ -23,6 +31,8 @@ void weather_impact_particle_event(PARTICLE *p)
         vec_fill(&p->vel_x, 0);
         p->gravity = 0;
     }
+
+    particle_hide(p);
 }
 
 void weather_rain_splash_particle(PARTICLE *p)
@@ -76,6 +86,8 @@ void weather_particle_event(PARTICLE *p)
         p->y = cycle(p->y, camera->y - weather_seedbox.y, camera->y + weather_seedbox.y);
         p->z = cycle(p->z, WEATHER_PARTICLE_Z_LIMIT, weather_seedbox.z);
     }
+
+    particle_hide(p);
 }
 
 void weather_rain_particle(PARTICLE *p)

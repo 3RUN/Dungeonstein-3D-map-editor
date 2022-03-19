@@ -160,12 +160,20 @@ void map_settings_update(Episode *episode)
     imgui_separator();
 
     // toggle ceiling visibility
-    imgui_text("Ceiling is visible:");
-    imgui_same_line();
-    imgui_align_right_with_offset(110 * config_saved.font_scale);
-    imgui_radiobutton("true", &map_settings.is_ceiling_visible, true);
-    imgui_same_line();
-    imgui_radiobutton("false", &map_settings.is_ceiling_visible, false);
+    if (map_settings.weather_id <= WEATHER_CLEAR)
+    {
+        imgui_text("Ceiling is visible:");
+        imgui_same_line();
+        imgui_align_right_with_offset(110 * config_saved.font_scale);
+        imgui_radiobutton("true", &map_settings.is_ceiling_visible, true);
+        imgui_same_line();
+        imgui_radiobutton("false", &map_settings.is_ceiling_visible, false);
+    }
+    else
+    {
+        imgui_text_disabled("Ceiling is not visible while weather is ON");
+        imgui_separator();
+    }
 
     // ceiling color
     if (map_settings.weather_id <= WEATHER_CLEAR && map_settings.is_ceiling_visible == true)

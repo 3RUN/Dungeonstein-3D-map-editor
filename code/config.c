@@ -84,6 +84,11 @@ void config_apply()
     tools_update_input_from_config(&config_current);
     camera_update_input_from_config(&config_current);
     test_run_update_from_config(&config_current);
+
+    draw_textmode("Courier", 1, 12 * config_saved.font_scale, 100);
+
+    master_vol = config_saved.master_volume;
+
     engine_apply_video_settings();
 }
 

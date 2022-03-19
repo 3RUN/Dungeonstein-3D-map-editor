@@ -8,6 +8,9 @@
 
 TEXT *message_txt = NULL;
 
+SOUND *beep_ogg = "beep.ogg";
+
+var beep_volume = 50;
 var message_timer[MAX_MESSAGES];
 
 void messages_show();

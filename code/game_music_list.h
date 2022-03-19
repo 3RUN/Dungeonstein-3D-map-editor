@@ -3,7 +3,7 @@
 
 #define MAX_AMOUNT_OF_MUSIC_TO_LOAD 999
 
-#define MUSIC_DEF_VOLUME 50
+#define MUSIC_DEF_VOLUME 100
 
 TEXT *music_found_txt = NULL;
 
@@ -14,7 +14,7 @@ int is_music_playing_failed = false;
 
 int playing_music_index = 0;
 var playing_music_handle = 0;
-var playing_music_volume = 100;
+var playing_music_volume = 50;
 
 char *selected_music;
 char *found_music_listbox[MAX_AMOUNT_OF_MUSIC_TO_LOAD];

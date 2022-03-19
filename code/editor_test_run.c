@@ -151,27 +151,27 @@ void editor_test_run_update(Episode *episode)
 {
     if (is_player_found == false)
     {
-        draw_text("Player is not created", 5, 5, COLOR_RED);
+        draw_text("Player is not created", 5, 5 * config_saved.font_scale, COLOR_RED);
     }
     else
     {
-        draw_text("Player is created", 5, 5, COLOR_GREEN);
+        draw_text("Player is created", 5, 5 * config_saved.font_scale, COLOR_GREEN);
     }
 
     if (is_finish_found == false)
     {
-        draw_text("Elevator switch is not created", 5, 25, COLOR_RED);
+        draw_text("Elevator switch is not created", 5, 25 * config_saved.font_scale, COLOR_RED);
     }
     else
     {
-        draw_text("Elevator switch is created", 5, 25, COLOR_GREEN);
+        draw_text("Elevator switch is created", 5, 25 * config_saved.font_scale, COLOR_GREEN);
     }
 
     STRING *map_stat_str = "";
     str_printf(map_stat_str, "Props: %d\nEvents: %d\nItems: %d\nEnemies: %d\nBosses: %d\nSecrets: %d\nTreasures: %d", (long)props_count, (long)event_count, (long)items_count, (long)enemies_cout, (long)bosses_count, (long)secrets_count, (long)treasure_count);
-    draw_text(map_stat_str, 5, 45, COLOR_WHITE);
+    draw_text(map_stat_str, 5, 45 * config_saved.font_scale, COLOR_WHITE);
 
-    draw_text(selected_cell_info_str, 5, 170, COLOR_WHITE);
+    draw_text(selected_cell_info_str, 5, 170 * config_saved.font_scale, COLOR_WHITE);
 
     VECTOR selected_bbox_min, selected_bbox_max;
     vec_fill(&selected_bbox_min, -(MAP_CELL_SIZE / 2));

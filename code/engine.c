@@ -170,17 +170,11 @@ void engine_apply_video_settings()
     autolock_mouse_locked = false;
 }
 
-void engine_update_settings_from_config()
-{
-}
-
 void engine_initialize()
 {
     d3d_alpharef = 1;                               // proper alpha fading
     d3d_instancing = 1;                             // sprite instancing
     vec_set(&d3d_lodfactor, vector(100, 110, 120)); // disable lods (ugly)
-
-    draw_textmode("Courier", 1, 16, 100);
 
     sun_light = 0;
 

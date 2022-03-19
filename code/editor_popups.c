@@ -1043,8 +1043,6 @@ void popup_music_browser()
     {
         if (found_music_index >= 0)
         {
-            playing_music_volume = MUSIC_DEF_VOLUME;
-            master_vol = config_saved.master_volume;
             weather_resume_sound();
             stop_playing_music();
             is_popup_check_failed = false;
@@ -1068,8 +1066,6 @@ void popup_music_browser()
     imgui_same_line();
     if (imgui_button_withsize("Close", width, POPUP_BUTTON_HEIGHT * config_saved.font_scale) || key_esc)
     {
-        playing_music_volume = MUSIC_DEF_VOLUME;
-        master_vol = config_saved.master_volume;
         weather_resume_sound();
         stop_playing_music();
         is_popup_check_failed = false;
@@ -1081,7 +1077,6 @@ void popup_music_browser()
 
     if (media_playing(playing_music_handle))
     {
-        master_vol = playing_music_volume;
         media_tune(playing_music_handle, playing_music_volume, 0, 0);
     }
 
