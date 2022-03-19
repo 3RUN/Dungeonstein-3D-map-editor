@@ -6,5 +6,6 @@ path "assets\\events";
 path "assets\\items";
 path "assets\\enemies";
 path "assets\\bosses";
+path "music";
 
 BIND "imgui.dll"; 
