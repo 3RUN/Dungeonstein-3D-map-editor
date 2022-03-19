@@ -18,6 +18,7 @@ array_t *map_events = NULL;
 array_t *map_items = NULL;
 array_t *map_enemies = NULL;
 array_t *map_bosses = NULL;
+array_t *map_bboxes = NULL;
 
 STRING *wall_mdl = "wall.mdl"; // used for secret walls, elevator switch, etc
 
@@ -37,6 +38,10 @@ void map_camera_facing_ent_fnc();
 void map_secret_wall_ent_fnc();
 
 void map_finish_wall_ent_fnc();
+
+void bbox_ent_event(var event_type);
+
+void map_info_bbox_ent_fnc();
 
 void object_attach_to_wall(ENTITY *ent);
 
@@ -67,6 +72,8 @@ void map_create_items(Map *map, Cell *cell);
 void map_create_enemies(Map *map, Cell *cell);
 
 void map_create_bosses(Map *map, Cell *cell);
+
+void map_create_bbox(Map *map, Cell *cell);
 
 void map_load(Map *map);
 

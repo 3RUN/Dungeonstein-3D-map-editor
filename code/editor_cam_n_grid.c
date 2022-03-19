@@ -1,4 +1,20 @@
 
+void vec_snap_to_grid(VECTOR *pos)
+{
+    if (!pos)
+    {
+        return;
+    }
+
+    pos->x += (MAP_CELL_SIZE / 2) * sign(pos->x);
+    pos->x = (integer(pos->x / MAP_CELL_SIZE) * MAP_CELL_SIZE);
+
+    pos->y += (MAP_CELL_SIZE / 2) * sign(pos->y);
+    pos->y = (integer(pos->y / MAP_CELL_SIZE) * MAP_CELL_SIZE);
+
+    pos->z = MAP_Z_POS;
+}
+
 VECTOR *vec_world_to_grid(VECTOR *world_pos)
 {
     if (!world_pos)
@@ -240,7 +256,6 @@ void camera_update_input_from_config(CONFIG *config)
     scancode_strafe_right = engine_key_return_scancode_from_letter(config->input_strafe_right);
     scancode_surface = engine_key_return_scancode_from_letter(config->input_surface);
     scancode_dive = engine_key_return_scancode_from_letter(config->input_dive);
-    scancode_interact = engine_key_return_scancode_from_letter(config->input_interact);
     scancode_run = engine_key_return_scancode_from_letter(config->input_run);
     scancode_drag_map = engine_key_return_scancode_from_letter(config->input_drag_map);
 }
@@ -360,7 +375,6 @@ void camera_n_grid_update(Episode *episode)
     key_strafe_right = key_pressed(scancode_strafe_right);
     key_surface = key_pressed(scancode_surface);
     key_dive = key_pressed(scancode_dive);
-    key_interact = key_pressed(scancode_interact);
     key_run = key_pressed(scancode_run);
     key_drag_map = key_pressed(scancode_drag_map);
 

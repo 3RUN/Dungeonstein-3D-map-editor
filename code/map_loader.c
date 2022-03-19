@@ -36,14 +36,33 @@ void map_camera_facing_ent_fnc()
 
 void map_secret_wall_ent_fnc()
 {
-    set(my, POLYGON | LIGHT | NOFILTER | UNLIT);
+    set(my, PASSABLE | LIGHT | NOFILTER | UNLIT);
     my->material = mtl_solid;
 }
 
 void map_finish_wall_ent_fnc()
 {
-    set(my, POLYGON | LIGHT | NOFILTER | UNLIT);
+    set(my, PASSABLE | LIGHT | NOFILTER | UNLIT);
     my->material = mtl_solid;
+}
+
+void bbox_ent_event(var event_type)
+{
+    if (event_type == EVENT_SHOOT)
+    {
+        beep();
+    }
+}
+
+void map_info_bbox_ent_fnc()
+{
+    set(my, POLYGON | TRANSLUCENT);
+    vec_fill(&my->scale_x, 1);
+    c_setminmax(my);
+    my->alpha = 0.1;
+
+    my->emask |= EVENT_SHOOT;
+    my->event = bbox_ent_event;
 }
 
 void object_attach_to_wall(ENTITY *ent)
@@ -153,6 +172,7 @@ void map_loader_initialize(Episode *episode)
     map_items = array_create(ENTITY *, 1);
     map_enemies = array_create(ENTITY *, 1);
     map_bosses = array_create(ENTITY *, 1);
+    map_bboxes = array_create(ENTITY *, 1);
 }
 
 void map_loader_free_array(array_t *array)
@@ -196,11 +216,25 @@ void map_loader_destroy()
     }
 
     map_loader_destroy_array(map_walls);
+    map_walls = NULL;
+
     map_loader_destroy_array(map_props);
+    map_props = NULL;
+
     map_loader_destroy_array(map_events);
+    map_events = NULL;
+
     map_loader_destroy_array(map_items);
+    map_items = NULL;
+
     map_loader_destroy_array(map_enemies);
+    map_enemies = NULL;
+
     map_loader_destroy_array(map_bosses);
+    map_bosses = NULL;
+
+    map_loader_destroy_array(map_bboxes);
+    map_bboxes = NULL;
 }
 
 void map_destroy(Map *map)
@@ -226,6 +260,7 @@ void map_destroy(Map *map)
     map_loader_free_array(map_items);
     map_loader_free_array(map_enemies);
     map_loader_free_array(map_bosses);
+    map_loader_free_array(map_bboxes);
 }
 
 int is_neighbour_solid(Map *map, VECTOR *pos, VECTOR *dir)
@@ -370,12 +405,28 @@ void map_create_props(Map *map, Cell *cell)
         ENTITY *ent = ent_create(asset_get_filename(cell_type, cell_asset), &cell->worldpos, map_fixed_rotation_ent_fnc);
         if (is_switch(cell_type, cell_asset) == true)
         {
-            object_attach_to_wall(ent);
             object_update_skills(ent, cell_pan, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
+            object_attach_to_wall(ent);
         }
         else if (is_door(cell_type, cell_asset) == true || is_fence(cell_type, cell_asset) == true)
         {
             object_update_skills(ent, (cell_pan - 90), cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
+
+            if (cell_asset == PROPS_DOOR_LOCKED)
+            {
+                if (cell_event_type == 0) // blue
+                {
+                    vec_set(&ent->blue, DOOR_LOCKED_BLUE);
+                }
+                else if (cell_event_type == 1) // red
+                {
+                    vec_set(&ent->blue, DOOR_LOCKED_RED);
+                }
+                else if (cell_event_type == 2) // yellow
+                {
+                    vec_set(&ent->blue, DOOR_LOCKED_YELLOW);
+                }
+            }
         }
         array_add(ENTITY *, map_props, ent);
     }
@@ -501,6 +552,32 @@ void map_create_bosses(Map *map, Cell *cell)
     array_add(ENTITY *, map_bosses, ent);
 }
 
+void map_create_bbox(Map *map, Cell *cell)
+{
+    if (!map || !cell)
+    {
+        return;
+    }
+
+    var cell_pan = cell->pan;
+
+    int cell_id = cell->id;
+    int cell_x = cell->x;
+    int cell_y = cell->y;
+
+    int cell_type = cell->type;
+    int cell_asset = cell->asset;
+
+    int cell_flag = cell->flag;
+    int cell_event_type = cell->event_type;
+    int cell_event_id = cell->event_id;
+    int cell_temp_skill = cell->temp_skill;
+
+    ENTITY *ent = ent_create(wall_mdl, &cell->worldpos, map_info_bbox_ent_fnc);
+    object_update_skills(ent, cell_pan, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
+    array_add(ENTITY *, map_bboxes, ent);
+}
+
 void map_load(Map *map)
 {
     if (!map)
@@ -535,26 +612,32 @@ void map_load(Map *map)
             if (cell->type == ASSET_TYPE_WALLS)
             {
                 map_create_walls(map, cell);
+                map_create_bbox(map, cell);
             }
             else if (cell->type == ASSET_TYPE_PROPS)
             {
                 map_create_props(map, cell);
+                map_create_bbox(map, cell);
             }
             else if (cell->type == ASSET_TYPE_EVENTS)
             {
                 map_create_events(map, cell);
+                map_create_bbox(map, cell);
             }
             else if (cell->type == ASSET_TYPE_ITEMS) // all NOT rotatable
             {
                 map_create_items(map, cell);
+                map_create_bbox(map, cell);
             }
             else if (cell->type == ASSET_TYPE_ENEMIES) // all rotatable
             {
                 map_create_enemies(map, cell);
+                map_create_bbox(map, cell);
             }
             else if (cell->type == ASSET_TYPE_BOSSES) // all rotatable
             {
                 map_create_bosses(map, cell);
+                map_create_bbox(map, cell);
             }
         }
     }

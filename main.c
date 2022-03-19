@@ -5,8 +5,6 @@
 
 // TO DO
 //
-// * add clickable bbox for all cells in 'test run' with CLICK event to show their info !
-// * create proper 'editor_test_run' ui to show the clicked cell info when in 'test run'
 // * create proper 'map_settings' ui to tweek the map settings
 
 #define PRAGMA_POINTER
@@ -26,6 +24,9 @@ STRING *episode_save_folder_str = "episodes\\";
 STRING *episode_music_folder_str = "music\\";
 STRING *episode_extension_str = ".ep"; // this added to the episode's file name on load/save
 STRING *music_extension_str = ".mid";  // only mid music is used
+
+#define TRACE_FLAGS (IGNORE_ME | IGNORE_PASSABLE | IGNORE_PASSENTS | IGNORE_MAPS | IGNORE_CONTENT)
+#define MOVE_FLAGS (IGNORE_ME | IGNORE_PASSABLE | IGNORE_PASSENTS | IGNORE_MAPS | IGNORE_CONTENT)
 
 #define MAX_ENTITIES 9999
 
@@ -113,8 +114,12 @@ int mouse_y = 0;
 
 void editor_reset()
 {
+	messages_reset();
 	episode_selection_reset();
 	music_selection_reset();
+
+	vec_set(&selected_cell_pos, nullvector);
+	str_cpy(selected_cell_info_str, "");
 
 	cell_info_tooltip_counter = 0;
 
@@ -183,6 +188,7 @@ void map_editor_startup()
 	editor_main_initialize();			 // initialize everything related to drawing/editing state ui
 	episode_reset(&def_episode);		 // initialize default episode with default values
 	map_loader_initialize(&def_episode); // initialize everything needed for test building the maps
+	test_run_initialize();				 // initialize everything related to test run
 }
 
 void on_frame_event()
@@ -246,6 +252,7 @@ void on_frame_event()
 		editor_reset();
 		map_sketch_hide();
 		map_load(active_map);
+		test_run_crosshair_show();
 		camera_reset(active_map, EDITOR_STATE_BUILD);
 		editor_switch_state_to(EDITOR_STATE_BUILD);
 		break;
@@ -258,6 +265,7 @@ void on_frame_event()
 	case EDITOR_STATE_FROM_BUILD:
 		map_sketch_show();
 		map_destroy(active_map);
+		test_run_crosshair_hide();
 		camera_reset(active_map, EDITOR_STATE_EDIT);
 		editor_switch_state_to(EDITOR_STATE_EDIT);
 		break;
@@ -304,6 +312,7 @@ void on_exit_event()
 	editor_main_destroy();
 	editor_cell_linker_destroy();
 	map_loader_destroy();
+	test_run_destroy();
 }
 
 void on_esc_event()

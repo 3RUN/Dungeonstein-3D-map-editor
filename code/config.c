@@ -84,7 +84,7 @@ void config_apply()
     shortcuts_update_from_config(&config_current);
     tools_update_input_from_config(&config_current);
     camera_update_input_from_config(&config_current);
-    // player_update_input_from_config(&config_current);
+    test_run_update_from_config(&config_current);
     engine_apply_video_settings();
 }
 

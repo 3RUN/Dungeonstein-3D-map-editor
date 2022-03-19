@@ -20,7 +20,6 @@ var scancode_strafe_left = 0;
 var scancode_strafe_right = 0;
 var scancode_surface = 0;
 var scancode_dive = 0;
-var scancode_interact = 0;
 var scancode_run = 0;
 var scancode_drag_map = 0;
 
@@ -30,9 +29,10 @@ var key_strafe_left = 0;
 var key_strafe_right = 0;
 var key_surface = 0;
 var key_dive = 0;
-var key_interact = 0;
 var key_run = 0;
 var key_drag_map = 0;
+
+void vec_snap_to_grid(VECTOR *pos);
 
 VECTOR *vec_world_to_grid(VECTOR *world_pos);
 
