@@ -3,6 +3,8 @@
 
 #define MAX_AMOUNT_OF_MUSIC_TO_LOAD 999
 
+#define MUSIC_DEF_VOLUME 50
+
 TEXT *music_found_txt = NULL;
 
 int found_music_index = -1;
@@ -28,5 +30,9 @@ void music_selection_reset();
 void music_list_refresh();
 
 void play_selection_from_music_list();
+
+void player_music_from_map(Map *map);
+
+void stop_playing_music();
 
 #endif

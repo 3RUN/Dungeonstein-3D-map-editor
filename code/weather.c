@@ -138,3 +138,61 @@ void weather_update(int type)
         effect(weather_snow_particle, maxv(1, snow_density * time_step), nullvector, nullvector);
     }
 }
+
+void weather_pause_sound()
+{
+    snd_pause(weather_sound_handle);
+}
+
+void weather_resume_sound()
+{
+    snd_start(weather_sound_handle);
+}
+
+void weather_stop_sound()
+{
+    if (!snd_playing(weather_sound_handle))
+    {
+        return;
+    }
+
+    weather_sound_volume = 0;
+    snd_stop(weather_sound_handle);
+}
+
+void weather_play_sound(int type)
+{
+    if (type == WEATHER_CLEAR)
+    {
+        weather_stop_sound();
+        return;
+    }
+
+    if (snd_playing(weather_sound_handle))
+    {
+        weather_sound_volume = 0;
+        snd_stop(weather_sound_handle);
+    }
+
+    if (type == WEATHER_RAIN)
+    {
+        weather_sound_handle = snd_loop(weather_rain_ogg, 0, 0);
+    }
+    else if (type == WEATHER_SNOW)
+    {
+        weather_sound_handle = snd_loop(weather_snow_ogg, 0, 0);
+    }
+
+    while (weather_sound_volume < weather_sound_volume_target)
+    {
+        if (!snd_playing(weather_sound_handle))
+        {
+            break;
+        }
+
+        weather_sound_volume += weather_sound_volume_fade_speed_factor * time_step;
+        weather_sound_volume = clamp(weather_sound_volume, 0, weather_sound_volume_target);
+        snd_tune(weather_sound_handle, weather_sound_volume, 0, 0);
+        wait(1);
+    }
+}

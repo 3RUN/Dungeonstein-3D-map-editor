@@ -58,6 +58,7 @@ void map_settings_refresh()
         if (map_settings.weather_id == i)
         {
             str_cpy(weather_currently_used_str, weather_list_str[i]);
+            weather_play_sound(i);
         }
     }
 }
@@ -203,6 +204,7 @@ void map_settings_update(Episode *episode)
     imgui_same_line();
     if (imgui_button_withsize("Browser", -1, MAP_SETTINGS_MUSIC_BROWSE_BUTTON_HEIGHT))
     {
+        weather_pause_sound();
         is_popup_opened = true;
     }
     imgui_separator();

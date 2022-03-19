@@ -247,6 +247,8 @@ void on_frame_event()
 		break;
 
 	case EDITOR_STATE_FROM_MAP_SETTINGS:
+		weather_stop_sound();
+		stop_playing_music();
 		map_sketch_show();
 		map_destroy(active_map);
 		camera_reset(active_map, EDITOR_STATE_EDIT);
@@ -269,6 +271,8 @@ void on_frame_event()
 		break;
 
 	case EDITOR_STATE_FROM_BUILD:
+		weather_stop_sound();
+		stop_playing_music();
 		map_sketch_show();
 		map_destroy(active_map);
 		test_run_crosshair_hide();

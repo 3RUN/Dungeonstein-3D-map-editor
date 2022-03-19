@@ -620,6 +620,10 @@ void map_load(Map *map)
         return;
     }
 
+    weather_play_sound(map->weather_id);
+
+    player_music_from_map(map);
+
     ceiling_update_from_map(map);
     floor_update_from_map(map);
 

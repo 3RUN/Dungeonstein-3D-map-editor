@@ -50,3 +50,25 @@ void play_selection_from_music_list()
     playing_music_handle = media_play(music_to_play_str, NULL, playing_music_volume);
     playing_music_index = found_music_index;
 }
+
+void player_music_from_map(Map *map)
+{
+    if (!map)
+    {
+        return;
+    }
+
+    if (editor_state != EDITOR_STATE_TO_BUILD)
+    {
+        return;
+    }
+
+    STRING *music_to_play_str = "";
+    str_cpy(music_to_play_str, _str(map->music));
+    playing_music_handle = media_play(music_to_play_str, NULL, playing_music_volume);
+}
+
+void stop_playing_music()
+{
+    media_stop(playing_music_handle);
+}

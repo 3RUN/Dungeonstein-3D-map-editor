@@ -1016,7 +1016,7 @@ void popup_music_browser()
 
             if (media_playing(playing_music_handle))
             {
-                media_stop(playing_music_handle);
+                stop_playing_music();
 
                 if (playing_music_index != found_music_index)
                 {
@@ -1031,18 +1031,19 @@ void popup_music_browser()
         else
         {
             is_popup_check_failed = true;
-            media_stop(playing_music_handle);
+            stop_playing_music();
         }
     }
 
     imgui_same_line();
     if (imgui_button_withsize("Use", width, POPUP_BUTTON_HEIGHT * config_saved.font_scale))
     {
-        master_vol = config_saved.master_volume;
-
         if (found_music_index >= 0)
         {
-            media_stop(playing_music_handle);
+            playing_music_volume = MUSIC_DEF_VOLUME;
+            master_vol = config_saved.master_volume;
+            weather_resume_sound();
+            stop_playing_music();
             is_popup_check_failed = false;
             found_music_index = -1;
 
@@ -1064,9 +1065,10 @@ void popup_music_browser()
     imgui_same_line();
     if (imgui_button_withsize("Close", width, POPUP_BUTTON_HEIGHT * config_saved.font_scale) || key_esc)
     {
+        playing_music_volume = MUSIC_DEF_VOLUME;
         master_vol = config_saved.master_volume;
-
-        media_stop(playing_music_handle);
+        weather_resume_sound();
+        stop_playing_music();
         is_popup_check_failed = false;
         found_music_index = -1;
 

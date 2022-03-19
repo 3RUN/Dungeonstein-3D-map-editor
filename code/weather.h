@@ -51,6 +51,11 @@ var snow_splash_fadeout_speed = 2.5;
 BMAP *weather_rain_tga = "weather_rain.tga";
 BMAP *weather_snow_tga = "weather_snow.tga";
 
+var weather_sound_handle = 0;
+var weather_sound_volume = 0;
+var weather_sound_volume_target = 25;
+var weather_sound_volume_fade_speed_factor = 4;
+
 SOUND *weather_rain_ogg = "rain.ogg";
 SOUND *weather_snow_ogg = "snow.ogg";
 
@@ -69,5 +74,13 @@ void weather_rain_particle(PARTICLE *p);
 void weather_snow_particle(PARTICLE *p);
 
 void weather_update(int type);
+
+void weather_pause_sound();
+
+void weather_resume_sound();
+
+void weather_stop_sound();
+
+void weather_play_sound(int type);
 
 #endif
