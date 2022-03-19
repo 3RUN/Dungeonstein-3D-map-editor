@@ -111,6 +111,7 @@ int mouse_y = 0;
 #include "editor_test_run.h"
 #include "map_loader.h"
 #include "map_settings.h"
+#include "weather.h"
 
 void editor_reset()
 {
@@ -157,6 +158,7 @@ void editor_reset()
 #include "editor_test_run.c"
 #include "map_loader.c"
 #include "map_settings.c"
+#include "weather.c"
 
 void map_editor_startup()
 {
@@ -189,6 +191,7 @@ void map_editor_startup()
 	episode_reset(&def_episode);		 // initialize default episode with default values
 	map_loader_initialize(&def_episode); // initialize everything needed for test building the maps
 	test_run_initialize();				 // initialize everything related to test run
+	map_settings_initialize();			 // initialize everything related to the map settings
 }
 
 void on_frame_event()
@@ -233,12 +236,14 @@ void on_frame_event()
 		editor_reset();
 		map_sketch_hide();
 		map_load(active_map);
+		map_settings_copy_from_active(active_map);
 		camera_reset(active_map, EDITOR_STATE_MAP_SETTINGS);
 		editor_switch_state_to(EDITOR_STATE_MAP_SETTINGS);
 		break;
 
 	case EDITOR_STATE_MAP_SETTINGS:
 		map_settings_update(&def_episode);
+		map_update(&map_settings);
 		break;
 
 	case EDITOR_STATE_FROM_MAP_SETTINGS:
@@ -259,6 +264,7 @@ void on_frame_event()
 
 	case EDITOR_STATE_BUILD:
 		editor_test_run_update(&def_episode);
+		map_update(active_map);
 		editor_cell_linker_update(active_map);
 		break;
 
@@ -313,6 +319,7 @@ void on_exit_event()
 	editor_cell_linker_destroy();
 	map_loader_destroy();
 	test_run_destroy();
+	map_settings_destory();
 }
 
 void on_esc_event()

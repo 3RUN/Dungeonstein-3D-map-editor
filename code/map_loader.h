@@ -39,9 +39,11 @@ void map_secret_wall_ent_fnc();
 
 void map_finish_wall_ent_fnc();
 
-void bbox_ent_event(var event_type);
-
 void map_info_bbox_ent_fnc();
+
+void ceiling_update_from_map(Map *map);
+
+void floor_update_from_map(Map *map);
 
 void object_attach_to_wall(ENTITY *ent);
 
@@ -76,5 +78,7 @@ void map_create_bosses(Map *map, Cell *cell);
 void map_create_bbox(Map *map, Cell *cell);
 
 void map_load(Map *map);
+
+void map_update(Map *map);
 
 #endif

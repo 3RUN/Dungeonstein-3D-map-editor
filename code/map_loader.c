@@ -46,23 +46,58 @@ void map_finish_wall_ent_fnc()
     my->material = mtl_solid;
 }
 
-void bbox_ent_event(var event_type)
-{
-    if (event_type == EVENT_SHOOT)
-    {
-        beep();
-    }
-}
-
 void map_info_bbox_ent_fnc()
 {
     set(my, POLYGON | TRANSLUCENT);
     vec_fill(&my->scale_x, 1);
     c_setminmax(my);
     my->alpha = 0.1;
+}
 
-    my->emask |= EVENT_SHOOT;
-    my->event = bbox_ent_event;
+void ceiling_update_from_map(Map *map)
+{
+    if (!map)
+    {
+        return;
+    }
+
+    if (ceiling_ent)
+    {
+        if (map->is_ceiling_visible == true && map->weather_id <= WEATHER_CLEAR)
+        {
+            if (is(ceiling_ent, INVISIBLE))
+            {
+                reset(ceiling_ent, INVISIBLE);
+            }
+        }
+        else
+        {
+            if (!is(ceiling_ent, INVISIBLE))
+            {
+                set(ceiling_ent, INVISIBLE);
+            }
+        }
+
+        change_color_from_hsv(&ceiling_ent->blue, map->ceiling_color[0], map->ceiling_color[1], map->ceiling_color[2]);
+    }
+}
+
+void floor_update_from_map(Map *map)
+{
+    if (!map)
+    {
+        return;
+    }
+
+    if (floor_ent)
+    {
+        if (is(floor_ent, INVISIBLE))
+        {
+            reset(floor_ent, INVISIBLE);
+        }
+
+        change_color_from_hsv(&floor_ent->blue, map->floor_color[0], map->floor_color[1], map->floor_color[2]);
+    }
 }
 
 void object_attach_to_wall(ENTITY *ent)
@@ -585,18 +620,8 @@ void map_load(Map *map)
         return;
     }
 
-    if (is(floor_ent, INVISIBLE))
-    {
-        reset(floor_ent, INVISIBLE);
-    }
-
-    if (map->weather_id <= WEATHER_CLEAR && map->is_ceiling_visible == true)
-    {
-        if (is(ceiling_ent, INVISIBLE))
-        {
-            reset(ceiling_ent, INVISIBLE);
-        }
-    }
+    ceiling_update_from_map(map);
+    floor_update_from_map(map);
 
     int x = 0, y = 0;
     for (y = 0; y < MAP_HEIGHT; y++)
@@ -641,4 +666,14 @@ void map_load(Map *map)
             }
         }
     }
+}
+
+void map_update(Map *map)
+{
+    if (!map)
+    {
+        return;
+    }
+
+    weather_update(map->weather_id);
 }

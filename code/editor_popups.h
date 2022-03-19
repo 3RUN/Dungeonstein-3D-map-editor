@@ -15,6 +15,8 @@
 #define POPUP_RESET_MAP_WIDTH 300
 #define POPUP_HELP_WIDTH 550
 #define POPUP_HELP_CHILD_HEIGHT 355
+#define POPUP_MUSIC_BROWSER_WIDTH 395
+#define POPUP_MUSIC_BROWSER_HEIGHT 320
 
 #define POPUP_BUTTON_HEIGHT 24
 #define POPUP_COMBOBOX_WIDTH 340
@@ -43,6 +45,9 @@ char *popup_episode_edit_story_end_id = "##Popup episode edit story end input id
 char *popup_episode_edit_map_count_slider_id = "##Popup episode edit map count slider id";
 char *popup_help_child_id = "##Popup help child id";
 char *popup_help_columns_id = "##Popup help columns id";
+char *popup_music_browser_child_id = "##Popup music browser child id";
+char *popup_music_browser_listbox_id = "##Popup music browser listbox id";
+char *popup_music_browser_volume_slider_id = "##Popup music browser volume slider id";
 
 char new_episode_filename[EPISODE_FILENAME_LENGTH];
 char new_episode_name[EPISODE_NAME_LENGTH];
@@ -63,6 +68,10 @@ STRING *popup_new_button_str = "";
 
 // save as
 STRING *popup_save_as_button_str = "";
+
+// music browser
+STRING *popup_currently_used_music_str = "";
+STRING *popup_currently_playing_music_str = "";
 
 // resolution config
 STRING *graphics_resolution_available_list_str[SCREEN_RESOLUTION_MAX];
@@ -113,5 +122,7 @@ void popup_map_reset(Episode *episode);
 void popup_help();
 
 void popup_wait_for_input();
+
+void popup_music_browser();
 
 #endif

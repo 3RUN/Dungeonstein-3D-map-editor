@@ -380,7 +380,7 @@ void camera_n_grid_update(Episode *episode)
 
     if (editor_state == EDITOR_STATE_MAP_SETTINGS)
     {
-        camera_fog_from_map(active_map);
+        camera_fog_from_map(&map_settings);
     }
     else if (editor_state == EDITOR_STATE_BUILD)
     {

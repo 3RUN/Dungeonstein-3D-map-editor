@@ -932,3 +932,158 @@ void popup_wait_for_input()
         imgui_close_current_popup();
     }
 }
+
+void popup_music_browser()
+{
+    imgui_text_centered("Music browser");
+    imgui_separator();
+
+    int editor_music_browser_child_flags = ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
+    imgui_begin_child(popup_music_browser_child_id, vector(-1, POPUP_MUSIC_BROWSER_HEIGHT - 60, 0), 1, editor_music_browser_child_flags);
+
+    if (found_music_total <= 0)
+    {
+        imgui_text("'Music' - folder is empty.");
+    }
+    else
+    {
+        imgui_push_item_width(-1);
+        if (imgui_list_box(popup_music_browser_listbox_id, &found_music_index, found_music_listbox, found_music_total, found_music_total))
+        {
+            int i = 0;
+            for (i = 0; i < found_music_total; i++)
+            {
+                if (found_music_index == i)
+                {
+                    selected_music = found_music_listbox[i];
+                }
+            }
+        }
+        imgui_pop_item_width();
+    }
+
+    imgui_end_child();
+
+    // currently used music name
+    if (strlen(map_settings.music) <= 0)
+    {
+        str_cpy(popup_currently_used_music_str, "Currently used: none");
+        imgui_text(_chr(popup_currently_used_music_str));
+    }
+    else
+    {
+        str_cpy(popup_currently_used_music_str, "Currently used: ");
+        str_cat(popup_currently_used_music_str, _str(map_settings.music));
+        str_replace(popup_currently_used_music_str, episode_music_folder_str, "");
+        imgui_text(_chr(popup_currently_used_music_str));
+    }
+
+    // currently playing music name
+    if (media_playing(playing_music_handle))
+    {
+        str_cpy(popup_currently_playing_music_str, "Currently playing: ");
+        str_cat(popup_currently_playing_music_str, _str(found_music_listbox[playing_music_index]));
+        imgui_text(_chr(popup_currently_playing_music_str));
+    }
+    else
+    {
+        str_cpy(popup_currently_playing_music_str, "Currently playing: none");
+        imgui_text(_chr(popup_currently_playing_music_str));
+    }
+
+    // volume slider
+    imgui_text("Volume: ");
+    imgui_same_line();
+    imgui_push_item_width(-1);
+    imgui_slider_var(popup_music_browser_volume_slider_id, &playing_music_volume, 0, 100);
+    imgui_pop_item_width();
+
+    imgui_separator();
+
+    var width = (POPUP_MUSIC_BROWSER_WIDTH * config_saved.font_scale) / 4;
+    if (imgui_button_withsize("Refresh", width, POPUP_BUTTON_HEIGHT * config_saved.font_scale))
+    {
+        is_popup_check_failed = false;
+        music_list_refresh();
+    }
+
+    imgui_same_line();
+    if (imgui_button_withsize("Play / Stop", width, POPUP_BUTTON_HEIGHT * config_saved.font_scale))
+    {
+        if (found_music_index >= 0)
+        {
+            is_popup_check_failed = false;
+
+            if (media_playing(playing_music_handle))
+            {
+                media_stop(playing_music_handle);
+
+                if (playing_music_index != found_music_index)
+                {
+                    play_selection_from_music_list();
+                }
+            }
+            else
+            {
+                play_selection_from_music_list();
+            }
+        }
+        else
+        {
+            is_popup_check_failed = true;
+            media_stop(playing_music_handle);
+        }
+    }
+
+    imgui_same_line();
+    if (imgui_button_withsize("Use", width, POPUP_BUTTON_HEIGHT * config_saved.font_scale))
+    {
+        master_vol = config_saved.master_volume;
+
+        if (found_music_index >= 0)
+        {
+            media_stop(playing_music_handle);
+            is_popup_check_failed = false;
+            found_music_index = -1;
+
+            is_popup_opened = false;
+            imgui_close_current_popup();
+
+            STRING *music_to_use_str = "";
+            str_cpy(music_to_use_str, episode_music_folder_str);
+            str_cat(music_to_use_str, selected_music);
+
+            strcpy(map_settings.music, _chr(music_to_use_str));
+        }
+        else
+        {
+            is_popup_check_failed = true;
+        }
+    }
+
+    imgui_same_line();
+    if (imgui_button_withsize("Close", width, POPUP_BUTTON_HEIGHT * config_saved.font_scale) || key_esc)
+    {
+        master_vol = config_saved.master_volume;
+
+        media_stop(playing_music_handle);
+        is_popup_check_failed = false;
+        found_music_index = -1;
+
+        is_popup_opened = false;
+        imgui_close_current_popup();
+    }
+
+    if (media_playing(playing_music_handle))
+    {
+        master_vol = playing_music_volume;
+        media_tune(playing_music_handle, playing_music_volume, 0, 0);
+    }
+
+    if (is_popup_check_failed == true)
+    {
+        imgui_push_style_color(ImGuiCol_TextDisabled, color4_red);
+        imgui_text_disabled_centered("Please, select music file from the list.");
+        imgui_pop_style_color(1);
+    }
+}
