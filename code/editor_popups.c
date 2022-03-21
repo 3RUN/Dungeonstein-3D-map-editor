@@ -928,7 +928,7 @@ void popup_help()
 
 void popup_wait_for_input()
 {
-    imgui_text_centered("Press anykey to bind it to selected command!");
+    imgui_text("Press anykey to bind it to selected command!");
 
     if (is_popup_opened == false)
     {
