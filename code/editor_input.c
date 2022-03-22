@@ -164,7 +164,9 @@ void editor_input_wait_for_binding(STRING *entry)
             // also (sorry...) we don't support joystick buttons...
             if (key_lastpressed != SCANCODE_ESC && key_lastpressed != SCANCODE_ENTER && key_lastpressed != SCANCODE_DELETE && key_lastpressed < 256 || key_lastpressed != SCANCODE_ESC && key_lastpressed != SCANCODE_ENTER && key_lastpressed != SCANCODE_DELETE && key_lastpressed > 279)
             {
-                editor_input_bind_new_key(entry, engine_key_return_letter_from_scancode(key_lastpressed));
+                STRING *bindkey = "";
+                engine_key_return_letter_from_scancode(&bindkey, key_lastpressed);
+                editor_input_bind_new_key(entry, bindkey);
                 wait_for_input = false;
             }
         }

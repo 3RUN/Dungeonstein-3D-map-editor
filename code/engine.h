@@ -13,7 +13,7 @@ void change_color_from_hsv(COLOR *color, float color_red, float color_green, flo
 
 void mouse_set_position(VECTOR *pos);
 
-VECTOR *mouse_get_position();
+void mouse_get_position(VECTOR *out);
 
 void mouse_set_map(BMAP *new_mouse_map);
 

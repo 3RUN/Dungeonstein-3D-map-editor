@@ -48,7 +48,7 @@ var engine_key_return_scancode_from_letter(STRING *key)
 
 // return a letter from the given scancode
 // this can be used for saving input from the game options
-STRING *engine_key_return_letter_from_scancode(var scancode)
+void engine_key_return_letter_from_scancode(STRING **out, var scancode)
 {
     // check if scancode is correct
     // correct range is from SCANCODE_ESC to SCANCODE_MOUSE_MIDDLE
@@ -61,23 +61,20 @@ STRING *engine_key_return_letter_from_scancode(var scancode)
         return "";
     }
 
-    STRING *tmp_str = "#16";
-    str_for_key(tmp_str, scancode);
+    str_for_key(*out, scancode);
 
     switch (scancode)
     {
     case SCANCODE_MOUSE_LEFT:
-        str_cpy(tmp_str, mouse_left_str);
+        str_cpy(*out, mouse_left_str);
         break;
 
     case SCANCODE_MOUSE_RIGHT:
-        str_cpy(tmp_str, mouse_right_str);
+        str_cpy(*out, mouse_right_str);
         break;
 
     case SCANCODE_MOUSE_MIDDLE:
-        str_cpy(tmp_str, mouse_middle_str);
+        str_cpy(*out, mouse_middle_str);
         break;
     }
-
-    return tmp_str;
 }

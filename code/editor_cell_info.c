@@ -1,5 +1,5 @@
 
-STRING *get_cell_info(Cell *cell)
+void get_cell_info(Cell *cell, STRING **out)
 {
     if (!cell)
     {
@@ -22,440 +22,437 @@ STRING *get_cell_info(Cell *cell)
     var cell_event_id = cell->event_id;
     var cell_temp_skill = cell->temp_skill;
 
-    STRING *info_str = "";
-    str_printf(info_str, "world position:\nx = %d; y = %d; z = %d;\n\ngrid position:\nx = %d; y = %d;\n\npan = %.0f;\nid = %d;", (long)cell_pos.x, (long)cell_pos.y, (long)cell_pos.z, (long)cell_x, (long)cell_y, (double)cell_pan, (long)cell_id);
+    str_printf(*out, "world position:\nx = %d; y = %d; z = %d;\n\ngrid position:\nx = %d; y = %d;\n\npan = %.0f;\nid = %d;", (long)cell_pos.x, (long)cell_pos.y, (long)cell_pos.z, (long)cell_x, (long)cell_y, (double)cell_pan, (long)cell_id);
 
     if (cell_type >= 0 && cell_asset >= 0)
     {
-        str_cat(info_str, "\n");
+        str_cat(*out, "\n");
 
         // asset type and index
         if (cell_type == ASSET_TYPE_WALLS)
         {
-            str_cat(info_str, "\ntype = wall;");
+            str_cat(*out, "\ntype = wall;");
         }
         else if (cell_type == ASSET_TYPE_PROPS)
         {
-            str_cat(info_str, "\ntype = props;");
+            str_cat(*out, "\ntype = props;");
         }
         else if (cell_type == ASSET_TYPE_EVENTS)
         {
-            str_cat(info_str, "\ntype = event;");
+            str_cat(*out, "\ntype = event;");
         }
         else if (cell_type == ASSET_TYPE_ITEMS)
         {
-            str_cat(info_str, "\ntype = item;");
+            str_cat(*out, "\ntype = item;");
         }
         else if (cell_type == ASSET_TYPE_ENEMIES)
         {
-            str_cat(info_str, "\ntype = enemy;");
+            str_cat(*out, "\ntype = enemy;");
         }
         else if (cell_type == ASSET_TYPE_BOSSES)
         {
-            str_cat(info_str, "\ntype = boss;");
+            str_cat(*out, "\ntype = boss;");
         }
-        str_cat(info_str, "\ndesc = ");
-        str_cat(info_str, asset_get_desc(cell_type, cell_asset));
-        str_cat(info_str, ";");
+        str_cat(*out, "\ndesc = ");
+        str_cat(*out, asset_get_desc(cell_type, cell_asset));
+        str_cat(*out, ";");
 
         // parameters
         if (cell_type == ASSET_TYPE_WALLS && cell_asset != TOTAL_WALL_TEXTURES - 1)
         {
-            str_cat(info_str, "\n\nparams:");
+            str_cat(*out, "\n\nparams:");
             if (cell_flag == true)
             {
-                str_cat(info_str, "\n* secret wall;");
-                str_cat(info_str, "\n* activation: ");
+                str_cat(*out, "\n* secret wall;");
+                str_cat(*out, "\n* activation: ");
                 if (cell_event_type == 0)
                 {
-                    str_cat(info_str, "on interaction;");
+                    str_cat(*out, "on interaction;");
                 }
                 else if (cell_event_type == 1)
                 {
-                    str_cat(info_str, str_printf(NULL, "trigger zone id = %d;", (long)cell_event_id));
+                    str_cat(*out, str_printf(NULL, "trigger zone id = %d;", (long)cell_event_id));
                 }
                 else if (cell_event_type == 2)
                 {
-                    str_cat(info_str, str_printf(NULL, "switch id = %d;", (long)cell_event_id));
+                    str_cat(*out, str_printf(NULL, "switch id = %d;", (long)cell_event_id));
                 }
             }
             else
             {
-                str_cat(info_str, "\n* solid wall;");
+                str_cat(*out, "\n* solid wall;");
             }
         }
         else if (cell_type == ASSET_TYPE_WALLS && cell_asset == TOTAL_WALL_TEXTURES - 1)
         {
-            str_cat(info_str, "\n\nparams:");
-            str_cat(info_str, "\n* finish level switch;");
+            str_cat(*out, "\n\nparams:");
+            str_cat(*out, "\n* finish level switch;");
         }
         else if (cell_type == ASSET_TYPE_PROPS && cell_asset == PROPS_FENCE || cell_type == ASSET_TYPE_PROPS && cell_asset == PROPS_FENCE_DIRTY || cell_type == ASSET_TYPE_PROPS && cell_asset == PROPS_DOOR || cell_type == ASSET_TYPE_PROPS && cell_asset == PROPS_DOOR_ELEVATOR || cell_type == ASSET_TYPE_PROPS && cell_asset == PROPS_DOOR_LOCKED || cell_type == ASSET_TYPE_PROPS && cell_asset == PROPS_SWITCH)
         {
-            str_cat(info_str, "\n\nparams:");
+            str_cat(*out, "\n\nparams:");
             if (cell_asset == PROPS_FENCE || cell_asset == PROPS_FENCE_DIRTY)
             {
-                str_cat(info_str, "\n* activation: ");
+                str_cat(*out, "\n* activation: ");
                 if (cell_event_type == 0)
                 {
-                    str_cat(info_str, "none (static);");
+                    str_cat(*out, "none (static);");
                 }
                 else if (cell_event_type == 1)
                 {
-                    str_cat(info_str, "on interaction;");
+                    str_cat(*out, "on interaction;");
                 }
                 else if (cell_event_type == 2)
                 {
-                    str_cat(info_str, str_printf(NULL, "trigger zone id = %d;", (long)cell_event_id));
+                    str_cat(*out, str_printf(NULL, "trigger zone id = %d;", (long)cell_event_id));
                 }
                 else if (cell_event_type == 3)
                 {
-                    str_cat(info_str, str_printf(NULL, "switch id = %d;", (long)cell_event_id));
+                    str_cat(*out, str_printf(NULL, "switch id = %d;", (long)cell_event_id));
                 }
             }
             else if (cell_asset == PROPS_DOOR || cell_asset == PROPS_DOOR_ELEVATOR)
             {
-                str_cat(info_str, "\n* activation: ");
+                str_cat(*out, "\n* activation: ");
                 if (cell_event_type == 0)
                 {
-                    str_cat(info_str, "on interaction;");
+                    str_cat(*out, "on interaction;");
                 }
                 else if (cell_event_type == 1)
                 {
-                    str_cat(info_str, str_printf(NULL, "trigger zone id = %d;", (long)cell_event_id));
+                    str_cat(*out, str_printf(NULL, "trigger zone id = %d;", (long)cell_event_id));
                 }
                 else if (cell_event_type == 2)
                 {
-                    str_cat(info_str, str_printf(NULL, "switch id = %d;", (long)cell_event_id));
+                    str_cat(*out, str_printf(NULL, "switch id = %d;", (long)cell_event_id));
                 }
             }
             else if (cell_asset == PROPS_DOOR_LOCKED)
             {
-                str_cat(info_str, "\n* requires: ");
+                str_cat(*out, "\n* requires: ");
                 if (cell_event_type == 0)
                 {
-                    str_cat(info_str, "Key blue");
+                    str_cat(*out, "Key blue");
                 }
                 else if (cell_event_type == 1)
                 {
-                    str_cat(info_str, "Key red");
+                    str_cat(*out, "Key red");
                 }
                 else if (cell_event_type == 2)
                 {
-                    str_cat(info_str, "Key yellow");
+                    str_cat(*out, "Key yellow");
                 }
-                str_cat(info_str, ";");
+                str_cat(*out, ";");
             }
             else if (cell_asset == PROPS_SWITCH)
             {
-                str_cat(info_str, str_printf(NULL, "\n* switch with id: %d;", (long)cell_event_id));
+                str_cat(*out, str_printf(NULL, "\n* switch with id: %d;", (long)cell_event_id));
             }
         }
         else if (cell_type == ASSET_TYPE_EVENTS && cell_asset == EVENT_TRIGGER_ZONE || cell_type == ASSET_TYPE_EVENTS && cell_asset == EVENT_SPAWN_OBJECT)
         {
             if (cell_asset == EVENT_TRIGGER_ZONE)
             {
-                str_cat(info_str, "\n\nparams:");
-                str_cat(info_str, str_printf(NULL, "\n* trigger zone with id: %d;", (long)cell_event_id));
+                str_cat(*out, "\n\nparams:");
+                str_cat(*out, str_printf(NULL, "\n* trigger zone with id: %d;", (long)cell_event_id));
             }
             else if (cell_asset == EVENT_SPAWN_OBJECT)
             {
-                str_cat(info_str, "\n\nparams:");
+                str_cat(*out, "\n\nparams:");
 
                 // activation
-                str_cat(info_str, "\n* activation: ");
+                str_cat(*out, "\n* activation: ");
                 if (cell_event_type == 0)
                 {
-                    str_cat(info_str, "on creation;");
+                    str_cat(*out, "on creation;");
                 }
                 else if (cell_event_type == 1)
                 {
-                    str_cat(info_str, str_printf(NULL, "trigger zone id = %d;", (long)cell_event_id));
+                    str_cat(*out, str_printf(NULL, "trigger zone id = %d;", (long)cell_event_id));
                 }
                 else if (cell_event_type == 2)
                 {
-                    str_cat(info_str, str_printf(NULL, "switch id = %d;", (long)cell_event_id));
+                    str_cat(*out, str_printf(NULL, "switch id = %d;", (long)cell_event_id));
                 }
 
                 // category
-                str_cat(info_str, "\n* spawn: ");
+                str_cat(*out, "\n* spawn: ");
                 if (cell_flag == 0) // items
                 {
-                    str_cat(info_str, "Item");
-                    str_cat(info_str, ": ");
+                    str_cat(*out, "Item");
+                    str_cat(*out, ": ");
 
                     if (cell_temp_skill == 0)
                     {
-                        str_cat(info_str, "Key blue");
+                        str_cat(*out, "Key blue");
                     }
                     else if (cell_temp_skill == 1)
                     {
-                        str_cat(info_str, "Key red");
+                        str_cat(*out, "Key red");
                     }
                     else if (cell_temp_skill == 2)
                     {
-                        str_cat(info_str, "Key yellow");
+                        str_cat(*out, "Key yellow");
                     }
                     else if (cell_temp_skill == 3)
                     {
-                        str_cat(info_str, "Small medkit");
+                        str_cat(*out, "Small medkit");
                     }
                     else if (cell_temp_skill == 4)
                     {
-                        str_cat(info_str, "Big medkit");
+                        str_cat(*out, "Big medkit");
                     }
-                    str_cat(info_str, ";");
+                    str_cat(*out, ";");
                 }
                 else if (cell_flag == 1) // weapons / ammo
                 {
-                    str_cat(info_str, "Weapon");
-                    str_cat(info_str, ": ");
+                    str_cat(*out, "Weapon");
+                    str_cat(*out, ": ");
 
                     if (cell_temp_skill == 0)
                     {
-                        str_cat(info_str, "Ammo box");
+                        str_cat(*out, "Ammo box");
                     }
                     else if (cell_temp_skill == 1)
                     {
-                        str_cat(info_str, "Pistol weapon");
+                        str_cat(*out, "Pistol weapon");
                     }
                     else if (cell_temp_skill == 2)
                     {
-                        str_cat(info_str, "Pistol ammo");
+                        str_cat(*out, "Pistol ammo");
                     }
                     else if (cell_temp_skill == 3)
                     {
-                        str_cat(info_str, "Shotgun weapon");
+                        str_cat(*out, "Shotgun weapon");
                     }
                     else if (cell_temp_skill == 4)
                     {
-                        str_cat(info_str, "Shotgun ammo");
+                        str_cat(*out, "Shotgun ammo");
                     }
                     else if (cell_temp_skill == 5)
                     {
-                        str_cat(info_str, "SMG weapon");
+                        str_cat(*out, "SMG weapon");
                     }
                     else if (cell_temp_skill == 6)
                     {
-                        str_cat(info_str, "SMG ammo");
+                        str_cat(*out, "SMG ammo");
                     }
                     else if (cell_temp_skill == 7)
                     {
-                        str_cat(info_str, "Machinegun weapon");
+                        str_cat(*out, "Machinegun weapon");
                     }
                     else if (cell_temp_skill == 8)
                     {
-                        str_cat(info_str, "Machinegun ammo");
+                        str_cat(*out, "Machinegun ammo");
                     }
                     else if (cell_temp_skill == 9)
                     {
-                        str_cat(info_str, "Rocketlauncher weapon");
+                        str_cat(*out, "Rocketlauncher weapon");
                     }
                     else if (cell_temp_skill == 10)
                     {
-                        str_cat(info_str, "Rocketlauncher ammo");
+                        str_cat(*out, "Rocketlauncher ammo");
                     }
-                    str_cat(info_str, ";");
+                    str_cat(*out, ";");
                 }
                 else if (cell_flag == 2) // enemies
                 {
-                    str_cat(info_str, "Enemy");
-                    str_cat(info_str, ": ");
+                    str_cat(*out, "Enemy");
+                    str_cat(*out, ": ");
 
                     if (cell_temp_skill == 0)
                     {
-                        str_cat(info_str, "Rat");
+                        str_cat(*out, "Rat");
                     }
                     else if (cell_temp_skill == 1)
                     {
-                        str_cat(info_str, "Dog");
+                        str_cat(*out, "Dog");
                     }
                     else if (cell_temp_skill == 2)
                     {
-                        str_cat(info_str, "Guard pistol");
+                        str_cat(*out, "Guard pistol");
                     }
                     else if (cell_temp_skill == 3)
                     {
-                        str_cat(info_str, "Guard shotgun");
+                        str_cat(*out, "Guard shotgun");
                     }
                     else if (cell_temp_skill == 4)
                     {
-                        str_cat(info_str, "Soldier SMG");
+                        str_cat(*out, "Soldier SMG");
                     }
                     else if (cell_temp_skill == 5)
                     {
-                        str_cat(info_str, "Suicide bomber");
+                        str_cat(*out, "Suicide bomber");
                     }
                     else if (cell_temp_skill == 6)
                     {
-                        str_cat(info_str, "Zombie");
+                        str_cat(*out, "Zombie");
                     }
                     else if (cell_temp_skill == 7)
                     {
-                        str_cat(info_str, "Support machinegun");
+                        str_cat(*out, "Support machinegun");
                     }
                     else if (cell_temp_skill == 8)
                     {
-                        str_cat(info_str, "Support rocketlauncher");
+                        str_cat(*out, "Support rocketlauncher");
                     }
-                    str_cat(info_str, ";");
+                    str_cat(*out, ";");
                 }
                 else if (cell_flag == 3) // bosses
                 {
-                    str_cat(info_str, "Boss");
-                    str_cat(info_str, ": ");
+                    str_cat(*out, "Boss");
+                    str_cat(*out, ": ");
 
                     if (cell_temp_skill == 0)
                     {
-                        str_cat(info_str, "Uber soldier");
+                        str_cat(*out, "Uber soldier");
                     }
                     else if (cell_temp_skill == 1)
                     {
-                        str_cat(info_str, "Uber officer");
+                        str_cat(*out, "Uber officer");
                     }
                     else if (cell_temp_skill == 2)
                     {
-                        str_cat(info_str, "Uber mutant");
+                        str_cat(*out, "Uber mutant");
                     }
                     else if (cell_temp_skill == 3)
                     {
-                        str_cat(info_str, "Mecha soldier");
+                        str_cat(*out, "Mecha soldier");
                     }
                     else if (cell_temp_skill == 4)
                     {
-                        str_cat(info_str, "Demon");
+                        str_cat(*out, "Demon");
                     }
-                    str_cat(info_str, ";");
+                    str_cat(*out, ";");
                 }
             }
         }
         else if (cell_type == ASSET_TYPE_ENEMIES)
         {
-            str_cat(info_str, "\n\nparams:");
+            str_cat(*out, "\n\nparams:");
 
-            str_cat(info_str, "\n* behaviour: ");
+            str_cat(*out, "\n* behaviour: ");
             if (cell_temp_skill == 0)
             {
-                str_cat(info_str, "wait");
+                str_cat(*out, "wait");
             }
             else if (cell_temp_skill == 1)
             {
-                str_cat(info_str, "deaf");
+                str_cat(*out, "deaf");
             }
             else if (cell_temp_skill == 2)
             {
-                str_cat(info_str, "patrol");
+                str_cat(*out, "patrol");
             }
-            str_cat(info_str, ";");
+            str_cat(*out, ";");
 
             if (cell_flag == true)
             {
-                str_cat(info_str, "\n* drop item: ");
+                str_cat(*out, "\n* drop item: ");
                 if (cell_event_type == 0)
                 {
-                    str_cat(info_str, "Key blue");
+                    str_cat(*out, "Key blue");
                 }
                 else if (cell_event_type == 1)
                 {
-                    str_cat(info_str, "Key red");
+                    str_cat(*out, "Key red");
                 }
                 else if (cell_event_type == 2)
                 {
-                    str_cat(info_str, "Key yellow");
+                    str_cat(*out, "Key yellow");
                 }
                 else if (cell_event_type == 3)
                 {
-                    str_cat(info_str, "Small medkit");
+                    str_cat(*out, "Small medkit");
                 }
                 else if (cell_event_type == 4)
                 {
-                    str_cat(info_str, "Big medkit");
+                    str_cat(*out, "Big medkit");
                 }
                 else if (cell_event_type == 5)
                 {
-                    str_cat(info_str, "Ammo from held weapon");
+                    str_cat(*out, "Ammo from held weapon");
                 }
                 else if (cell_event_type == 6)
                 {
-                    str_cat(info_str, "Held weapon");
+                    str_cat(*out, "Held weapon");
                 }
-                str_cat(info_str, ";");
+                str_cat(*out, ";");
             }
             else
             {
-                str_cat(info_str, "\n* drop item: false;");
+                str_cat(*out, "\n* drop item: false;");
             }
         }
         else if (cell_type == ASSET_TYPE_BOSSES)
         {
-            str_cat(info_str, "\n\nparams:");
+            str_cat(*out, "\n\nparams:");
 
-            str_cat(info_str, "\n* behaviour: ");
+            str_cat(*out, "\n* behaviour: ");
             if (cell_temp_skill == 0)
             {
-                str_cat(info_str, "wait");
+                str_cat(*out, "wait");
             }
             else if (cell_temp_skill == 1)
             {
-                str_cat(info_str, "deaf");
+                str_cat(*out, "deaf");
             }
             else if (cell_temp_skill == 2)
             {
-                str_cat(info_str, "patrol");
+                str_cat(*out, "patrol");
             }
-            str_cat(info_str, ";");
+            str_cat(*out, ";");
 
             if (cell_flag == true)
             {
-                str_cat(info_str, "\n* drop item: ");
+                str_cat(*out, "\n* drop item: ");
                 if (cell_event_type == 0)
                 {
-                    str_cat(info_str, "Key blue");
+                    str_cat(*out, "Key blue");
                 }
                 else if (cell_event_type == 1)
                 {
-                    str_cat(info_str, "Key red");
+                    str_cat(*out, "Key red");
                 }
                 else if (cell_event_type == 2)
                 {
-                    str_cat(info_str, "Key yellow");
+                    str_cat(*out, "Key yellow");
                 }
                 else if (cell_event_type == 3)
                 {
-                    str_cat(info_str, "Small medkit");
+                    str_cat(*out, "Small medkit");
                 }
                 else if (cell_event_type == 4)
                 {
-                    str_cat(info_str, "Big medkit");
+                    str_cat(*out, "Big medkit");
                 }
-                str_cat(info_str, ";");
+                str_cat(*out, ";");
             }
             else
             {
-                str_cat(info_str, "\n* drop item: false;");
+                str_cat(*out, "\n* drop item: false;");
             }
         }
     }
-
-    return info_str;
 }
 
-STRING *draw_map_info(Map *current_map, var x, var y)
+void draw_map_info(Map *current_map, STRING **out, var x, var y)
 {
     if (!current_map)
     {
-        return NULL;
+        return;
     }
 
     if (is_allowed_to_draw() == false)
     {
-        return NULL;
+        return;
     }
 
     Cell *cell = &current_map->cell[x][y];
     if (!cell)
     {
-        return NULL;
+        return;
     }
 
-    return get_cell_info(cell);
+    get_cell_info(cell, out);
 }

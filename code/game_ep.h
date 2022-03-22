@@ -1,6 +1,9 @@
 #ifndef _GAME_EP_H_
 #define _GAME_EP_H_
 
+// all episodes are saved to and loaded from 'save_dir\episodes\'
+// f.e. C:\Users\Admin\Documents\MapEditor\episodes
+
 #define EPISODE_FILENAME_LENGTH 32
 #define EPISODE_NAME_LENGTH 32
 #define EPISODE_STORY_START_LENGTH 128
@@ -97,5 +100,9 @@ void map_reset(Map *map);
 void episode_change_info(Episode *episode, STRING *name, STRING *story_start, STRING *story_end, var map_count);
 
 void episode_reset(Episode *episode);
+
+var episode_save(STRING *file_name, Episode *episode);
+
+var episode_load(STRING *file_name, Episode *episode);
 
 #endif

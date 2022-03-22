@@ -21,9 +21,10 @@ void test_run_get_cell_info(Map *map)
         return;
     }
 
-    VECTOR pos;
-    vec_set(&pos, vec_world_to_grid(&selected_cell_pos));
-    str_cpy(selected_cell_info_str, get_cell_info(&map->cell[pos.x][pos.y]));
+    var x = -1;
+    var y = -1;
+    vec_world_to_grid(&selected_cell_pos, &x, &y);
+    get_cell_info(&map->cell[x][y], &selected_cell_info_str);
 }
 
 void test_run_select_player_on_start(Map *map)

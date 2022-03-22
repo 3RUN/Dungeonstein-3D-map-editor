@@ -94,7 +94,6 @@ var mouse_y = 0;
 #include "game_ep.h"
 #include "game_ep_list.h"
 #include "game_music_list.h"
-#include "game_ep_save_n_load.h"
 #include "assets_helper.h"
 #include "editor.h"
 #include "editor_msg.h"
@@ -107,7 +106,6 @@ var mouse_y = 0;
 #include "editor_draw_tools.h"
 #include "editor_cell_linker.h"
 #include "editor_cell_info.h"
-#include "editor_main.h"
 #include "editor_test_run.h"
 #include "map_loader.h"
 #include "map_settings.h"
@@ -140,7 +138,6 @@ void editor_reset()
 #include "game_ep.c"
 #include "game_ep_list.c"
 #include "game_music_list.c"
-#include "game_ep_save_n_load.c"
 #include "assets_helper.c"
 #include "editor.c"
 #include "editor_msg.c"
@@ -153,7 +150,6 @@ void editor_reset()
 #include "editor_draw_tools.c"
 #include "editor_cell_linker.c"
 #include "editor_cell_info.c"
-#include "editor_main.c"
 #include "editor_test_run.c"
 #include "map_loader.c"
 #include "map_settings.c"
@@ -163,8 +159,8 @@ void map_editor_startup()
 {
 	// set launcher window
 	// check for existing game folder or create new one
-	savedir_create_folder();
-	wait_for(savedir_create_folder);
+	set_savedir();
+	wait_for(set_savedir);
 
 	// set proper path to the config file
 	STRING *temp_str = "#256";

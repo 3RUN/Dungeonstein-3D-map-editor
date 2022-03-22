@@ -61,6 +61,8 @@ SOUND *weather_snow_ogg = "snow.ogg";
 
 void vec_randomize(VECTOR *vec, var range);
 
+void particle_hide(PARTICLE *p);
+
 void weather_impact_particle_event(PARTICLE *p);
 
 void weather_rain_splash_particle(PARTICLE *p);
