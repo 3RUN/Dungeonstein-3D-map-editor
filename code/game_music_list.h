@@ -7,10 +7,10 @@
 
 TEXT *music_found_txt = NULL;
 
-var found_music_index = -1;
+int found_music_index = -1;
 var found_music_total = 0;
 
-var playing_music_index = 0;
+int playing_music_index = 0;
 var playing_music_handle = 0;
 var playing_music_volume = 50;
 
