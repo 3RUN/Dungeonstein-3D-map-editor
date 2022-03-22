@@ -33,29 +33,29 @@
 
 char ep_save_name[EPISODE_FILENAME_LENGTH];
 
-var active_map_id = 0;
+int active_map_id = 0;
 
 typedef struct Cell
 {
     VECTOR worldpos;
     var pan;
 
-    var id;
-    var x;
-    var y;
+    int id;
+    int x;
+    int y;
 
-    var type;
-    var asset;
+    int type;
+    int asset;
 
-    var flag;
-    var event_type;
-    var event_id;
-    var temp_skill;
+    int flag;
+    int event_type;
+    int event_id;
+    int temp_skill;
 } Cell;
 
 typedef struct Map
 {
-    var weather_id;
+    int weather_id;
 
     var fog_start;
     var fog_end;
@@ -64,7 +64,7 @@ typedef struct Map
     float floor_color[3];
     float ceiling_color[3];
 
-    var is_ceiling_visible;
+    int is_ceiling_visible;
 
     char music[MUSIC_NAME_LENGTH];
     Cell cell[MAP_WIDTH][MAP_HEIGHT];
@@ -76,13 +76,13 @@ typedef struct Episode
     char story_start[EPISODE_STORY_START_LENGTH];
     char story_end[EPISODE_STORY_END_LENGTH];
 
-    var map_count;
+    int map_count;
     Map map[MAX_MAPS_PER_EPISODE];
 } Episode;
 
 Episode def_episode;
 
-var is_game_episode_loaded();
+int is_game_episode_loaded();
 
 void episode_save_name_udpate_to(STRING *filename);
 
@@ -94,7 +94,7 @@ void map_copy_weather(Map *to, Map *from);
 
 void map_reset(Map *map);
 
-void episode_change_info(Episode *episode, STRING *name, STRING *story_start, STRING *story_end, var map_count);
+void episode_change_info(Episode *episode, STRING *name, STRING *story_start, STRING *story_end, int map_count);
 
 void episode_reset(Episode *episode);
 

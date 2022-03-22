@@ -125,15 +125,14 @@ float mouse_def_sensitivity = 1;
 float master_def_volume = 50;
 
 // config others
-var is_cell_tooltip_def_enabled = true;
-
 float font_def_scale = 1;
+int is_cell_tooltip_def_enabled = true;
 float background_def_color[3];
 float grid_def_color[3];
 
 // default graphics
-var graphics_video_res_def_id = 0;
-var graphics_display_def_mode = DISPLAY_MODE_WINDOWED_FULLSCREEN;
+int graphics_video_res_def_id = 0;
+int graphics_display_def_mode = DISPLAY_MODE_WINDOWED_FULLSCREEN;
 
 // structure to save all game config
 typedef struct CONFIG
@@ -179,15 +178,14 @@ typedef struct CONFIG
     float master_volume;
 
     // other settings
-    var is_cell_tooltip_enabled;
-
     float font_scale;
+    int is_cell_tooltip_enabled;
     float background_color[3];
     float grid_color[3];
 
     // graphics
-    var graphics_video_res_id;
-    var graphics_display_mode;
+    int graphics_video_res_id;
+    int graphics_display_mode;
 
 } CONFIG;
 

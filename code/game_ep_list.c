@@ -14,7 +14,7 @@ void episode_list_destroy()
     }
 }
 
-var episode_list_load()
+int episode_list_load()
 {
     STRING *temp_str = "#256";
     str_cpy(temp_str, episode_save_folder_str);
@@ -36,7 +36,7 @@ void episode_list_refresh()
     found_episodes_total = 0;
     found_episodes_total = episode_list_load();
 
-    var i = 0;
+    int i = 0;
     for (i = 0; i < found_episodes_total; i++) // remove file extension from the filename
     {
         STRING *temp_str = "";

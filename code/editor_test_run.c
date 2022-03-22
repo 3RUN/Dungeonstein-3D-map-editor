@@ -33,7 +33,7 @@ void test_run_select_player_on_start(Map *map)
         return;
     }
 
-    var x = 0, y = 0, player_found = false;
+    int x = 0, y = 0, player_found = false;
     for (y = 0; y < MAP_HEIGHT; y++)
     {
         for (x = 0; x < MAP_WIDTH; x++)

@@ -17,7 +17,7 @@ void particle_laserbeam(PARTICLE *p)
     p->event = particle_laserbeam_event;
 }
 
-var is_activation_cell(Cell *cell)
+int is_activation_cell(Cell *cell)
 {
     if (!cell)
     {
@@ -37,7 +37,7 @@ var is_activation_cell(Cell *cell)
     return false;
 }
 
-var is_object_to_link(Cell *cell)
+int is_object_to_link(Cell *cell)
 {
     if (!cell)
     {
@@ -104,7 +104,7 @@ void editor_cell_linker_destroy()
 
 void editor_cell_show_links()
 {
-    var i = 0, j = 0;
+    int i = 0, j = 0;
     for (i = 0; i < array_get_count(switch_n_trigger_list); i++)
     {
         Cell *activator_cell = array_get_element_at(Cell *, switch_n_trigger_list, i);
@@ -115,11 +115,11 @@ void editor_cell_show_links()
 
         VECTOR from;
         vec_set(&from, vector(activator_cell->worldpos.x, activator_cell->worldpos.y, activator_cell->worldpos.z + CELL_LINK_Z_OFFSET));
-        var id = activator_cell->event_id;
-        var type = activator_cell->type;
-        var asset = activator_cell->asset;
+        int id = activator_cell->event_id;
+        int type = activator_cell->type;
+        int asset = activator_cell->asset;
 
-        var activator_type = 1; // default is trigger zone
+        int activator_type = 1; // default is trigger zone
         if (type == ASSET_TYPE_PROPS && asset == PROPS_SWITCH)
         {
             activator_type = 2;
@@ -135,8 +135,8 @@ void editor_cell_show_links()
 
             VECTOR to;
             vec_set(&to, vector(object_cell->worldpos.x, object_cell->worldpos.y, object_cell->worldpos.z + CELL_LINK_Z_OFFSET));
-            var obj_id = object_cell->event_id;
-            var obj_activator_type = object_cell->event_type; // 1 - trigger zone or 2 - switch
+            int obj_id = object_cell->event_id;
+            int obj_activator_type = object_cell->event_type; // 1 - trigger zone or 2 - switch
 
             if (id == obj_id && activator_type == obj_activator_type)
             {
@@ -174,7 +174,7 @@ void editor_cell_find_links(Map *map)
     }
     objects_to_link_list = array_create(Cell *, 1);
 
-    var x = 0, y = 0, id = 0;
+    int x = 0, y = 0, id = 0;
     for (y = 0; y < MAP_HEIGHT; y++)
     {
         for (x = 0; x < MAP_WIDTH; x++)

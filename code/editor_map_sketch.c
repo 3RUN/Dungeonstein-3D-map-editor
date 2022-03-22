@@ -34,7 +34,7 @@ void map_sketch_initialize()
     }
     sketch_ents = array_create(ENTITY *, 1);
 
-    var x = 0, y = 0, id = 0;
+    int x = 0, y = 0, id = 0;
     for (y = 0; y < MAP_HEIGHT; y++)
     {
         for (x = 0; x < MAP_WIDTH; x++)
@@ -98,15 +98,15 @@ void map_sketch_sprite_update_from_cell(Cell *cell)
 
     var cell_pan = cell->pan;
 
-    var cell_id = cell->id;
+    int cell_id = cell->id;
 
-    var cell_type = cell->type;
-    var cell_asset = cell->asset;
+    int cell_type = cell->type;
+    int cell_asset = cell->asset;
 
-    var cell_flag = cell->flag;
-    var cell_event_type = cell->event_type;
-    var cell_event_id = cell->event_id;
-    var cell_temp_skill = cell->temp_skill;
+    int cell_flag = cell->flag;
+    int cell_event_type = cell->event_type;
+    int cell_event_id = cell->event_id;
+    int cell_temp_skill = cell->temp_skill;
 
     ENTITY *cell_ent = array_get_element_at(ENTITY *, sketch_ents, cell_id);
     if (!cell_ent)
@@ -211,7 +211,7 @@ void map_sketch_refresh(Map *map)
         reset(cursor_sprite_ent, INVISIBLE);
     }
 
-    var x = 0, y = 0;
+    int x = 0, y = 0;
     for (y = 0; y < MAP_HEIGHT; y++)
     {
         for (x = 0; x < MAP_WIDTH; x++)
@@ -229,7 +229,7 @@ void map_sketch_show()
         reset(cursor_sprite_ent, INVISIBLE);
     }
 
-    var x = 0, y = 0, id = 0;
+    int x = 0, y = 0, id = 0;
     for (y = 0; y < MAP_HEIGHT; y++)
     {
         for (x = 0; x < MAP_WIDTH; x++)
@@ -270,7 +270,7 @@ void map_sketch_hide()
         set(cursor_sprite_ent, INVISIBLE);
     }
 
-    var x = 0, y = 0, id = 0;
+    int x = 0, y = 0, id = 0;
     for (y = 0; y < MAP_HEIGHT; y++)
     {
         for (x = 0; x < MAP_WIDTH; x++)

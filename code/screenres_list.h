@@ -52,22 +52,22 @@ typedef struct _devicemode
 
 SCRMODE screen_resolution_struct;
 
-var screen_resolution_available_list[2][SCREEN_RESOLUTION_MAX]; // list of all available resolutions for currently used PC
-var screen_resolutions_total = 0;                               // total amount of resolutions available for currently used PC
+int screen_resolution_available_list[2][SCREEN_RESOLUTION_MAX]; // list of all available resolutions for currently used PC
+int screen_resolutions_total = 0;                               // total amount of resolutions available for currently used PC
 
 // desktop resolution
 var desktop_size_x = 0;        // width
 var desktop_size_y = 0;        // height
-var desktop_resolution_id = 0; // id of the desktop resolution
+int desktop_resolution_id = 0; // id of the desktop resolution
 
 // sort list of resolutions in ascending order
 void screen_resolutions_sort_ascending();
 
 // check if given resolution was already added into the list or not
-var is_screen_resolution_added(var width, var height);
+int is_screen_resolution_added(int width, int height);
 
 // add given resolution into the list
-void screen_resolution_add_to_list(var width, var height);
+void screen_resolution_add_to_list(int width, int height);
 
 // find all available resolutions
 void screen_resolutions_find_all();

@@ -22,7 +22,7 @@ var scancode_shift_map_east = 0;
 var scancode_shift_map_south = 0;
 var scancode_shift_map_north = 0;
 
-var is_shortcut_allowed();
+int is_shortcut_allowed();
 
 void shortcut_remove_binding(var scancode);
 

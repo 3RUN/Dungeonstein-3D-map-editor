@@ -1,5 +1,5 @@
 
-var is_game_episode_loaded()
+int is_game_episode_loaded()
 {
     return strlen(ep_save_name) > 0;
 }
@@ -71,7 +71,7 @@ void map_copy_weather(Map *to, Map *from)
 
         to->is_ceiling_visible = true;
 
-        var i = 0;
+        int i = 0;
         for (i = 0; i < 3; i++)
         {
             to->fog_color[i] = get_hsv_from_color(FOG_DEF_COLOR);
@@ -90,7 +90,7 @@ void map_copy_weather(Map *to, Map *from)
 
     to->is_ceiling_visible = from->is_ceiling_visible;
 
-    var i = 0;
+    int i = 0;
     for (i = 0; i < 3; i++)
     {
         to->fog_color[i] = from->fog_color[i];
@@ -110,7 +110,7 @@ void map_reset(Map *map)
 
     map_copy_weather(map, NULL);
 
-    var x = 0, y = 0, id = 0;
+    int x = 0, y = 0, id = 0;
     for (y = 0; y < MAP_HEIGHT; y++)
     {
         for (x = 0; x < MAP_WIDTH; x++)
@@ -131,7 +131,7 @@ void map_reset(Map *map)
     }
 }
 
-void episode_change_info(Episode *episode, STRING *name, STRING *story_start, STRING *story_end, var map_count)
+void episode_change_info(Episode *episode, STRING *name, STRING *story_start, STRING *story_end, int map_count)
 {
     if (!episode)
     {
@@ -154,7 +154,7 @@ void episode_reset(Episode *episode)
     active_map_id = 0;
     episode_change_info(episode, "", "", "", 1);
 
-    var i = 0;
+    int i = 0;
     for (i = 0; i < MAX_MAPS_PER_EPISODE; i++)
     {
         map_reset(&episode->map[i]);

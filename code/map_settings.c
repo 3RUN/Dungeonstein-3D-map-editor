@@ -23,7 +23,7 @@ void map_settings_copy_to_active(Map *map)
 void map_settings_initialize()
 {
     // weather
-    var i = 0;
+    int i = 0;
     for (i = 0; i < WEATHER_MAX; i++)
     {
         STRING *temp_weather_str = "";
@@ -52,7 +52,7 @@ void map_settings_initialize()
 
 void map_settings_refresh()
 {
-    var i = 0;
+    int i = 0;
     for (i = 0; i < WEATHER_MAX; i++)
     {
         if (map_settings.weather_id == i)
@@ -65,7 +65,7 @@ void map_settings_refresh()
 
 void map_settings_destory()
 {
-    var i = 0;
+    int i = 0;
     for (i = 0; i < WEATHER_MAX; i++)
     {
         if (weather_list_str[i])
@@ -82,7 +82,7 @@ void map_settings_popup()
         imgui_open_popup(map_settings_music_browser_popup_id);
     }
 
-    var editor_map_popup_flags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings;
+    int editor_map_popup_flags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings;
     if (imgui_begin_popup_modals_params(map_settings_music_browser_popup_id, NULL, editor_map_popup_flags))
     {
         popup_music_browser();
@@ -106,7 +106,7 @@ void map_settings_update(Episode *episode)
     imgui_start_imode();
     imgui_set_next_window_pos(screen_size.x - (MAP_SETTINGS_WINDOW_WIDTH * config_saved.font_scale) - 8, screen_size.y - (MAP_SETTINGS_WINDOW_HEIGHT * config_saved.font_scale) - 8, ImGuiCond_Always);
     imgui_set_next_window_size(MAP_SETTINGS_WINDOW_WIDTH * config_saved.font_scale, MAP_SETTINGS_WINDOW_HEIGHT * config_saved.font_scale, ImGuiCond_Always);
-    var settings_window_flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoSavedSettings;
+    int settings_window_flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoSavedSettings;
     imgui_begin(map_settings_window_id, NULL, settings_window_flags);
     imgui_separator();
     imgui_text_disabled_centered(_chr(str_printf(NULL, "Opened map id: %d", (long)active_map_id)));
@@ -119,10 +119,10 @@ void map_settings_update(Episode *episode)
     imgui_push_item_width(avail_combobox_width);
     if (imgui_begin_combo(map_settings_weather_combo_id, _chr(weather_currently_used_str), ImGuiComboFlags_HeightSmall))
     {
-        var i = 0;
+        int i = 0;
         for (i = 0; i < WEATHER_MAX; i++)
         {
-            var is_selected = str_cmp(weather_currently_used_str, weather_list_str[i]);
+            int is_selected = str_cmp(weather_currently_used_str, weather_list_str[i]);
             if (imgui_selectable(_chr(weather_list_str[i]), &is_selected, 0))
             {
                 map_settings.weather_id = i;
@@ -154,7 +154,7 @@ void map_settings_update(Episode *episode)
     imgui_same_line();
     var avail_picker_width = imgui_get_content_region_avail_width();
     imgui_push_item_width(avail_picker_width);
-    static var fog_color_misc_flags = ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_NoDragDrop;
+    static int fog_color_misc_flags = ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_NoDragDrop;
     imgui_color_edit3(map_settings_fog_color_picker_id, map_settings.fog_color, fog_color_misc_flags);
     imgui_pop_item_width();
     imgui_separator();
@@ -188,7 +188,7 @@ void map_settings_update(Episode *episode)
     imgui_same_line();
     var avail_picker_width = imgui_get_content_region_avail_width();
     imgui_push_item_width(avail_picker_width);
-    static var sky_color_misc_flags = ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_NoDragDrop;
+    static int sky_color_misc_flags = ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_NoDragDrop;
     imgui_color_edit3(map_settings_sky_color_picker_id, map_settings.ceiling_color, sky_color_misc_flags);
     imgui_pop_item_width();
 
@@ -197,7 +197,7 @@ void map_settings_update(Episode *episode)
     imgui_same_line();
     var avail_picker_width = imgui_get_content_region_avail_width();
     imgui_push_item_width(avail_picker_width);
-    static var misc_flags = ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_NoDragDrop;
+    static int misc_flags = ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_NoDragDrop;
     imgui_color_edit3(map_settings_floor_color_picker_id, map_settings.floor_color, misc_flags);
     imgui_pop_item_width();
     imgui_separator();
@@ -205,7 +205,7 @@ void map_settings_update(Episode *episode)
     // music
     imgui_text("Music:        ");
     imgui_same_line();
-    var len = strlen(map_settings.music);
+    int len = strlen(map_settings.music);
     imgui_push_item_width(MAP_SETTINGS_MUSIC_NAME_INPUT_WIDTH);
     imgui_input_text(map_settings_music_input_id, map_settings.music, len, ImGuiInputTextFlags_ReadOnly | ImGuiInputTextFlags_AutoSelectAll);
     imgui_pop_item_width();

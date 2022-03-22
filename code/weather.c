@@ -122,7 +122,7 @@ void weather_snow_particle(PARTICLE *p)
     p->event = weather_particle_event;
 }
 
-void weather_update(var type)
+void weather_update(int type)
 {
     if (type < WEATHER_RAIN)
     {
@@ -172,7 +172,7 @@ void weather_stop_sound()
     snd_stop(weather_sound_handle);
 }
 
-void weather_play_sound(var type)
+void weather_play_sound(int type)
 {
     if (type == WEATHER_CLEAR)
     {

@@ -3,6 +3,6 @@
 
 STRING *get_cell_info(Cell *cell);
 
-STRING *draw_map_info(Map *current_map, var x, var y);
+STRING *draw_map_info(Map *current_map, int x, int y);
 
 #endif

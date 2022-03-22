@@ -5,8 +5,8 @@
 
 TEXT *episodes_found_txt = NULL;
 
-var found_episode_index = -1;
-var found_episodes_total = 0;
+int found_episode_index = -1;
+int found_episodes_total = 0;
 
 char *selected_episode;
 char *found_episodes_listbox[MAX_EPISODES_TO_LOAD];
@@ -15,7 +15,7 @@ void episode_list_initialize();
 
 void episode_list_destroy();
 
-var episode_list_load();
+int episode_list_load();
 
 void episode_selection_reset();
 

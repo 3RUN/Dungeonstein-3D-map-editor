@@ -38,7 +38,7 @@ typedef struct Asset
 #define TOTAL_ENEMY_TEXTURES 9
 #define TOTAL_BOSS_TEXTURES 5
 
-// wall id
+// walls
 #define WALLS_ELEVATOR_SWITCH 42
 
 // props id
@@ -304,11 +304,11 @@ array_t *item_textures;
 array_t *enemy_textures;
 array_t *boss_textures;
 
-BMAP *asset_get_bmap(var type, var asset);
+BMAP *asset_get_bmap(int type, int index);
 
-STRING *asset_get_desc(var type, var asset);
+STRING *asset_get_desc(int type, int index);
 
-STRING *asset_get_filename(var type, var asset);
+STRING *asset_get_filename(int type, int index);
 
 void asset_add(array_t *array, STRING *desc, STRING *bmap);
 

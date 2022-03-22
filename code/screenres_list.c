@@ -2,7 +2,7 @@
 // sort list of resolutions in ascending order
 void screen_resolutions_sort_ascending()
 {
-    var i = 0, j = 0;
+    int i = 0, j = 0;
 
     for (i = 0; i < screen_resolutions_total; ++i)
     {
@@ -10,8 +10,8 @@ void screen_resolutions_sort_ascending()
         {
             if (screen_resolution_available_list[SCREEN_RESOLUTION_WIDTH][i] > screen_resolution_available_list[SCREEN_RESOLUTION_WIDTH][j])
             {
-                var width = screen_resolution_available_list[SCREEN_RESOLUTION_WIDTH][i];
-                var height = screen_resolution_available_list[SCREEN_RESOLUTION_HEIGHT][i];
+                int width = screen_resolution_available_list[SCREEN_RESOLUTION_WIDTH][i];
+                int height = screen_resolution_available_list[SCREEN_RESOLUTION_HEIGHT][i];
 
                 screen_resolution_available_list[SCREEN_RESOLUTION_WIDTH][i] = screen_resolution_available_list[SCREEN_RESOLUTION_WIDTH][j];
                 screen_resolution_available_list[SCREEN_RESOLUTION_HEIGHT][i] = screen_resolution_available_list[SCREEN_RESOLUTION_HEIGHT][j];
@@ -24,9 +24,9 @@ void screen_resolutions_sort_ascending()
 }
 
 // check if given resolution was already added into the list or not
-var is_screen_resolution_added(var width, var height)
+int is_screen_resolution_added(int width, int height)
 {
-    var i = 0;
+    int i = 0;
     for (i = 0; i < screen_resolutions_total; i++)
     {
         if (screen_resolution_available_list[SCREEN_RESOLUTION_WIDTH][i] == width && screen_resolution_available_list[SCREEN_RESOLUTION_HEIGHT][i] == height)
@@ -39,7 +39,7 @@ var is_screen_resolution_added(var width, var height)
 }
 
 // add given resolution into the list
-void screen_resolution_add_to_list(var width, var height)
+void screen_resolution_add_to_list(int width, int height)
 {
     screen_resolution_available_list[SCREEN_RESOLUTION_WIDTH][screen_resolutions_total] = width;
     screen_resolution_available_list[SCREEN_RESOLUTION_HEIGHT][screen_resolutions_total] = height;
@@ -53,12 +53,12 @@ void screen_resolutions_find_all()
     desktop_size_x = sys_metrics(SM_CXSCREEN);
     desktop_size_y = sys_metrics(SM_CYSCREEN);
 
-    var i = 0;
+    int i = 0;
     screen_resolution_struct.dmSize = sizeof(SCRMODE);
     for (i = 1; EnumDisplaySettings(NULL, i, &screen_resolution_struct) != 0; ++i)
     {
-        var width = screen_resolution_struct.dmPelsWidth;
-        var height = screen_resolution_struct.dmPelsHeight;
+        int width = screen_resolution_struct.dmPelsWidth;
+        int height = screen_resolution_struct.dmPelsHeight;
 
         if (width < SCREEN_RESOLUTION_MIN_X || height < SCREEN_RESOLUTION_MIN_Y)
         {
@@ -76,8 +76,8 @@ void screen_resolutions_find_all()
     // find id of the desktop resolution
     for (i = 0; i < screen_resolutions_total; i++)
     {
-        var width = screen_resolution_available_list[SCREEN_RESOLUTION_WIDTH][i];
-        var height = screen_resolution_available_list[SCREEN_RESOLUTION_HEIGHT][i];
+        int width = screen_resolution_available_list[SCREEN_RESOLUTION_WIDTH][i];
+        int height = screen_resolution_available_list[SCREEN_RESOLUTION_HEIGHT][i];
         if (desktop_size_x == width && desktop_size_y == height)
         {
             desktop_resolution_id = i;

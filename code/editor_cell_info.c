@@ -10,17 +10,17 @@ STRING *get_cell_info(Cell *cell)
     vec_set(&cell_pos, &cell->worldpos);
     var cell_pan = cell->pan;
 
-    var cell_id = cell->id;
-    var cell_x = cell->x;
-    var cell_y = cell->y;
+    int cell_id = cell->id;
+    int cell_x = cell->x;
+    int cell_y = cell->y;
 
-    var cell_type = cell->type;
-    var cell_asset = cell->asset;
+    int cell_type = cell->type;
+    int cell_asset = cell->asset;
 
-    var cell_flag = cell->flag;
-    var cell_event_type = cell->event_type;
-    var cell_event_id = cell->event_id;
-    var cell_temp_skill = cell->temp_skill;
+    int cell_flag = cell->flag;
+    int cell_event_type = cell->event_type;
+    int cell_event_id = cell->event_id;
+    int cell_temp_skill = cell->temp_skill;
 
     STRING *info_str = "";
     str_printf(info_str, "world position:\nx = %d; y = %d; z = %d;\n\ngrid position:\nx = %d; y = %d;\n\npan = %.0f;\nid = %d;", (long)cell_pos.x, (long)cell_pos.y, (long)cell_pos.z, (long)cell_x, (long)cell_y, (double)cell_pan, (long)cell_id);
@@ -439,7 +439,7 @@ STRING *get_cell_info(Cell *cell)
     return info_str;
 }
 
-STRING *draw_map_info(Map *current_map, var x, var y)
+STRING *draw_map_info(Map *current_map, int x, int y)
 {
     if (!current_map)
     {
