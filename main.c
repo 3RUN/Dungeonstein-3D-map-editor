@@ -192,7 +192,9 @@ void map_editor_startup()
 void on_frame_event()
 {
 	Map *active_map = map_get_active(&def_episode);
-	
+
+	draw_text(selected_music, 200, 100, COLOR_WHITE);
+
 	switch (editor_state)
 	{
 	case EDITOR_STATE_EDIT:
@@ -312,6 +314,11 @@ void on_frame_event()
 	camera_n_grid_update(&def_episode);
 	messages_update();
 	mouse_lock_in_window();
+
+	if (key_f4 && key_alt)
+	{
+		sys_exit(NULL);
+	}
 }
 
 void on_exit_event()
