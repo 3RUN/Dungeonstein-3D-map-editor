@@ -3,10 +3,6 @@
 #include <windows.h>
 #include <strio.c>
 
-// TO DO
-//
-// * create proper 'map_settings' ui to tweek the map settings
-
 #define PRAGMA_POINTER
 
 #define PRAGMA_PATH "code"
@@ -192,7 +188,7 @@ void map_editor_startup()
 void on_frame_event()
 {
 	Map *active_map = map_get_active(&def_episode);
-	
+
 	switch (editor_state)
 	{
 	case EDITOR_STATE_EDIT:
