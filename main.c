@@ -193,8 +193,6 @@ void on_frame_event()
 {
 	Map *active_map = map_get_active(&def_episode);
 
-	draw_text(selected_music, 200, 100, COLOR_WHITE);
-
 	switch (editor_state)
 	{
 	case EDITOR_STATE_EDIT:

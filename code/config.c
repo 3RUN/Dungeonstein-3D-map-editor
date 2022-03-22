@@ -87,6 +87,7 @@ void config_apply()
     test_run_update_from_config(&config_current);
 
     draw_textmode("Courier", 1, 12 * config_saved.font_scale, 100);
+
     master_vol = config_saved.master_volume;
 
     engine_apply_video_settings();
@@ -250,10 +251,10 @@ void config_load_from_file(STRING *config_file)
     ini_read_write_char(config_current.short_shift_map_north, config_file, config_shortcuts_section_str, short_shift_map_north_entry_str, config_default.short_shift_map_north);
 
     // mouse
-    ini_read_write_float(&config_current.mouse_sensitivity, config_file, config_input_section_str, mouse_sensitivity_entry_str, config_default.mouse_sensitivity);
+    ini_read_write_var(&config_current.mouse_sensitivity, config_file, config_input_section_str, mouse_sensitivity_entry_str, config_default.mouse_sensitivity);
 
     // audio
-    ini_read_write_float(&config_current.master_volume, config_file, config_other_section_str, other_master_volume_entry_str, config_default.master_volume);
+    ini_read_write_var(&config_current.master_volume, config_file, config_other_section_str, other_master_volume_entry_str, config_default.master_volume);
 
     // other settings
     ini_read_write_var(&config_current.is_cell_tooltip_enabled, config_file, config_other_section_str, other_cell_tooltip_entry_str, config_default.is_cell_tooltip_enabled);
@@ -311,10 +312,10 @@ void config_save_to_file(STRING *config_file)
     ini_write(config_file, config_shortcuts_section_str, short_shift_map_north_entry_str, config_current.short_shift_map_north);
 
     // mouse
-    ini_write_float(config_file, config_input_section_str, mouse_sensitivity_entry_str, config_current.mouse_sensitivity);
+    ini_write_var(config_file, config_input_section_str, mouse_sensitivity_entry_str, config_current.mouse_sensitivity);
 
     // audio
-    ini_write_float(config_file, config_other_section_str, other_master_volume_entry_str, config_current.master_volume);
+    ini_write_var(config_file, config_other_section_str, other_master_volume_entry_str, config_current.master_volume);
 
     // other settings
     ini_write_var(config_file, config_other_section_str, other_cell_tooltip_entry_str, config_current.is_cell_tooltip_enabled);

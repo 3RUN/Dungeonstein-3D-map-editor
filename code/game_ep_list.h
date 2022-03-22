@@ -5,7 +5,7 @@
 
 TEXT *episodes_found_txt = NULL;
 
-int found_episode_index = -1;
+var found_episode_index = -1;
 var found_episodes_total = 0;
 
 char *selected_episode;
