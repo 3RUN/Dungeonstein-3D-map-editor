@@ -1,7 +1,7 @@
 
 void popups_initialize()
 {
-    int i = 0;
+    var i = 0;
 
     // resolution
     STRING *temp_resolution = "";
@@ -42,7 +42,7 @@ void popups_initialize()
 
 void popups_refresh()
 {
-    int i = 0;
+    var i = 0;
 
     // resolution
     STRING *temp_resolution = "";
@@ -72,7 +72,7 @@ void popups_refresh()
 
 void popups_destroy()
 {
-    int i = 0;
+    var i = 0;
 
     for (i = 0; i < screen_resolutions_total; i++)
     {
@@ -101,7 +101,7 @@ void popup_open(Episode *episode)
     imgui_text_centered("Open episode");
     imgui_separator();
 
-    int popup_open_child_flags = ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
+    var popup_open_child_flags = ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
     imgui_begin_child(popup_episode_browser_id, vector(-1, (POPUP_OPEN_HEIGHT * config_saved.font_scale) - (60 * config_saved.font_scale), 0), 1, popup_open_child_flags);
 
     if (found_episodes_total <= 0)
@@ -113,7 +113,7 @@ void popup_open(Episode *episode)
         imgui_push_item_width(-1);
         if (imgui_list_box(popup_episode_listbox_id, &found_episode_index, found_episodes_listbox, found_episodes_total, found_episodes_total))
         {
-            int i = 0;
+            var i = 0;
             for (i = 0; i < found_episodes_total; i++)
             {
                 if (found_episode_index == i)
@@ -262,7 +262,7 @@ void popup_new(Episode *episode)
     imgui_same_line();
     editor_help_maker(_chr(str_printf(NULL, "Amount of maps in the episode. Max %d.", (long)MAX_MAPS_PER_EPISODE)));
     imgui_push_item_width(-1);
-    imgui_slider_int(popup_new_episode_map_slider_id, &new_episode_map_count, 1, MAX_MAPS_PER_EPISODE);
+    imgui_slider_var(popup_new_episode_map_slider_id, &new_episode_map_count, 1, MAX_MAPS_PER_EPISODE);
     imgui_pop_item_width();
 
     var width = (POPUP_NEW_WIDTH * config_saved.font_scale) / 2;
@@ -418,7 +418,7 @@ void popup_save_as(Episode *episode)
 
 void popup_settings_general()
 {
-    int general_child_flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
+    var general_child_flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
     imgui_begin_child(popup_settings_input_child_id, vector(-1, POPUP_SETTINGS_CHILD_HEIGHT * config_saved.font_scale, 0), 0, general_child_flags);
 
     imgui_text_disabled_centered("AUDIO");
@@ -456,7 +456,7 @@ void popup_settings_general()
     imgui_same_line();
     imgui_align_right_with_offset(POPUP_COMBOBOX_WIDTH * config_saved.font_scale);
     imgui_push_item_width((POPUP_COMBOBOX_WIDTH * config_saved.font_scale) - 1);
-    static int misc_flags = ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_NoDragDrop;
+    static var misc_flags = ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_NoDragDrop;
     imgui_color_edit3(popup_settings_bg_color_picker_id, config_current.background_color, misc_flags);
     imgui_pop_item_width();
 
@@ -465,7 +465,7 @@ void popup_settings_general()
     imgui_same_line();
     imgui_align_right_with_offset(POPUP_COMBOBOX_WIDTH * config_saved.font_scale);
     imgui_push_item_width((POPUP_COMBOBOX_WIDTH * config_saved.font_scale) - 1);
-    static int misc_flags = ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_NoDragDrop;
+    static var misc_flags = ImGuiColorEditFlags_DisplayRGB | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_NoDragDrop;
     imgui_color_edit3(popup_settings_grid_color_picker_id, config_current.grid_color, misc_flags);
     imgui_pop_item_width();
 
@@ -479,7 +479,7 @@ void popup_settings_general()
     imgui_push_item_width((POPUP_COMBOBOX_WIDTH * config_saved.font_scale) - 1);
     if (imgui_begin_combo(popup_settings_display_combo_id, _chr(graphics_display_currently_used_str), ImGuiComboFlags_HeightSmall))
     {
-        int n = 0;
+        var n = 0;
         for (n = 0; n < DISPLAY_MODES_MAX; n++)
         {
             BOOL is_selected = str_cmp(graphics_display_currently_used_str, graphics_display_mode_list_str[n]);
@@ -511,7 +511,7 @@ void popup_settings_general()
         imgui_push_item_width((POPUP_COMBOBOX_WIDTH * config_saved.font_scale) - 1);
         if (imgui_begin_combo(popup_settings_resolution_combo_id, _chr(graphics_resolution_currently_used_str), ImGuiComboFlags_HeightSmall))
         {
-            int n = 0;
+            var n = 0;
             for (n = 0; n < screen_resolutions_total; n++)
             {
                 // if in windowed mode then make sure to clip resolutions equal or higher than the desktop resolutions
@@ -553,7 +553,7 @@ void popup_settings_general()
 
 void popup_settings_input()
 {
-    int input_main_child_flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
+    var input_main_child_flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
     imgui_begin_child(popup_settings_input_child_id, vector(-1, POPUP_SETTINGS_CHILD_HEIGHT * config_saved.font_scale, 0), 0, input_main_child_flags);
 
     imgui_text_disabled_centered("MOUSE");
@@ -568,7 +568,7 @@ void popup_settings_input()
     imgui_separator();
     imgui_text_disabled_centered("KEYBOARD");
 
-    int input_child_flags = ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
+    var input_child_flags = ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
     imgui_begin_child(popup_settings_input_buttons_child_id, vector(-1, -1, 0), 1, input_child_flags);
 
     imgui_text_disabled_centered("INPUT");
@@ -618,10 +618,10 @@ void popup_settings()
     imgui_text_centered("Settings");
     imgui_separator();
 
-    int settings_tab_bar_flags = ImGuiTabBarFlags_NoTooltip | ImGuiTabBarFlags_TabListPopupButton | ImGuiTabBarFlags_FittingPolicyDefault_;
+    var settings_tab_bar_flags = ImGuiTabBarFlags_NoTooltip | ImGuiTabBarFlags_TabListPopupButton | ImGuiTabBarFlags_FittingPolicyDefault_;
     if (imgui_begin_tabbar(popup_settings_tabs_id, settings_tab_bar_flags))
     {
-        int settings_tab_item_falgs = ImGuiTabItemFlags_NoCloseWithMiddleMouseButton;
+        var settings_tab_item_falgs = ImGuiTabItemFlags_NoCloseWithMiddleMouseButton;
         if (imgui_begin_tabitem("General", NULL, settings_tab_item_falgs))
         {
             settings_tab_id = SETTINGS_TAB_GENERIC;
@@ -776,7 +776,7 @@ void popup_ep_edit(Episode *episode)
     imgui_same_line();
     imgui_help_maker(_chr(str_printf(NULL, "Amount of maps in the episode. Max %d.", (long)MAX_MAPS_PER_EPISODE)));
     imgui_push_item_width(-1);
-    imgui_slider_int(popup_episode_edit_map_count_slider_id, &episode_edit_map_count, 1, MAX_MAPS_PER_EPISODE);
+    imgui_slider_var(popup_episode_edit_map_count_slider_id, &episode_edit_map_count, 1, MAX_MAPS_PER_EPISODE);
     imgui_pop_item_width();
 
     var width = (POPUP_EPISODE_EDIT_WIDTH * config_saved.font_scale) / 3;
@@ -857,7 +857,7 @@ void popup_help()
     imgui_text_centered("Help");
     imgui_separator();
 
-    int popup_help_controlls_child_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
+    var popup_help_controlls_child_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
     imgui_begin_child(popup_help_child_id, vector(-1, POPUP_HELP_CHILD_HEIGHT * config_saved.font_scale, 0), 1, popup_help_controlls_child_flags);
 
     imgui_columns(2, popup_help_columns_id, true);
@@ -941,7 +941,7 @@ void popup_music_browser()
     imgui_text_centered("Music browser");
     imgui_separator();
 
-    int editor_music_browser_child_flags = ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
+    var editor_music_browser_child_flags = ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
     imgui_begin_child(popup_music_browser_child_id, vector(-1, POPUP_MUSIC_BROWSER_HEIGHT - 60, 0), 1, editor_music_browser_child_flags);
 
     if (found_music_total <= 0)
@@ -953,7 +953,7 @@ void popup_music_browser()
         imgui_push_item_width(-1);
         if (imgui_list_box(popup_music_browser_listbox_id, &found_music_index, found_music_listbox, found_music_total, found_music_total))
         {
-            int i = 0;
+            var i = 0;
             for (i = 0; i < found_music_total; i++)
             {
                 if (found_music_index == i)

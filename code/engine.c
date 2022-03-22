@@ -49,7 +49,7 @@ void mouse_set_map(BMAP *new_mouse_map)
     }
 }
 
-void mouse_enable(int is_mouse_centered)
+void mouse_enable(var is_mouse_centered)
 {
     if (mouse_mode != 4)
     {
@@ -106,7 +106,7 @@ void mouse_lock_in_window()
     }
 }
 
-void engine_set_resolution_from_id(int id, int display_mode)
+void engine_set_resolution_from_id(var id, var display_mode)
 {
     // cycle the id and keep in the range
     id = cycle(id, 0, screen_resolutions_total);
@@ -114,8 +114,8 @@ void engine_set_resolution_from_id(int id, int display_mode)
     var prop_x = camera->size_x / screen_size.x;
     var prop_y = camera->size_y / screen_size.y;
 
-    int width = screen_resolution_available_list[SCREEN_RESOLUTION_WIDTH][id];
-    int height = screen_resolution_available_list[SCREEN_RESOLUTION_HEIGHT][id];
+    var width = screen_resolution_available_list[SCREEN_RESOLUTION_WIDTH][id];
+    var height = screen_resolution_available_list[SCREEN_RESOLUTION_HEIGHT][id];
 
     // because on some computers screen_size doesn't get updated by itself...
     screen_size.x = width;
@@ -155,7 +155,7 @@ void engine_apply_video_settings()
     wait(1); // wait one frame
 
     // resolution id
-    int id = config_current.graphics_video_res_id;
+    var id = config_current.graphics_video_res_id;
 
     // if in borderless, then go desktop resolution !
     if (config_current.graphics_display_mode == DISPLAY_MODE_WINDOWED_FULLSCREEN)

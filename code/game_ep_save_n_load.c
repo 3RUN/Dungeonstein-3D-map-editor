@@ -1,5 +1,5 @@
 
-int episode_save(STRING *file_name, Episode *episode)
+var episode_save(STRING *file_name, Episode *episode)
 {
     if (!episode)
     {
@@ -21,7 +21,7 @@ int episode_save(STRING *file_name, Episode *episode)
     return true;
 }
 
-int episode_load(STRING *file_name, Episode *episode)
+var episode_load(STRING *file_name, Episode *episode)
 {
     if (!episode)
     {

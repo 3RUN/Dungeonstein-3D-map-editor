@@ -3,7 +3,7 @@
 
 BMAP *mouse_tga = "mouse.tga";
 
-int autolock_mouse_locked = false;
+var autolock_mouse_locked = false;
 
 float get_hsv_from_color(float value);
 
@@ -17,13 +17,13 @@ VECTOR *mouse_get_position();
 
 void mouse_set_map(BMAP *new_mouse_map);
 
-void mouse_enable(int is_mouse_centered);
+void mouse_enable(var is_mouse_centered);
 
 void mouse_disable();
 
 void mouse_lock_in_window();
 
-void engine_set_resolution_from_id(int id, int display_mode);
+void engine_set_resolution_from_id(var id, var display_mode);
 
 void engine_apply_video_settings();
 

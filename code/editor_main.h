@@ -39,11 +39,11 @@ BMAP *preview_bmap = NULL;
 
 Cell preview_cell;
 
-int main_popup_state = MAIN_POPUP_OPEN;
-int main_popup_old_state = MAIN_POPUP_OPEN;
+var main_popup_state = MAIN_POPUP_OPEN;
+var main_popup_old_state = MAIN_POPUP_OPEN;
 
-int selected_type = 0;
-int selected_asset = 0;
+var selected_type = 0;
+var selected_asset = 0;
 
 var cell_info_tooltip_counter = 0;
 
@@ -53,15 +53,15 @@ void editor_main_reset();
 
 void editor_main_destroy();
 
-void preview_update(int type, int asset);
+void preview_update(var type, var asset);
 
-void editor_main_switch_popup_to(int state);
+void editor_main_switch_popup_to(var state);
 
 void editor_popups(Episode *episode);
 
 void editor_top_bar(Episode *episode);
 
-void editor_asset_list_item(void *draw_list, int type, int asset);
+void editor_asset_list_item(void *draw_list, var type, var asset);
 
 void editor_side_bar(Episode *episode);
 

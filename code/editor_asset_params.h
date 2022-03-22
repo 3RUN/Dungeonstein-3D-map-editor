@@ -41,16 +41,16 @@ void asset_params_activation_type(Cell *cell);
 
 void asset_params_id(Cell *cell);
 
-void asset_params_wall_params(Cell *cell, int asset);
+void asset_params_wall_params(Cell *cell, var asset);
 
-void asset_params_props_params(Cell *cell, int asset);
+void asset_params_props_params(Cell *cell, var asset);
 
-void asset_params_events_params(Cell *cell, int asset);
+void asset_params_events_params(Cell *cell, var asset);
 
-void asset_params_enemies_params(Cell *cell, int asset);
+void asset_params_enemies_params(Cell *cell, var asset);
 
-void asset_params_bosses_params(Cell *cell, int asset);
+void asset_params_bosses_params(Cell *cell, var asset);
 
-void asset_params_obj_params_update(Cell *cell, int type, int asset);
+void asset_params_obj_params_update(Cell *cell, var type, var asset);
 
 #endif

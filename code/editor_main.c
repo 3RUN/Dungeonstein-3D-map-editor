@@ -27,7 +27,7 @@ void editor_main_destroy()
     preview_bmap = NULL;
 }
 
-void preview_update(int type, int asset)
+void preview_update(var type, var asset)
 {
     preview_bmap = asset_get_bmap(type, asset);
     strcpy(preview_asset_name, "Name: ");
@@ -37,7 +37,7 @@ void preview_update(int type, int asset)
     preview_cell.asset = asset;
 }
 
-void editor_main_switch_popup_to(int state)
+void editor_main_switch_popup_to(var state)
 {
     is_popup_opened = true;
     main_popup_old_state = main_popup_state;
@@ -56,7 +56,7 @@ void editor_popups(Episode *episode)
         imgui_open_popup(editor_main_popup_id);
     }
 
-    int editor_pause_popup_flags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings;
+    var editor_pause_popup_flags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings;
     if (imgui_begin_popup_modals_params(editor_main_popup_id, NULL, editor_pause_popup_flags))
     {
         switch (main_popup_state)
@@ -128,7 +128,7 @@ void editor_top_bar(Episode *episode)
 
     imgui_set_next_window_pos(0, 0, ImGuiCond_Always);
     imgui_set_next_window_size(screen_size.x, EDITOR_TOP_BAR_HEIGHT * config_saved.font_scale, ImGuiCond_Always);
-    int top_bar_window_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoFocusOnAppearing;
+    var top_bar_window_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoFocusOnAppearing;
     imgui_begin(editor_top_bar_id, NULL, top_bar_window_flags);
 
     is_top_bar_used = false;
@@ -265,7 +265,7 @@ void editor_top_bar(Episode *episode)
     imgui_end();
 }
 
-void editor_asset_list_item(void *draw_list, int type, int asset)
+void editor_asset_list_item(void *draw_list, var type, var asset)
 {
     if (!draw_list)
     {
@@ -277,7 +277,7 @@ void editor_asset_list_item(void *draw_list, int type, int asset)
 
     var width = imgui_get_content_region_avail_width();
 
-    int is_temp_boolean = false;
+    var is_temp_boolean = false;
     if (selected_asset == asset)
     {
         is_temp_boolean = true;
@@ -319,7 +319,7 @@ void editor_side_bar(Episode *episode)
 
     imgui_set_next_window_pos(screen_size.x - (EDITOR_SIDE_BAR_WIDTH * config_saved.font_scale), EDITOR_TOP_BAR_HEIGHT * config_saved.font_scale, ImGuiCond_Always);
     imgui_set_next_window_size(EDITOR_SIDE_BAR_WIDTH * config_saved.font_scale, screen_size.y - (EDITOR_TOP_BAR_HEIGHT * config_saved.font_scale), ImGuiCond_Always);
-    int side_bar_window_flags = ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing;
+    var side_bar_window_flags = ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing;
     imgui_begin(editor_side_bar_id, NULL, side_bar_window_flags);
 
     if (imgui_collapsing_header("Selected asset", NULL, ImGuiTreeNodeFlags_DefaultOpen))
@@ -335,7 +335,7 @@ void editor_side_bar(Episode *episode)
         imgui_separator();
 
         imgui_text("Parameters:");
-        int selected_asset_parameters_child_flag = ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
+        var selected_asset_parameters_child_flag = ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
         var width = imgui_get_content_region_avail_width();
         imgui_begin_child(editor_preview_parameters_child_id, vector(width, (SIDEBAR_PARAM_CHILD_HEIGHT * config_saved.font_scale), 0), 1, selected_asset_parameters_child_flag);
 
@@ -353,7 +353,7 @@ void editor_side_bar(Episode *episode)
         imgui_push_item_width(-1);
         if (imgui_begin_combo(editor_side_bar_category_combo_id, selected_asset_category, ImGuiComboFlags_HeightSmall))
         {
-            int n = 0;
+            var n = 0;
             for (n = 0; n < MAX_ASSET_TYPES; n++)
             {
                 BOOL is_selected = (selected_asset_category == asset_categories_combobox[n]);
@@ -370,7 +370,7 @@ void editor_side_bar(Episode *episode)
         }
         imgui_pop_item_width();
 
-        int assets_list_child_flags = ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
+        var assets_list_child_flags = ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
         var width = imgui_get_content_region_avail_width();
         imgui_begin_child(editor_side_bar_asset_list_child_id, vector(width, SIDEBAR_ASSET_LIST_CHILD_HEIGHT * config_saved.font_scale, 0), 1, assets_list_child_flags);
 
@@ -379,7 +379,7 @@ void editor_side_bar(Episode *episode)
         switch (selected_type)
         {
         case ASSET_TYPE_WALLS:
-            int n = 0;
+            var n = 0;
             for (n = 0; n < TOTAL_WALL_TEXTURES; n++)
             {
                 editor_asset_list_item(asset_draw_list, ASSET_TYPE_WALLS, n);
@@ -387,7 +387,7 @@ void editor_side_bar(Episode *episode)
             break;
 
         case ASSET_TYPE_PROPS:
-            int n = 0;
+            var n = 0;
             for (n = 0; n < TOTAL_PROPS_TEXTURES; n++)
             {
                 editor_asset_list_item(asset_draw_list, ASSET_TYPE_PROPS, n);
@@ -395,7 +395,7 @@ void editor_side_bar(Episode *episode)
             break;
 
         case ASSET_TYPE_EVENTS:
-            int n = 0;
+            var n = 0;
             for (n = 0; n < TOTAL_EVENT_TEXTURES; n++)
             {
                 editor_asset_list_item(asset_draw_list, ASSET_TYPE_EVENTS, n);
@@ -403,7 +403,7 @@ void editor_side_bar(Episode *episode)
             break;
 
         case ASSET_TYPE_ITEMS:
-            int n = 0;
+            var n = 0;
             for (n = 0; n < TOTAL_ITEM_TEXTURES; n++)
             {
                 editor_asset_list_item(asset_draw_list, ASSET_TYPE_ITEMS, n);
@@ -411,7 +411,7 @@ void editor_side_bar(Episode *episode)
             break;
 
         case ASSET_TYPE_ENEMIES:
-            int n = 0;
+            var n = 0;
             for (n = 0; n < TOTAL_ENEMY_TEXTURES; n++)
             {
                 editor_asset_list_item(asset_draw_list, ASSET_TYPE_ENEMIES, n);
@@ -419,7 +419,7 @@ void editor_side_bar(Episode *episode)
             break;
 
         case ASSET_TYPE_BOSSES:
-            int n = 0;
+            var n = 0;
             for (n = 0; n < TOTAL_BOSS_TEXTURES; n++)
             {
                 editor_asset_list_item(asset_draw_list, ASSET_TYPE_BOSSES, n);

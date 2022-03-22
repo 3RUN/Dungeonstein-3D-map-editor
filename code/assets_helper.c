@@ -1,5 +1,5 @@
 
-int can_become_secret_wall(int type, int asset)
+var can_become_secret_wall(var type, var asset)
 {
     if (type != ASSET_TYPE_WALLS || asset == TOTAL_WALL_TEXTURES - 1)
     {
@@ -9,16 +9,16 @@ int can_become_secret_wall(int type, int asset)
     return true;
 }
 
-int is_secret_wall(Cell *cell)
+var is_secret_wall(Cell *cell)
 {
     if (!cell)
     {
         return false;
     }
 
-    int cell_type = cell->type;
-    int cell_asset = cell->asset;
-    int cell_flag = cell->flag;
+    var cell_type = cell->type;
+    var cell_asset = cell->asset;
+    var cell_flag = cell->flag;
 
     if (cell_type != ASSET_TYPE_WALLS || cell_asset == TOTAL_WALL_TEXTURES - 1)
     {
@@ -28,7 +28,7 @@ int is_secret_wall(Cell *cell)
     return cell_flag;
 }
 
-int is_door(int type, int asset)
+var is_door(var type, var asset)
 {
     if (type != ASSET_TYPE_PROPS)
     {
@@ -43,7 +43,7 @@ int is_door(int type, int asset)
     return true;
 }
 
-int is_fence(int type, int asset)
+var is_fence(var type, var asset)
 {
     if (type != ASSET_TYPE_PROPS)
     {
@@ -58,7 +58,7 @@ int is_fence(int type, int asset)
     return true;
 }
 
-int is_npc(int type, int asset)
+var is_npc(var type, var asset)
 {
     if (type != ASSET_TYPE_ENEMIES && type != ASSET_TYPE_BOSSES) // all enemies/bosses
     {
@@ -68,7 +68,7 @@ int is_npc(int type, int asset)
     return true;
 }
 
-int is_player_start(int type, int asset)
+var is_player_start(var type, var asset)
 {
     if (type != ASSET_TYPE_EVENTS)
     {
@@ -83,7 +83,7 @@ int is_player_start(int type, int asset)
     return true;
 }
 
-int is_finish_elevator(int type, int asset)
+var is_finish_elevator(var type, var asset)
 {
     if (type != ASSET_TYPE_WALLS)
     {
@@ -98,7 +98,7 @@ int is_finish_elevator(int type, int asset)
     return true;
 }
 
-int is_switch(int type, int asset)
+var is_switch(var type, var asset)
 {
     if (type != ASSET_TYPE_PROPS)
     {
@@ -113,7 +113,7 @@ int is_switch(int type, int asset)
     return true;
 }
 
-int is_treasure(int type, int asset)
+var is_treasure(var type, var asset)
 {
     if (type != ASSET_TYPE_ITEMS)
     {
@@ -128,7 +128,7 @@ int is_treasure(int type, int asset)
     return true;
 }
 
-int is_rotatable(int type, int asset)
+var is_rotatable(var type, var asset)
 {
     if (is_npc(type, asset) == true) // enemies/bosses
     {
@@ -163,7 +163,7 @@ int is_rotatable(int type, int asset)
     return false;
 }
 
-int is_neighbour_is_door(Map *map, VECTOR *pos, VECTOR *dir)
+var is_neighbour_is_door(Map *map, VECTOR *pos, VECTOR *dir)
 {
     if (!map)
     {
@@ -181,11 +181,11 @@ int is_neighbour_is_door(Map *map, VECTOR *pos, VECTOR *dir)
         return false;
     }
 
-    int x = endpos.x;
-    int y = endpos.y;
+    var x = endpos.x;
+    var y = endpos.y;
 
-    int type = map->cell[x][y].type;
-    int asset = map->cell[x][y].asset;
+    var type = map->cell[x][y].type;
+    var asset = map->cell[x][y].asset;
 
     return is_door(type, asset);
 }

@@ -18,9 +18,9 @@ void particle_laserbeam_event(PARTICLE *p);
 
 void particle_laserbeam(PARTICLE *p);
 
-int is_activation_cell(Cell *cell);
+var is_activation_cell(Cell *cell);
 
-int is_object_to_link(Cell *cell);
+var is_object_to_link(Cell *cell);
 
 void editor_cell_linker_destroy_array(array_t *array);
 

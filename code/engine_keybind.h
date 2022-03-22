@@ -16,10 +16,10 @@ STRING *mouse_right_str = "mouse_right";
 STRING *mouse_middle_str = "mouse_middle";
 
 // function to check for specific input keys and return their scancodes!
-int engine_key_return_scancode_from_letter(STRING *key);
+var engine_key_return_scancode_from_letter(STRING *key);
 
 // return a letter from the given scancode
 // this can be used for saving input from the game options
-STRING *engine_key_return_letter_from_scancode(int scancode);
+STRING *engine_key_return_letter_from_scancode(var scancode);
 
 #endif

@@ -144,7 +144,7 @@ void editor_input_wait_for_binding(STRING *entry)
         wait(1);
     }
 
-    int wait_for_input = true;
+    var wait_for_input = true;
     while (wait_for_input == true)
     {
         if (key_lastpressed == SCANCODE_ESC || key_lastpressed == SCANCODE_ENTER)

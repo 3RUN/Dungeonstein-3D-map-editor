@@ -138,7 +138,7 @@ void object_change_skin_to(ENTITY *ent, STRING *bmap_filename, BMAP *bmap)
     ent_setskin(ent, new, 1);
 }
 
-void object_update_skills(ENTITY *ent, var pan, int id, int type, int asset, int flag, int e_type, int e_id, int temp_skill)
+void object_update_skills(ENTITY *ent, var pan, var id, var type, var asset, var flag, var e_type, var e_id, var temp_skill)
 {
     if (!ent)
     {
@@ -298,7 +298,7 @@ void map_destroy(Map *map)
     map_loader_free_array(map_bboxes);
 }
 
-int is_neighbour_solid(Map *map, VECTOR *pos, VECTOR *dir)
+var is_neighbour_solid(Map *map, VECTOR *pos, VECTOR *dir)
 {
     if (!map || !pos || !dir)
     {
@@ -316,8 +316,8 @@ int is_neighbour_solid(Map *map, VECTOR *pos, VECTOR *dir)
         return false;
     }
 
-    int x = endpos.x;
-    int y = endpos.y;
+    var x = endpos.x;
+    var y = endpos.y;
 
     Cell *cell = &map->cell[x][y];
     if (!cell)
@@ -342,17 +342,17 @@ void map_create_walls(Map *map, Cell *cell)
 
     var cell_pan = cell->pan;
 
-    int cell_id = cell->id;
-    int cell_x = cell->x;
-    int cell_y = cell->y;
+    var cell_id = cell->id;
+    var cell_x = cell->x;
+    var cell_y = cell->y;
 
-    int cell_type = cell->type;
-    int cell_asset = cell->asset;
+    var cell_type = cell->type;
+    var cell_asset = cell->asset;
 
-    int cell_flag = cell->flag;
-    int cell_event_type = cell->event_type;
-    int cell_event_id = cell->event_id;
-    int cell_temp_skill = cell->temp_skill;
+    var cell_flag = cell->flag;
+    var cell_event_type = cell->event_type;
+    var cell_event_id = cell->event_id;
+    var cell_temp_skill = cell->temp_skill;
 
     if (is_secret_wall(cell) == true)
     {
@@ -372,13 +372,13 @@ void map_create_walls(Map *map, Cell *cell)
     }
     else
     {
-        int i = 0;
+        var i = 0;
         for (i = 0; i < MAX_DIRECTION_STEP; i++)
         {
             if (is_neighbour_solid(map, vector(cell_x, cell_y, 0), &cardinal_dir[i]) == true)
             {
-                int neighbour_x = cell_x + cardinal_dir[i].x;
-                int neighbour_y = cell_y + cardinal_dir[i].y;
+                var neighbour_x = cell_x + cardinal_dir[i].x;
+                var neighbour_y = cell_y + cardinal_dir[i].y;
                 if (is_pos_on_grid(vector(neighbour_x, neighbour_y, 0)) == false)
                 {
                     continue;
@@ -425,17 +425,17 @@ void map_create_props(Map *map, Cell *cell)
 
     var cell_pan = cell->pan;
 
-    int cell_id = cell->id;
-    int cell_x = cell->x;
-    int cell_y = cell->y;
+    var cell_id = cell->id;
+    var cell_x = cell->x;
+    var cell_y = cell->y;
 
-    int cell_type = cell->type;
-    int cell_asset = cell->asset;
+    var cell_type = cell->type;
+    var cell_asset = cell->asset;
 
-    int cell_flag = cell->flag;
-    int cell_event_type = cell->event_type;
-    int cell_event_id = cell->event_id;
-    int cell_temp_skill = cell->temp_skill;
+    var cell_flag = cell->flag;
+    var cell_event_type = cell->event_type;
+    var cell_event_id = cell->event_id;
+    var cell_temp_skill = cell->temp_skill;
 
     if (is_rotatable(cell_type, cell_asset) == true)
     {
@@ -486,17 +486,17 @@ void map_create_events(Map *map, Cell *cell)
 
     var cell_pan = cell->pan;
 
-    int cell_id = cell->id;
-    int cell_x = cell->x;
-    int cell_y = cell->y;
+    var cell_id = cell->id;
+    var cell_x = cell->x;
+    var cell_y = cell->y;
 
-    int cell_type = cell->type;
-    int cell_asset = cell->asset;
+    var cell_type = cell->type;
+    var cell_asset = cell->asset;
 
-    int cell_flag = cell->flag;
-    int cell_event_type = cell->event_type;
-    int cell_event_id = cell->event_id;
-    int cell_temp_skill = cell->temp_skill;
+    var cell_flag = cell->flag;
+    var cell_event_type = cell->event_type;
+    var cell_event_id = cell->event_id;
+    var cell_temp_skill = cell->temp_skill;
 
     if (is_rotatable(cell_type, cell_asset) == true)
     {
@@ -529,17 +529,17 @@ void map_create_items(Map *map, Cell *cell)
 
     var cell_pan = cell->pan;
 
-    int cell_id = cell->id;
-    int cell_x = cell->x;
-    int cell_y = cell->y;
+    var cell_id = cell->id;
+    var cell_x = cell->x;
+    var cell_y = cell->y;
 
-    int cell_type = cell->type;
-    int cell_asset = cell->asset;
+    var cell_type = cell->type;
+    var cell_asset = cell->asset;
 
-    int cell_flag = cell->flag;
-    int cell_event_type = cell->event_type;
-    int cell_event_id = cell->event_id;
-    int cell_temp_skill = cell->temp_skill;
+    var cell_flag = cell->flag;
+    var cell_event_type = cell->event_type;
+    var cell_event_id = cell->event_id;
+    var cell_temp_skill = cell->temp_skill;
 
     if (is_treasure(cell_type, cell_asset) == true)
     {
@@ -561,17 +561,17 @@ void map_create_enemies(Map *map, Cell *cell)
 
     var cell_pan = cell->pan;
 
-    int cell_id = cell->id;
-    int cell_x = cell->x;
-    int cell_y = cell->y;
+    var cell_id = cell->id;
+    var cell_x = cell->x;
+    var cell_y = cell->y;
 
-    int cell_type = cell->type;
-    int cell_asset = cell->asset;
+    var cell_type = cell->type;
+    var cell_asset = cell->asset;
 
-    int cell_flag = cell->flag;
-    int cell_event_type = cell->event_type;
-    int cell_event_id = cell->event_id;
-    int cell_temp_skill = cell->temp_skill;
+    var cell_flag = cell->flag;
+    var cell_event_type = cell->event_type;
+    var cell_event_id = cell->event_id;
+    var cell_temp_skill = cell->temp_skill;
 
     ENTITY *ent = ent_create(asset_get_filename(cell_type, cell_asset), &cell->worldpos, map_camera_facing_ent_fnc);
     object_update_skills(ent, cell_pan, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
@@ -588,17 +588,17 @@ void map_create_bosses(Map *map, Cell *cell)
 
     var cell_pan = cell->pan;
 
-    int cell_id = cell->id;
-    int cell_x = cell->x;
-    int cell_y = cell->y;
+    var cell_id = cell->id;
+    var cell_x = cell->x;
+    var cell_y = cell->y;
 
-    int cell_type = cell->type;
-    int cell_asset = cell->asset;
+    var cell_type = cell->type;
+    var cell_asset = cell->asset;
 
-    int cell_flag = cell->flag;
-    int cell_event_type = cell->event_type;
-    int cell_event_id = cell->event_id;
-    int cell_temp_skill = cell->temp_skill;
+    var cell_flag = cell->flag;
+    var cell_event_type = cell->event_type;
+    var cell_event_id = cell->event_id;
+    var cell_temp_skill = cell->temp_skill;
 
     ENTITY *ent = ent_create(asset_get_filename(cell_type, cell_asset), &cell->worldpos, map_camera_facing_ent_fnc);
     object_update_skills(ent, cell_pan, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
@@ -615,17 +615,17 @@ void map_create_bbox(Map *map, Cell *cell)
 
     var cell_pan = cell->pan;
 
-    int cell_id = cell->id;
-    int cell_x = cell->x;
-    int cell_y = cell->y;
+    var cell_id = cell->id;
+    var cell_x = cell->x;
+    var cell_y = cell->y;
 
-    int cell_type = cell->type;
-    int cell_asset = cell->asset;
+    var cell_type = cell->type;
+    var cell_asset = cell->asset;
 
-    int cell_flag = cell->flag;
-    int cell_event_type = cell->event_type;
-    int cell_event_id = cell->event_id;
-    int cell_temp_skill = cell->temp_skill;
+    var cell_flag = cell->flag;
+    var cell_event_type = cell->event_type;
+    var cell_event_id = cell->event_id;
+    var cell_temp_skill = cell->temp_skill;
 
     ENTITY *ent = ent_create(wall_mdl, &cell->worldpos, map_info_bbox_ent_fnc);
     object_update_skills(ent, cell_pan, cell_id, cell_type, cell_asset, cell_flag, cell_event_type, cell_event_id, cell_temp_skill);
@@ -659,7 +659,7 @@ void map_load(Map *map)
     ceiling_update_from_map(map);
     floor_update_from_map(map);
 
-    int x = 0, y = 0;
+    var x = 0, y = 0;
     for (y = 0; y < MAP_HEIGHT; y++)
     {
         for (x = 0; x < MAP_WIDTH; x++)

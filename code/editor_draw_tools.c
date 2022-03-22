@@ -6,7 +6,7 @@ void find_n_erase_player(Map *map)
         return;
     }
 
-    int x = 0, y = 0, id = 0;
+    var x = 0, y = 0, id = 0;
     for (y = 0; y < MAP_HEIGHT; y++)
     {
         for (x = 0; x < MAP_WIDTH; x++)
@@ -30,7 +30,7 @@ void find_n_erase_finish(Map *map)
         return;
     }
 
-    int x = 0, y = 0, id = 0;
+    var x = 0, y = 0, id = 0;
     for (y = 0; y < MAP_HEIGHT; y++)
     {
         for (x = 0; x < MAP_WIDTH; x++)
@@ -97,8 +97,8 @@ void pick_cell(Cell *to, Cell *from)
         return;
     }
 
-    int type = from->type;
-    int asset = from->asset;
+    var type = from->type;
+    var asset = from->asset;
 
     selected_asset_category = asset_categories_combobox[type];
     selected_type = type;

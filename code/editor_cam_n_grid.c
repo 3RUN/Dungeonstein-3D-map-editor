@@ -22,7 +22,7 @@ VECTOR *vec_world_to_grid(VECTOR *world_pos)
         return vector(-1, -1, -1);
     }
 
-    int grid_x = -1, grid_y = -1;
+    var grid_x = -1, grid_y = -1;
 
     grid_x = floor(world_pos->x / MAP_CELL_SIZE);
     grid_x = clamp(grid_x, -1, MAP_WIDTH);
@@ -33,7 +33,7 @@ VECTOR *vec_world_to_grid(VECTOR *world_pos)
     return vector(grid_x, grid_y, 0);
 }
 
-int is_pos_on_grid(VECTOR *pos)
+var is_pos_on_grid(VECTOR *pos)
 {
     if (!pos)
     {
@@ -43,7 +43,7 @@ int is_pos_on_grid(VECTOR *pos)
     return (pos->x >= 0 && pos->x < MAP_WIDTH && pos->y >= 0 && pos->y < MAP_HEIGHT);
 }
 
-int is_pos_within_camera(VECTOR *pos)
+var is_pos_within_camera(VECTOR *pos)
 {
     if (!pos)
     {
@@ -53,7 +53,7 @@ int is_pos_within_camera(VECTOR *pos)
     return (pos->x >= camera->pos_x && pos->x < camera->size_x && pos->y >= camera->pos_y && pos->y < camera->size_y);
 }
 
-int is_allowed_to_draw()
+var is_allowed_to_draw()
 {
     if (is_top_bar_used == true)
     {
@@ -83,7 +83,7 @@ int is_allowed_to_draw()
     return true;
 }
 
-void grid_get_mouse_pos(int *x, int *y)
+void grid_get_mouse_pos(var *x, var *y)
 {
     if (is_allowed_to_draw() == true)
     {
@@ -97,10 +97,10 @@ void grid_get_mouse_pos(int *x, int *y)
     }
 }
 
-void grid_draw(VECTOR *center, var grid_size, int width, int height, COLOR *color)
+void grid_draw(VECTOR *center, var grid_size, var width, var height, COLOR *color)
 {
-    int lines_x = width + 1;
-    int lines_y = height + 1;
+    var lines_x = width + 1;
+    var lines_y = height + 1;
     var bounds_x = (lines_x - 1) / 2.0 * grid_size;
     var bounds_y = (lines_y - 1) / 2.0 * grid_size;
 
@@ -112,7 +112,7 @@ void grid_draw(VECTOR *center, var grid_size, int width, int height, COLOR *colo
     end.x -= bounds_x;
     end.y += bounds_y;
 
-    int i = 0;
+    var i = 0;
     for (i = 0; i < lines_x; i++)
     {
         draw_line3d(&start, color, 0);
@@ -160,7 +160,7 @@ void camera_auto_resize()
 
 void camera_topdown_movement(var grid_height, var grid_size)
 {
-    int is_allowed = is_allowed_to_draw();
+    var is_allowed = is_allowed_to_draw();
 
     if (key_drag_map && is_allowed == true)
     {
@@ -299,7 +299,7 @@ void camera_fog_from_map(Map *map)
     }
 }
 
-void camera_reset(Map *map, int state)
+void camera_reset(Map *map, var state)
 {
     if (!map)
     {
@@ -313,7 +313,7 @@ void camera_reset(Map *map, int state)
             mouse_disable();
         }
 
-        int x = 0, y = 0, player_found = false;
+        var x = 0, y = 0, player_found = false;
         for (y = 0; y < MAP_HEIGHT; y++)
         {
             for (x = 0; x < MAP_WIDTH; x++)

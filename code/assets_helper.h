@@ -1,26 +1,26 @@
 #ifndef _ASSETS_HELPER_H_
 #define _ASSETS_HELPER_H_
 
-int can_become_secret_wall(int type, int asset);
+var can_become_secret_wall(var type, var asset);
 
-int is_secret_wall(Cell *cell);
+var is_secret_wall(Cell *cell);
 
-int is_door(int type, int asset);
+var is_door(var type, var asset);
 
-int is_fence(int type, int asset);
+var is_fence(var type, var asset);
 
-int is_npc(int type, int asset);
+var is_npc(var type, var asset);
 
-int is_player_start(int type, int asset);
+var is_player_start(var type, var asset);
 
-int is_finish_elevator(int type, int asset);
+var is_finish_elevator(var type, var asset);
 
-int is_switch(int type, int asset);
+var is_switch(var type, var asset);
 
-int is_treasure(int type, int asset);
+var is_treasure(var type, var asset);
 
-int is_rotatable(int type, int asset);
+var is_rotatable(var type, var asset);
 
-int is_neighbour_is_door(Map *map, VECTOR *pos, VECTOR *dir);
+var is_neighbour_is_door(Map *map, VECTOR *pos, VECTOR *dir);
 
 #endif

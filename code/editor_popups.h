@@ -58,10 +58,10 @@ char episode_edit_name[EPISODE_NAME_LENGTH];
 char episode_edit_story_start[EPISODE_STORY_START_LENGTH];
 char episode_edit_story_end[EPISODE_STORY_END_LENGTH];
 
-int new_episode_map_count = 1;
-int episode_edit_map_count = 1;
+var new_episode_map_count = 1;
+var episode_edit_map_count = 1;
 
-int settings_tab_id = SETTINGS_TAB_GENERIC;
+var settings_tab_id = SETTINGS_TAB_GENERIC;
 
 // new
 STRING *popup_new_button_str = "";

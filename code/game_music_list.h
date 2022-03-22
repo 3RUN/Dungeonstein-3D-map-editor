@@ -7,12 +7,10 @@
 
 TEXT *music_found_txt = NULL;
 
-int found_music_index = -1;
-int found_music_total = 0;
+var found_music_index = -1;
+var found_music_total = 0;
 
-int is_music_playing_failed = false;
-
-int playing_music_index = 0;
+var playing_music_index = 0;
 var playing_music_handle = 0;
 var playing_music_volume = 50;
 
@@ -23,7 +21,7 @@ void music_list_initialize();
 
 void music_list_destroy();
 
-int scan_music_folder();
+var scan_music_folder();
 
 void music_selection_reset();
 

@@ -1,6 +1,6 @@
 
 // function to check for specific input keys and return their scancodes!
-int engine_key_return_scancode_from_letter(STRING *key)
+var engine_key_return_scancode_from_letter(STRING *key)
 {
     // nothing in the string ?
     if (key == NULL || str_len(key) <= 0)
@@ -32,7 +32,7 @@ int engine_key_return_scancode_from_letter(STRING *key)
     }
 
     // check if the given key can return a proper scancode
-    int temp_scancode = key_for_str(key);
+    var temp_scancode = key_for_str(key);
     if (temp_scancode > 0)
     {
         return temp_scancode;
@@ -48,7 +48,7 @@ int engine_key_return_scancode_from_letter(STRING *key)
 
 // return a letter from the given scancode
 // this can be used for saving input from the game options
-STRING *engine_key_return_letter_from_scancode(int scancode)
+STRING *engine_key_return_letter_from_scancode(var scancode)
 {
     // check if scancode is correct
     // correct range is from SCANCODE_ESC to SCANCODE_MOUSE_MIDDLE
@@ -76,9 +76,6 @@ STRING *engine_key_return_letter_from_scancode(int scancode)
 
     case SCANCODE_MOUSE_MIDDLE:
         str_cpy(tmp_str, mouse_middle_str);
-        break;
-
-    default:
         break;
     }
 

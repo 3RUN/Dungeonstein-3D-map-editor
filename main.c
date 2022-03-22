@@ -62,22 +62,22 @@ STRING *music_extension_str = ".mp3";
 #define EDITOR_STATE_EXIT 12
 
 // editor booleans
-int is_top_bar_used = false;
-int is_popup_opened = false;
-int is_popup_check_failed = false;
-int is_esc_allowed = false;
-int is_esc_popup_allowed = false;
+var is_top_bar_used = false;
+var is_popup_opened = false;
+var is_popup_check_failed = false;
+var is_esc_allowed = false;
+var is_esc_popup_allowed = false;
 
 // view booleans
-int is_grid_visible = true;
-int is_walls_visible = true;
-int is_objects_visible = true;
-int is_cell_links_visible = true;
-int is_debug_panel_visible = false;
+var is_grid_visible = true;
+var is_walls_visible = true;
+var is_objects_visible = true;
+var is_cell_links_visible = true;
+var is_debug_panel_visible = false;
 
 // mouse position on the grid
-int mouse_x = 0;
-int mouse_y = 0;
+var mouse_x = 0;
+var mouse_y = 0;
 
 #include "cmd.h"
 #include "imgui.h"

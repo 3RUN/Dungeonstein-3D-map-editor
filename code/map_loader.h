@@ -25,8 +25,8 @@ STRING *wall_mdl = "wall.mdl"; // used for secret walls, elevator switch, etc
 VECTOR cardinal_dir[MAX_DIRECTION_STEP]; // top/right/bottom/left
 var cardinal_rot[MAX_DIRECTION_STEP];    // top/right/bottom/left
 
-int is_player_found = false;
-int is_finish_found = false;
+var is_player_found = false;
+var is_finish_found = false;
 
 var props_count = 0;
 var event_count = 0;
@@ -60,7 +60,7 @@ void object_attach_to_wall(ENTITY *ent);
 
 void object_change_skin_to(ENTITY *ent, STRING *bmap_filename, BMAP *bmap);
 
-void object_update_skills(ENTITY *ent, var pan, int id, int type, int asset, int flag, int e_type, int e_id, int temp_skill);
+void object_update_skills(ENTITY *ent, var pan, var id, var type, var asset, var flag, var e_type, var e_id, var temp_skill);
 
 void map_loader_initialize(Episode *episode);
 
@@ -72,7 +72,7 @@ void map_loader_destroy();
 
 void map_destroy(Map *map);
 
-int is_neighbour_solid(Map *map, VECTOR *pos, VECTOR *dir);
+var is_neighbour_solid(Map *map, VECTOR *pos, VECTOR *dir);
 
 void map_create_walls(Map *map, Cell *cell);
 

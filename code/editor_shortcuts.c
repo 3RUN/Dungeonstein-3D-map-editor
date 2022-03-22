@@ -1,5 +1,5 @@
 
-int is_shortcut_allowed()
+var is_shortcut_allowed()
 {
     if (is_popup_opened == true)
     {
@@ -316,7 +316,7 @@ void shortcut_shift_map_west()
         return;
     }
 
-    int x = 0, y = 0;
+    var x = 0, y = 0;
     for (x = 0; x < MAP_WIDTH; x++)
     {
         Cell saved;
@@ -354,7 +354,7 @@ void shortcut_shift_map_east()
         return;
     }
 
-    int x = 0, y = 0;
+    var x = 0, y = 0;
     for (x = 0; x < MAP_WIDTH; x++)
     {
         Cell saved;
@@ -392,7 +392,7 @@ void shortcut_shift_map_south()
         return;
     }
 
-    int x = 0, y = 0;
+    var x = 0, y = 0;
     for (y = 0; y < MAP_HEIGHT; y++)
     {
         Cell saved;
@@ -430,7 +430,7 @@ void shortcut_shift_map_north()
         return;
     }
 
-    int x = 0, y = 0;
+    var x = 0, y = 0;
     for (y = 0; y < MAP_HEIGHT; y++)
     {
         Cell saved;

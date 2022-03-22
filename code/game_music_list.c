@@ -15,7 +15,7 @@ void music_list_destroy()
     }
 }
 
-int scan_music_folder()
+var scan_music_folder()
 {
     STRING *temp_str = "#256";
     str_cpy(temp_str, episode_music_folder_str);
@@ -36,7 +36,7 @@ void music_list_refresh()
     found_music_total = 0;
     found_music_total = scan_music_folder();
 
-    int i = 0;
+    var i = 0;
     for (i = 0; i < found_music_total; i++)
     {
         found_music_listbox[i] = _chr((music_found_txt->pstring)[i]);

@@ -2,16 +2,24 @@
 #define _EDITOR_MSG_H_
 
 #define MAX_MESSAGES 5
-#define MESSAGE_FADE_SPEED 3
 #define MESSAGES_LAYER 998
-#define MESSAGES_ALPHA 75
+#define MESSAGES_ALPHA 100
+#define MESSAGE_FADE_SPEED 2
 
-TEXT *message_txt = NULL;
+PANEL *message_pan[MAX_MESSAGES];
+
+FONT *message_font = "Arial#16";
+
+STRING *message_str[MAX_MESSAGES];
 
 SOUND *beep_ogg = "beep.ogg";
 
-var beep_volume = 50;
-var message_timer[MAX_MESSAGES];
+var snd_beep_volume = 50;
+var messages_total = 0;
+
+void messages_initialize();
+
+void messages_destroy();
 
 void messages_show();
 
@@ -19,12 +27,8 @@ void messages_hide();
 
 void messages_reset();
 
-void messages_initialize();
-
-void messages_destroy();
+void message_add(STRING *msg);
 
 void messages_update();
-
-void message_add(STRING *msg);
 
 #endif
