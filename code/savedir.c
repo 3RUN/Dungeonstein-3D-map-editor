@@ -6,14 +6,8 @@ BOOL DirectoryExists(char *szPath)
     return (dwAttrib != INVALID_FILE_ATTRIBUTES && (dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
 }
 
-// returns the full path to your game folder (which is in your PC's documents folder)
-STRING *get_savedir_folder()
-{
-    return save_dir;
-}
-
-// this function will create game's folder in documents folder
-void set_savedir()
+// return your computer's the documents folder
+STRING *get_documents_folder()
 {
     char *documents_path[MAX_PATH]; // MAX_PATH = 260 characters
 
@@ -25,18 +19,31 @@ void set_savedir()
     }
     else
     {
-        SHGetSpecialFolderPath(NULL, documents_path, CSIDL_PERSONAL, FALSE);
+        SHGetSpecialFolderPath(NULL, _chr(documents_path), CSIDL_PERSONAL, FALSE);
     }
+    return _str(documents_path);
+}
 
+// returns the full path to your game folder (which is in your PC's documents folder)
+STRING *get_savedir_folder()
+{
+    STRING *game_save_directory = "#260"; // 260 characters = MAX_PATH
+    str_cpy(game_save_directory, get_documents_folder());
+    str_cat(game_save_directory, "\\");
+    str_cat(game_save_directory, project_name_str);
+    str_cat(game_save_directory, "\\");
+    return game_save_directory;
+}
+
+// this function will create game's folder in documents folder
+void savedir_create_folder()
+{
     // set new save directory
-    str_cpy(save_dir, _str(documents_path));
-    str_cat(save_dir, "\\");
-    str_cat(save_dir, project_name_str);
-    str_cat(save_dir, "\\");
+    str_cpy(save_dir, get_savedir_folder());
 
     // check if directory exists or not
     // and if it doesn't, create it !
-    if (!DirectoryExists(_chr(save_dir)))
+    if (!DirectoryExists(save_dir))
     {
         CreateDirectory(_chr(save_dir), NULL);
     }
@@ -45,7 +52,7 @@ void set_savedir()
     STRING *subfolder_str = "";
     str_cpy(subfolder_str, save_dir);
     str_cat(subfolder_str, "\\episodes");
-    if (!DirectoryExists(_chr(subfolder_str)))
+    if (!DirectoryExists(subfolder_str))
     {
         CreateDirectory(_chr(subfolder_str), NULL);
     }

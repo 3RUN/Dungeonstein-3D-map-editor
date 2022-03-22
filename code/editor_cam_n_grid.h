@@ -34,7 +34,7 @@ var key_drag_map = 0;
 
 void vec_snap_to_grid(VECTOR *pos);
 
-void vec_world_to_grid(VECTOR *world_pos, var *x, var *y);
+VECTOR *vec_world_to_grid(VECTOR *world_pos);
 
 var is_pos_on_grid(VECTOR *pos);
 

@@ -15,20 +15,22 @@ void vec_snap_to_grid(VECTOR *pos)
     pos->z = MAP_Z_POS;
 }
 
-void vec_world_to_grid(VECTOR *world_pos, var *x, var *y)
+VECTOR *vec_world_to_grid(VECTOR *world_pos)
 {
     if (!world_pos)
     {
-        *x = -1;
-        *y = -1;
-        return;
+        return vector(-1, -1, -1);
     }
 
-    *x = floor(world_pos->x / MAP_CELL_SIZE);
-    *x = clamp(*x, -1, MAP_WIDTH);
+    var grid_x = -1, grid_y = -1;
 
-    *y = floor(-world_pos->y / MAP_CELL_SIZE);
-    *y = clamp(*y, -1, MAP_HEIGHT);
+    grid_x = floor(world_pos->x / MAP_CELL_SIZE);
+    grid_x = clamp(grid_x, -1, MAP_WIDTH);
+
+    grid_y = floor(-world_pos->y / MAP_CELL_SIZE);
+    grid_y = clamp(grid_y, -1, MAP_HEIGHT);
+
+    return vector(grid_x, grid_y, 0);
 }
 
 var is_pos_on_grid(VECTOR *pos)

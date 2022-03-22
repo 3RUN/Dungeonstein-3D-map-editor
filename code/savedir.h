@@ -17,10 +17,13 @@ HRESULT WINAPI SHGetFolderPath(HWND hwndOwner, int nFolder, HANDLE hToken, DWORD
 // checks if given directory exists or not
 BOOL DirectoryExists(char *szPath);
 
+// return your computer's the documents folder
+STRING *get_documents_folder();
+
 // returns the full path to your game folder (which is in your PC's documents folder)
-STRING *get_savedir();
+STRING *get_savedir_folder();
 
 // this function will create game's folder in documents folder
-void set_savedir();
+void savedir_create_folder();
 
 #endif

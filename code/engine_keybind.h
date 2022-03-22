@@ -20,6 +20,6 @@ var engine_key_return_scancode_from_letter(STRING *key);
 
 // return a letter from the given scancode
 // this can be used for saving input from the game options
-void engine_key_return_letter_from_scancode(STRING **out, var scancode);
+STRING *engine_key_return_letter_from_scancode(var scancode);
 
 #endif

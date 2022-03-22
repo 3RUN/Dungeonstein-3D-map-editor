@@ -27,12 +27,13 @@ void mouse_set_position(VECTOR *pos)
     SetCursorPos(rect.left + offset.x, rect.top + offset.y);
 }
 
-void mouse_get_position(VECTOR *out)
+VECTOR *mouse_get_position()
 {
     POINT cp;
     GetCursorPos(&cp);
-
-    vec_set(out, vector(cp.x, cp.y, 0));
+    VECTOR pos;
+    vec_set(&pos, vector(cp.x, cp.y, 0));
+    return &pos;
 }
 
 void mouse_set_map(BMAP *new_mouse_map)
