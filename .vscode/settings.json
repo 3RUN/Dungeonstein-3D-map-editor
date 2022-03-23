@@ -46,6 +46,10 @@
         "editor_input.h": "c",
         "sketcher_tools.h": "c",
         "editor_draw_tools.h": "c",
-        "editor_map_sketch.h": "c"
+        "editor_map_sketch.h": "c",
+        "screenres_list.h": "c",
+        "messages.h": "c",
+        "debug_panel.h": "c",
+        "map_sketcher.h": "c"
     }
 }

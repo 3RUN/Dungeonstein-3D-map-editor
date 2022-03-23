@@ -56,8 +56,9 @@ int screen_resolution_available_list[2][SCREEN_RESOLUTION_MAX]; // list of all a
 int screen_resolutions_total = 0;                               // total amount of resolutions available for currently used PC
 
 // desktop resolution
-var desktop_size_x = 0;        // width
-var desktop_size_y = 0;        // height
+var desktop_size_x = 0; // width
+var desktop_size_y = 0; // height
+
 int desktop_resolution_id = 0; // id of the desktop resolution
 
 // sort list of resolutions in ascending order
@@ -72,4 +73,5 @@ void screen_resolution_add_to_list(int width, int height);
 // find all available resolutions
 void screen_resolutions_find_all();
 
+#include "screenres_list.c"
 #endif

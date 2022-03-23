@@ -44,14 +44,14 @@ int is_object_to_link(Cell *cell)
         return false;
     }
 
-    if (cell->type == ASSET_TYPE_WALLS && cell->event_type >= 1) // 1 - trigger zone or 2 - switch)
+    if (cell->type == ASSET_TYPE_WALLS && cell->event_type >= 1)
     {
         return true;
     }
 
-    if (cell->type == ASSET_TYPE_PROPS && cell->event_type >= 1) // 1 - trigger zone or 2 - switch)
+    if (cell->type == ASSET_TYPE_PROPS && cell->event_type >= 1)
     {
-        if (cell->asset == PROPS_DOOR || cell->asset == PROPS_DOOR_ELEVATOR || cell->asset == PROPS_FENCE || cell->asset == PROPS_FENCE_DIRTY)
+        if (is_door(cell->type, cell->asset) == true || cell->asset == PROPS_FENCE)
         {
             return true;
         }
@@ -61,7 +61,12 @@ int is_object_to_link(Cell *cell)
         }
     }
 
-    if (cell->type == ASSET_TYPE_EVENTS && cell->asset == EVENT_SPAWN_OBJECT && cell->event_type >= 1) // 1 - trigger zone or 2 - switch)
+    if (cell->type == ASSET_TYPE_EVENTS && cell->asset == EVENT_SPAWN_OBJECT && cell->event_type >= 1)
+    {
+        return true;
+    }
+
+    if (cell->type == ASSET_TYPE_EFFECT)
     {
         return true;
     }

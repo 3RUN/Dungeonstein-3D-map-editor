@@ -3,10 +3,6 @@
 #include <windows.h>
 #include <strio.c>
 
-// TO DO
-//
-// * create proper 'map_settings' ui to tweek the map settings
-
 #define PRAGMA_POINTER
 
 #define PRAGMA_PATH "code"
@@ -14,16 +10,10 @@
 #define PRAGMA_PATH "assets\\walls"
 #define PRAGMA_PATH "assets\\props"
 #define PRAGMA_PATH "assets\\events"
+#define PRAGMA_PATH "assets\\effects"
 #define PRAGMA_PATH "assets\\items"
 #define PRAGMA_PATH "assets\\enemies"
 #define PRAGMA_PATH "assets\\bosses"
-
-STRING *editor_config_file_str = "editor_config.ini";
-STRING *project_name_str = "MapEditor";
-STRING *episode_save_folder_str = "episodes\\";
-STRING *episode_music_folder_str = "music\\";
-STRING *episode_extension_str = ".ep"; // this added to the episode's file name on load/save
-STRING *music_extension_str = ".mp3";
 
 #define TRACE_FLAGS (IGNORE_ME | IGNORE_PASSABLE | IGNORE_PASSENTS | IGNORE_MAPS | IGNORE_CONTENT)
 #define MOVE_FLAGS (IGNORE_ME | IGNORE_PASSABLE | IGNORE_PASSENTS | IGNORE_MAPS | IGNORE_CONTENT)
@@ -61,6 +51,17 @@ STRING *music_extension_str = ".mp3";
 #define EDITOR_STATE_RESET_MAP 11
 #define EDITOR_STATE_EXIT 12
 
+STRING *editor_config_file_str = "editor_config.ini";
+STRING *project_name_str = "MapEditor";
+STRING *episode_save_folder_str = "episodes\\";
+STRING *episode_music_folder_str = "music\\";
+STRING *episode_extension_str = ".ep";
+STRING *music_extension_str = ".mp3";
+
+// editor state machine
+int editor_state = EDITOR_STATE_EDIT;
+int editor_old_state = EDITOR_STATE_EDIT;
+
 // editor booleans
 int is_top_bar_used = false;
 int is_popup_opened = false;
@@ -86,85 +87,46 @@ int mouse_y = 0;
 #include "savedir.h"
 #include "screenres_list.h"
 #include "engine.h"
-#include "engine_keybind.h"
-#include "debug_panel.h"
 #include "config.h"
 #include "assets.h"
-#include "shaders.h"
-#include "game_ep.h"
-#include "game_ep_list.h"
-#include "game_music_list.h"
-#include "game_ep_save_n_load.h"
 #include "assets_helper.h"
-#include "editor.h"
-#include "editor_msg.h"
-#include "editor_shortcuts.h"
-#include "editor_input.h"
-#include "editor_cam_n_grid.h"
-#include "editor_popups.h"
-#include "editor_asset_params.h"
-#include "editor_map_sketch.h"
-#include "editor_draw_tools.h"
-#include "editor_cell_linker.h"
-#include "editor_cell_info.h"
-#include "editor_main.h"
-#include "editor_test_run.h"
-#include "map_loader.h"
-#include "map_settings.h"
+#include "assets_params.h"
+#include "shaders.h"
 #include "weather.h"
+#include "messages.h"
+#include "debug_panel.h"
+#include "draw.h"
+#include "game_episode.h"
+#include "camera_n_grid.h"
+#include "editor.h"
+#include "editor_popups.h"
+#include "editor_cell_linker.h"
+#include "editor_tools.h"
+#include "editor_map_settings.h"
+#include "editor_test_run.h"
+#include "shortcuts.h"
+#include "map_load.h"
+#include "map_sketch.h"
 
-void editor_reset()
-{
-	messages_reset();
-	episode_selection_reset();
-	music_selection_reset();
-
-	cell_info_tooltip_counter = 0;
-
-	if (editor_state == EDITOR_STATE_OPEN || editor_state == EDITOR_STATE_NEW)
-	{
-		active_map_id = 0;
-		selected_type = ASSET_TYPE_WALLS;
-		selected_asset = 0;
-	}
-}
-
-#include "savedir.c"
-#include "screenres_list.c"
 #include "engine.c"
-#include "engine_keybind.c"
-#include "debug_panel.c"
 #include "config.c"
-#include "assets.c"
-#include "shaders.c"
-#include "game_ep.c"
-#include "game_ep_list.c"
-#include "game_music_list.c"
-#include "game_ep_save_n_load.c"
 #include "assets_helper.c"
+#include "assets_params.c"
+#include "camera_n_grid.c"
 #include "editor.c"
-#include "editor_msg.c"
-#include "editor_shortcuts.c"
-#include "editor_input.c"
-#include "editor_cam_n_grid.c"
 #include "editor_popups.c"
-#include "editor_asset_params.c"
-#include "editor_map_sketch.c"
-#include "editor_draw_tools.c"
 #include "editor_cell_linker.c"
-#include "editor_cell_info.c"
-#include "editor_main.c"
+#include "editor_tools.c"
+#include "editor_map_settings.c"
 #include "editor_test_run.c"
-#include "map_loader.c"
-#include "map_settings.c"
-#include "weather.c"
+#include "shortcuts.c"
+#include "map_load.c"
+#include "map_sketch.c"
 
 void map_editor_startup()
 {
-	// set launcher window
-	// check for existing game folder or create new one
-	savedir_create_folder();
-	wait_for(savedir_create_folder);
+	set_savedir();
+	wait_for(set_savedir);
 
 	// set proper path to the config file
 	STRING *temp_str = "#256";
@@ -173,24 +135,19 @@ void map_editor_startup()
 
 	screen_resolutions_find_all(); // find all available screen resolution (primary monitor only)
 	engine_initialize();		   // initialize all engine settings
-	assets_initialize();		   // load all editor assets (textures, sprites)
-	debug_panel_initialize();	   // initialize debug panel
-	shaders_initialize();		   // initialize all shaders used in editor
 	imgui_init(0);				   // initialize imgui
 	imgui_change_theme();		   // and apply custom theme
 	config_initialize(temp_str);   // initialize config (set defaults and load from the config file)engine_initialize()
+	assets_initialize();		   // initialize assets
+	messages_initialize();		   // initialize editor message system
+	debug_panel_initialize();	   // initialize debug panel
+	game_episode_initialize();	   // initialize everything related to game episode
 
-	messages_initialize();				 // initialize editor message system
-	episode_list_initialize();			 // load all episodes from 'episodes' folder
-	music_list_initialize();			 // same as above, but for music
-	camera_initialize();				 // initialize all camera
-	popups_initialize();				 // initialize popups
-	map_sketch_initialize();			 // grid of entities to visualize the map while drawing it
-	editor_main_initialize();			 // initialize everything related to drawing/editing state ui
-	episode_reset(&def_episode);		 // initialize default episode with default values
+	episode_reset(&def_episode);		 // reset default episode
+	camera_n_grid_initialize();			 // initialize camera and grid systems
+	editor_initialize(&def_episode);	 // initialize main editor system
 	map_loader_initialize(&def_episode); // initialize everything needed for test building the maps
-	test_run_initialize();				 // initialize everything related to test run
-	map_settings_initialize();			 // initialize everything related to the map settings
+	map_sketch_initialize();			 // initialize map sketcher
 }
 
 void on_frame_event()
@@ -200,11 +157,10 @@ void on_frame_event()
 	switch (editor_state)
 	{
 	case EDITOR_STATE_EDIT:
-		grid_get_mouse_pos(&mouse_x, &mouse_y);
-		editor_main_update(&def_episode);
-		map_sketch_update(&def_episode);
-		tools_update(active_map, &preview_cell);
+		editor_update(&def_episode, active_map);
+		editor_tools_update(active_map, &preview_cell);
 		editor_cell_linker_update(active_map);
+		map_sketch_update(&def_episode);
 		break;
 
 	case EDITOR_STATE_OPEN:
@@ -247,39 +203,39 @@ void on_frame_event()
 
 	case EDITOR_STATE_TO_MAP_SETTINGS:
 		editor_reset();
-		map_sketch_hide();
 		map_load(active_map);
-		map_settings_copy_from_active(active_map);
+		map_sketch_hide();
+		editor_map_settings_copy_from_active(active_map);
 		camera_reset(active_map, EDITOR_STATE_MAP_SETTINGS);
 		editor_switch_state_to(EDITOR_STATE_MAP_SETTINGS);
 		break;
 
 	case EDITOR_STATE_MAP_SETTINGS:
-		map_settings_update(&def_episode);
+		editor_map_settings_update(active_map);
 		map_update(&map_settings);
 		break;
 
 	case EDITOR_STATE_FROM_MAP_SETTINGS:
 		weather_stop_sound();
 		stop_playing_music();
-		map_sketch_show();
 		map_destroy(active_map);
+		map_sketch_show();
 		camera_reset(active_map, EDITOR_STATE_EDIT);
 		editor_switch_state_to(EDITOR_STATE_EDIT);
 		break;
 
 	case EDITOR_STATE_TO_BUILD:
 		editor_reset();
-		map_sketch_hide();
 		map_load(active_map);
-		test_run_crosshair_show();
-		test_run_select_player_on_start(active_map);
+		map_sketch_hide();
+		editor_test_run_crosshair_show();
+		editor_test_run_select_player_on_start(active_map);
 		camera_reset(active_map, EDITOR_STATE_BUILD);
 		editor_switch_state_to(EDITOR_STATE_BUILD);
 		break;
 
 	case EDITOR_STATE_BUILD:
-		editor_test_run_update(&def_episode);
+		editor_test_run_update();
 		map_update(active_map);
 		editor_cell_linker_update(active_map);
 		break;
@@ -287,9 +243,9 @@ void on_frame_event()
 	case EDITOR_STATE_FROM_BUILD:
 		weather_stop_sound();
 		stop_playing_music();
-		map_sketch_show();
 		map_destroy(active_map);
-		test_run_crosshair_hide();
+		map_sketch_show();
+		editor_test_run_crosshair_hide();
 		camera_reset(active_map, EDITOR_STATE_EDIT);
 		editor_switch_state_to(EDITOR_STATE_EDIT);
 		break;
@@ -311,33 +267,24 @@ void on_frame_event()
 		break;
 	}
 
-	debug_panel_update();
 	shaders_update();
-	camera_n_grid_update(&def_episode);
 	messages_update();
+	debug_panel_update();
 	mouse_lock_in_window();
-
-	if (key_f4 && key_alt)
-	{
-		sys_exit(NULL);
-	}
+	camera_n_grid_update(active_map);
+	grid_get_mouse_pos(&mouse_x, &mouse_y);
 }
 
 void on_exit_event()
 {
-	assets_destroy_all();
-	debug_panel_destroy();
-	shaders_destroy();
+	assets_destroy();
 	messages_destroy();
-	episode_list_destroy();
-	music_list_destroy();
-	popups_destroy();
-	map_sketch_destroy();
-	editor_main_destroy();
-	editor_cell_linker_destroy();
+	debug_panel_destroy();
+	game_episode_destroy();
+	editor_destroy();
 	map_loader_destroy();
-	test_run_destroy();
-	map_settings_destory();
+	map_sketch_destroy();
+	editor_cell_linker_destroy();
 }
 
 void on_esc_event()

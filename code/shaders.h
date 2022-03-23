@@ -4,13 +4,19 @@
 var shader_level_ambient = 0.5;
 var shader_angle_surface_darken = 0.5;
 
-MATERIAL *mtl_solid;
-MATERIAL *mtl_two_sided;
+MATERIAL *mtl_solid =
+{
+    effect = "mtl_solid.fx";
+    flags = AUTORELOAD;
+}
 
-void shaders_initialize();
-
-void shaders_destroy();
+MATERIAL *mtl_two_sided =
+{
+    effect = "mtl_two_sided.fx";
+    flags = AUTORELOAD;
+}
 
 void shaders_update();
 
+#include "shaders.c"
 #endif

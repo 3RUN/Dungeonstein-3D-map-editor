@@ -41,8 +41,8 @@ void weather_rain_splash_particle(PARTICLE *p)
     p->vel_z = rain_splash_vel_z + random(rain_splash_random_vel_z);
     p->gravity = rain_splash_gravity;
 
-    set(p, MOVE | NOFILTER | BRIGHT | TRANSLUCENT);
-    p->bmap = weather_snow_tga;
+    set(p, MOVE | NOFILTER | TRANSLUCENT);
+    p->bmap = weather_particle_pcx;
     p->size = rain_splash_size + random(rain_splash_random_size);
     p->alpha = rain_splash_alpha + random(rain_splash_random_alpha);
     p->skill_x = rain_splash_fadeout_speed;
@@ -52,8 +52,8 @@ void weather_rain_splash_particle(PARTICLE *p)
 
 void weather_snow_impact_particle(PARTICLE *p)
 {
-    set(p, MOVE | NOFILTER | BRIGHT | TRANSLUCENT);
-    p->bmap = weather_snow_tga;
+    set(p, MOVE | NOFILTER | TRANSLUCENT);
+    p->bmap = weather_particle_pcx;
     p->size = snow_splash_size + random(snow_splash_random_size);
     p->alpha = snow_splash_alpha + random(snow_splash_random_alpha);
     p->skill_x = snow_splash_fadeout_speed;
@@ -68,11 +68,11 @@ void weather_particle_event(PARTICLE *p)
         VECTOR particle_pos;
         vec_set(&particle_pos, vector(p->x, p->y, WEATHER_PARTICLE_Z_LIMIT + WEATHER_PARTICLE_Z_OFFSET));
 
-        if (p->bmap == weather_rain_tga)
+        if (p->skill_x == 0)
         {
             effect(weather_rain_splash_particle, maxv(2, rain_splash_density * time_step), &particle_pos, nullvector);
         }
-        else if (p->bmap == weather_snow_tga)
+        else if (p->skill_x == 1)
         {
             effect(weather_snow_impact_particle, maxv(1, 1 * time_step), &particle_pos, nullvector);
         }
@@ -98,10 +98,11 @@ void weather_rain_particle(PARTICLE *p)
 
     vec_set(&p->vel_x, &weather_velocity);
 
-    set(p, MOVE | NOFILTER | BRIGHT | TRANSLUCENT | BEAM);
-    p->bmap = weather_rain_tga;
+    set(p, MOVE | NOFILTER | TRANSLUCENT | BEAM);
+    p->bmap = weather_particle_pcx;
     p->size = random(rain_random_size) + rain_size;
     p->alpha = random(rain_random_alpha) + rain_alpha;
+    p->skill_x = 0; // rain
 
     p->event = weather_particle_event;
 }
@@ -114,10 +115,11 @@ void weather_snow_particle(PARTICLE *p)
 
     vec_set(&p->vel_x, &weather_velocity);
 
-    set(p, MOVE | NOFILTER | BRIGHT | TRANSLUCENT);
-    p->bmap = weather_snow_tga;
+    set(p, MOVE | NOFILTER | TRANSLUCENT);
+    p->bmap = weather_particle_pcx;
     p->size = random(snow_random_size) + snow_size;
     p->alpha = random(snow_random_alpha) + snow_alpha;
+    p->skill_x = 1; // snow
 
     p->event = weather_particle_event;
 }

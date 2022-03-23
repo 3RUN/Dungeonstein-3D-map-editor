@@ -1,6 +1,9 @@
 #ifndef _EDITOR_POPUPS_H_
 #define _EDITOR_POPUPS_H_
 
+#define INPUT_BOTTON_WIDTH 128
+#define INPUT_BUTTON_HEIGHT 16
+
 #define POPUP_OPEN_WIDTH 395
 #define POPUP_OPEN_HEIGHT 320
 #define POPUP_OPEN_SURE_WIDTH 340
@@ -85,44 +88,60 @@ STRING *graphics_display_mode_str = "Display mode:";
 STRING *graphics_display_windowed_str = "Windowed";
 STRING *graphics_display_windowed_fullscreen_str = "Borderless";
 
-void popups_initialize();
+void editor_input_overwrite(char *input, STRING *bindkey);
 
-void popups_refresh();
+void editor_input_check_overwrite(STRING *bindkey);
 
-void popups_destroy();
+void editor_input_bind_key(char *input, STRING *input_entry, STRING *entry, STRING *bindkey);
 
-void popup_open(Episode *episode);
+void editor_input_bind_new_key(STRING *entry, STRING *bindkey);
 
-void popup_open_sure();
+void editor_input_remove_bind_key(STRING *entry);
 
-void popup_new_reset();
+void editor_input_wait_for_binding(STRING *entry);
 
-void popup_new(Episode *episode);
+void editor_input_add_keybinding(STRING *entry, STRING *input);
 
-void popup_new_sure();
+void editor_shortcut_add_keybinding(STRING *entry, STRING *base_key, STRING *input);
 
-void popup_save_as(Episode *episode);
+void editor_popups_initialize();
 
-void popup_settings_general();
+void editor_popups_refresh();
 
-void popup_settings_input();
+void editor_popups_destroy();
 
-void popup_settings();
+void editor_popup_open(Episode *episode);
 
-void popup_exit();
+void editor_popup_open_sure();
 
-void popup_ep_reset(Episode *episode);
+void editor_popup_new_reset();
 
-void popup_ep_edit_reset(Episode *episode);
+void editor_popup_new(Episode *episode);
 
-void popup_ep_edit(Episode *episode);
+void editor_popup_new_sure();
 
-void popup_map_reset(Episode *episode);
+void editor_popup_save_as(Episode *episode);
 
-void popup_help();
+void editor_popup_settings_general();
 
-void popup_wait_for_input();
+void editor_popup_settings_input();
 
-void popup_music_browser();
+void editor_popup_settings();
+
+void editor_popup_exit();
+
+void editor_popup_ep_reset();
+
+void editor_popup_ep_edit_reset(Episode *episode);
+
+void editor_popup_ep_edit(Episode *episode);
+
+void editor_popup_map_reset();
+
+void editor_popup_help();
+
+void editor_popup_wait_for_input();
+
+void editor_popup_music_browser();
 
 #endif

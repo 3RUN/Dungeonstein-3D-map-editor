@@ -1,32 +1,19 @@
 
-void draw_bbox3d(VECTOR *position, VECTOR *bbox_min, VECTOR *bbox_max, ANGLE *angle, COLOR *color, var alpha)
-{
-    VECTOR vMin, vMax;
-
-    vec_set(&vMin, bbox_min);
-    vec_rotate(&vMin, angle);
-    vec_add(&vMin, position);
-
-    vec_set(&vMax, bbox_max);
-    vec_rotate(&vMax, angle);
-    vec_add(&vMax, position);
-
-    draw_box3d(&vMin, &vMax, color, alpha);
-}
-
-void test_run_get_cell_info(Map *map)
+void editor_test_run_get_cell_info(Map *map)
 {
     if (!map)
     {
         return;
     }
 
-    VECTOR pos;
-    vec_set(&pos, vec_world_to_grid(&selected_cell_pos));
-    str_cpy(selected_cell_info_str, get_cell_info(&map->cell[pos.x][pos.y]));
+    int x = 0;
+    int y = 0;
+
+    vec_worldpos_to_grid(&selected_cell_pos, &x, &y);
+    get_cell_info(&map->cell[x][y], &selected_cell_info_str);
 }
 
-void test_run_select_player_on_start(Map *map)
+void editor_test_run_select_player_on_start(Map *map)
 {
     if (!map)
     {
@@ -50,16 +37,16 @@ void test_run_select_player_on_start(Map *map)
             }
 
             vec_set(&selected_cell_pos, &cell->worldpos);
-            test_run_get_cell_info(map);
+            editor_test_run_get_cell_info(map);
             return;
         }
     }
 
     vec_set(&selected_cell_pos, nullvector);
-    test_run_get_cell_info(map);
+    editor_test_run_get_cell_info(map);
 }
 
-void test_run_initialize()
+void editor_test_run_initialize()
 {
     crosshair_pan = pan_create(NULL, CROSSHAIR_LAYER);
     layer_sort(crosshair_pan, CROSSHAIR_LAYER);
@@ -67,7 +54,7 @@ void test_run_initialize()
     set(crosshair_pan, UNTOUCHABLE | OVERLAY);
 }
 
-void test_run_destroy()
+void editor_test_run_destroy()
 {
     if (crosshair_pan)
     {
@@ -75,7 +62,7 @@ void test_run_destroy()
     }
 }
 
-void test_run_crosshair_show()
+void editor_test_run_crosshair_show()
 {
     if (!is(crosshair_pan, SHOW))
     {
@@ -83,7 +70,7 @@ void test_run_crosshair_show()
     }
 }
 
-void test_run_crosshair_hide()
+void editor_test_run_crosshair_hide()
 {
     if (is(crosshair_pan, SHOW))
     {
@@ -91,7 +78,7 @@ void test_run_crosshair_hide()
     }
 }
 
-void test_run_remove_binding(var scancode)
+void editor_test_run_remove_binding(var scancode)
 {
     if (scancode <= 0)
     {
@@ -101,7 +88,7 @@ void test_run_remove_binding(var scancode)
     key_set(scancode, NULL);
 }
 
-void test_run_update_binding(var scancode, void *fnc)
+void editor_test_run_update_binding(var scancode, void *fnc)
 {
     if (scancode <= 0)
     {
@@ -112,16 +99,16 @@ void test_run_update_binding(var scancode, void *fnc)
     key_set(scancode, fnc);
 }
 
-void test_run_update_from_config(CONFIG *config)
+void editor_test_run_update_from_config(Config *config)
 {
-    test_run_remove_binding(scancode_interact);
+    editor_test_run_remove_binding(scancode_interact);
 
     scancode_interact = engine_key_return_scancode_from_letter(config->input_draw);
 
-    test_run_update_binding(scancode_interact, test_run_info_trace);
+    editor_test_run_update_binding(scancode_interact, editor_test_run_info_trace);
 }
 
-void test_run_info_trace()
+void editor_test_run_info_trace()
 {
     VECTOR to;
     vec_set(&to, vector(1000, 0, 0));
@@ -142,12 +129,12 @@ void test_run_info_trace()
         Map *active_map = map_get_active(&def_episode);
         if (active_map)
         {
-            test_run_get_cell_info(active_map);
+            editor_test_run_get_cell_info(active_map);
         }
     }
 }
 
-void editor_test_run_update(Episode *episode)
+void editor_test_run_update()
 {
     if (is_player_found == false)
     {

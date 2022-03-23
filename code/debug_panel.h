@@ -31,4 +31,5 @@ void debug_panel_hide();
 
 void debug_panel_update();
 
+#include "debug_panel.c"
 #endif

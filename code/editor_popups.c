@@ -1,5 +1,232 @@
 
-void popups_initialize()
+void editor_input_overwrite(char *input, STRING *bindkey)
+{
+    if (strcmp(input, _chr(bindkey)) == 0)
+    {
+        strcpy(input, _chr(input_none_str));
+    }
+}
+
+void editor_input_check_overwrite(STRING *bindkey)
+{
+    // input
+    editor_input_overwrite(config_current.input_forward, bindkey);
+    editor_input_overwrite(config_current.input_backward, bindkey);
+    editor_input_overwrite(config_current.input_strafe_left, bindkey);
+    editor_input_overwrite(config_current.input_strafe_right, bindkey);
+    editor_input_overwrite(config_current.input_surface, bindkey);
+    editor_input_overwrite(config_current.input_dive, bindkey);
+    editor_input_overwrite(config_current.input_run, bindkey);
+    editor_input_overwrite(config_current.input_draw, bindkey);
+    editor_input_overwrite(config_current.input_erase, bindkey);
+    editor_input_overwrite(config_current.input_pick, bindkey);
+    editor_input_overwrite(config_current.input_rotate, bindkey);
+
+    // shortcuts
+    editor_input_overwrite(config_current.short_help, bindkey);
+    editor_input_overwrite(config_current.short_new, bindkey);
+    editor_input_overwrite(config_current.short_open, bindkey);
+    editor_input_overwrite(config_current.short_save, bindkey);
+    editor_input_overwrite(config_current.short_ep_reset, bindkey);
+    editor_input_overwrite(config_current.short_ep_edit, bindkey);
+    editor_input_overwrite(config_current.short_reset_map, bindkey);
+    editor_input_overwrite(config_current.short_test_run, bindkey);
+    editor_input_overwrite(config_current.short_map_settings, bindkey);
+    editor_input_overwrite(config_current.short_screenshot, bindkey);
+    editor_input_overwrite(config_current.short_settings, bindkey);
+    editor_input_overwrite(config_current.short_prior_map, bindkey);
+    editor_input_overwrite(config_current.short_next_map, bindkey);
+    editor_input_overwrite(config_current.short_toggle_debug, bindkey);
+    editor_input_overwrite(config_current.short_shift_map_west, bindkey);
+    editor_input_overwrite(config_current.short_shift_map_east, bindkey);
+    editor_input_overwrite(config_current.short_shift_map_south, bindkey);
+    editor_input_overwrite(config_current.short_shift_map_north, bindkey);
+}
+
+void editor_input_bind_key(char *input, STRING *input_entry, STRING *entry, STRING *bindkey)
+{
+    if (str_cmp(entry, input_entry))
+    {
+        strcpy(input, _chr(bindkey));
+    }
+}
+
+void editor_input_bind_new_key(STRING *entry, STRING *bindkey)
+{
+    // check if given key is already in use, and if yes
+    // then remove it !
+    editor_input_check_overwrite(bindkey);
+    wait_for(editor_input_check_overwrite);
+
+    // assign the key
+    editor_input_bind_key(config_current.input_forward, input_forward_entry_str, entry, bindkey); // input
+    editor_input_bind_key(config_current.input_backward, input_backward_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.input_strafe_left, input_strafe_left_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.input_strafe_right, input_strafe_right_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.input_surface, input_surface_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.input_dive, input_dive_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.input_run, input_run_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.input_draw, input_draw_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.input_erase, input_erase_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.input_pick, input_pick_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.input_rotate, input_rotate_entry_str, entry, bindkey);
+
+    editor_input_bind_key(config_current.short_help, short_help_entry_str, entry, bindkey); // shortcuts
+    editor_input_bind_key(config_current.short_new, short_new_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.short_open, short_open_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.short_save, short_save_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.short_ep_reset, short_ep_reset_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.short_ep_edit, short_ep_edit_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.short_reset_map, short_reset_map_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.short_test_run, short_test_run_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.short_map_settings, short_map_settings_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.short_screenshot, short_screenshot_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.short_settings, short_settings_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.short_prior_map, short_prior_map_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.short_next_map, short_next_map_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.short_toggle_debug, short_toggle_debug_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.short_shift_map_west, short_shift_map_west_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.short_shift_map_east, short_shift_map_east_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.short_shift_map_south, short_shift_map_south_entry_str, entry, bindkey);
+    editor_input_bind_key(config_current.short_shift_map_north, short_shift_map_north_entry_str, entry, bindkey);
+}
+
+void editor_input_remove_bind_key(STRING *entry)
+{
+    // assign the key
+    editor_input_bind_key(config_current.input_forward, input_forward_entry_str, entry, input_none_str); // input
+    editor_input_bind_key(config_current.input_backward, input_backward_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.input_strafe_left, input_strafe_left_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.input_strafe_right, input_strafe_right_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.input_surface, input_surface_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.input_dive, input_dive_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.input_run, input_run_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.input_draw, input_draw_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.input_erase, input_erase_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.input_pick, input_pick_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.input_rotate, input_rotate_entry_str, entry, input_none_str);
+
+    editor_input_bind_key(config_current.short_help, short_help_entry_str, entry, input_none_str); // shortcuts
+    editor_input_bind_key(config_current.short_new, short_new_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.short_open, short_open_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.short_save, short_save_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.short_ep_reset, short_ep_reset_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.short_ep_edit, short_ep_edit_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.short_reset_map, short_reset_map_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.short_test_run, short_test_run_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.short_map_settings, short_map_settings_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.short_screenshot, short_screenshot_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.short_settings, short_settings_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.short_prior_map, short_prior_map_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.short_next_map, short_next_map_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.short_toggle_debug, short_toggle_debug_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.short_shift_map_west, short_shift_map_west_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.short_shift_map_east, short_shift_map_east_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.short_shift_map_south, short_shift_map_south_entry_str, entry, input_none_str);
+    editor_input_bind_key(config_current.short_shift_map_north, short_shift_map_north_entry_str, entry, input_none_str);
+}
+
+void editor_input_wait_for_binding(STRING *entry)
+{
+    is_popup_opened = false;
+    imgui_close_current_popup();
+    editor_switch_popup_to(EDITOR_POPUP_WAIT_FOR_INPUT);
+
+    while (key_any) // wait untill we 'unpress' all keys
+    {
+        wait(1);
+    }
+
+    var cooldown_time = 0.1;
+    while (cooldown_time > 0)
+    {
+        cooldown_time -= time_frame / 16;
+        wait(1);
+    }
+
+    int wait_for_input = true;
+    while (wait_for_input == true)
+    {
+        if (key_lastpressed == SCANCODE_ESC || key_lastpressed == SCANCODE_ENTER)
+        {
+            wait_for_input = false;
+        }
+
+        if (key_lastpressed == SCANCODE_DELETE)
+        {
+            editor_input_remove_bind_key(entry);
+            wait_for_input = false;
+        }
+
+        if (key_any == true)
+        {
+            // check for the key's not being esc, enter or delete
+            // also (sorry...) we don't support joystick buttons...
+            if (key_lastpressed != SCANCODE_ESC && key_lastpressed != SCANCODE_ENTER && key_lastpressed != SCANCODE_DELETE && key_lastpressed < 256 || key_lastpressed != SCANCODE_ESC && key_lastpressed != SCANCODE_ENTER && key_lastpressed != SCANCODE_DELETE && key_lastpressed > 279)
+            {
+                STRING *bindkey = "";
+                engine_key_return_letter_from_scancode(&bindkey, key_lastpressed);
+                editor_input_bind_new_key(entry, bindkey);
+                wait_for_input = false;
+            }
+        }
+
+        wait(1);
+    }
+
+    is_popup_opened = false;
+
+    wait(1);
+
+    editor_switch_popup_to(editor_old_popup_state);
+}
+
+void editor_input_add_keybinding(STRING *entry, STRING *input)
+{
+    imgui_text(_chr(entry));
+    imgui_same_line();
+    imgui_align_right_with_offset(INPUT_BOTTON_WIDTH * config_saved.font_scale);
+
+    // fixed button label (id)
+    STRING *id_str = "";
+    str_cpy(id_str, input);
+    str_cat(id_str, "##");
+    str_cat(id_str, entry);
+
+    if (imgui_button_withsize(_chr(id_str), INPUT_BOTTON_WIDTH * config_saved.font_scale, INPUT_BUTTON_HEIGHT * config_saved.font_scale))
+    {
+        editor_input_wait_for_binding(entry);
+    }
+    imgui_separator();
+}
+
+void editor_shortcut_add_keybinding(STRING *entry, STRING *base_key, STRING *input)
+{
+    imgui_text(_chr(entry));
+    imgui_same_line();
+
+    VECTOR pos;
+    vec_set(&pos, imgui_get_cursor_screen_pos());
+    var width = imgui_get_content_region_avail_width() - (INPUT_BOTTON_WIDTH * config_saved.font_scale) - (imgui_get_text_width(_chr(base_key))) - ((engine_theme_win_padding[0] * 1.5) * config_saved.font_scale);
+    imgui_set_cursor_screen_pos(vector(pos.x + width, pos.y, pos.z));
+    imgui_text_disabled(_chr(base_key));
+    imgui_same_line();
+    imgui_align_right_with_offset(INPUT_BOTTON_WIDTH * config_saved.font_scale);
+
+    // fixed button label (id)
+    STRING *id_str = "";
+    str_cpy(id_str, input);
+    str_cat(id_str, "##");
+    str_cat(id_str, entry);
+
+    if (imgui_button_withsize(_chr(id_str), INPUT_BOTTON_WIDTH * config_saved.font_scale, INPUT_BUTTON_HEIGHT * config_saved.font_scale))
+    {
+        editor_input_wait_for_binding(entry);
+    }
+    imgui_separator();
+}
+
+void editor_popups_initialize()
 {
     int i = 0;
 
@@ -37,10 +264,10 @@ void popups_initialize()
         }
     }
 
-    popups_refresh();
+    editor_popups_refresh();
 }
 
-void popups_refresh()
+void editor_popups_refresh()
 {
     int i = 0;
 
@@ -70,7 +297,7 @@ void popups_refresh()
     }
 }
 
-void popups_destroy()
+void editor_popups_destroy()
 {
     int i = 0;
 
@@ -91,7 +318,7 @@ void popups_destroy()
     }
 }
 
-void popup_open(Episode *episode)
+void editor_popup_open(Episode *episode)
 {
     if (!episode)
     {
@@ -189,7 +416,7 @@ void popup_open(Episode *episode)
     }
 }
 
-void popup_open_sure()
+void editor_popup_open_sure()
 {
     imgui_text_centered("Are you sure you want to open different episode?");
     imgui_text_centered("All unsaved data will be lost!");
@@ -204,7 +431,7 @@ void popup_open_sure()
         imgui_close_current_popup();
 
         // now move to the open state !
-        editor_main_switch_popup_to(MAIN_POPUP_OPEN);
+        editor_switch_popup_to(EDITOR_POPUP_OPEN);
     }
 
     imgui_same_line();
@@ -215,7 +442,7 @@ void popup_open_sure()
     }
 }
 
-void popup_new_reset()
+void editor_popup_new_reset()
 {
     strcpy(new_episode_filename, "");
     strcpy(new_episode_name, "");
@@ -224,7 +451,7 @@ void popup_new_reset()
     new_episode_map_count = 1;
 }
 
-void popup_new(Episode *episode)
+void editor_popup_new(Episode *episode)
 {
     if (!episode)
     {
@@ -284,7 +511,7 @@ void popup_new(Episode *episode)
     imgui_same_line();
     if (imgui_button_withsize("Back", width, POPUP_BUTTON_HEIGHT * config_saved.font_scale) || key_esc && is_esc_popup_allowed == true)
     {
-        popup_new_reset();
+        editor_popup_new_reset();
         is_popup_check_failed = false;
 
         is_popup_opened = false;
@@ -317,7 +544,7 @@ void popup_new(Episode *episode)
     }
 }
 
-void popup_new_sure()
+void editor_popup_new_sure()
 {
     imgui_text_centered("Are you sure you want to create a new episode?");
     imgui_text_centered("All unsaved data will be lost!");
@@ -332,7 +559,7 @@ void popup_new_sure()
         imgui_close_current_popup();
 
         // now move to the open state !
-        editor_main_switch_popup_to(MAIN_POPUP_NEW);
+        editor_switch_popup_to(EDITOR_POPUP_NEW);
     }
 
     imgui_same_line();
@@ -343,7 +570,7 @@ void popup_new_sure()
     }
 }
 
-void popup_save_as(Episode *episode)
+void editor_popup_save_as(Episode *episode)
 {
     if (!episode)
     {
@@ -416,7 +643,7 @@ void popup_save_as(Episode *episode)
     }
 }
 
-void popup_settings_general()
+void editor_popup_settings_general()
 {
     int general_child_flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
     imgui_begin_child(popup_settings_input_child_id, vector(-1, POPUP_SETTINGS_CHILD_HEIGHT * config_saved.font_scale, 0), 0, general_child_flags);
@@ -551,7 +778,7 @@ void popup_settings_general()
     imgui_end_child();
 }
 
-void popup_settings_input()
+void editor_popup_settings_input()
 {
     int input_main_child_flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings;
     imgui_begin_child(popup_settings_input_child_id, vector(-1, POPUP_SETTINGS_CHILD_HEIGHT * config_saved.font_scale, 0), 0, input_main_child_flags);
@@ -613,7 +840,7 @@ void popup_settings_input()
     imgui_end_child();
 }
 
-void popup_settings()
+void editor_popup_settings()
 {
     imgui_text_centered("Settings");
     imgui_separator();
@@ -625,14 +852,14 @@ void popup_settings()
         if (imgui_begin_tabitem("General", NULL, settings_tab_item_falgs))
         {
             settings_tab_id = SETTINGS_TAB_GENERIC;
-            popup_settings_general();
+            editor_popup_settings_general();
             imgui_end_tabitem();
         }
 
         if (imgui_begin_tabitem("Input", NULL, settings_tab_item_falgs))
         {
             settings_tab_id = SETTINGS_TAB_INPUT;
-            popup_settings_input();
+            editor_popup_settings_input();
             imgui_end_tabitem();
         }
 
@@ -646,7 +873,7 @@ void popup_settings()
     if (imgui_button_withsize("Defaults", width, POPUP_BUTTON_HEIGHT * config_saved.font_scale)) // reset to defaults button
     {
         config_reset_to_default(settings_tab_id);
-        popups_refresh();
+        editor_popups_refresh();
     }
 
     // apply and save
@@ -655,7 +882,7 @@ void popup_settings()
     {
         config_save();
         config_apply();
-        popups_refresh();
+        editor_popups_refresh();
         is_popup_opened = false;
         imgui_close_current_popup();
     }
@@ -665,13 +892,13 @@ void popup_settings()
     if (imgui_button_withsize("Back", width, POPUP_BUTTON_HEIGHT * config_saved.font_scale) || key_esc && is_esc_popup_allowed == true)
     {
         config_reset_to_saved();
-        popups_refresh();
+        editor_popups_refresh();
         is_popup_opened = false;
         imgui_close_current_popup();
     }
 }
 
-void popup_exit()
+void editor_popup_exit()
 {
     imgui_text_centered("Are you sure you want to exit?");
     imgui_text_centered("All unsaved data will be lost!");
@@ -693,19 +920,8 @@ void popup_exit()
     }
 }
 
-void popup_ep_reset(Episode *episode)
+void editor_popup_ep_reset()
 {
-    if (!episode)
-    {
-        return;
-    }
-
-    Map *active_map = map_get_active(episode);
-    if (!active_map)
-    {
-        return;
-    }
-
     imgui_text_centered("Are you sure you want to reset the whole episode?");
     imgui_separator();
 
@@ -725,7 +941,7 @@ void popup_ep_reset(Episode *episode)
     }
 }
 
-void popup_ep_edit_reset(Episode *episode)
+void editor_popup_ep_edit_reset(Episode *episode)
 {
     if (!episode)
     {
@@ -738,7 +954,7 @@ void popup_ep_edit_reset(Episode *episode)
     episode_edit_map_count = episode->map_count;
 }
 
-void popup_ep_edit(Episode *episode)
+void editor_popup_ep_edit(Episode *episode)
 {
     if (!episode)
     {
@@ -783,7 +999,7 @@ void popup_ep_edit(Episode *episode)
     if (imgui_button_withsize("Reset", width, POPUP_BUTTON_HEIGHT * config_saved.font_scale))
     {
         is_popup_check_failed = false;
-        popup_ep_edit_reset(episode);
+        editor_popup_ep_edit_reset(episode);
     }
 
     imgui_same_line();
@@ -806,7 +1022,7 @@ void popup_ep_edit(Episode *episode)
     if (imgui_button_withsize("Cancel", width, POPUP_BUTTON_HEIGHT * config_saved.font_scale) || key_esc && is_esc_popup_allowed == true)
     {
         is_popup_check_failed = false;
-        popup_ep_edit_reset(episode);
+        editor_popup_ep_edit_reset(episode);
 
         is_popup_opened = false;
         imgui_close_current_popup();
@@ -820,19 +1036,8 @@ void popup_ep_edit(Episode *episode)
     }
 }
 
-void popup_map_reset(Episode *episode)
+void editor_popup_map_reset()
 {
-    if (!episode)
-    {
-        return;
-    }
-
-    Map *active_map = map_get_active(episode);
-    if (!active_map)
-    {
-        return;
-    }
-
     imgui_text_centered("Are you sure you want to reset current map?");
     imgui_separator();
 
@@ -852,7 +1057,7 @@ void popup_map_reset(Episode *episode)
     }
 }
 
-void popup_help()
+void editor_popup_help()
 {
     imgui_text_centered("Help");
     imgui_separator();
@@ -926,7 +1131,7 @@ void popup_help()
     }
 }
 
-void popup_wait_for_input()
+void editor_popup_wait_for_input()
 {
     imgui_text("Press anykey to bind it to selected command!");
 
@@ -936,7 +1141,7 @@ void popup_wait_for_input()
     }
 }
 
-void popup_music_browser()
+void editor_popup_music_browser()
 {
     imgui_text_centered("Music browser");
     imgui_separator();

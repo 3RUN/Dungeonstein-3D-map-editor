@@ -14,16 +14,11 @@ const long INVALID_FILE_ATTRIBUTES = -1;
 HRESULT WINAPI SHGetFolderPath(HWND hwndOwner, int nFolder, HANDLE hToken, DWORD dwFlags, char *pszPath);
 #define PRAGMA_API SHGetFolderPath;Shell32.dll!SHGetFolderPathA
 
-// checks if given directory exists or not
+// check if given directory exists or not
 BOOL DirectoryExists(char *szPath);
 
-// return your computer's the documents folder
-STRING *get_documents_folder();
+// set save_dir to documents + project_name
+void set_savedir();
 
-// returns the full path to your game folder (which is in your PC's documents folder)
-STRING *get_savedir_folder();
-
-// this function will create game's folder in documents folder
-void savedir_create_folder();
-
+#include "savedir.c"
 #endif

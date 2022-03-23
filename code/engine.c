@@ -16,24 +16,98 @@ void change_color_from_hsv(COLOR *color, float color_red, float color_green, flo
     color->blue = get_color_from_hsv(color_blue);
 }
 
+var engine_key_return_scancode_from_letter(STRING *key)
+{
+    // nothing in the string ?
+    if (key == NULL || str_len(key) <= 0)
+    {
+        diag("\nERROR! Can't return a scancode! Nothing in the key string!");
+        return SCANCODE_NONE;
+    }
+
+    str_lwr(key); // convert key into lowercase string
+
+    // check if it's 'none'
+    if (str_cmpi(key, input_none_str))
+    {
+        return SCANCODE_NONE;
+    }
+
+    // expand with additional keys if needed
+    if (str_cmpi(key, mouse_left_str))
+    {
+        return SCANCODE_MOUSE_LEFT;
+    }
+    else if (str_cmpi(key, mouse_right_str))
+    {
+        return SCANCODE_MOUSE_RIGHT;
+    }
+    else if (str_cmpi(key, mouse_middle_str))
+    {
+        return SCANCODE_MOUSE_MIDDLE;
+    }
+
+    // check if the given key can return a proper scancode
+    var temp_scancode = key_for_str(key);
+    if (temp_scancode > 0)
+    {
+        return temp_scancode;
+    }
+
+    // if nothing worked correctly, then return -1
+    diag("\nERROR! Can't return a scancode from key: ");
+    diag(key);
+    diag(". No scancode was found!");
+
+    return SCANCODE_NONE;
+}
+
+void engine_key_return_letter_from_scancode(STRING **out_letter, int scancode)
+{
+    // check if scancode is correct
+    // correct range is from SCANCODE_ESC to SCANCODE_MOUSE_MIDDLE
+    if (scancode <= 0 || scancode > SCANCODE_MOUSE_MIDDLE)
+    {
+        diag("\nERROR! Given scancode: ");
+        diag(str_for_num(NULL, scancode));
+        diag("is out of range!");
+
+        return;
+    }
+
+    str_for_key(*out_letter, scancode);
+
+    switch (scancode)
+    {
+    case SCANCODE_MOUSE_LEFT:
+        str_cpy(*out_letter, mouse_left_str);
+        break;
+
+    case SCANCODE_MOUSE_RIGHT:
+        str_cpy(*out_letter, mouse_right_str);
+        break;
+
+    case SCANCODE_MOUSE_MIDDLE:
+        str_cpy(*out_letter, mouse_middle_str);
+        break;
+    }
+}
+
 void mouse_set_position(VECTOR *pos)
 {
-    VECTOR offset;
-    vec_set(&offset, pos);
     RECT rect;
     GetClientRect(hWnd, &rect);
     ClientToScreen(hWnd, &rect);
     ClientToScreen(hWnd, &rect.right);
-    SetCursorPos(rect.left + offset.x, rect.top + offset.y);
+    SetCursorPos(rect.left + pos->x, rect.top + pos->y);
 }
 
-VECTOR *mouse_get_position()
+void mouse_get_position(VECTOR *out)
 {
     POINT cp;
     GetCursorPos(&cp);
-    VECTOR pos;
-    vec_set(&pos, vector(cp.x, cp.y, 0));
-    return &pos;
+
+    vec_set(out, vector(cp.x, cp.y, 0));
 }
 
 void mouse_set_map(BMAP *new_mouse_map)
