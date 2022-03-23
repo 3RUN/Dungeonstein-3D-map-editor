@@ -31,7 +31,7 @@ void find_n_erase_player(Map *map);
 
 void find_n_erase_finish(Map *map);
 
-void draw_cell(Episode *episode, Cell *to, Cell *from);
+void draw_cell(Map *map, Cell *to, Cell *from);
 
 void erase_cell(Cell *cell);
 
