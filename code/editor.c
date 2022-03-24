@@ -148,8 +148,13 @@ void editor_asset_list_item(void *draw_list, int type, int asset)
     var width = imgui_get_content_region_avail_width();
 
     int is_temp_boolean = false;
-    if (selected_asset == asset)
+    if (selected_type == type && selected_asset == asset)
     {
+        if (category_reset_scrollbar == true)
+        {
+            imgui_set_scroll_here_y(0);
+            category_reset_scrollbar = false;
+        }
         is_temp_boolean = true;
     }
 
@@ -246,12 +251,6 @@ void editor_side_bar(Episode *episode)
         imgui_begin_child(editor_side_bar_asset_list_child_id, vector(width, SIDEBAR_ASSET_LIST_CHILD_HEIGHT * config_saved.font_scale, 0), 1, assets_list_child_flags);
 
         asset_draw_list = imgui_get_window_draw_list();
-
-        if (category_reset_scrollbar == true)
-        {
-            imgui_set_scroll_y(0);
-            category_reset_scrollbar = false;
-        }
 
         switch (selected_type)
         {

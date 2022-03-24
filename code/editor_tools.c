@@ -595,6 +595,8 @@ void pick_cell(Cell *to, Cell *from)
     int type = from->type;
     int asset = from->asset;
 
+    category_reset_scrollbar = true;
+
     selected_asset_category = asset_categories_combobox[type];
     selected_type = type;
     selected_asset = asset;
