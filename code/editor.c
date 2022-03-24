@@ -234,6 +234,7 @@ void editor_side_bar(Episode *episode)
                     selected_asset = 0;
                     cell_copy(&preview_cell, NULL);
                     editor_preview_update(selected_type, selected_asset);
+                    category_reset_scrollbar = true;
                 }
             }
             imgui_end_combo();
@@ -245,6 +246,12 @@ void editor_side_bar(Episode *episode)
         imgui_begin_child(editor_side_bar_asset_list_child_id, vector(width, SIDEBAR_ASSET_LIST_CHILD_HEIGHT * config_saved.font_scale, 0), 1, assets_list_child_flags);
 
         asset_draw_list = imgui_get_window_draw_list();
+
+        if (category_reset_scrollbar == true)
+        {
+            imgui_set_scroll_y(0);
+            category_reset_scrollbar = false;
+        }
 
         switch (selected_type)
         {

@@ -46,6 +46,8 @@ int editor_old_popup_state = EDITOR_POPUP_OPEN;
 int selected_type = 0;
 int selected_asset = 0;
 
+int category_reset_scrollbar = false;
+
 var cell_info_tooltip_counter = 0;
 
 void editor_switch_state_to(int state);

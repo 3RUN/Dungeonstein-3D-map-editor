@@ -256,6 +256,18 @@ void imgui_init(long config_flags);
 void imgui_reset();
 long custom_scan_message(UINT message, WPARAM wParam, LPARAM lParam);
 
+// scrollbars
+var imgui_get_scroll_x();
+var imgui_get_scroll_y();
+var imgui_get_scroll_max_x();
+var imgui_get_scroll_max_y();
+void imgui_set_scroll_x(float scroll_x);
+void imgui_set_scroll_y(float scroll_y);
+void imgui_set_scroll_from_pos_y(float local_y, float center_y_ratio);
+void imgui_set_scroll_here_y(float center_y_ratio); // center_y_ratio: 0.0f top of last item, 0.5f vertical center of last item, 1.0f bottom of last item.
+
+var imgui_is_any_item_active();
+
 void imgui_create_tooltip(char *tooltip)
 {
     if (imgui_is_item_hovered())
