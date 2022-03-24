@@ -33,7 +33,7 @@ typedef struct Asset
 
 // total amount of textures per each type
 #define TOTAL_WALL_TEXTURES 12
-#define TOTAL_PROPS_TEXTURES 29
+#define TOTAL_PROPS_TEXTURES 32
 #define TOTAL_EVENT_TEXTURES 4
 #define TOTAL_EFFECT_TEXTURES 3
 #define TOTAL_ITEM_TEXTURES 17
@@ -71,8 +71,11 @@ typedef struct Asset
 #define PROPS_FLAG_1 24
 #define PROPS_PAINTING_0 25
 #define PROPS_PAINTING_1 26
-#define PROPS_SHIELD_0 27
-#define PROPS_SHIELD_1 28
+#define PROPS_PAINTING_2 27
+#define PROPS_SHIELD_0 28
+#define PROPS_SHIELD_1 29
+#define PROPS_WINDOW_0 30
+#define PROPS_WINDOW_1 31
 
 // event id
 #define EVENT_PLAYER 0
@@ -157,6 +160,9 @@ STRING *props_gravestone_0_pcx = "props_gravestone_0.pcx";
 STRING *props_gravestone_1_pcx = "props_gravestone_1.pcx";
 STRING *props_painting_0_pcx = "props_painting_0.pcx";
 STRING *props_painting_1_pcx = "props_painting_1.pcx";
+STRING *props_painting_2_pcx = "props_painting_2.pcx";
+STRING *props_window_0_pcx = "props_window_0.pcx";
+STRING *props_window_1_pcx = "props_window_1.pcx";
 STRING *props_rock_0_pcx = "props_rock_0.pcx";
 STRING *props_rock_1_pcx = "props_rock_1.pcx";
 STRING *props_shield_0_pcx = "props_shield_0.pcx";

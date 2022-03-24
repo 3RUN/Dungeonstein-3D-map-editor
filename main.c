@@ -7,6 +7,7 @@
 
 #define PRAGMA_PATH "code"
 #define PRAGMA_PATH "assets"
+#define PRAGMA_PATH "assets\\animated"
 #define PRAGMA_PATH "assets\\walls"
 #define PRAGMA_PATH "assets\\props"
 #define PRAGMA_PATH "assets\\events"

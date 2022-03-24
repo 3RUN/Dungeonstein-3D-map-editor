@@ -183,8 +183,11 @@ void assets_initialize()
     asset_add(props_textures, "Flag 2 (on wall)", props_flag_1_pcx);
     asset_add(props_textures, "Painting 1 (on wall)", props_painting_0_pcx);
     asset_add(props_textures, "Painting 2 (on wall)", props_painting_1_pcx);
+    asset_add(props_textures, "Painting 3 (on wall)", props_painting_2_pcx);
     asset_add(props_textures, "Shield 1 (on wall)", props_shield_0_pcx);
     asset_add(props_textures, "Shield 2 (on wall)", props_shield_1_pcx);
+    asset_add(props_textures, "Window 1 (on wall)", props_window_0_pcx);
+    asset_add(props_textures, "Window 2 (on wall)", props_window_1_pcx);
 
     // events
     event_textures = array_create(Asset *, 1);

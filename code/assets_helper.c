@@ -115,7 +115,7 @@ int is_decal(int type, int asset)
         return false;
     }
 
-    if (asset != PROPS_FLAG_0 && asset != PROPS_FLAG_1 && asset != PROPS_PAINTING_0 && asset != PROPS_PAINTING_1 && asset != PROPS_SHIELD_0 && asset != PROPS_SHIELD_1)
+    if (asset < PROPS_FLAG_0)
     {
         return false;
     }
