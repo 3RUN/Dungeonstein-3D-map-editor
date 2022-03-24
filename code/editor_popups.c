@@ -354,15 +354,22 @@ void editor_popup_open(Episode *episode)
 
     imgui_end_child();
 
-    var width = (POPUP_OPEN_WIDTH * config_saved.font_scale) / 4;
-    if (imgui_button_withsize("Refresh", width, POPUP_BUTTON_HEIGHT * config_saved.font_scale))
+    if (imgui_button_withsize("Refresh", -1, POPUP_BUTTON_HEIGHT * config_saved.font_scale))
     {
         is_popup_check_failed = false;
         episode_list_refresh();
     }
 
-    imgui_same_line();
-    if (imgui_button_withsize("Delete", width, POPUP_BUTTON_HEIGHT * config_saved.font_scale))
+    var width = (POPUP_OPEN_WIDTH * config_saved.font_scale) / 3;
+    imgui_push_id(POPUP_DELETE_BUTTON_ID);
+    imgui_push_style_color_hsv(ImGuiCol_Button, 0, 0.7, 0.7, 1.0);
+    imgui_push_style_color_hsv(ImGuiCol_ButtonHovered, 0, 0.8, 0.8, 1.0);
+    imgui_push_style_color_hsv(ImGuiCol_ButtonActive, 0, 0.9, 0.9, 1.0);
+    var delete_button = imgui_button_withsize("Delete", width, POPUP_BUTTON_HEIGHT * config_saved.font_scale);
+    imgui_pop_style_color(3);
+    imgui_pop_id();
+
+    if (delete_button == true)
     {
         if (found_episode_index >= 0)
         {
@@ -1088,10 +1095,10 @@ void editor_popup_help()
         imgui_text(_chr(str_printf(NULL, "Debug mode ON/OFF: %s", config_current.short_toggle_debug)));
         imgui_text(_chr(str_printf(NULL, "Prior map: %s", config_current.short_prior_map)));
         imgui_text(_chr(str_printf(NULL, "Next map: %s", config_current.short_next_map)));
-        imgui_text(_chr(str_printf(NULL, "Shift map to the West: ctrl + %s", config_current.short_shift_map_west)));
-        imgui_text(_chr(str_printf(NULL, "Shift map to the East: ctrl + %s", config_current.short_shift_map_east)));
-        imgui_text(_chr(str_printf(NULL, "Shift map to the South: ctrl + %s", config_current.short_shift_map_south)));
-        imgui_text(_chr(str_printf(NULL, "Shift map to the North: ctrl + %s", config_current.short_shift_map_north)));
+        imgui_text(_chr(str_printf(NULL, "Shift map to the West: shift + %s", config_current.short_shift_map_west)));
+        imgui_text(_chr(str_printf(NULL, "Shift map to the East: shift + %s", config_current.short_shift_map_east)));
+        imgui_text(_chr(str_printf(NULL, "Shift map to the South: shift + %s", config_current.short_shift_map_south)));
+        imgui_text(_chr(str_printf(NULL, "Shift map to the North: shift + %s", config_current.short_shift_map_north)));
     }
     imgui_next_column();
     {

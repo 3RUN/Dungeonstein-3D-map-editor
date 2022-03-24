@@ -185,6 +185,7 @@ void on_frame_event()
 		episode_save_name_udpate_to(_str(new_episode_filename));
 		episode_save(ep_save_name, &def_episode);
 		editor_reset();
+		episode_list_refresh();
 
 		STRING *temp_ep_name_str = "";
 		str_cpy(temp_ep_name_str, "Episode ");

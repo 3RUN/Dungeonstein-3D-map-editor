@@ -250,6 +250,7 @@ void camera_fp_movement()
     {
         input.x *= RUN_FACTOR;
         input.y *= RUN_FACTOR;
+        input.z *= RUN_FACTOR;
     }
 
     vec_add(&camera->x, vec_rotate(&input, &camera->pan));

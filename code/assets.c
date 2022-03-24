@@ -222,8 +222,8 @@ void assets_initialize()
     // enemies
     enemy_textures = array_create(Asset *, 1);
     asset_add(enemy_textures, "Bat", enemy_bat_pcx);
-    asset_add(enemy_textures, "Blob fire", enemy_blob_fire_pcx);
-    asset_add(enemy_textures, "Blob ice", enemy_blob_ice_pcx);
+    asset_add(enemy_textures, "Slime fire", enemy_slime_fire_pcx);
+    asset_add(enemy_textures, "Slime ice", enemy_slime_ice_pcx);
     asset_add(enemy_textures, "Bum", enemy_bum_pcx);
     asset_add(enemy_textures, "Mage", enemy_mage_pcx);
     asset_add(enemy_textures, "Zombie", enemy_zombie_pcx);
@@ -236,7 +236,7 @@ void assets_initialize()
     boss_textures = array_create(Asset *, 1);
     asset_add(boss_textures, "Human chaingun", boss_machinegun_pcx);
     asset_add(boss_textures, "Human rocketlauncher", boss_rocketlauncher_pcx);
-    asset_add(boss_textures, "Blob acid", boss_acid_blob_pcx);
+    asset_add(boss_textures, "Acid slime", boss_acid_slime_pcx);
     asset_add(boss_textures, "Eye", boss_eye_pcx);
 }
 

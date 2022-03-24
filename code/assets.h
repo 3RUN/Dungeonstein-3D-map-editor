@@ -106,8 +106,8 @@ typedef struct Asset
 
 // enemy id
 #define ENEMY_BAT 0
-#define ENEMY_BLOB_FIRE 1
-#define ENEMY_BLOB_ICE 2
+#define ENEMY_SLIME_FIRE 1
+#define ENEMY_SLIME_ICE 2
 #define ENEMY_BUM 3
 #define ENEMY_MAGE 4
 #define ENEMY_ZOMBIE 5
@@ -119,7 +119,7 @@ typedef struct Asset
 // boss id
 #define BOSS_CHAINGUN 0
 #define BOSS_ROCKETLAUNCHER 1
-#define BOSS_BLOB_ACID 2
+#define BOSS_ACID_SLIME 2
 #define BOSS_EYE 3
 
 // walls
@@ -200,8 +200,8 @@ STRING *item_wpn_rocketlauncher_pcx = "item_wpn_rocketlauncher.pcx";
 
 // enemies
 STRING *enemy_bat_pcx = "enemy_bat.pcx";
-STRING *enemy_blob_fire_pcx = "enemy_blob_fire.pcx";
-STRING *enemy_blob_ice_pcx = "enemy_blob_ice.pcx";
+STRING *enemy_slime_fire_pcx = "enemy_slime_fire.pcx";
+STRING *enemy_slime_ice_pcx = "enemy_slime_ice.pcx";
 STRING *enemy_boxer_pcx = "enemy_boxer.pcx";
 STRING *enemy_bum_pcx = "enemy_bum.pcx";
 STRING *enemy_mage_pcx = "enemy_mage.pcx";
@@ -213,7 +213,7 @@ STRING *enemy_shotgun_pcx = "enemy_shotgun.pcx";
 // bosses
 STRING *boss_machinegun_pcx = "boss_machinegun.pcx";
 STRING *boss_rocketlauncher_pcx = "boss_rocketlauncher.pcx";
-STRING *boss_acid_blob_pcx = "boss_acid_blob.pcx";
+STRING *boss_acid_slime_pcx = "boss_acid_slime.pcx";
 STRING *boss_eye_pcx = "boss_eye.pcx";
 
 array_t *wall_textures;

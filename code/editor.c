@@ -162,21 +162,21 @@ void editor_asset_list_item(void *draw_list, int type, int asset)
     str_cat(selectable_id_str, " index:");
     str_cat(selectable_id_str, str_for_num(NULL, asset));
 
-    if (imgui_selectable_size(_chr(selectable_id_str), &is_temp_boolean, ImGuiSelectableFlags_None, vector(width, 64, 0)))
+    if (imgui_selectable_size(_chr(selectable_id_str), &is_temp_boolean, ImGuiSelectableFlags_None, vector(width, 64 * config_saved.font_scale, 0)))
     {
         selected_asset = asset;
         cell_copy(&preview_cell, NULL);
         editor_preview_update(type, asset);
     }
 
-    var text_pos_x = cursor_screen_pos.x + ASSET_PREVIEW_IMAGE_WIDTH + engine_theme_item_spacing[0];
-    var text_pos_y = cursor_screen_pos.y + (ASSET_PREVIEW_IMAGE_HEIGHT / 2) - (imgui_get_font_size() / 2);
+    var text_pos_x = cursor_screen_pos.x + (ASSET_PREVIEW_IMAGE_WIDTH * config_saved.font_scale) + engine_theme_item_spacing[0];
+    var text_pos_y = cursor_screen_pos.y + ((ASSET_PREVIEW_IMAGE_HEIGHT * config_saved.font_scale) / 2) - (imgui_get_font_size() / 2);
     imgui_drawlist_add_text(asset_draw_list, vector(text_pos_x, text_pos_y, 0), color4_white, _chr(asset_desc_str));
 
     var image_start_x = cursor_screen_pos.x;
     var image_start_y = cursor_screen_pos.y;
-    var image_end_x = image_start_x + ASSET_PREVIEW_IMAGE_WIDTH;
-    var image_end_y = image_start_y + ASSET_PREVIEW_IMAGE_HEIGHT;
+    var image_end_x = image_start_x + (ASSET_PREVIEW_IMAGE_WIDTH * config_saved.font_scale);
+    var image_end_y = image_start_y + (ASSET_PREVIEW_IMAGE_HEIGHT * config_saved.font_scale);
     imgui_drawlist_add_image(asset_draw_list, asset_get_bmap(type, asset), vector(image_start_x, image_start_y, 0), vector(image_end_x, image_end_y, 0), vector(0, 0, 0), vector(1, 1, 0), color4_image, 1.0);
 }
 
@@ -330,7 +330,7 @@ void editor_side_bar(Episode *episode)
     {
         active_map_id++;
         active_map_id = clamp(active_map_id, 0, episode->map_count - 1);
-        
+
         Map *active_map = map_get_active(episode);
         if (active_map)
         {

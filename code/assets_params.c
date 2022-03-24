@@ -49,7 +49,7 @@ void asset_params_wall_params(Cell *cell, int asset)
         return;
     }
 
-    imgui_checkbox("is_secret_wall", &cell->flag);
+    imgui_checkbox("Secret wall (moves up)", &cell->flag);
 
     if (cell->flag == false)
     {
