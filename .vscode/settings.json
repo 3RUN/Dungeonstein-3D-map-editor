@@ -50,6 +50,8 @@
         "screenres_list.h": "c",
         "messages.h": "c",
         "debug_panel.h": "c",
-        "map_sketcher.h": "c"
+        "map_sketcher.h": "c",
+        "draw.h": "c",
+        "assets_helper.h": "c"
     }
 }

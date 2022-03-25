@@ -6,7 +6,7 @@ void editor_map_settings_copy_from_active(Map *map)
         return;
     }
 
-    map_copy(&map_settings, map);
+    map_copy_settings(&map_settings, map);
     editor_map_settings_refresh();
 }
 
@@ -17,7 +17,7 @@ void editor_map_settings_copy_to_active(Map *map)
         return;
     }
 
-    map_copy(map, &map_settings);
+    map_copy_settings(map, &map_settings);
 }
 
 void editor_map_settings_initialize()
@@ -218,7 +218,7 @@ void editor_map_settings_update(Map *map)
     var width = (((MAP_SETTINGS_WINDOW_WIDTH * config_saved.font_scale) - (engine_theme_win_padding[0] * 2)) / 4) - 3;
     if (imgui_button_withsize("Defaults", width, MAP_SETTINGS_BUTTON_HEIGHT * config_saved.font_scale)) // reset current level settings
     {
-        map_copy(&map_settings, NULL);
+        map_copy_settings(&map_settings, NULL);
         editor_map_settings_refresh();
     }
 

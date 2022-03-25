@@ -105,7 +105,10 @@ typedef struct Episode
 } Episode;
 
 Cell preview_cell;
+
+Map map_copied;
 Map map_settings;
+
 Episode def_episode;
 
 void game_episode_initialize();
@@ -135,6 +138,8 @@ int is_game_episode_loaded();
 void cell_copy(Cell *to, Cell *from);
 
 Map *map_get_active(Episode *episode);
+
+void map_copy_settings(Map *to, Map *from);
 
 void map_copy(Map *to, Map *from);
 

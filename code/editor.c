@@ -466,6 +466,25 @@ void editor_top_bar(Episode *episode, Map *map)
             {
                 editor_switch_popup_to(EDITOR_POPUP_MAP_RESET);
             }
+            if (imgui_menu_item("Copy", "", 0, 1))
+            {
+                is_map_copied = true;
+                map_copy(&map_copied, map);
+            }
+            if (is_map_copied == true)
+            {
+                if (imgui_menu_item("Paste", "", 0, 1))
+                {
+                    map_copy(map, &map_copied);
+
+                    Map *active_map = map_get_active(episode);
+                    if (active_map)
+                    {
+                        map_sketch_refresh(active_map);
+                    }
+                }
+            }
+            imgui_separator();
             if (imgui_menu_item("Settings", "", 0, 1))
             {
                 is_popup_opened = false;

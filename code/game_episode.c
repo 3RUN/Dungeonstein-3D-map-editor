@@ -172,7 +172,7 @@ Map *map_get_active(Episode *episode)
     return &episode->map[active_map_id];
 }
 
-void map_copy(Map *to, Map *from)
+void map_copy_settings(Map *to, Map *from)
 {
     if (!to)
     {
@@ -218,6 +218,27 @@ void map_copy(Map *to, Map *from)
     strcpy(to->music, from->music);
 }
 
+void map_copy(Map *to, Map *from)
+{
+    if (!to || !from)
+    {
+        return;
+    }
+
+    map_copy_settings(to, from);
+
+    int x = 0, y = 0;
+    for (y = 0; y < MAP_HEIGHT; y++)
+    {
+        for (x = 0; x < MAP_WIDTH; x++)
+        {
+            Cell *to_cell = &to->cell[x][y];
+            Cell *from_cell = &from->cell[x][y];
+            cell_copy(to_cell, from_cell);
+        }
+    }
+}
+
 void map_reset(Map *map)
 {
     if (!map)
@@ -225,7 +246,7 @@ void map_reset(Map *map)
         return;
     }
 
-    map_copy(map, NULL);
+    map_copy_settings(map, NULL);
 
     int x = 0, y = 0, id = 0;
     for (y = 0; y < MAP_HEIGHT; y++)
