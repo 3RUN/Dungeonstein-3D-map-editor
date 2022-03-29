@@ -470,12 +470,16 @@ void editor_popup_new(Episode *episode)
 
     imgui_text("File name");
     imgui_same_line();
+    imgui_text(_chr(str_printf(NULL, "(%d / %d)", (long)strlen(new_episode_filename), (long)EPISODE_FILENAME_LENGTH)));
+    imgui_same_line();
     editor_help_maker(_chr(str_printf(NULL, "The file name to save episode as. Character limit %d.", (long)EPISODE_FILENAME_LENGTH)));
     imgui_push_item_width(-1);
     imgui_input_text(popup_new_filename_input_id, new_episode_filename, EPISODE_FILENAME_LENGTH, NULL);
     imgui_pop_item_width();
 
     imgui_text("Episode name");
+    imgui_same_line();
+    imgui_text(_chr(str_printf(NULL, "(%d / %d)", (long)strlen(new_episode_name), (long)EPISODE_NAME_LENGTH)));
     imgui_same_line();
     editor_help_maker(_chr(str_printf(NULL, "The name of the episode. Character limit %d.", (long)EPISODE_NAME_LENGTH)));
     imgui_push_item_width(-1);
@@ -484,15 +488,21 @@ void editor_popup_new(Episode *episode)
 
     imgui_text("Story beginning");
     imgui_same_line();
+    imgui_text(_chr(str_printf(NULL, "(%d / %d)", (long)strlen(new_episode_story_start), (long)EPISODE_STORY_START_LENGTH)));
+    imgui_same_line();
     editor_help_maker(_chr(str_printf(NULL, "Short story showed at the beginning of the episode. Character limit %d.", (long)EPISODE_STORY_START_LENGTH)));
     imgui_input_text_multiline(popup_new_episode_story_start_input_id, new_episode_story_start, EPISODE_STORY_START_LENGTH, -1, 128, NULL);
 
     imgui_text("Story ending");
     imgui_same_line();
+    imgui_text(_chr(str_printf(NULL, "(%d / %d)", (long)strlen(new_episode_story_end), (long)EPISODE_STORY_END_LENGTH)));
+    imgui_same_line();
     editor_help_maker(_chr(str_printf(NULL, "Short story showed when episode is finished. Character limit %d.", (long)EPISODE_STORY_END_LENGTH)));
     imgui_input_text_multiline(popup_new_episode_story_end_id, new_episode_story_end, EPISODE_STORY_END_LENGTH, -1, 128, NULL);
 
     imgui_text("Map count");
+    imgui_same_line();
+    imgui_text(_chr(str_printf(NULL, "(%d / %d)", (long)new_episode_map_count, (long)MAX_MAPS_PER_EPISODE)));
     imgui_same_line();
     editor_help_maker(_chr(str_printf(NULL, "Amount of maps in the episode. Max %d.", (long)MAX_MAPS_PER_EPISODE)));
     imgui_push_item_width(-1);
@@ -980,6 +990,8 @@ void editor_popup_ep_edit(Episode *episode)
 
     imgui_text("Episode name");
     imgui_same_line();
+    imgui_text(_chr(str_printf(NULL, "(%d / %d)", (long)strlen(episode_edit_name), (long)EPISODE_NAME_LENGTH)));
+    imgui_same_line();
     imgui_help_maker(_chr(str_printf(NULL, "The name of the episode. Character limit %d.", (long)EPISODE_NAME_LENGTH)));
     imgui_push_item_width(-1);
     imgui_input_text(popup_episode_edit_name_id, episode_edit_name, EPISODE_NAME_LENGTH, NULL);
@@ -987,15 +999,21 @@ void editor_popup_ep_edit(Episode *episode)
 
     imgui_text("Story beginning");
     imgui_same_line();
+    imgui_text(_chr(str_printf(NULL, "(%d / %d)", (long)strlen(episode_edit_story_start), (long)EPISODE_STORY_START_LENGTH)));
+    imgui_same_line();
     imgui_help_maker(_chr(str_printf(NULL, "Short story showed at the beginning of the episode. Character limit %d.", (long)EPISODE_STORY_START_LENGTH)));
     imgui_input_text_multiline(popup_episode_edit_story_start_id, episode_edit_story_start, EPISODE_STORY_START_LENGTH, -1, 128, NULL);
 
     imgui_text("Story ending");
     imgui_same_line();
+    imgui_text(_chr(str_printf(NULL, "(%d / %d)", (long)strlen(episode_edit_story_end), (long)EPISODE_STORY_END_LENGTH)));
+    imgui_same_line();
     imgui_help_maker(_chr(str_printf(NULL, "Short story showed at the ending of the episode. Character limit %d.", (long)EPISODE_STORY_END_LENGTH)));
     imgui_input_text_multiline(popup_episode_edit_story_end_id, episode_edit_story_end, EPISODE_STORY_END_LENGTH, -1, 128, NULL);
 
     imgui_text("Map count");
+    imgui_same_line();
+    imgui_text(_chr(str_printf(NULL, "(%d / %d)", (long)episode_edit_map_count, (long)MAX_MAPS_PER_EPISODE)));
     imgui_same_line();
     imgui_help_maker(_chr(str_printf(NULL, "Amount of maps in the episode. Max %d.", (long)MAX_MAPS_PER_EPISODE)));
     imgui_push_item_width(-1);
