@@ -153,6 +153,9 @@ void map_editor_startup()
 
 void on_frame_event()
 {
+		DEBUG_VAR(props_count, 200);
+	DEBUG_VAR(array_get_count(map_props), 220);
+	
 	Map *active_map = map_get_active(&def_episode);
 
 	switch (editor_state)

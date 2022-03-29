@@ -1014,6 +1014,12 @@ void editor_popup_ep_edit(Episode *episode)
     {
         if (strlen(episode_edit_name) > 0 && strlen(episode_edit_story_start) > 0 && strlen(episode_edit_story_end) > 0)
         {
+            STRING *temp_ep_name_str = "";
+            str_cpy(temp_ep_name_str, "Episode ");
+            str_cat(temp_ep_name_str, _str(episode_edit_name));
+            str_cat(temp_ep_name_str, " edited.");
+            message_add(temp_ep_name_str);
+
             is_popup_check_failed = false;
             episode_change_info(episode, episode_edit_name, episode_edit_story_start, episode_edit_story_end, episode_edit_map_count);
             is_popup_opened = false;

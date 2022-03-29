@@ -226,6 +226,7 @@ void map_loader_free_array(array_t *array)
         }
     }
     array_enumerate_end(array);
+    array_clear(array);
 }
 
 void map_loader_destroy_array(array_t *array)

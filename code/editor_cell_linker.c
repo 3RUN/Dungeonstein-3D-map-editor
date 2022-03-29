@@ -51,7 +51,7 @@ int is_object_to_link(Cell *cell)
 
     if (cell->type == ASSET_TYPE_PROPS && cell->event_type >= 1)
     {
-        if (is_door(cell->type, cell->asset) == true || cell->asset == PROPS_FENCE)
+        if (cell->asset == PROPS_DOOR || cell->asset == PROPS_FENCE)
         {
             return true;
         }

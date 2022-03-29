@@ -52,6 +52,7 @@
         "debug_panel.h": "c",
         "map_sketcher.h": "c",
         "draw.h": "c",
-        "assets_helper.h": "c"
+        "assets_helper.h": "c",
+        "camera_n_grid.h": "c"
     }
 }
