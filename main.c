@@ -153,9 +153,9 @@ void map_editor_startup()
 
 void on_frame_event()
 {
-		DEBUG_VAR(props_count, 200);
+	DEBUG_VAR(props_count, 200);
 	DEBUG_VAR(array_get_count(map_props), 220);
-	
+
 	Map *active_map = map_get_active(&def_episode);
 
 	switch (editor_state)
@@ -179,7 +179,8 @@ void on_frame_event()
 		str_cat(temp_ep_name_str, " opened.");
 		message_add(temp_ep_name_str);
 
-		map_sketch_refresh(active_map);
+		Map *map = map_get_active(&def_episode); // because 'active_map' won't return 1 frame old map
+		map_sketch_refresh(map);
 		editor_switch_state_to(EDITOR_STATE_EDIT);
 		break;
 
