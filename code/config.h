@@ -34,34 +34,37 @@ STRING *input_forward_entry_str = "Move forward";
 STRING *input_backward_entry_str = "Move backward";
 STRING *input_strafe_left_entry_str = "Move left (strafe)";
 STRING *input_strafe_right_entry_str = "Move right (strafe)";
-STRING *input_surface_entry_str = "Move up (surface)";
-STRING *input_dive_entry_str = "Move down (dive)";
-STRING *input_run_entry_str = "Run (hold)";
-STRING *input_drag_map_entry_str = "Drag map";
+STRING *input_fly_up_entry_str = "Move up";
+STRING *input_fly_down_entry_str = "Move down";
+STRING *input_run_entry_str = "Run (move faster)";
+STRING *input_rotate_cam_entry_str = "Rotate camera (hold)";
 STRING *input_draw_entry_str = "Draw cell";
-STRING *input_erase_entry_str = "Erase cell";
-STRING *input_pick_entry_str = "Pick cell";
+STRING *input_erase_entry_str = "Erase cell (hold + draw)";
+STRING *input_pick_entry_str = "Pick cell (hold + draw)";
 STRING *input_rotate_entry_str = "Rotate cell";
+STRING *input_toggle_assets_entry_str = "Toggle asset list";
+STRING *input_toggle_lights_entry_str = "Toggle dynamic lights";
+STRING *input_toggle_draw_mode_entry_str = "Toggle draw mode";
 
 // config shortcut entries
 STRING *short_help_entry_str = "Help";
+STRING *short_screenshot_entry_str = "Take screenshot";
 STRING *short_new_entry_str = "New episode";
 STRING *short_open_entry_str = "Open episode";
+STRING *short_settings_entry_str = "Settings";
 STRING *short_save_entry_str = "Save episode";
 STRING *short_ep_reset_entry_str = "Episode reset";
 STRING *short_ep_edit_entry_str = "Episode edit";
-STRING *short_reset_map_entry_str = "Reset active map";
-STRING *short_test_run_entry_str = "Map test run";
-STRING *short_map_settings_entry_str = "Active map settings";
-STRING *short_screenshot_entry_str = "Take screenshot";
-STRING *short_settings_entry_str = "Settings";
-STRING *short_toggle_debug_entry_str = "Debug mode ON/OFF";
-STRING *short_prior_map_entry_str = "Prior map";
-STRING *short_next_map_entry_str = "Next map";
-STRING *short_shift_map_west_entry_str = "Shift map to the West";   // pan 90
-STRING *short_shift_map_east_entry_str = "Shift map to the East";   // pan 270
-STRING *short_shift_map_south_entry_str = "Shift map to the South"; // pan 180
-STRING *short_shift_map_north_entry_str = "Shift map to the North"; // pan 0
+STRING *short_map_reset_entry_str = "Map reset";
+STRING *short_map_settings_entry_str = "Map settings";
+STRING *short_toggle_hovering_entry_str = "Hovering obj info ON/OFF";
+STRING *short_toggle_debug_entry_str = "Debug panel ON/OFF";
+STRING *short_map_prior_entry_str = "Map prior";
+STRING *short_map_next_entry_str = "Map next";
+STRING *short_map_shift_west_entry_str = "Map shift to West";
+STRING *short_map_shift_east_entry_str = "Map shift to East";
+STRING *short_map_shift_south_entry_str = "Map shift to South";
+STRING *short_map_shift_north_entry_str = "Map shift to North";
 
 // mouse
 STRING *mouse_sensitivity_entry_str = "Mouse sensitivity";
@@ -71,7 +74,6 @@ STRING *other_master_volume_entry_str = "Master volume";
 
 // config other entries
 STRING *other_font_scale_entry_str = "Font scale";
-STRING *other_cell_tooltip_entry_str = "Cell tooltip enabled";
 STRING *other_background_color_red_entry_str = "Background color red";
 STRING *other_background_color_green_entry_str = "Background color green";
 STRING *other_background_color_blue_entry_str = "Background color blue";
@@ -89,34 +91,37 @@ STRING *input_def_forward_str = "w";
 STRING *input_def_backward_str = "s";
 STRING *input_def_strafe_left_str = "a";
 STRING *input_def_strafe_right_str = "d";
-STRING *input_def_surface_str = "q";
-STRING *input_def_dive_str = "e";
+STRING *input_def_fly_up_str = "q";
+STRING *input_def_fly_down_str = "e";
 STRING *input_def_run_str = "shiftl";
-STRING *input_def_drag_map_str = "mouse_middle";
+STRING *input_def_rotate_camera_str = "mouse_right";
 STRING *input_def_draw_str = "mouse_left";
-STRING *input_def_erase_str = "mouse_right";
+STRING *input_def_erase_str = "ctrl";
 STRING *input_def_pick_str = "alt";
 STRING *input_def_rotate_str = "r";
+STRING *input_def_toggle_assets_str = "tab";
+STRING *input_def_toggle_lights_str = "l";
+STRING *input_def_toggle_draw_mode_str = "mouse_middle";
 
 // default shortcuts
 STRING *short_def_help_str = "f1";
+STRING *short_def_screenshot_str = "f5";
 STRING *short_def_new_str = "f2";
 STRING *short_def_open_str = "f3";
-STRING *short_def_save_str = "f4";
-STRING *short_def_ep_reset_str = "f5";
-STRING *short_def_ep_edit_str = "f6";
-STRING *short_def_reset_map_str = "f7";
-STRING *short_def_test_run_str = "f8";
-STRING *short_def_map_settings_str = "f9";
-STRING *short_def_screenshot_str = "f10";
-STRING *short_def_settings_str = "f11";
+STRING *short_def_settings_str = "f4";
+STRING *short_def_save_str = "f6";
+STRING *short_def_ep_reset_str = "f7";
+STRING *short_def_ep_edit_str = "f8";
+STRING *short_def_map_reset_str = "f9";
+STRING *short_def_map_settings_str = "f10";
+STRING *short_def_toggle_hovering_str = "f11";
 STRING *short_def_toggle_debug_str = "f12";
-STRING *short_def_prior_map_str = "pgdn";
-STRING *short_def_next_map_str = "pgup";
-STRING *short_def_shift_map_west_str = "cuu";
-STRING *short_def_shift_map_east_str = "cud";
-STRING *short_def_shift_map_south_str = "cul";
-STRING *short_def_shift_map_north_str = "cur";
+STRING *short_def_map_prior_str = "pgdn";
+STRING *short_def_map_next_str = "pgup";
+STRING *short_def_map_shift_west_str = "cuu";
+STRING *short_def_map_shift_east_str = "cud";
+STRING *short_def_map_shift_south_str = "cul";
+STRING *short_def_map_shift_north_str = "cur";
 
 // default mouse
 float mouse_def_sensitivity = 1;
@@ -125,8 +130,6 @@ float mouse_def_sensitivity = 1;
 float master_def_volume = 50;
 
 // config others
-int is_cell_tooltip_def_enabled = true;
-
 float font_def_scale = 1;
 float background_def_color[3];
 float grid_def_color[3];
@@ -143,34 +146,37 @@ typedef struct Config
     char input_backward[32];
     char input_strafe_left[32];
     char input_strafe_right[32];
-    char input_surface[32];
-    char input_dive[32];
+    char input_fly_up[32];
+    char input_fly_down[32];
     char input_run[32];
-    char input_drag_map[32];
+    char input_rotate_camera[32];
     char input_draw[32];
     char input_erase[32];
     char input_pick[32];
     char input_rotate[32];
+    char input_toggle_assets[32];
+    char input_toggle_lights[32];
+    char input_toggle_draw_mode[32];
 
     // shortcuts
     char short_help[32];
+    char short_screenshot[32];
     char short_new[32];
     char short_open[32];
+    char short_settings[32];
     char short_save[32];
     char short_ep_reset[32];
     char short_ep_edit[32];
-    char short_reset_map[32];
-    char short_test_run[32];
+    char short_map_reset[32];
     char short_map_settings[32];
-    char short_screenshot[32];
-    char short_settings[32];
     char short_toggle_debug[32];
-    char short_prior_map[32];
-    char short_next_map[32];
-    char short_shift_map_west[32];
-    char short_shift_map_east[32];
-    char short_shift_map_south[32];
-    char short_shift_map_north[32];
+    char short_toggle_hovering[32];
+    char short_map_prior[32];
+    char short_map_next[32];
+    char short_map_shift_west[32];
+    char short_map_shift_east[32];
+    char short_map_shift_south[32];
+    char short_map_shift_north[32];
 
     // mouse
     float mouse_sensitivity;
@@ -179,8 +185,6 @@ typedef struct Config
     float master_volume;
 
     // other settings
-    int is_cell_tooltip_enabled;
-
     float font_scale;
     float background_color[3];
     float grid_color[3];

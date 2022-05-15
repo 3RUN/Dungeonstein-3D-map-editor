@@ -14,211 +14,74 @@ int is_shortcut_allowed()
     return true;
 }
 
-void shortcut_remove_binding(var scancode)
+void shortcuts_load_config(Config *config)
 {
-    if (scancode <= 0)
-    {
-        return;
-    }
-
-    key_set(scancode, NULL);
-}
-
-void shortcut_update_binding(var scancode, void *fnc)
-{
-    if (scancode <= 0)
-    {
-        return;
-    }
-
-    key_set(scancode, NULL);
-    key_set(scancode, fnc);
-}
-
-void shortcuts_update_from_config(Config *config)
-{
-    shortcut_remove_binding(scancode_help);
-    shortcut_remove_binding(scancode_new);
-    shortcut_remove_binding(scancode_open);
-    shortcut_remove_binding(scancode_save);
-    shortcut_remove_binding(scancode_ep_reset);
-    shortcut_remove_binding(scancode_ep_edit);
-    shortcut_remove_binding(scancode_reset_map);
-    shortcut_remove_binding(scancode_test_run);
-    shortcut_remove_binding(scancode_map_settings);
-    shortcut_remove_binding(scancode_screenshot);
-    shortcut_remove_binding(scancode_settings);
-    shortcut_remove_binding(scancode_toggle_debug);
-    shortcut_remove_binding(scancode_prior_map);
-    shortcut_remove_binding(scancode_next_map);
-    shortcut_remove_binding(scancode_shift_map_west);
-    shortcut_remove_binding(scancode_shift_map_east);
-    shortcut_remove_binding(scancode_shift_map_south);
-    shortcut_remove_binding(scancode_shift_map_north);
+    input_remove_on_key_binding(scancode_help);
+    input_remove_on_key_binding(scancode_screenshot);
+    input_remove_on_key_binding(scancode_new);
+    input_remove_on_key_binding(scancode_open);
+    input_remove_on_key_binding(scancode_settings);
+    input_remove_on_key_binding(scancode_save);
+    input_remove_on_key_binding(scancode_ep_reset);
+    input_remove_on_key_binding(scancode_ep_edit);
+    input_remove_on_key_binding(scancode_map_reset);
+    input_remove_on_key_binding(scancode_map_settings);
+    input_remove_on_key_binding(scancode_toggle_hovering_info);
+    input_remove_on_key_binding(scancode_toggle_debug_panel);
+    input_remove_on_key_binding(scancode_map_prior);
+    input_remove_on_key_binding(scancode_map_next);
+    input_remove_on_key_binding(scancode_map_shift_west);
+    input_remove_on_key_binding(scancode_map_shift_east);
+    input_remove_on_key_binding(scancode_map_shift_south);
+    input_remove_on_key_binding(scancode_map_shift_north);
 
     scancode_help = engine_key_return_scancode_from_letter(config->short_help);
+    scancode_screenshot = engine_key_return_scancode_from_letter(config->short_screenshot);
     scancode_new = engine_key_return_scancode_from_letter(config->short_new);
     scancode_open = engine_key_return_scancode_from_letter(config->short_open);
+    scancode_settings = engine_key_return_scancode_from_letter(config->short_settings);
     scancode_save = engine_key_return_scancode_from_letter(config->short_save);
     scancode_ep_reset = engine_key_return_scancode_from_letter(config->short_ep_reset);
     scancode_ep_edit = engine_key_return_scancode_from_letter(config->short_ep_edit);
-    scancode_reset_map = engine_key_return_scancode_from_letter(config->short_reset_map);
-    scancode_test_run = engine_key_return_scancode_from_letter(config->short_test_run);
+    scancode_map_reset = engine_key_return_scancode_from_letter(config->short_map_reset);
     scancode_map_settings = engine_key_return_scancode_from_letter(config->short_map_settings);
-    scancode_screenshot = engine_key_return_scancode_from_letter(config->short_screenshot);
-    scancode_settings = engine_key_return_scancode_from_letter(config->short_settings);
-    scancode_toggle_debug = engine_key_return_scancode_from_letter(config->short_toggle_debug);
-    scancode_prior_map = engine_key_return_scancode_from_letter(config->short_prior_map);
-    scancode_next_map = engine_key_return_scancode_from_letter(config->short_next_map);
-    scancode_shift_map_west = engine_key_return_scancode_from_letter(config->short_shift_map_west);
-    scancode_shift_map_east = engine_key_return_scancode_from_letter(config->short_shift_map_east);
-    scancode_shift_map_south = engine_key_return_scancode_from_letter(config->short_shift_map_south);
-    scancode_shift_map_north = engine_key_return_scancode_from_letter(config->short_shift_map_north);
+    scancode_toggle_hovering_info = engine_key_return_scancode_from_letter(config->short_toggle_debug);
+    scancode_toggle_debug_panel = engine_key_return_scancode_from_letter(config->short_toggle_hovering);
+    scancode_map_prior = engine_key_return_scancode_from_letter(config->short_map_prior);
+    scancode_map_next = engine_key_return_scancode_from_letter(config->short_map_next);
+    scancode_map_shift_west = engine_key_return_scancode_from_letter(config->short_map_shift_west);
+    scancode_map_shift_east = engine_key_return_scancode_from_letter(config->short_map_shift_east);
+    scancode_map_shift_south = engine_key_return_scancode_from_letter(config->short_map_shift_south);
+    scancode_map_shift_north = engine_key_return_scancode_from_letter(config->short_map_shift_north);
 
-    shortcut_update_binding(scancode_help, shortcut_help);
-    shortcut_update_binding(scancode_new, shortcut_new);
-    shortcut_update_binding(scancode_open, shortcut_open);
-    shortcut_update_binding(scancode_save, shortcut_save);
-    shortcut_update_binding(scancode_ep_reset, shortcut_ep_reset);
-    shortcut_update_binding(scancode_ep_edit, shortcut_ep_edit);
-    shortcut_update_binding(scancode_reset_map, shortcut_reset_map);
-    shortcut_update_binding(scancode_test_run, shortcut_test_run);
-    shortcut_update_binding(scancode_map_settings, shortcut_map_settings);
-    shortcut_update_binding(scancode_screenshot, shortcut_screenshot);
-    shortcut_update_binding(scancode_settings, shortcut_settings);
-    shortcut_update_binding(scancode_toggle_debug, shortcut_toggle_debug);
-    shortcut_update_binding(scancode_prior_map, shortcut_prior_map);
-    shortcut_update_binding(scancode_next_map, shortcut_next_map);
-    shortcut_update_binding(scancode_shift_map_west, shortcut_shift_map_west);
-    shortcut_update_binding(scancode_shift_map_east, shortcut_shift_map_east);
-    shortcut_update_binding(scancode_shift_map_south, shortcut_shift_map_south);
-    shortcut_update_binding(scancode_shift_map_north, shortcut_shift_map_north);
+    input_update_on_key_binding(scancode_help, shortcut_help);
+    input_update_on_key_binding(scancode_screenshot, shortcut_screenshot);
+    input_update_on_key_binding(scancode_new, shortcut_new);
+    input_update_on_key_binding(scancode_open, shortcut_open);
+    input_update_on_key_binding(scancode_settings, shortcut_settings);
+    input_update_on_key_binding(scancode_save, shortcut_save);
+    input_update_on_key_binding(scancode_ep_reset, shortcut_ep_reset);
+    input_update_on_key_binding(scancode_ep_edit, shortcut_ep_edit);
+    input_update_on_key_binding(scancode_map_reset, shortcut_map_reset);
+    input_update_on_key_binding(scancode_map_settings, shortcut_map_settings);
+    input_update_on_key_binding(scancode_toggle_hovering_info, shortcut_toggle_hovering_info);
+    input_update_on_key_binding(scancode_toggle_debug_panel, shortcut_toggle_debug_panel);
+    input_update_on_key_binding(scancode_map_prior, shortcut_map_prior);
+    input_update_on_key_binding(scancode_map_next, shortcut_map_next);
+    input_update_on_key_binding(scancode_map_shift_west, shortcut_map_shift_west);
+    input_update_on_key_binding(scancode_map_shift_east, shortcut_map_shift_east);
+    input_update_on_key_binding(scancode_map_shift_south, shortcut_map_shift_south);
+    input_update_on_key_binding(scancode_map_shift_north, shortcut_map_shift_north);
 }
 
 void shortcut_help()
 {
-    if (is_shortcut_allowed() == false)
+    if (is_popup_opened == true)
     {
-        return;
+        return false;
     }
 
-    editor_switch_popup_to(EDITOR_POPUP_HELP);
-}
-
-void shortcut_new()
-{
-    if (is_shortcut_allowed() == false)
-    {
-        return;
-    }
-
-    if (is_game_episode_loaded() == true)
-    {
-        editor_switch_popup_to(EDITOR_POPUP_SURE_NEW);
-    }
-    else
-    {
-        editor_switch_popup_to(EDITOR_POPUP_NEW);
-    }
-}
-
-void shortcut_open()
-{
-    if (is_shortcut_allowed() == false)
-    {
-        return;
-    }
-
-    if (is_game_episode_loaded() == true)
-    {
-        editor_switch_popup_to(EDITOR_POPUP_SURE_OPEN);
-    }
-    else
-    {
-        editor_switch_popup_to(EDITOR_POPUP_OPEN);
-    }
-}
-
-void shortcut_save()
-{
-    if (is_shortcut_allowed() == false)
-    {
-        return;
-    }
-
-    if (key_ctrl)
-    {
-        strcpy(save_as_filename, ep_save_name);
-        editor_switch_popup_to(EDITOR_POPUP_SAVE_AS);
-    }
-    if (is_game_episode_loaded() == true)
-    {
-        STRING *temp_ep_name_str = "";
-        str_cpy(temp_ep_name_str, ep_save_name);
-        str_cat(temp_ep_name_str, " saved.");
-        message_add(temp_ep_name_str);
-
-        editor_switch_state_to(EDITOR_STATE_SAVE);
-    }
-    else
-    {
-        strcpy(save_as_filename, ep_save_name);
-        editor_switch_popup_to(EDITOR_POPUP_SAVE_AS);
-    }
-}
-
-void shortcut_ep_reset()
-{
-    if (is_shortcut_allowed() == false)
-    {
-        return;
-    }
-
-    editor_switch_popup_to(EDITOR_POPUP_EP_RESET);
-}
-
-void shortcut_ep_edit()
-{
-    if (is_shortcut_allowed() == false)
-    {
-        return;
-    }
-
-    strcpy(episode_edit_name, def_episode.name);
-    strcpy(episode_edit_story_start, def_episode.story_start);
-    strcpy(episode_edit_story_end, def_episode.story_end);
-    episode_edit_map_count = def_episode.map_count;
-    editor_switch_popup_to(EDITOR_POPUP_EP_EDIT);
-}
-
-void shortcut_reset_map()
-{
-    if (is_shortcut_allowed() == false)
-    {
-        return;
-    }
-
-    editor_switch_popup_to(EDITOR_POPUP_MAP_RESET);
-}
-
-void shortcut_test_run()
-{
-    if (is_shortcut_allowed() == false)
-    {
-        return;
-    }
-
-    editor_switch_state_to(EDITOR_STATE_TO_BUILD);
-}
-
-void shortcut_map_settings()
-{
-    if (is_shortcut_allowed() == false)
-    {
-        return;
-    }
-
-    editor_switch_state_to(EDITOR_STATE_TO_MAP_SETTINGS);
+    editor_switch_popup_to(EDITOR_POPUP_STATE_HELP);
 }
 
 void shortcut_screenshot()
@@ -236,216 +99,191 @@ void shortcut_screenshot()
     screenshot_num++;
 }
 
+void shortcut_new()
+{
+    if (is_popup_opened == true)
+    {
+        return;
+    }
+
+    if (editor_state == EDITOR_STATE_START)
+    {
+        editor_switch_popup_to(EDITOR_POPUP_STATE_NEW);
+        return;
+    }
+
+    editor_switch_popup_to(EDITOR_POPUP_STATE_CONFIRM_NEW);
+}
+
+void shortcut_open()
+{
+    if (is_popup_opened == true)
+    {
+        return;
+    }
+
+    if (editor_state == EDITOR_STATE_START)
+    {
+        editor_switch_popup_to(EDITOR_POPUP_STATE_OPEN);
+        return;
+    }
+
+    editor_switch_popup_to(EDITOR_POPUP_STATE_CONFIRM_OPEN);
+}
+
 void shortcut_settings()
 {
+    if (is_popup_opened == true)
+    {
+        return;
+    }
+
+    editor_switch_popup_to(EDITOR_POPUP_STATE_SETTINGS);
+}
+
+void shortcut_save()
+{
     if (is_shortcut_allowed() == false)
     {
         return;
     }
 
-    editor_switch_popup_to(EDITOR_POPUP_SETTINGS);
+    if (key_ctrl)
+    {
+        strcpy(save_as_filename, ep_filename);
+        editor_switch_popup_to(EDITOR_POPUP_STATE_SAVE_AS);
+        return;
+    }
+
+    STRING *temp_ep_name_str = "";
+    str_cpy(temp_ep_name_str, ep_filename);
+    str_cat(temp_ep_name_str, " saved.");
+    message_add(temp_ep_name_str);
+
+    episode_save(ep_filename, &def_episode);
 }
 
-void shortcut_toggle_debug()
+void shortcut_ep_reset()
 {
+    if (is_shortcut_allowed() == false)
+    {
+        return;
+    }
+
+    editor_switch_popup_to(EDITOR_POPUP_STATE_EP_RESET);
+}
+
+void shortcut_ep_edit()
+{
+    if (is_shortcut_allowed() == false)
+    {
+        return;
+    }
+
+    strcpy(episode_edit_name, def_episode.name);
+    episode_edit_map_count = def_episode.map_count;
+    editor_switch_popup_to(EDITOR_POPUP_STATE_EP_EDIT);
+}
+
+void shortcut_map_reset()
+{
+    if (is_shortcut_allowed() == false)
+    {
+        return;
+    }
+
+    editor_switch_popup_to(EDITOR_POPUP_STATE_MAP_RESET);
+}
+
+void shortcut_map_settings()
+{
+    if (is_shortcut_allowed() == false)
+    {
+        return;
+    }
+
+    Map *active_map = map_get_active(&def_episode);
+    map_copy(&map_settings, active_map);
+
+    is_map_settings_visible = 1 - is_map_settings_visible;
+}
+
+void shortcut_toggle_hovering_info()
+{
+    if (is_shortcut_allowed() == false)
+    {
+        return;
+    }
+
+    is_selected_cell_visible = 1 - is_selected_cell_visible;
+}
+
+void shortcut_toggle_debug_panel()
+{
+    if (is_shortcut_allowed() == false)
+    {
+        return;
+    }
+
     is_debug_panel_visible = 1 - is_debug_panel_visible;
-
-    if (is_debug_panel_visible == true)
-    {
-        message_add("Debug mode is ON");
-    }
-    else
-    {
-        message_add("Debug mode is OFF");
-    }
 }
 
-void shortcut_prior_map()
+void shortcut_map_prior()
 {
     if (is_shortcut_allowed() == false)
     {
         return;
     }
 
-    active_map_id--;
-    active_map_id = clamp(active_map_id, 0, def_episode.map_count - 1);
-
-    Map *active_map = map_get_active(&def_episode);
-    if (active_map)
-    {
-        map_sketch_refresh(active_map);
-    }
-
-    message_add(str_printf(NULL, "Moved to prior map! Active map id is %d", (long)active_map_id + 1));
+    map_prior();
 }
 
-void shortcut_next_map()
+void shortcut_map_next()
 {
     if (is_shortcut_allowed() == false)
     {
         return;
     }
 
-    active_map_id++;
-    active_map_id = clamp(active_map_id, 0, def_episode.map_count - 1);
-
-    Map *active_map = map_get_active(&def_episode);
-    if (active_map)
-    {
-        map_sketch_refresh(active_map);
-    }
-
-    message_add(str_printf(NULL, "Moved to next map! Active map id is %d", (long)active_map_id + 1));
+    map_next();
 }
 
-void shortcut_shift_map_west()
+void shortcut_map_shift_west()
 {
     if (is_shortcut_allowed() == false)
     {
         return;
     }
 
-    if (!key_shift)
-    {
-        return;
-    }
-
-    Map *active_map = map_get_active(&def_episode);
-    if (!active_map)
-    {
-        return;
-    }
-
-    int x = 0, y = 0;
-    for (x = 0; x < MAP_WIDTH; x++)
-    {
-        Cell saved;
-        cell_copy(&saved, &active_map->cell[x][0]);
-
-        for (y = 0; y < MAP_HEIGHT; y++)
-        {
-            Cell *from = &active_map->cell[x][y + 1];
-            Cell *to = &active_map->cell[x][y];
-            cell_copy(to, from);
-        }
-
-        cell_copy(&active_map->cell[x][MAP_HEIGHT - 1], &saved);
-    }
-    map_sketch_refresh(active_map);
-
-    message_add("Map shifted to the West");
+    map_shift_west();
 }
 
-void shortcut_shift_map_east()
+void shortcut_map_shift_east()
 {
     if (is_shortcut_allowed() == false)
     {
         return;
     }
 
-    if (!key_shift)
-    {
-        return;
-    }
-
-    Map *active_map = map_get_active(&def_episode);
-    if (!active_map)
-    {
-        return;
-    }
-
-    int x = 0, y = 0;
-    for (x = 0; x < MAP_WIDTH; x++)
-    {
-        Cell saved;
-        cell_copy(&saved, &active_map->cell[x][MAP_HEIGHT - 1]);
-
-        for (y = MAP_HEIGHT - 1; y >= 0; y--)
-        {
-            Cell *from = &active_map->cell[x][y - 1];
-            Cell *to = &active_map->cell[x][y];
-            cell_copy(to, from);
-        }
-
-        cell_copy(&active_map->cell[x][0], &saved);
-    }
-    map_sketch_refresh(active_map);
-
-    message_add("Map shifted to the East");
+    map_shift_east();
 }
 
-void shortcut_shift_map_south()
+void shortcut_map_shift_south()
 {
     if (is_shortcut_allowed() == false)
     {
         return;
     }
 
-    if (!key_shift)
-    {
-        return;
-    }
-
-    Map *active_map = map_get_active(&def_episode);
-    if (!active_map)
-    {
-        return;
-    }
-
-    int x = 0, y = 0;
-    for (y = 0; y < MAP_HEIGHT; y++)
-    {
-        Cell saved;
-        cell_copy(&saved, &active_map->cell[0][y]);
-
-        for (x = 0; x < MAP_WIDTH; x++)
-        {
-            Cell *from = &active_map->cell[x + 1][y];
-            Cell *to = &active_map->cell[x][y];
-            cell_copy(to, from);
-        }
-
-        cell_copy(&active_map->cell[MAP_WIDTH - 1][y], &saved);
-    }
-    map_sketch_refresh(active_map);
-
-    message_add("Map shifted to the South");
+    map_shift_south();
 }
 
-void shortcut_shift_map_north()
+void shortcut_map_shift_north()
 {
     if (is_shortcut_allowed() == false)
     {
         return;
     }
 
-    if (!key_shift)
-    {
-        return;
-    }
-
-    Map *active_map = map_get_active(&def_episode);
-    if (!active_map)
-    {
-        return;
-    }
-
-    int x = 0, y = 0;
-    for (y = 0; y < MAP_HEIGHT; y++)
-    {
-        Cell saved;
-        cell_copy(&saved, &active_map->cell[MAP_WIDTH - 1][y]);
-
-        for (x = MAP_WIDTH - 1; x >= 0; x--)
-        {
-            Cell *from = &active_map->cell[x - 1][y];
-            Cell *to = &active_map->cell[x][y];
-            cell_copy(to, from);
-        }
-
-        cell_copy(&active_map->cell[0][y], &saved);
-    }
-    map_sketch_refresh(active_map);
-
-    message_add("Map shifted to the North");
+    map_shift_north();
 }

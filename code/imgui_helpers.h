@@ -5,32 +5,6 @@ typedef void ImFont;
 typedef char utf8;
 typedef short unicode;
 
-// IMGUI
-// ------------------------------------------------------------------------------------------------------
-
-void editor_create_tooltip(char *tooltip)
-{
-    if (imgui_is_item_hovered())
-    {
-        imgui_set_tooltip(tooltip);
-        imgui_begin_tooltip();
-        imgui_end_tooltip();
-    }
-}
-
-void editor_help_maker(char *desc)
-{
-    imgui_text_disabled("(?)");
-    if (imgui_is_item_hovered())
-    {
-        imgui_begin_tooltip();
-        imgui_push_text_wrap_pos(imgui_get_font_size() * 35);
-        imgui_text_unformatted(desc);
-        imgui_pop_text_wrap_pos();
-        imgui_end_tooltip();
-    }
-}
-
 // imgui_fonts.ccp
 
 #define GLYPH_RANGE_Default 0

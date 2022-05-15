@@ -88,7 +88,7 @@ void debug_panel_update()
     if (debug_pan)
     {
         debug_pan->pos_x = camera->size_x - 320;
-        debug_pan->pos_y = camera->pos_y + 7;
+        debug_pan->pos_y = screen_size.y - 96;
 
         if (is_debug_panel_visible == true)
         {

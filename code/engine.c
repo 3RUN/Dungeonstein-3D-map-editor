@@ -242,6 +242,8 @@ void engine_apply_video_settings()
 
     // relock the mouse !
     autolock_mouse_locked = false;
+
+    shaders_reset();
 }
 
 void engine_initialize()

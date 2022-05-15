@@ -6,34 +6,37 @@ void config_initialize(STRING *config_file)
     strcpy(config_default.input_backward, _chr(input_def_backward_str));
     strcpy(config_default.input_strafe_left, _chr(input_def_strafe_left_str));
     strcpy(config_default.input_strafe_right, _chr(input_def_strafe_right_str));
-    strcpy(config_default.input_surface, _chr(input_def_surface_str));
-    strcpy(config_default.input_dive, _chr(input_def_dive_str));
+    strcpy(config_default.input_fly_up, _chr(input_def_fly_up_str));
+    strcpy(config_default.input_fly_down, _chr(input_def_fly_down_str));
     strcpy(config_default.input_run, _chr(input_def_run_str));
-    strcpy(config_default.input_drag_map, _chr(input_def_drag_map_str));
+    strcpy(config_default.input_rotate_camera, _chr(input_def_rotate_camera_str));
     strcpy(config_default.input_draw, _chr(input_def_draw_str));
     strcpy(config_default.input_erase, _chr(input_def_erase_str));
     strcpy(config_default.input_pick, _chr(input_def_pick_str));
     strcpy(config_default.input_rotate, _chr(input_def_rotate_str));
+    strcpy(config_default.input_toggle_assets, _chr(input_def_toggle_assets_str));
+    strcpy(config_default.input_toggle_lights, _chr(input_def_toggle_lights_str));
+    strcpy(config_default.input_toggle_draw_mode, _chr(input_def_toggle_draw_mode_str));
 
     // default shortcut
     strcpy(config_default.short_help, _chr(short_def_help_str));
+    strcpy(config_default.short_screenshot, _chr(short_def_screenshot_str));
     strcpy(config_default.short_new, _chr(short_def_new_str));
     strcpy(config_default.short_open, _chr(short_def_open_str));
+    strcpy(config_default.short_settings, _chr(short_def_settings_str));
     strcpy(config_default.short_save, _chr(short_def_save_str));
     strcpy(config_default.short_ep_reset, _chr(short_def_ep_reset_str));
     strcpy(config_default.short_ep_edit, _chr(short_def_ep_edit_str));
-    strcpy(config_default.short_reset_map, _chr(short_def_reset_map_str));
-    strcpy(config_default.short_test_run, _chr(short_def_test_run_str));
+    strcpy(config_default.short_map_reset, _chr(short_def_map_reset_str));
     strcpy(config_default.short_map_settings, _chr(short_def_map_settings_str));
-    strcpy(config_default.short_screenshot, _chr(short_def_screenshot_str));
-    strcpy(config_default.short_settings, _chr(short_def_settings_str));
-    strcpy(config_default.short_toggle_debug, _chr(short_def_toggle_debug_str));
-    strcpy(config_default.short_prior_map, _chr(short_def_prior_map_str));
-    strcpy(config_default.short_next_map, _chr(short_def_next_map_str));
-    strcpy(config_default.short_shift_map_west, _chr(short_def_shift_map_west_str));
-    strcpy(config_default.short_shift_map_east, _chr(short_def_shift_map_east_str));
-    strcpy(config_default.short_shift_map_south, _chr(short_def_shift_map_south_str));
-    strcpy(config_default.short_shift_map_north, _chr(short_def_shift_map_north_str));
+    strcpy(config_default.short_toggle_debug, _chr(short_def_toggle_hovering_str));
+    strcpy(config_default.short_toggle_hovering, _chr(short_def_toggle_debug_str));
+    strcpy(config_default.short_map_prior, _chr(short_def_map_prior_str));
+    strcpy(config_default.short_map_next, _chr(short_def_map_next_str));
+    strcpy(config_default.short_map_shift_west, _chr(short_def_map_shift_west_str));
+    strcpy(config_default.short_map_shift_east, _chr(short_def_map_shift_east_str));
+    strcpy(config_default.short_map_shift_south, _chr(short_def_map_shift_south_str));
+    strcpy(config_default.short_map_shift_north, _chr(short_def_map_shift_north_str));
 
     // mouse
     config_default.mouse_sensitivity = mouse_def_sensitivity;
@@ -42,8 +45,6 @@ void config_initialize(STRING *config_file)
     config_default.master_volume = master_def_volume;
 
     // others
-    config_default.is_cell_tooltip_enabled = is_cell_tooltip_def_enabled;
-
     config_default.font_scale = font_def_scale;
     background_def_color[0] = get_hsv_from_color(152);
     background_def_color[1] = get_hsv_from_color(0);
@@ -80,12 +81,12 @@ void config_save()
 
 void config_apply()
 {
-    imgui_set_global_fontscale(config_current.font_scale);
-    camera_input_from_config(&config_current);
-    shortcuts_update_from_config(&config_current);
-    editor_tools_update_input_from_config(&config_current);
-    editor_test_run_update_from_config(&config_current);
+    camera_load_config(&config_current);
+    editor_load_config(&config_current);
+    shortcuts_load_config(&config_current);
+    map_draw_load_config(&config_current);
 
+    imgui_set_global_fontscale(config_current.font_scale);
     draw_textmode("Courier", 1, 12 * config_saved.font_scale, 100);
     master_vol = config_saved.master_volume;
 
@@ -101,34 +102,37 @@ void config_reset_to_default(int tab)
         strcpy(config_current.input_backward, config_default.input_backward);
         strcpy(config_current.input_strafe_left, config_default.input_strafe_left);
         strcpy(config_current.input_strafe_right, config_default.input_strafe_right);
-        strcpy(config_current.input_surface, config_default.input_surface);
-        strcpy(config_current.input_dive, config_default.input_dive);
+        strcpy(config_current.input_fly_up, config_default.input_fly_up);
+        strcpy(config_current.input_fly_down, config_default.input_fly_down);
         strcpy(config_current.input_run, config_default.input_run);
-        strcpy(config_current.input_drag_map, config_default.input_drag_map);
+        strcpy(config_current.input_rotate_camera, config_default.input_rotate_camera);
         strcpy(config_current.input_draw, config_default.input_draw);
         strcpy(config_current.input_erase, config_default.input_erase);
         strcpy(config_current.input_pick, config_default.input_pick);
         strcpy(config_current.input_rotate, config_default.input_rotate);
+        strcpy(config_current.input_toggle_assets, config_default.input_toggle_assets);
+        strcpy(config_current.input_toggle_lights, config_default.input_toggle_lights);
+        strcpy(config_current.input_toggle_draw_mode, config_default.input_toggle_draw_mode);
 
         // shortcuts
         strcpy(config_current.short_help, config_default.short_help);
+        strcpy(config_current.short_screenshot, config_default.short_screenshot);
         strcpy(config_current.short_new, config_default.short_new);
         strcpy(config_current.short_open, config_default.short_open);
+        strcpy(config_current.short_settings, config_default.short_settings);
         strcpy(config_current.short_save, config_default.short_save);
         strcpy(config_current.short_ep_reset, config_default.short_ep_reset);
         strcpy(config_current.short_ep_edit, config_default.short_ep_edit);
-        strcpy(config_current.short_reset_map, config_default.short_reset_map);
-        strcpy(config_current.short_test_run, config_default.short_test_run);
+        strcpy(config_current.short_map_reset, config_default.short_map_reset);
         strcpy(config_current.short_map_settings, config_default.short_map_settings);
-        strcpy(config_current.short_screenshot, config_default.short_screenshot);
-        strcpy(config_current.short_settings, config_default.short_settings);
         strcpy(config_current.short_toggle_debug, config_default.short_toggle_debug);
-        strcpy(config_current.short_prior_map, config_default.short_prior_map);
-        strcpy(config_current.short_next_map, config_default.short_next_map);
-        strcpy(config_current.short_shift_map_west, config_default.short_shift_map_west);
-        strcpy(config_current.short_shift_map_east, config_default.short_shift_map_east);
-        strcpy(config_current.short_shift_map_south, config_default.short_shift_map_south);
-        strcpy(config_current.short_shift_map_north, config_default.short_shift_map_north);
+        strcpy(config_current.short_toggle_hovering, config_default.short_toggle_hovering);
+        strcpy(config_current.short_map_prior, config_default.short_map_prior);
+        strcpy(config_current.short_map_next, config_default.short_map_next);
+        strcpy(config_current.short_map_shift_west, config_default.short_map_shift_west);
+        strcpy(config_current.short_map_shift_east, config_default.short_map_shift_east);
+        strcpy(config_current.short_map_shift_south, config_default.short_map_shift_south);
+        strcpy(config_current.short_map_shift_north, config_default.short_map_shift_north);
 
         // mouse
         config_current.mouse_sensitivity = config_default.mouse_sensitivity;
@@ -139,8 +143,6 @@ void config_reset_to_default(int tab)
         config_current.master_volume = config_default.master_volume;
 
         // other settings
-        config_current.is_cell_tooltip_enabled = config_default.is_cell_tooltip_enabled;
-
         config_current.font_scale = config_default.font_scale;
         config_current.background_color[0] = config_default.background_color[0];
         config_current.background_color[1] = config_default.background_color[1];
@@ -162,34 +164,37 @@ void config_reset_to_saved()
     strcpy(config_current.input_backward, config_saved.input_backward);
     strcpy(config_current.input_strafe_left, config_saved.input_strafe_left);
     strcpy(config_current.input_strafe_right, config_saved.input_strafe_right);
-    strcpy(config_current.input_surface, config_saved.input_surface);
-    strcpy(config_current.input_dive, config_saved.input_dive);
+    strcpy(config_current.input_fly_up, config_saved.input_fly_up);
+    strcpy(config_current.input_fly_down, config_saved.input_fly_down);
     strcpy(config_current.input_run, config_saved.input_run);
-    strcpy(config_current.input_drag_map, config_saved.input_drag_map);
+    strcpy(config_current.input_rotate_camera, config_saved.input_rotate_camera);
     strcpy(config_current.input_draw, config_saved.input_draw);
     strcpy(config_current.input_erase, config_saved.input_erase);
     strcpy(config_current.input_pick, config_saved.input_pick);
     strcpy(config_current.input_rotate, config_saved.input_rotate);
+    strcpy(config_current.input_toggle_assets, config_saved.input_toggle_assets);
+    strcpy(config_current.input_toggle_lights, config_saved.input_toggle_lights);
+    strcpy(config_current.input_toggle_draw_mode, config_saved.input_toggle_draw_mode);
 
     // shortcuts
     strcpy(config_current.short_help, config_saved.short_help);
+    strcpy(config_current.short_screenshot, config_saved.short_screenshot);
     strcpy(config_current.short_new, config_saved.short_new);
     strcpy(config_current.short_open, config_saved.short_open);
+    strcpy(config_current.short_settings, config_saved.short_settings);
     strcpy(config_current.short_save, config_saved.short_save);
     strcpy(config_current.short_ep_reset, config_saved.short_ep_reset);
     strcpy(config_current.short_ep_edit, config_saved.short_ep_edit);
-    strcpy(config_current.short_reset_map, config_saved.short_reset_map);
-    strcpy(config_current.short_test_run, config_saved.short_test_run);
+    strcpy(config_current.short_map_reset, config_saved.short_map_reset);
     strcpy(config_current.short_map_settings, config_saved.short_map_settings);
-    strcpy(config_current.short_screenshot, config_saved.short_screenshot);
-    strcpy(config_current.short_settings, config_saved.short_settings);
     strcpy(config_current.short_toggle_debug, config_saved.short_toggle_debug);
-    strcpy(config_current.short_prior_map, config_saved.short_prior_map);
-    strcpy(config_current.short_next_map, config_saved.short_next_map);
-    strcpy(config_current.short_shift_map_west, config_saved.short_shift_map_west);
-    strcpy(config_current.short_shift_map_east, config_saved.short_shift_map_east);
-    strcpy(config_current.short_shift_map_south, config_saved.short_shift_map_south);
-    strcpy(config_current.short_shift_map_north, config_saved.short_shift_map_north);
+    strcpy(config_current.short_toggle_hovering, config_saved.short_toggle_hovering);
+    strcpy(config_current.short_map_prior, config_saved.short_map_prior);
+    strcpy(config_current.short_map_next, config_saved.short_map_next);
+    strcpy(config_current.short_map_shift_west, config_saved.short_map_shift_west);
+    strcpy(config_current.short_map_shift_east, config_saved.short_map_shift_east);
+    strcpy(config_current.short_map_shift_south, config_saved.short_map_shift_south);
+    strcpy(config_current.short_map_shift_north, config_saved.short_map_shift_north);
 
     // mouse
     config_current.mouse_sensitivity = config_saved.mouse_sensitivity;
@@ -198,8 +203,6 @@ void config_reset_to_saved()
     config_current.master_volume = config_saved.master_volume;
 
     // other settings
-    config_current.is_cell_tooltip_enabled = config_saved.is_cell_tooltip_enabled;
-
     config_current.font_scale = config_saved.font_scale;
     config_current.background_color[0] = config_saved.background_color[0];
     config_current.background_color[1] = config_saved.background_color[1];
@@ -220,34 +223,37 @@ void config_load_from_file(STRING *config_file)
     ini_read_write_char(config_current.input_backward, config_file, config_input_section_str, input_backward_entry_str, config_default.input_backward);
     ini_read_write_char(config_current.input_strafe_left, config_file, config_input_section_str, input_strafe_left_entry_str, config_default.input_strafe_left);
     ini_read_write_char(config_current.input_strafe_right, config_file, config_input_section_str, input_strafe_right_entry_str, config_default.input_strafe_right);
-    ini_read_write_char(config_current.input_surface, config_file, config_input_section_str, input_surface_entry_str, config_default.input_surface);
-    ini_read_write_char(config_current.input_dive, config_file, config_input_section_str, input_dive_entry_str, config_default.input_dive);
+    ini_read_write_char(config_current.input_fly_up, config_file, config_input_section_str, input_fly_up_entry_str, config_default.input_fly_up);
+    ini_read_write_char(config_current.input_fly_down, config_file, config_input_section_str, input_fly_down_entry_str, config_default.input_fly_down);
     ini_read_write_char(config_current.input_run, config_file, config_input_section_str, input_run_entry_str, config_default.input_run);
-    ini_read_write_char(config_current.input_drag_map, config_file, config_input_section_str, input_drag_map_entry_str, config_default.input_drag_map);
+    ini_read_write_char(config_current.input_rotate_camera, config_file, config_input_section_str, input_rotate_cam_entry_str, config_default.input_rotate_camera);
     ini_read_write_char(config_current.input_draw, config_file, config_input_section_str, input_draw_entry_str, config_default.input_draw);
     ini_read_write_char(config_current.input_erase, config_file, config_input_section_str, input_erase_entry_str, config_default.input_erase);
     ini_read_write_char(config_current.input_pick, config_file, config_input_section_str, input_pick_entry_str, config_default.input_pick);
     ini_read_write_char(config_current.input_rotate, config_file, config_input_section_str, input_rotate_entry_str, config_default.input_rotate);
+    ini_read_write_char(config_current.input_toggle_assets, config_file, config_input_section_str, input_toggle_assets_entry_str, config_default.input_toggle_assets);
+    ini_read_write_char(config_current.input_toggle_lights, config_file, config_input_section_str, input_toggle_lights_entry_str, config_default.input_toggle_lights);
+    ini_read_write_char(config_current.input_toggle_draw_mode, config_file, config_input_section_str, input_toggle_draw_mode_entry_str, config_default.input_toggle_draw_mode);
 
     // shortcuts
     ini_read_write_char(config_current.short_help, config_file, config_shortcuts_section_str, short_help_entry_str, config_default.short_help);
+    ini_read_write_char(config_current.short_screenshot, config_file, config_shortcuts_section_str, short_screenshot_entry_str, config_default.short_screenshot);
     ini_read_write_char(config_current.short_new, config_file, config_shortcuts_section_str, short_new_entry_str, config_default.short_new);
     ini_read_write_char(config_current.short_open, config_file, config_shortcuts_section_str, short_open_entry_str, config_default.short_open);
+    ini_read_write_char(config_current.short_settings, config_file, config_shortcuts_section_str, short_settings_entry_str, config_default.short_settings);
     ini_read_write_char(config_current.short_save, config_file, config_shortcuts_section_str, short_save_entry_str, config_default.short_save);
     ini_read_write_char(config_current.short_ep_reset, config_file, config_shortcuts_section_str, short_ep_reset_entry_str, config_default.short_ep_reset);
     ini_read_write_char(config_current.short_ep_edit, config_file, config_shortcuts_section_str, short_ep_edit_entry_str, config_default.short_ep_edit);
-    ini_read_write_char(config_current.short_reset_map, config_file, config_shortcuts_section_str, short_reset_map_entry_str, config_default.short_reset_map);
-    ini_read_write_char(config_current.short_test_run, config_file, config_shortcuts_section_str, short_test_run_entry_str, config_default.short_test_run);
+    ini_read_write_char(config_current.short_map_reset, config_file, config_shortcuts_section_str, short_map_reset_entry_str, config_default.short_map_reset);
     ini_read_write_char(config_current.short_map_settings, config_file, config_shortcuts_section_str, short_map_settings_entry_str, config_default.short_map_settings);
-    ini_read_write_char(config_current.short_screenshot, config_file, config_shortcuts_section_str, short_screenshot_entry_str, config_default.short_screenshot);
-    ini_read_write_char(config_current.short_settings, config_file, config_shortcuts_section_str, short_settings_entry_str, config_default.short_settings);
-    ini_read_write_char(config_current.short_toggle_debug, config_file, config_shortcuts_section_str, short_toggle_debug_entry_str, config_default.short_toggle_debug);
-    ini_read_write_char(config_current.short_prior_map, config_file, config_shortcuts_section_str, short_prior_map_entry_str, config_default.short_prior_map);
-    ini_read_write_char(config_current.short_next_map, config_file, config_shortcuts_section_str, short_next_map_entry_str, config_default.short_next_map);
-    ini_read_write_char(config_current.short_shift_map_west, config_file, config_shortcuts_section_str, short_shift_map_west_entry_str, config_default.short_shift_map_west);
-    ini_read_write_char(config_current.short_shift_map_east, config_file, config_shortcuts_section_str, short_shift_map_east_entry_str, config_default.short_shift_map_east);
-    ini_read_write_char(config_current.short_shift_map_south, config_file, config_shortcuts_section_str, short_shift_map_south_entry_str, config_default.short_shift_map_south);
-    ini_read_write_char(config_current.short_shift_map_north, config_file, config_shortcuts_section_str, short_shift_map_north_entry_str, config_default.short_shift_map_north);
+    ini_read_write_char(config_current.short_toggle_debug, config_file, config_shortcuts_section_str, short_toggle_hovering_entry_str, config_default.short_toggle_debug);
+    ini_read_write_char(config_current.short_toggle_hovering, config_file, config_shortcuts_section_str, short_toggle_debug_entry_str, config_default.short_toggle_hovering);
+    ini_read_write_char(config_current.short_map_prior, config_file, config_shortcuts_section_str, short_map_prior_entry_str, config_default.short_map_prior);
+    ini_read_write_char(config_current.short_map_next, config_file, config_shortcuts_section_str, short_map_next_entry_str, config_default.short_map_next);
+    ini_read_write_char(config_current.short_map_shift_west, config_file, config_shortcuts_section_str, short_map_shift_west_entry_str, config_default.short_map_shift_west);
+    ini_read_write_char(config_current.short_map_shift_east, config_file, config_shortcuts_section_str, short_map_shift_east_entry_str, config_default.short_map_shift_east);
+    ini_read_write_char(config_current.short_map_shift_south, config_file, config_shortcuts_section_str, short_map_shift_south_entry_str, config_default.short_map_shift_south);
+    ini_read_write_char(config_current.short_map_shift_north, config_file, config_shortcuts_section_str, short_map_shift_north_entry_str, config_default.short_map_shift_north);
 
     // mouse
     ini_read_write_float(&config_current.mouse_sensitivity, config_file, config_input_section_str, mouse_sensitivity_entry_str, config_default.mouse_sensitivity);
@@ -256,8 +262,6 @@ void config_load_from_file(STRING *config_file)
     ini_read_write_float(&config_current.master_volume, config_file, config_other_section_str, other_master_volume_entry_str, config_default.master_volume);
 
     // other settings
-    ini_read_write_int(&config_current.is_cell_tooltip_enabled, config_file, config_other_section_str, other_cell_tooltip_entry_str, config_default.is_cell_tooltip_enabled);
-
     ini_read_write_float(&config_current.font_scale, config_file, config_other_section_str, other_font_scale_entry_str, config_default.font_scale);
     ini_read_write_float(&config_current.background_color[0], config_file, config_other_section_str, other_background_color_red_entry_str, config_default.background_color[0]);
     ini_read_write_float(&config_current.background_color[1], config_file, config_other_section_str, other_background_color_green_entry_str, config_default.background_color[1]);
@@ -281,34 +285,37 @@ void config_save_to_file(STRING *config_file)
     ini_write(config_file, config_input_section_str, input_backward_entry_str, config_current.input_backward);
     ini_write(config_file, config_input_section_str, input_strafe_left_entry_str, config_current.input_strafe_left);
     ini_write(config_file, config_input_section_str, input_strafe_right_entry_str, config_current.input_strafe_right);
-    ini_write(config_file, config_input_section_str, input_surface_entry_str, config_current.input_surface);
-    ini_write(config_file, config_input_section_str, input_dive_entry_str, config_current.input_dive);
+    ini_write(config_file, config_input_section_str, input_fly_up_entry_str, config_current.input_fly_up);
+    ini_write(config_file, config_input_section_str, input_fly_down_entry_str, config_current.input_fly_down);
     ini_write(config_file, config_input_section_str, input_run_entry_str, config_current.input_run);
-    ini_write(config_file, config_input_section_str, input_drag_map_entry_str, config_current.input_drag_map);
+    ini_write(config_file, config_input_section_str, input_rotate_cam_entry_str, config_current.input_rotate_camera);
     ini_write(config_file, config_input_section_str, input_draw_entry_str, config_current.input_draw);
     ini_write(config_file, config_input_section_str, input_erase_entry_str, config_current.input_erase);
     ini_write(config_file, config_input_section_str, input_pick_entry_str, config_current.input_pick);
     ini_write(config_file, config_input_section_str, input_rotate_entry_str, config_current.input_rotate);
+    ini_write(config_file, config_input_section_str, input_toggle_assets_entry_str, config_current.input_toggle_assets);
+    ini_write(config_file, config_input_section_str, input_toggle_lights_entry_str, config_current.input_toggle_lights);
+    ini_write(config_file, config_input_section_str, input_toggle_draw_mode_entry_str, config_current.input_toggle_draw_mode);
 
     // shortcut
     ini_write(config_file, config_shortcuts_section_str, short_help_entry_str, config_current.short_help);
+    ini_write(config_file, config_shortcuts_section_str, short_screenshot_entry_str, config_current.short_screenshot);
     ini_write(config_file, config_shortcuts_section_str, short_new_entry_str, config_current.short_new);
     ini_write(config_file, config_shortcuts_section_str, short_open_entry_str, config_current.short_open);
+    ini_write(config_file, config_shortcuts_section_str, short_settings_entry_str, config_current.short_settings);
     ini_write(config_file, config_shortcuts_section_str, short_save_entry_str, config_current.short_save);
     ini_write(config_file, config_shortcuts_section_str, short_ep_reset_entry_str, config_current.short_ep_reset);
     ini_write(config_file, config_shortcuts_section_str, short_ep_edit_entry_str, config_current.short_ep_edit);
-    ini_write(config_file, config_shortcuts_section_str, short_reset_map_entry_str, config_current.short_reset_map);
-    ini_write(config_file, config_shortcuts_section_str, short_test_run_entry_str, config_current.short_test_run);
+    ini_write(config_file, config_shortcuts_section_str, short_map_reset_entry_str, config_current.short_map_reset);
     ini_write(config_file, config_shortcuts_section_str, short_map_settings_entry_str, config_current.short_map_settings);
-    ini_write(config_file, config_shortcuts_section_str, short_screenshot_entry_str, config_current.short_screenshot);
-    ini_write(config_file, config_shortcuts_section_str, short_settings_entry_str, config_current.short_settings);
-    ini_write(config_file, config_shortcuts_section_str, short_prior_map_entry_str, config_current.short_prior_map);
-    ini_write(config_file, config_shortcuts_section_str, short_next_map_entry_str, config_current.short_next_map);
-    ini_write(config_file, config_shortcuts_section_str, short_toggle_debug_entry_str, config_current.short_toggle_debug);
-    ini_write(config_file, config_shortcuts_section_str, short_shift_map_west_entry_str, config_current.short_shift_map_west);
-    ini_write(config_file, config_shortcuts_section_str, short_shift_map_east_entry_str, config_current.short_shift_map_east);
-    ini_write(config_file, config_shortcuts_section_str, short_shift_map_south_entry_str, config_current.short_shift_map_south);
-    ini_write(config_file, config_shortcuts_section_str, short_shift_map_north_entry_str, config_current.short_shift_map_north);
+    ini_write(config_file, config_shortcuts_section_str, short_toggle_hovering_entry_str, config_current.short_toggle_debug);
+    ini_write(config_file, config_shortcuts_section_str, short_toggle_debug_entry_str, config_current.short_toggle_hovering);
+    ini_write(config_file, config_shortcuts_section_str, short_map_prior_entry_str, config_current.short_map_prior);
+    ini_write(config_file, config_shortcuts_section_str, short_map_next_entry_str, config_current.short_map_next);
+    ini_write(config_file, config_shortcuts_section_str, short_map_shift_west_entry_str, config_current.short_map_shift_west);
+    ini_write(config_file, config_shortcuts_section_str, short_map_shift_east_entry_str, config_current.short_map_shift_east);
+    ini_write(config_file, config_shortcuts_section_str, short_map_shift_south_entry_str, config_current.short_map_shift_south);
+    ini_write(config_file, config_shortcuts_section_str, short_map_shift_north_entry_str, config_current.short_map_shift_north);
 
     // mouse
     ini_write_float(config_file, config_input_section_str, mouse_sensitivity_entry_str, config_current.mouse_sensitivity);
@@ -317,8 +324,6 @@ void config_save_to_file(STRING *config_file)
     ini_write_float(config_file, config_other_section_str, other_master_volume_entry_str, config_current.master_volume);
 
     // other settings
-    ini_write_int(config_file, config_other_section_str, other_cell_tooltip_entry_str, config_current.is_cell_tooltip_enabled);
-
     ini_write_float(config_file, config_other_section_str, other_font_scale_entry_str, config_current.font_scale);
     ini_write_float(config_file, config_other_section_str, other_background_color_red_entry_str, config_current.background_color[0]);
     ini_write_float(config_file, config_other_section_str, other_background_color_green_entry_str, config_current.background_color[1]);

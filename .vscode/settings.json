@@ -53,6 +53,20 @@
         "map_sketcher.h": "c",
         "draw.h": "c",
         "assets_helper.h": "c",
-        "camera_n_grid.h": "c"
+        "camera_n_grid.h": "c",
+        "memory.h": "c",
+        "shortcuts.h": "c",
+        "editor_popups.h": "c",
+        "camera.h": "c",
+        "editor_assets.h": "c",
+        "lightstyle.h": "c",
+        "grid.h": "c",
+        "map_loader.h": "c",
+        "editor_start.h": "c",
+        "editor_general.h": "c",
+        "object_params.h": "c",
+        "map_draw.h": "c",
+        "map_funcs.h": "c",
+        "compass.h": "c"
     }
 }

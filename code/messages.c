@@ -22,13 +22,11 @@ void messages_destroy()
         if (message_pan[i])
         {
             safe_remove(message_pan[i]);
-            message_pan[i] = NULL;
         }
 
         if (message_str[i])
         {
             safe_remove(message_str[i]);
-            message_str[i] = NULL;
         }
     }
 }
@@ -72,7 +70,7 @@ void messages_reset()
 
 void message_add(STRING *msg)
 {
-    if (editor_state != EDITOR_STATE_BUILD && editor_state != EDITOR_STATE_MAP_SETTINGS)
+    if (editor_state == EDITOR_STATE_START || editor_state == EDITOR_STATE_EDIT)
     {
         messages_total++;
         messages_total = clamp(messages_total, 0, MAX_MESSAGES);
