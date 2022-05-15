@@ -14,7 +14,7 @@ Originally editor was suppose to look like Havoc's Wolf3D Editor, but then I've 
 - imgui wrapper/plugin which was originally made by Patrick Jendral (jenGs), edited by forum members Txesmi and EVO. Original sources can be found here: https://github.com/ocornut/imgui and https://github.com/pjen/imgui-Lite-C-integration and https://github.com/txesmi/imgui-Lite-C-integration
 - WinAPI to find all supported resolutions of the primary monitor (big thanks to forum members Superku and Emre)
 - Sidney Just aka JustSid for teaching me C/C++ basics and helping out with dynamic array
-- JustinV aka Justin Varghese for supporting me and testing 🖤
+- JustinV aka Justin Varghese and Emre aka Mr. Cthulhu for supporting me and testing 🖤
 
 # Some screenshots:
 ![Alt text](https://github.com/3RUN/Dungeonstein-3D-map-editor/blob/main/screenshots/5.jpg?raw=true "Main interface.")
