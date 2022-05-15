@@ -22,14 +22,7 @@ in float4 inposition: POSITION,
 out float4 outposition: POSITION,
 out float4 outWorld: TEXCOORD1)
 {
-	// vertex snapping
-	float4 snapToPixel = mul(inposition, matWorldViewProj);
-	float4 vertex = snapToPixel;
-	vertex.xyz = snapToPixel.xyz / snapToPixel.w;
-	vertex.x = floor((vecSkill1.y + 40) * vertex.x) / (vecSkill1.y + 40); // default 160
-	vertex.y = floor(vecSkill1.y * vertex.y) / vecSkill1.y; // default 120
-	vertex.xyz *= snapToPixel.w;
-	outposition = vertex;
+	outposition = mul(inposition, matWorldViewProj);
 
 	outWorld = mul(inposition, matWorld);
 }

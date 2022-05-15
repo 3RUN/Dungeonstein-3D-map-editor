@@ -11,7 +11,7 @@ BMAP *render_target_tga;
 ENTITY *skycube_ent = NULL;
 
 var shader_level_ambient = 0.35;
-var shader_vertex_snapping = 80;
+var shader_vertex_snapping = 120;
 var shader_lighting_brightness = 25;
 var shader_sky_fogginess = 0.5; // smaller value - less fog
 
