@@ -83,7 +83,7 @@
 #define TELEPORT_LIGHTRANGE 32
 
 STRING *editor_config_file_str = "editor_config.ini";
-STRING *project_name_str = "MapEditor";
+STRING *project_name_str = "Dungeonstein3D";
 STRING *episode_save_folder_str = "episodes\\";
 STRING *episode_music_folder_str = "music\\";
 STRING *episode_extension_str = ".ep";
