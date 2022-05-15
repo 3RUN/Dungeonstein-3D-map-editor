@@ -389,7 +389,7 @@ void map_create_solid(Map *map, Cell *cell)
 
 void map_remove_object(Map *map, Cell *cell)
 {
-    if (!cell)
+    if (!map && !cell)
     {
         return;
     }
@@ -526,7 +526,7 @@ void map_rotate_object(Cell *cell)
 
 void map_create_object(Map *map, Cell *cell)
 {
-    if (!cell)
+    if (!map && !cell)
     {
         return;
     }
@@ -1149,8 +1149,6 @@ void map_load(Map *map)
     }
 
     map_destroy();
-
-    int x = 0, y = 0;
 
     int x = 0, y = 0;
     for (y = 0; y < MAP_HEIGHT; y++)

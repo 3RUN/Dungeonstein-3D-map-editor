@@ -191,7 +191,7 @@ void popup_open(Episode *episode)
 
     if (found_episodes_total <= 0)
     {
-        imgui_text("'Documents\\MapEditor\\episodes' - folder is empty.");
+        imgui_text("'Documents\\Dungeonstein3D\\episodes' - folder is empty.");
     }
     else
     {
