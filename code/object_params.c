@@ -255,17 +255,17 @@ void params_doors(Object *object)
         object->flag[1] = 0;
     }
     imgui_same_line();
-    if (imgui_radiobutton("Key", &object->flag[0], 1))
+    if (imgui_radiobutton("Switch", &object->flag[0], 1))
     {
         object->flag[1] = 0;
     }
     imgui_same_line();
-    if (imgui_radiobutton("Switch", &object->flag[0], 2))
+    if (imgui_radiobutton("Trigger zone", &object->flag[0], 2))
     {
         object->flag[1] = 0;
     }
     imgui_same_line();
-    if (imgui_radiobutton("Trigger zone", &object->flag[0], 3))
+    if (imgui_radiobutton("Key", &object->flag[0], 3))
     {
         object->flag[1] = 0;
     }
@@ -275,7 +275,7 @@ void params_doors(Object *object)
         object->flag[1] = 0;
     }
 
-    if (object->flag[0] == 1)
+    if (object->flag[0] == 3)
     {
         imgui_text("Key type:");
         imgui_same_line();
@@ -285,7 +285,7 @@ void params_doors(Object *object)
         imgui_same_line();
         imgui_radio_button("yellow", &object->flag[1], 2);
     }
-    else if (object->flag[0] == 2 || object->flag[0] == 3)
+    else if (object->flag[0] == 1 || object->flag[0] == 2)
     {
         params_id(object);
     }

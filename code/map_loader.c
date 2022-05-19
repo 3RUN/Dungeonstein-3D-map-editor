@@ -557,6 +557,7 @@ void map_create_object(Map *map, Cell *cell)
         {
             mesh[x][y].object = ent_create(bbox_npc_mdl, &mesh[x][y].pos, player_controller);
             mesh[x][y].object->z += MAP_CELL_SIZE / 2;
+            mesh[x][y].object->pan = pan;
 
             mesh[x][y].rotation = ent_create(direction_pcx, &cell_pos, map_marker_fnc);
             mesh[x][y].rotation->pan = pan;
@@ -605,6 +606,7 @@ void map_create_object(Map *map, Cell *cell)
         {
             mesh[x][y].object = ent_create(secret_wall_mdl, &mesh[x][y].pos, teleport_out);
             mesh[x][y].object->z += MAP_CELL_SIZE / 2;
+            mesh[x][y].object->pan = pan;
 
             mesh[x][y].rotation = ent_create(direction_pcx, &cell_pos, map_marker_fnc);
             mesh[x][y].rotation->pan = pan;
@@ -671,7 +673,7 @@ void map_create_object(Map *map, Cell *cell)
             set(mesh[x][y].object->parent, DECAL);
             mesh[x][y].object->parent->z += MAP_CELL_SIZE / 2;
 
-            if (cell->object.flag[0] == 1) // uses keys ?
+            if (cell->object.flag[0] == 3) // uses keys ?
             {
                 set(mesh[x][y].object->parent, LIGHT);
 
@@ -704,6 +706,10 @@ void map_create_object(Map *map, Cell *cell)
                 Cell *neighbour = map_get_neighbours(map, vector(x, y, 0), &cardinal_dir[i], 1);
                 if (!neighbour)
                 {
+                    if (mesh[x][y].face[i])
+                    {
+                        ent_change_skin(mesh[x][y].face[i], doorway_wall_pcx);
+                    }
                     continue;
                 }
 

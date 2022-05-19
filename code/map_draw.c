@@ -178,6 +178,7 @@ void map_draw_draw(Map *map, Cell *cell)
             map_find_n_erase_teleport_out(map, preview_cell.object.flag[1]);
         }
 
+        cell->object.pan = preview_cell.object.pan;
         cell->object.is_occupied = true;
         cell->object.type = preview_cell.object.type;
         cell->object.index = preview_cell.object.index;
@@ -248,6 +249,7 @@ void map_draw_pick(Map *map, Cell *cell)
     {
         if (cell->object.is_occupied == true)
         {
+            preview_cell.object.pan = cell->object.pan;
             preview_cell.object.type = cell->object.type;
             preview_cell.object.index = cell->object.index;
 

@@ -235,12 +235,22 @@ void shortcut_map_prior()
         return;
     }
 
+    if (!key_ctrl)
+    {
+        return;
+    }
+
     map_prior();
 }
 
 void shortcut_map_next()
 {
     if (is_shortcut_allowed() == false)
+    {
+        return;
+    }
+
+    if (!key_ctrl)
     {
         return;
     }
@@ -255,12 +265,22 @@ void shortcut_map_shift_west()
         return;
     }
 
+    if (!key_shift)
+    {
+        return;
+    }
+
     map_shift_west();
 }
 
 void shortcut_map_shift_east()
 {
     if (is_shortcut_allowed() == false)
+    {
+        return;
+    }
+
+    if (!key_shift)
     {
         return;
     }
@@ -275,12 +295,22 @@ void shortcut_map_shift_south()
         return;
     }
 
+    if (!key_shift)
+    {
+        return;
+    }
+
     map_shift_south();
 }
 
 void shortcut_map_shift_north()
 {
     if (is_shortcut_allowed() == false)
+    {
+        return;
+    }
+
+    if (!key_shift)
     {
         return;
     }

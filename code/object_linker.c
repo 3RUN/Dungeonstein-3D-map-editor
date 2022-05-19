@@ -143,7 +143,21 @@ void object_show_links()
 
             if (is_door(type, index))
             {
-                if (requires == 1) // key
+                if (requires == 1 && is_switch(activator_type, activator_index)) // switch
+                {
+                    if (activator_id == id)
+                    {
+                        particle_draw_line(&from, &to);
+                    }
+                }
+                else if (requires == 2 && is_trigger_zone(activator_type, activator_index)) // trigger zone
+                {
+                    if (activator_id == id)
+                    {
+                        particle_draw_line(&from, &to);
+                    }
+                }
+                else if (requires == 3) // key
                 {
                     if (id == 0 && is_a_key_blue(activator_type, activator_index))
                     {
@@ -154,20 +168,6 @@ void object_show_links()
                         particle_draw_line(&from, &to);
                     }
                     else if (id == 2 && is_a_key_yellow(activator_type, activator_index))
-                    {
-                        particle_draw_line(&from, &to);
-                    }
-                }
-                else if (requires == 2 && is_switch(activator_type, activator_index)) // switch
-                {
-                    if (activator_id == id)
-                    {
-                        particle_draw_line(&from, &to);
-                    }
-                }
-                else if (requires == 3 && is_trigger_zone(activator_type, activator_index)) // trigger zone
-                {
-                    if (activator_id == id)
                     {
                         particle_draw_line(&from, &to);
                     }
