@@ -393,11 +393,17 @@ void editor_map_settings(Episode *episode)
     if (imgui_arrow_button("##prior map button", ImGuiDir_Left))
     {
         map_prior();
+
+        Map *active_map = map_get_active(episode);
+        map_copy(&map_settings, active_map);
     }
     imgui_same_line();
     if (imgui_arrow_button("##next map button", ImGuiDir_Right))
     {
         map_next();
+
+        Map *active_map = map_get_active(episode);
+        map_copy(&map_settings, active_map);
     }
     imgui_separator();
 
