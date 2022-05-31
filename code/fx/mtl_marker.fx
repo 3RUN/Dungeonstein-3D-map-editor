@@ -2,19 +2,11 @@
 float4x4 matWorldViewProj;
 float4x4 matWorld;
 
-float iLights;
-float4 vecLightPos[8];
-float4 vecLightColor[8];
-float4 vecLightDir[8];
-
 float4 vecViewPos;
-float4 vecViewDir;
 float4 vecFog;
 float4 vecFogColor;
 float4 vecLight;
 float4 vecColor;
-float4 vecAmbient;
-float4 vecEmissive;
 float4 vecSkill1;
 
 texture entSkin1;
