@@ -37,7 +37,9 @@ void vec_world_to_grid(VECTOR *pos, int *x, int *y)
 {
     if (!pos)
     {
-        return vector(-1, -1, -1);
+        *x = -1;
+        *y = -1;
+        return;
     }
 
     *x = floor(pos->x / MAP_CELL_SIZE);
